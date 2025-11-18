@@ -1,38 +1,541 @@
-.App {
+@import url("https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap");
+
+/* Header styles */
+.header-section {
+  background-color: #d3d5d6; /* similar gray tone */
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.nav-link {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.nav-link:hover {
+  color: #555;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Center logo vertical styling */
+.logo-container {
+  position: relative;
+}
+
+.logo-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.tagline {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  color: #444;
+}
+.logo-image {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+}
+.header-text {
+  font-family: "Arial", sans-serif;
+}
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .left-menu,
+  .right-menu {
+    flex-basis: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .logo-container {
+    order: -1;
+    margin-bottom: 10px;
+  }
+}
+
+/* Homepage styles */
+.carousel-container {
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100vh; /* full screen height */
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .carousel-img {
+    height: 60vh; /* smaller height for mobile */
+  }
+}
+/* product section */
+.tangerine-bold {
+  font-family: "Tangerine", cursive;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 70px;
+}
+.products-section {
+  background-color: #fff;
+}
+.product-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  height: 220px;
+  object-fit: contain;
+}
+
+.product-name {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #222;
+}
+
+.ingredient-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.product-price {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .product-image {
+    height: 180px;
+  }
+}
+/* Bath Gel content section */
+.product-detail-section {
+  background-color: #f5f5f5;
+  color: #000;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Left Image Boxes */
+.image-box {
+  width: 280px;
+  height: 400px;
+  background-color: #d9d9d9;
+  border-radius: 4px;
+}
+
+/* Product Info */
+.product-title {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Icons Row */
+.icon {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.icon-text {
+  font-size: 0.75rem;
+  color: #000;
+  line-height: 1.2;
+  margin-top: 6px;
+}
+
+/* Text sections */
+.section-heading {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+
+.info-text p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Bottom Menu */
+.bottom-menu {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.menu-item {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.menu-item:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .image-box {
+    width: 45%;
+    height: 250px;
+  }
+  .product-title {
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+  .icon-text {
+    font-size: 0.7rem;
+  }
+  .info-text {
+    text-align: center;
+  }
+}
+
+/* New design */
+.twelve-section {
+  background-color: #4b4749;
+  height: auto;
+  position: relative;
+}
+
+.title-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 2.5rem;
+  font-weight: 400;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.subtitle {
+  font-family: "Playfair Display", serif;
+  font-size: 0.9rem;
+  color: #ddd;
+  letter-spacing: 1px;
 }
 
-@keyframes App-logo-spin {
+.zodiac-grid {
+  flex: 1;
+}
+
+.zodiac-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+}
+
+.zodiac-name {
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 700;
+  letter-spacing: 3px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  color: white;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .vertical-text {
+    display: none;
+  }
+
+  .title-text {
+    font-size: 2rem;
+  }
+
+  .zodiac-circle {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
+/* Red section */
+.aries-section {
+  background-color: #a53a32; /* red section */
+  color: white;
+  padding: 80px 20px 120px;
+  position: relative;
+  overflow: visible;
+  text-align: center;
+}
+
+.aries-title {
+  font-size: 4rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.aries-icon-circle {
+  background-color: #6b1f18;
+  width: 80px;
+  height: 80px;
+  margin: 10px auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aries-symbol {
+  font-size: 2rem;
+  color: white;
+}
+
+.aries-date {
+  font-size: 1rem;
+  margin-bottom: 30px;
+}
+
+.aries-description {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.aries-details {
+  font-size: 0.95rem;
+  margin-bottom: 60px;
+  color: #f7e4e4;
+}
+
+.aries-images {
+  position: relative;
+  overflow: visible;
+}
+
+.half-out-image {
+  height: 150px;
+  object-fit: contain;
+  position: relative;
+  bottom: -75px; /* half inside red, half outside */
+  transition: transform 0.3s ease;
+}
+
+.half-out-image:hover {
+  transform: translateY(-10px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .aries-title {
+    font-size: 2.5rem;
+  }
+
+  .aries-description {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+
+  .half-out-image {
+    height: 100px;
+    bottom: -50px;
+  }
+
+  .aries-images {
+    gap: 1.5rem;
+  }
+}
+/* New Product Section */
+.product-section {
+  background-color: #fff;
+  color: #000;
+  overflow: hidden;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.product-box {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #d9d9d9;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 20px;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #333;
+  line-height: 1.5;
+  animation: fadeIn 2s ease;
+}
+
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .product-box {
+    font-size: 0.8rem;
+  }
+}
+
+/* Connect Page Styles */
+.connect-page {
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Hero Section Image */
+.hero-image-wrapper {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* Form Section */
+.form-section {
+  background-color: #e8e8e8;
+  padding: 4rem 1rem;
+}
+
+.form-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.connect-heading {
+  font-family: "Playfair Display", serif;
+  font-size: 2.8rem;
+  font-weight: 500;
+  color: #000;
+  letter-spacing: 1px;
+}
+
+.connect-subtext {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #000;
+  letter-spacing: 1px;
+}
+
+.connect-desc {
+  font-size: 0.75rem;
+  color: #000;
+  letter-spacing: 0.5px;
+}
+
+/* Form Inputs */
+.connect-form input,
+.connect-form textarea {
+  border: none;
+  border-bottom: 1px solid #000;
+  border-radius: 0;
+  background-color: transparent;
+  color: #000;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.connect-form input::placeholder,
+.connect-form textarea::placeholder {
+  color: #000;
+}
+
+.connect-form input:focus,
+.connect-form textarea:focus {
+  border-bottom: 1.5px solid #000;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Button */
+.send-btn {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #000;
+  border-radius: 0;
+  color: #000;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  padding: 0.4rem 0;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.send-btn:hover {
+  background: none;
+  border-bottom: 1px solid #333;
+  color: #333;
+  transform: scale(1.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .connect-heading {
+    font-size: 2.2rem;
+  }
+
+  .form-section {
+    padding: 3rem 1rem;
   }
 }
