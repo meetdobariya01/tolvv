@@ -10,6 +10,13 @@ import Connect from './pages/connect/connect';
 import Faqs from './pages/faqs/faqs';
 import Knowus from './pages/knowus/knowus';
 import Benifits from './pages/benifits/benifits';
+import Product from './components/product-images/product';
+import Mainproduct from './pages/product/mainproduct';
+import Login from './pages/login/login';
+import Signup from './pages/signup/signup';
+import Forgotpassword from './pages/forgotpassword/passoword';
+import Cart from './pages/cart/cart';
+import Checkout from './pages/checkout/checkout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +27,12 @@ root.render(
       <Route path="/faqs" element={<Faqs/>} />
       <Route path="/know-us" element={<Knowus/>} />
       <Route path="/benefits" element={<Benifits/>} />
+      <Route path="/product" element={<Mainproduct />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<Forgotpassword />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/Check-out" element={<Checkout />} />
        <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   </Router>

@@ -1,54 +1,97 @@
 import React, { useState } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
+import "./header.css";
 
 const Header = () => {
-    const [expanded, setExpanded] = useState(false);
-  return (
-    <div>
-      <header className="header-section py-3">
-        <nav className="container d-flex justify-content-around align-items-center flex-wrap">
-          {/* Left Menu */}
-          <div className="d-flex align-items-center gap-5 left-menu header-text">
-            <a href="#products" className="nav-link">
-              PRODUCTS
-            </a>
-            <a href="#twelves" className="nav-link">
-              THE TWELVEs
-            </a>
-            <a href="/benefits" className="nav-link">
-              BENEFITS
-            </a>
-          </div>
+  const [expanded, setExpanded] = useState(false);
+  const [showSearch, setShowSearch] = useState(false); // ADDED
 
-          {/* Center Logo */}
-          <div className="logo-container text-center">
-            <div className="logo-box">
+  return (
+    <>
+      <header className="tolvv-header shadow-sm">
+        <Navbar expand="lg" expanded={expanded} className="container">
+
+          {/* Mobile Toggle */}
+          <Navbar.Toggle
+            aria-controls="navbar-nav"
+            className="border-0"
+            onClick={() => setExpanded(expanded ? false : "expanded")}
+          >
+            {expanded ? <FiX size={26} /> : <FiMenu size={26} />}
+          </Navbar.Toggle>
+
+          {/* CENTER LOGO (Mobile) */}
+          <Navbar.Brand className="mx-auto d-lg-none">
+            <img
+              src="./images/logo-tolvv.png"
+              className="tolvv-logo"
+              alt="TOLVV"
+            />
+          </Navbar.Brand>
+
+          <Navbar.Collapse id="navbar-nav">
+            {/* LEFT MENU */}
+            <Nav className="left-nav d-flex align-items-center gap-5 mx-auto">
+              <NavLink className="menu-text" to="/product">PRODUCTS</NavLink>
+              <NavLink className="menu-text" to="#twelves">THE TWELVEs</NavLink>
+              <NavLink className="menu-text" to="/benefits">BENEFITS</NavLink>
+            </Nav>
+
+            {/* CENTER LOGO (Desktop Only) */}
+            <div className="d-none d-lg-flex justify-content-center mx-4">
               <NavLink to="/" className="logo-link">
-                <img
-                  src="./images/logo.png" // ← your logo image path
-                  alt="Twelve Logo"
-                  className="logo-image"
-                />
+                <img src="./images/logo-tolvv.png" className="tolvv-logo" alt="TOLVV" />
               </NavLink>
             </div>
-          </div>
 
-          {/* Right Menu */}
-          <div className="d-flex align-items-center gap-5 right-menu header-text">
-            <a href="/know-us" className="nav-link">
-              KNOW US
-            </a>
-            <a href="/faqs" className="nav-link">
-              FAQs
-            </a>
-            <a href="/connect" className="nav-link">
-              CONNECT
-            </a>
+            {/* RIGHT MENU */}
+            <Nav className="right-nav d-flex align-items-center gap-5 mx-auto">
+              <NavLink className="menu-text" to="/know-us">KNOW US</NavLink>
+              <NavLink className="menu-text" to="/faqs">FAQs</NavLink>
+              <NavLink className="menu-text" to="/connect">CONNECT</NavLink>
+            </Nav>
+          </Navbar.Collapse>
+
+          {/* ICONS */}
+          <div className="icon-area d-flex align-items-center gap-3 ms-auto">
+
+            {/* SEARCH ICON */}
+            <button
+              className="nav-link p-0 bg-transparent border-0"
+              onClick={() => setShowSearch(true)}
+            >
+              <FiSearch className="header-icon" size={20} />
+            </button>
+
+            <NavLink to="/cart" className="nav-link p-0">
+              <FiShoppingCart className="header-icon" size={20} />
+            </NavLink>
+
+            <NavLink to="/login" className="nav-link p-0">
+              <FiUser className="header-icon" size={20} />
+            </NavLink>
           </div>
-        </nav>
+        </Navbar>
       </header>
-    </div>
+
+      {/* SEARCH BAR POPUP */}
+      {showSearch && (
+        <div className="search-overlay">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Search..."
+              autoFocus
+            />
+            <button className="close-btn" onClick={() => setShowSearch(false)}>
+              <FiX size={24} />
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
