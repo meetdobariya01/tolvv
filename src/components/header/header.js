@@ -35,7 +35,7 @@ const Header = () => {
             {/* LEFT MENU */}
             <Nav className="left-nav d-flex align-items-center gap-5 mx-auto">
               <NavLink className="menu-text" to="/product">PRODUCTS</NavLink>
-              <NavLink className="menu-text" to="#twelves">THE TWELVEs</NavLink>
+              <NavLink className="menu-text" to="/twelve">THE TWELVEs</NavLink>
               <NavLink className="menu-text" to="/benefits">BENEFITS</NavLink>
             </Nav>
 

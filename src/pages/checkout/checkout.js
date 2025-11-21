@@ -179,7 +179,7 @@ const Checkout = () => {
                     name="name"
                     value={billing.name}
                     onChange={handleBillingChange}
-                    placeholder="Meet Sharma"
+                    placeholder="Rahul Sharma"
                     required
                   />
                 </label>

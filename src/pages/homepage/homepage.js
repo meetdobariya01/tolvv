@@ -6,72 +6,25 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Product from "../../components/product-images/product";
 import Category from "../../components/category/category";
+import "./homepage.css";
+import Homeproduct from "../../components/category/home-product/homeproduct";
 
 const Homepage = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Aries Hydraglow Bath Gel",
-      price: "₹ 750",
-      image: "./images/bath-gel.jpg",
-      ingredients: [
-        "/images/fruit.jpg",
-        "/images/flower.jpg",
-        "/images/leaf.jpg",
-        "/images/herb.jpg",
-      ],
-    },
-    {
-      id: 2,
-      name: "Aries Luxe Essence",
-      price: "₹ 1800",
-      image: "./images/perfume.jpg",
-      ingredients: [
-        "/images/fruit.jpg",
-        "/images/herb.jpg",
-        "/images/flower.jpg",
-        "/images/leaf.jpg",
-      ],
-    },
-    {
-      id: 3,
-      name: "Aries SkinRevive Soap",
-      price: "₹ 200",
-      image: "./images/soap.jpg",
-      ingredients: [
-        "/images/fruit.jpg",
-        "/images/flower.jpg",
-        "/images/leaf.jpg",
-        "/images/herb.jpg",
-      ],
-    },
-    {
-      id: 4,
-      name: "Aries RefreshMint Oil",
-      price: "₹ 750",
-      image: "./images/oil.jpg",
-      ingredients: [
-        "/images/fruit.jpg",
-        "/images/herb.jpg",
-        "/images/flower.jpg",
-        "/images/leaf.jpg",
-      ],
-    },
-  ];
   const zodiacSigns = [
-    { name: "Aries", color: "#7E0D0D", icon: "♈" },
-    { name: "Taurus", color: "#7B8E2E", icon: "♉" },
-    { name: "Gemini", color: "#C6932C", icon: "♊" },
-    { name: "Cancer", color: "#B2B2B2", icon: "♋" },
-    { name: "Leo", color: "#E0B900", icon: "♌" },
-    { name: "Virgo", color: "#E66B3E", icon: "♍" },
-    { name: "Libra", color: "#FF766B", icon: "♎" },
-    { name: "Scorpio", color: "#111111", icon: "♏" },
-    { name: "Sagittarius", color: "#6E4FA8", icon: "♐" },
-    { name: "Capricorn", color: "#E7E1C5", icon: "♑" },
-    { name: "Aquarius", color: "#6CC0C9", icon: "♒" },
-    { name: "Pisces", color: "#003E5E", icon: "♓" },
+    { name: "Aries", color: "#7E0D0D", image: "./images/zodiac/1.png" },
+    { name: "Taurus", color: "#7B8E2E", image: "./images/zodiac/2.png" },
+    { name: "Gemini", color: "#C6932C", image: "./images/zodiac/3.png" },
+    { name: "Cancer", color: "#B2B2B2", image: "./images/zodiac/4.png" },
+    { name: "Leo", color: "#E0B900", image: "./images/zodiac/5.png" },
+    { name: "Virgo", color: "#E66B3E", image: "./images/zodiac/6.png" },
+    { name: "Libra", color: "#FF766B", image: "./images/zodiac/7.png" },
+    { name: "Scorpio", color: "#111111", image: "./images/zodiac/8.png" },
+    { name: "Sagittarius", color: "#6E4FA8", image: "./images/zodiac/9.png" },
+    { name: "Capricorn", color: "#E7E1C5", image: "./images/zodiac/10.png" },
+    { name: "Aquarius", color: "#6CC0C9", image: "./images/zodiac/11.png" },
+    { name: "Pisces", color: "#003E5E", image: "./images/zodiac/12.png" },
   ];
+
   const productss = [
     { name: "BATH GEL" },
     { name: "BATH LOTION" },
@@ -156,21 +109,27 @@ const Homepage = () => {
           fade
           controls={false}
           indicators={true}
-          interval={3000} // Auto slide every 3 seconds
-          pause={false} // Continue sliding even on hover
+          interval={3000}
+          pause={false}
         >
+          {/* REMOVE THIS FIRST IMAGE — replaced with VIDEO */}
           <Carousel.Item>
-            <img
-              className="d-block w-100 carousel-img"
-              src="./images/hero-section.png" // your first image
-              alt="First slide"
-            />
+            <video
+              className="d-block w-100 h-auto carousel-img"
+              autoPlay
+              loop
+              muted
+              playsInline
+            >
+              <source src="./images/video.mp4" type="video/mp4" />
+            </video>
           </Carousel.Item>
 
+          {/* KEEP SECOND IMAGE */}
           <Carousel.Item>
             <img
-              className="d-block w-100 carousel-img"
-              src="./images/hero-section1.png" // your second image
+              className="d-block w-100 h-auto carousel-img"
+              src="./images/hero-section1.png"
               alt="Second slide"
             />
           </Carousel.Item>
@@ -178,42 +137,10 @@ const Homepage = () => {
       </div>
 
       {/* Products Section */}
-      <section className="products-section py-5 text-center">
-        <h2 className="products-title mb-5 tangerine-bold">Products</h2>
-        <div className="container">
-          <div className="row justify-content-center g-4">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="col-6 col-md-4 col-lg-3 d-flex justify-content-center"
-              >
-                <div className="product-card p-3">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="img-fluid product-image mb-3"
-                  />
-                  <h5 className="product-name">{product.name}</h5>
-                  <div className="d-flex justify-content-center align-items-center gap-2 mt-2 mb-3 flex-wrap">
-                    {product.ingredients.map((icon, i) => (
-                      <img
-                        key={i}
-                        src={icon}
-                        alt="ingredient"
-                        className="ingredient-icon"
-                      />
-                    ))}
-                  </div>
-                  <p className="product-price">{product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Homeproduct />
 
       {/* Category Section */}
-      <Category />
+      {/* <Category /> */}
 
       {/* New Zodiac Section */}
       <div className="twelve-section">
@@ -240,7 +167,11 @@ const Homepage = () => {
                     className="zodiac-circle mx-auto"
                     style={{ backgroundColor: sign.color }}
                   >
-                    <span className="zodiac-icon">{sign.icon}</span>
+                    <img
+                      src={sign.image}
+                      alt={sign.name}
+                      className="zodiac-image"
+                    />
                   </div>
                   <p className="zodiac-name mt-2">{sign.name}</p>
                 </div>
@@ -260,8 +191,13 @@ const Homepage = () => {
         <div className="aries-content container">
           <h1 className="aries-title">Aries</h1>
           <div className="aries-icon-circle">
-            <span className="aries-symbol">♈</span>
+            <img
+              src="./images/zodiac/1.png"
+              alt="Aries Icon"
+              className="aries-icon-img"
+            />
           </div>
+
           <p className="aries-date">Date : March 21 - April 19</p>
 
           <p className="aries-description">
@@ -373,63 +309,44 @@ const Homepage = () => {
       </div>
 
       {/* moon section */}
+      <div className="moon-wrapper d-flex justify-content-center align-items-center">
+        <div className="container text-white py-5">
+          <div className="row align-items-center">
+            {/* LEFT SIDE */}
+            <div className="col-12 col-md-6 position-relative text-center mb-5 mb-md-0">
+              {/* Moon */}
+              <img
+                src="./images/moon.png"
+                alt="Moon"
+                className="moon-img fade-in-scale"
+              />
 
-      <div
-        className="container-fluid py-5 text-light"
-        style={{ backgroundColor: "#52186b" }}
-      >
-        <div className="container d-flex flex-column flex-lg-row align-items-center justify-content-between">
-          {/* Left Circle + Title */}
-          <div className="text-center text-lg-start mb-4 mb-lg-0 animate__animated animate__fadeInLeft">
-            <div
-              style={{
-                width: "220px",
-                height: "220px",
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(circle at 30% 30%, #2b013e, #3c005b)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                margin: "0 auto",
-              }}
-            >
-              <h1
-                style={{
-                  fontSize: "70px",
-                  fontWeight: "300",
-                  color: "white",
-                  letterSpacing: "5px",
-                }}
-              >
-                MOON
-              </h1>
+              {/* Text on Moon */}
+              <h1 className="moon-title fade-in-up">MOON</h1>
             </div>
-          </div>
 
-          {/* Right Content */}
-          <div
-            className="text-center text-lg-end animate__animated animate__fadeInRight"
-            style={{ maxWidth: "600px" }}
-          >
-            <p style={{ fontSize: "16px", lineHeight: "1.7" }}>
-              The King and the Great Father embody the archetypes of the Sun—
-              the source of all light and life, both earthly and spiritual. The
-              Sun uplifts and energizes, offering inspiration, balance, and
-              renewal. It rules over healthy self-esteem, life purpose,
-              creativity, healing, and vitality, illuminating the path toward
-              wholeness and strength.
-            </p>
+            {/* RIGHT SIDE */}
+            <div className="col-12 col-md-6 fade-in-right text-center text-md-start">
+              <p>
+                The King and the Great Father embody the archetypes of the
+                Sun—the source of all light and life, both earthly and
+                spiritual. The Sun uplifts and energizes, offering inspiration,
+                balance, and renewal. It rules over healthy self-esteem, life
+                purpose, creativity, healing, and vitality, illuminating the
+                path toward wholeness and strength.
+              </p>
 
-            <div className="d-flex flex-wrap justify-content-center justify-content-lg-end mt-4 gap-4">
-              <span>Astral Energy : Vitality</span>
-              <span>Colour : Gold</span>
-              <span>Element : Fire</span>
-              <span>Rules : Leo</span>
+              <div className="details mt-4 d-flex flex-wrap gap-4 justify-content-center justify-content-md-start">
+                <span>Astral Energy : Vitality</span>
+                <span>Colour : Gold</span>
+                <span>Element : Fire</span>
+                <span>Rules : Leo</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
       {/* moon bottom */}
 
       <div className="container py-5">
@@ -465,13 +382,7 @@ const Homepage = () => {
         <div className="container text-center">
           {/* Heading */}
           <h1
-            className="fw-light mb-5"
-            style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: "80px",
-              color: "#000",
-            }}
-          >
+            className="fw-light mb-5 the-artisan-font">
             Benefits
           </h1>
 
@@ -525,13 +436,7 @@ const Homepage = () => {
         <div className="container text-center">
           {/* Heading */}
           <h1
-            className="fw-light mb-5"
-            style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: "70px",
-              color: "#000",
-            }}
-          >
+            className="fw-light mb-5 the-artisan-font">
             Know Us
           </h1>
 
@@ -655,15 +560,7 @@ const Homepage = () => {
       >
         <div className="container text-center">
           {/* Header */}
-          <h1
-            style={{
-              fontFamily: "'Playfair Display', cursive",
-              fontSize: "55px",
-              fontWeight: "400",
-              color: "#000",
-              marginBottom: "10px",
-            }}
-          >
+          <h1 className="the-artisan-font">
             Faqs
           </h1>
           <h5
@@ -735,7 +632,7 @@ const Homepage = () => {
               transition={{ duration: 1, delay: 0.3 }}
             >
               <div className="text-center">
-                <h2 className="connect-heading">Connect</h2>
+                <h2 className=" the-artisan-font">Connect</h2>
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 
@@ -781,7 +678,7 @@ const Homepage = () => {
                 </Form.Group>
 
                 <div className="text-center">
-                  <Button className="send-btn" type="submit">
+                  <Button className="send-btn p-2" variant="outline-dark" type="submit">
                     SEND A REQUEST
                   </Button>
                 </div>

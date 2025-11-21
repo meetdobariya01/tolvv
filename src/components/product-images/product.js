@@ -1,89 +1,35 @@
 import React from "react";
+import "./product.css";
 
 const itemsData = [
   { name: "BATH GEL", img: "./images/bath-gel.jpg" },
-  { name: "BATH LOTION", img: "./images//body-lotion.jpg" },
+  { name: "BATH LOTION", img: "./images/body-lotion.jpg" },
   { name: "SOAP", img: "./images/soap.jpg" },
   { name: "ESSENTIAL OIL", img: "./images/oil.jpg" },
   { name: "EAU DE PERFUMES", img: "./images/perfume.jpg" },
-  { name: "CANDLE", img: "/images/products/candle.jpg" },
 ];
 
 const Product = () => {
   return (
-    <div>
-      <div className="container py-5 text-center">
-        {/* Top Text */}
-        <p
-          className="text-muted mb-4 animate__animated animate__fadeInDown"
-          style={{ fontSize: "15px" }}
-        >
+    <div className="aries-wrapper">
+      <div className="container text-center py-5">
+        <p className="aries-top-text animate__animated animate__fadeInDown">
           Experience the goodness of Ginger, Cinnamon and Coconut in our Aries
           products
         </p>
 
-        {/* Product Grid */}
-        <div className="row g-4 justify-content-center">
+        <div className="row g-4 justify-content-center aries-grid">
           {itemsData.map((item, index) => (
-            <div
-              className="col-6 col-md-4 d-flex justify-content-center"
-              key={index}
-            >
-              <div
-                className="product-box animate__animated animate__zoomIn"
-                style={{
-                  width: "100%",
-                  height: "300px",
-                  background: "#e0e0e0",
-                  position: "relative",
-                  overflow: "hidden",
-                  borderRadius: "6px",
-                }}
-              >
-                {/* Product Image */}
-                <img
-                  src={item.img}
-                  alt={item.name}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-
-                {/* Product Name */}
-                <h6
-                  style={{
-                    position: "absolute",
-                    bottom: "10px",
-                    width: "100%",
-                    textAlign: "center",
-                    color: "#000",
-                    fontWeight: "600",
-                    letterSpacing: "1px",
-                    background: "rgba(255, 255, 255, 0.7)",
-                    padding: "8px 0",
-                    margin: 0,
-                  }}
-                >
-                  {item.name}
-                </h6>
+            <div className="col-6 col-md-4 col-lg-2 aries-col" key={index}>
+              <div className="aries-card animate__animated animate__zoomIn">
+                <img src={item.img} alt={item.name} className="aries-img" />
+                <h6 className="aries-name">{item.name}</h6>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom Text */}
-        <p
-          className="mt-4 animate__animated animate__fadeInUp"
-          style={{
-            fontSize: "16px",
-            color: "#000",
-          }}
-        >
+        <p className="aries-bottom-text animate__animated animate__fadeInUp">
           Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed <br />
           diam nonummy nibh euismod
         </p>

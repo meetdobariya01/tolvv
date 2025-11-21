@@ -85,7 +85,7 @@ export const Footer = () => {
             <div className="col-md-3 text-center text-md-end">
               <div>
                 <img
-                  src="images/logo-tolvv.png"
+                  src="images/logo-footer.png"
                   alt="Twelve Logo"
                   style={{ maxHeight: "120px", marginBottom: "10px" }}
                 />

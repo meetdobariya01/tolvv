@@ -17,6 +17,9 @@ import Signup from './pages/signup/signup';
 import Forgotpassword from './pages/forgotpassword/passoword';
 import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout/checkout';
+import Twelve from './pages/twelve/twelve';
+import Payment from './pages/payment/payment';
+import Error from './pages/error/error';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -33,7 +36,9 @@ root.render(
       <Route path="/forgot-password" element={<Forgotpassword />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/Check-out" element={<Checkout />} />
-       <Route path="*" element={<h1>404 Not Found</h1>} />
+      <Route path="/twelve" element={<Twelve />} />
+      <Route path='/payment' element={<Payment/>}/>
+       <Route path="*" element={<Error/>} />
     </Routes>
   </Router>
 );
