@@ -10,12 +10,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-    unique: true
-  },
   password: {
     type: String,
     required: true,
@@ -33,14 +27,6 @@ const UserSchema = new mongoose.Schema({
     unique: true
   },
   addresses: [String] 
-});
-
-//Password hashing middleware
-UserSchema.pre('save', async function (next) {
-  if (this.isModified('password')) { //  Use correct field name
-    this.password = await bcrypt.hash(this.password, 6);
-  }
-  next();
 });
 
 module.exports = mongoose.model('User', UserSchema);

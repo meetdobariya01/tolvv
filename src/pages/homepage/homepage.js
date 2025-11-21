@@ -178,6 +178,7 @@ const Homepage = () => {
       </div>
 
       {/* Products Section */}
+      {/* Products Section */}
       <section className="products-section py-5 text-center">
         <h2 className="products-title mb-5 tangerine-bold">Products</h2>
         <div className="container">
@@ -194,6 +195,8 @@ const Homepage = () => {
                     className="img-fluid product-image mb-3"
                   />
                   <h5 className="product-name">{product.name}</h5>
+
+                  {/* Ingredients Icons */}
                   <div className="d-flex justify-content-center align-items-center gap-2 mt-2 mb-3 flex-wrap">
                     {product.ingredients.map((icon, i) => (
                       <img
@@ -204,6 +207,7 @@ const Homepage = () => {
                       />
                     ))}
                   </div>
+
                   <p className="product-price">{product.price}</p>
                 </div>
               </div>
@@ -211,6 +215,7 @@ const Homepage = () => {
           </div>
         </div>
       </section>
+
 
       {/* Category Section */}
       <Category />
