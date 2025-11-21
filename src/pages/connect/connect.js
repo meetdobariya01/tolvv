@@ -35,7 +35,7 @@ const Connect = () => {
               transition={{ duration: 1, delay: 0.3 }}
             >
               <div className="text-center">
-                <h2 className="connect-heading">Connect</h2>
+                <h2 className="the-artisan-font">Connect</h2>
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 
@@ -81,7 +81,7 @@ const Connect = () => {
                 </Form.Group>
 
                 <div className="text-center">
-                  <Button className="send-btn" type="submit">
+                  <Button className="send-btn p-2" variant="outline-dark" type="submit">
                     SEND A REQUEST
                   </Button>
                 </div>

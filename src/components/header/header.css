@@ -20,6 +20,9 @@
 .tolvv-logo{
     width: 50%;
 }
+.logo-link{
+  text-align: center;
+}
 /* SEARCH BOX */
 .search-box {
   width: 80%;

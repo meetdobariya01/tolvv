@@ -25,14 +25,7 @@ const Benifits = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1
-            className="fw-light mb-5"
-            style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: "80px",
-              color: "#000",
-            }}
-          >
+          <h1 className="the-artisan-font">
             Benefits
           </h1>
 

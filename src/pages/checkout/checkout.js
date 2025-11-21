@@ -115,8 +115,15 @@ const Checkout = () => {
               <h2>Billing & Shipping</h2>
 
               <form onSubmit={placeOrder} className="billing-form" noValidate>
-                <label>Full name
-                  <input name="name" value={billing.name} onChange={handleBillingChange} required />
+                <label>
+                  Full name
+                  <input
+                    name="name"
+                    value={billing.name}
+                    onChange={handleBillingChange}
+                    placeholder="Meet Sharma"
+                    required
+                  />
                 </label>
 
                 <label>Email

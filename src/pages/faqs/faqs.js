@@ -25,15 +25,7 @@ const Faqs = () => {
       >
         <div className="container text-center">
           {/* Header */}
-          <h1
-            style={{
-              fontFamily: "'Playfair Display', cursive",
-              fontSize: "55px",
-              fontWeight: "400",
-              color: "#000",
-              marginBottom: "10px",
-            }}
-          >
+          <h1 className="the-artisan-font">
             Faqs
           </h1>
           <h5

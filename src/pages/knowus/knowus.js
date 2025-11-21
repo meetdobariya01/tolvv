@@ -16,7 +16,7 @@ const Knowus = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <img src="./images/know-us.jpg" alt="Hero" className="hero-image" />
+        <img src="./images/know-us.png" alt="Hero" className="hero-image" />
       </motion.div>
 
       <div
@@ -25,14 +25,7 @@ const Knowus = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1
-            className="fw-light mb-5"
-            style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: "70px",
-              color: "#000",
-            }}
-          >
+          <h1 className="the-artisan-font">
             Know Us
           </h1>
 

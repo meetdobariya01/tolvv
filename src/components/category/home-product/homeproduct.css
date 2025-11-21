@@ -1,0 +1,133 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
+
+
+
+.product-section {
+  background: #d9d9d9;
+  padding: 80px 0;
+}
+
+.product-heading {
+  /* font-family: "Great Vibes", cursive; */
+  text-align: center;
+  font-size: 100px;
+  font-weight: 500;
+  animation: fadeDown 1.2s ease;
+  font-family: "Allura", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Card Layout */
+.product-box {
+  border: none;
+  background: transparent;
+  text-align: center;
+  padding: 20px 10px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+}
+
+.product-box:hover {
+  transform: translateY(-12px);
+}
+
+.product-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.product-box:hover .product-img {
+  transform: scale(1.07);
+}
+
+/* Text styling */
+.product-info .name {
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  align-items: center;
+}
+
+.arrow {
+  font-size: 16px;
+}
+
+.product-info .size {
+  font-family: "Sora", sans-serif;
+  font-size: 13px;
+  margin-top: 6px;
+  color: #222;
+}
+
+/* Underline */
+.underline {
+  height: 1px;
+  background: black;
+  width: 80%;
+  margin: 10px auto 0;
+  transition: width 0.3s ease;
+}
+
+.product-box:hover .underline {
+  width: 100%;
+}
+
+/* Card container */
+.product-card {
+  border-right: 1px solid #888;
+}
+
+.product-card:last-child {
+  border-right: none;
+}/* REMOVE Right Border – replace with subtle spacer */
+.product-card {
+  border-right: 1px solid rgba(0,0,0,0.2);
+  background: transparent !important;
+}
+
+/* Remove last border */
+.product-card:last-child {
+  border-right: none;
+}
+
+/* Make images look clean like screenshot */
+.product-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply; /* removes white cast */
+  background: transparent !important;
+}
+
+/* Remove any padding background effect */
+.product-box {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Animation */
+@keyframes fadeDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive fix for mobile (2 per row) */
+@media (max-width: 576px) {
+  .product-box {
+    padding: 10px 5px;
+  }
+}

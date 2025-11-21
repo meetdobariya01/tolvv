@@ -1,0 +1,499 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
+
+.the-artisan-font{
+  font-family: "Allura", cursive;
+  font-weight: 400;
+  font-size: 100px;
+  font-style: normal;
+}
+/* Homepage styles */
+.carousel-container {
+  width: 100%;
+  /* max-height: 90vh; */
+  overflow: hidden;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100%; /* full screen height */
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .carousel-img {
+    height: 60vh; /* smaller height for mobile */
+  }
+}
+/* product section */
+.tangerine-bold {
+  font-family: "Tangerine", cursive;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 70px;
+}
+.products-section {
+  background-color: #fff;
+}
+.product-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  height: 220px;
+  object-fit: contain;
+}
+
+.product-name {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #222;
+}
+
+.ingredient-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.product-price {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .product-image {
+    height: 180px;
+  }
+}
+/* Bath Gel content section */
+.product-detail-section {
+  background-color: #f5f5f5;
+  color: #000;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Left Image Boxes */
+.image-box {
+  width: 280px;
+  height: 400px;
+  background-color: #d9d9d9;
+  border-radius: 4px;
+}
+
+/* Product Info */
+.product-title {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Icons Row */
+.icon {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.icon-text {
+  font-size: 0.75rem;
+  color: #000;
+  line-height: 1.2;
+  margin-top: 6px;
+}
+
+/* Text sections */
+.section-heading {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+
+.info-text p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Bottom Menu */
+.bottom-menu {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.menu-item {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.menu-item:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .image-box {
+    width: 45%;
+    height: 250px;
+  }
+  .product-title {
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+  .icon-text {
+    font-size: 0.7rem;
+  }
+  .info-text {
+    text-align: center;
+  }
+}
+
+/* New design */
+.twelve-section {
+  background-color: #4b4749;
+  height: auto;
+  position: relative;
+}
+
+.title-text {
+  font-family: "Dancing Script", cursive;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: white;
+}
+
+.subtitle {
+  font-family: "Playfair Display", serif;
+  font-size: 0.9rem;
+  color: #ddd;
+  letter-spacing: 1px;
+}
+.zodiac-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zodiac-image {
+  width: 60%;
+  height: auto;
+  object-fit: contain;
+}
+
+
+.zodiac-grid {
+  flex: 1;
+}
+
+/* .zodiac-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+} */
+
+.zodiac-name {
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 700;
+  letter-spacing: 3px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  color: white;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .vertical-text {
+    display: none;
+  }
+
+  .title-text {
+    font-size: 2rem;
+  }
+
+  .zodiac-circle {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
+/* Red section */
+.aries-icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.aries-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.aries-section {
+  background-color: #a53a32; /* red section */
+  color: white;
+  padding: 80px 20px 120px;
+  position: relative;
+  overflow: visible;
+  text-align: center;
+}
+
+.aries-title {
+  font-size: 4rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.aries-icon-circle {
+  background-color: #6b1f18;
+  width: 80px;
+  height: 80px;
+  margin: 10px auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aries-symbol {
+  font-size: 2rem;
+  color: white;
+}
+
+.aries-date {
+  font-size: 1rem;
+  margin-bottom: 30px;
+}
+
+.aries-description {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.aries-details {
+  font-size: 0.95rem;
+  margin-bottom: 60px;
+  color: #f7e4e4;
+}
+
+.aries-images {
+  position: relative;
+  overflow: visible;
+}
+
+.half-out-image {
+  height: 150px;
+  object-fit: contain;
+  position: relative;
+  bottom: -75px; /* half inside red, half outside */
+  transition: transform 0.3s ease;
+}
+
+.half-out-image:hover {
+  transform: translateY(-10px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .aries-title {
+    font-size: 2.5rem;
+  }
+
+  .aries-description {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+
+  .half-out-image {
+    height: 100px;
+    bottom: -50px;
+  }
+
+  .aries-images {
+    gap: 1.5rem;
+  }
+}
+
+/* Moon Section */
+.moon-wrapper {
+  background: #5b2a6f;
+  /* min-height: 100vh; */
+}
+
+.moon-img {
+  width: 260px;
+  max-width: 320px;
+  filter: drop-shadow(0px 0px 30px rgba(0, 0, 0, 0.5));
+  animation: fadeInScale 1.3s ease forwards;
+}
+
+.moon-title {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -170%);
+  color: white;
+  font-size: 4rem;
+  font-weight: 300;
+  letter-spacing: 8px;
+  animation: fadeInUp 1.2s ease forwards;
+  font-family: "Playfair Display", serif;
+}
+
+/* ------------------- */
+/* TEXT ANIMATIONS */
+/* ------------------- */
+
+.fade-in-right {
+  opacity: 0;
+  animation: fadeInRight 1.2s ease forwards;
+  animation-delay: 0.4s;
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+}
+
+/* ------------------- */
+/* KEYFRAMES */
+/* ------------------- */
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -200%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -170%);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive title sizing */
+@media (max-width: 768px) {
+  .moon-title {
+    font-size: 3rem;
+  }
+}
+
+
+/* New Product Section */
+.product-section {
+  background-color: #fff;
+  color: #000;
+  overflow: hidden;
+}
+
+.section-subtitle {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.product-box {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #d9d9d9;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 20px;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #333;
+  line-height: 1.5;
+  animation: fadeIn 2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .product-box {
+    font-size: 0.8rem;
+  }
+}
