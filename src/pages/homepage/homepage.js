@@ -137,40 +137,7 @@ const Homepage = () => {
       </div>
 
       {/* Products Section */}
-      {/* Products Section */}
-      <section className="products-section py-5 text-center">
-        <h2 className="products-title mb-5 tangerine-bold">Products</h2>
-        <div className="container">
-          <div className="row justify-content-center g-4">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="col-6 col-md-4 col-lg-3 d-flex justify-content-center"
-              >
-                <div className="product-card p-3">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="img-fluid product-image mb-3"
-                  />
-                  <h5 className="product-name">{product.name}</h5>
-                  <div className="d-flex justify-content-center align-items-center gap-2 mt-2 mb-3 flex-wrap">
-                    {product.ingredients.map((icon, i) => (
-                      <img
-                        key={i}
-                        src={icon}
-                        alt="ingredient"
-                        className="ingredient-icon"
-                      />
-                    ))}
-                  </div>
-                  <p className="product-price">{product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Homeproduct />
 
       {/* Category Section */}
       {/* <Category /> */}
