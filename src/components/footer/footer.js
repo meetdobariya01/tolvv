@@ -31,9 +31,33 @@ export const Footer = () => {
             <div className="col-md-3 col-6">
               <h6 className="fw-bold text-uppercase mb-3">Know Us</h6>
               <ul className="list-unstyled small">
-                <li className="mb-2">Connect</li>
-                <li className="mb-2">Instagram</li>
-                <li className="mb-2">WhatsApp</li>
+                <li className="mb-2">
+                  <a href="/connect" className="text-white text-decoration-none">
+                    Connect
+                  </a>
+                </li>
+
+                <li className="mb-2">
+                  <a
+                    href="https://www.instagram.com/tolvvsigns"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-decoration-none"
+                  >
+                    Instagram
+                  </a>
+                </li>
+
+                <li className="mb-2">
+                  <a
+                    href="https://wa.me/9198242573556"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-decoration-none"
+                  >
+                    WhatsApp
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -47,7 +71,9 @@ export const Footer = () => {
               {/* Social Icons */}
               <div className="d-flex align-items-center gap-3 mt-3">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/tolvvsigns?igsh=cmhmN244cnVjbnM%3D&utm_source=qr"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white"
                   style={{
                     fontSize: "20px",
@@ -63,7 +89,7 @@ export const Footer = () => {
                   <FaInstagram />
                 </a>
                 <a
-                  href="#"
+                  href="mailto:care@tolvvsigns.com"
                   className="text-white"
                   style={{
                     fontSize: "20px",
