@@ -2,6 +2,7 @@
 
 /* Import fancy Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 
 :root{
   --bg: #f5f7fb;
@@ -27,8 +28,8 @@ body { font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "He
 
 /* Page title uses Playfair Display for a premium feel */
 .page-title {
-  font-family: "Playfair Display", serif;
-  font-size: 34px;
+   font-family: "Allura", cursive;
+  font-size: 60px;
   margin: 6px 0 22px;
   text-align: center;
   letter-spacing: -0.5px;

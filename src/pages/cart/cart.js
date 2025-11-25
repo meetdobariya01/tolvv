@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FiTrash2 } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
+import "./cart.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
@@ -60,7 +61,7 @@ const Cart = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-4 text-center fw-bold"
+          className="mb-4 text-center  your-cart-title"
         >
           🛒 Your Cart
         </motion.h2>
