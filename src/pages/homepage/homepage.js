@@ -8,6 +8,8 @@ import Product from "../../components/product-images/product";
 import Category from "../../components/category/category";
 import "./homepage.css";
 import Homeproduct from "../../components/category/home-product/homeproduct";
+import Leoproduct from "../leo-product/leoproduct";
+import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 
 const Homepage = () => {
   const zodiacSigns = [
@@ -32,14 +34,6 @@ const Homepage = () => {
     { name: "ESSENTIAL OIL" },
     { name: "EAU DE PERFUMES" },
     { name: "CANDLE" },
-  ];
-  const itemsData = [
-    "BATH GEL",
-    "BATH LOTION",
-    "SOAP",
-    "ESSENTIAL OIL",
-    "EAU DE PERFUMES",
-    "CANDLE",
   ];
 
   const planets = [
@@ -113,7 +107,7 @@ const Homepage = () => {
           pause={false}
         >
           {/* REMOVE THIS FIRST IMAGE — replaced with VIDEO */}
-          <Carousel.Item>
+          {/* <Carousel.Item>
             <video
               className="d-block w-100 h-auto carousel-img"
               autoPlay
@@ -123,7 +117,7 @@ const Homepage = () => {
             >
               <source src="./images/video.mp4" type="video/mp4" />
             </video>
-          </Carousel.Item>
+          </Carousel.Item> */}
 
           {/* KEEP SECOND IMAGE */}
           <Carousel.Item>
@@ -349,30 +343,9 @@ const Homepage = () => {
 
       {/* moon bottom */}
 
-      <div className="container py-5">
-        <div className="row g-4">
-          {itemsData.map((item, index) => (
-            <div
-              className="col-12 col-sm-6 col-md-4 d-flex justify-content-center"
-              key={index}
-            >
-              <div
-                className="d-flex align-items-center justify-content-center text-center"
-                style={{
-                  backgroundColor: "#e0e0e0",
-                  width: "100%",
-                  height: "300px",
-                  fontWeight: "600",
-                  letterSpacing: "1px",
-                  color: "#000",
-                }}
-              >
-                {item}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Leo products */}
+      <Leoproduct />
+
       {/* benifits */}
 
       <div
@@ -381,51 +354,45 @@ const Homepage = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1
-            className="fw-light mb-5 the-artisan-font">
-            Benefits
-          </h1>
+          <h1 className="fw-light mb-5 the-artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
           <p
             className="mx-auto"
             style={{
-              maxWidth: "900px",
+              // maxWidth: "900px",
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
             }}
           >
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-            ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-            consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate
-            velit esse molestie consequat, vel illum dolore eu feugiat nulla
-            facilisis at vero eros et accumsan et iusto odio dignissim qui
-            blandit praesent luptatum zzril delenit Lorem ipsum dolor sit amet,
-            consectetuer adipiscing elit, sed diam nonummy nibh euismod
-            tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            Our Zodiac Collection blends luxurious skincare with the energy of
+            your sign, creating a ritual that feels personally designed for you.
+            Each soap, body lotion, bath gel, and perfume is infused with
+            mood-enhancing aromas, skin-loving botanicals, and intention-driven
+            formulations that resonate with your zodiac’s natural traits.
+            Whether you’re a fiery Aries seeking invigorating freshness or a
+            calm Pisces craving soothing hydration, every product aligns with
+            the essence of your cosmic personality.
           </p>
 
           {/* Paragraph 2 */}
           <p
             className="mx-auto mt-4"
             style={{
-              maxWidth: "900px",
+              // maxWidth: "900px",
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
             }}
           >
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-            ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-            consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate
-            velit esse molestie consequat, vel illum dolore eu feugiat nulla
-            facilisis at vero eros et accumsan et iusto odio dignissim qui
-            blandit praesent luptatum zzril delenit.
+            These products don’t just nourish your skin; they elevate your
+            spirit. Feel the difference as signature fragrances boost your mood,
+            celestial ingredients restore balance, and your daily routine
+            transforms into a grounding, empowering ritual. With every use,
+            you’re not just caring for your body—you’re connecting with your
+            inner energy, enhancing your aura, and celebrating the unique magic
+            of your zodiac sign.
           </p>
         </div>
       </div>
@@ -435,10 +402,7 @@ const Homepage = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1
-            className="fw-light mb-5 the-artisan-font">
-            Know Us
-          </h1>
+          <h1 className="fw-light mb-5 the-artisan-font">Know Us</h1>
 
           {/* Row */}
           <div className="row align-items-center justify-content-center">
@@ -560,9 +524,7 @@ const Homepage = () => {
       >
         <div className="container text-center">
           {/* Header */}
-          <h1 className="the-artisan-font">
-            Faqs
-          </h1>
+          <h1 className="the-artisan-font">Faqs</h1>
           <h5
             className="mb-4"
             style={{
@@ -595,28 +557,7 @@ const Homepage = () => {
             style={{ maxWidth: "800px", fontSize: "15px", color: "#000" }}
           >
             <hr />
-            <p>
-              1. What makes your self-care products different from others in the
-              market?
-            </p>
-            <hr />
-            <p>2. Are your products natural, organic, or cruelty-free?</p>
-            <hr />
-            <p>3. Are your products dermatologically or clinically tested?</p>
-            <hr />
-            <p>4. Where do you source your ingredients from?</p>
-            <hr />
-            <p>5. Are your products safe for sensitive skin?</p>
-            <hr />
-            <p>6. Where can I buy your products – online or in store?</p>
-            <hr />
-            <p>7. Do you ship internationally?</p>
-            <hr />
-            <p>8. What is your return or exchange policy?</p>
-            <hr />
-            <p>9. Are they suitable for men, women, and teenagers alike?</p>
-            <hr />
-            <p>10. Are your products safe during pregnancy or breastfeeding?</p>
+            <Allfaqs />
             <hr />
           </div>
         </div>
@@ -678,7 +619,11 @@ const Homepage = () => {
                 </Form.Group>
 
                 <div className="text-center">
-                  <Button className="send-btn p-2" variant="outline-dark" type="submit">
+                  <Button
+                    className="send-btn p-2"
+                    variant="outline-dark"
+                    type="submit"
+                  >
                     SEND A REQUEST
                   </Button>
                 </div>

@@ -1,0 +1,57 @@
+/* Single column layout */
+.faq-wrapper.single {
+  max-width: 900px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.faq-box {
+  background: #f8f8f8;
+  border-radius: 10px;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.faq-box:hover {
+  background: #f0f0f0;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.q-num {
+  color: #1968ff;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.faq-question p {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.arrow {
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.faq-answer {
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.faq-answer p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Responsive is automatically single row */
