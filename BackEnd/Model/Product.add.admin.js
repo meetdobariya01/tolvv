@@ -1,14 +1,12 @@
 const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema({
-    ProductName: { type: String, required: true },
-    ProductPrice: { type: Number, required: true },
-    Description: String,
-    Category: { type: String, required: true },
-    Photos: String,
-    Zodiac: { type: String, enum: [
-        'Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'
-    ] }, // optional
-}, { timestamps: true });
+const ProductSchema = new mongoose.Schema({
+  ProductName: { type: String, required: true },
+  ProductPrice: { type: Number, required: true },
+  Category: { type: String },
+  Zodiac: { type: String }, // optional if used
+  Description: { type: String },
+  Image: { type: String }
+});
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model('Product', ProductSchema);

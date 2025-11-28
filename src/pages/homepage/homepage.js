@@ -445,7 +445,7 @@ const Homepage = () => {
             {/* Left Image */}
             <div className="col-lg-5 col-md-6 col-sm-12 mb-4 mb-lg-0">
               <img
-                src="./images/knowus-girl.jpg"
+                src="./images/know-us.jpeg"
                 alt="Founders"
                 className="img-fluid rounded shadow"
                 style={{

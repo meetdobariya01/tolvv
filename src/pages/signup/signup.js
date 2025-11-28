@@ -41,10 +41,13 @@ const Signup = () => {
     setOtpLoading(true);
     try {
       const res = await axios.post(`${api_base}/send-otp`, { mobile: formData.mobile });
-      if (res.data.success) setOtpSent(true);
+      if (res.data.success) {
+        setOtpSent(true);
+        setErrors({});
+      }
     } catch (err) {
       console.error(err);
-      setServerError("Failed to send OTP. Try again.");
+      setServerError(err.response?.data?.message || "Failed to send OTP. Try again.");
     } finally {
       setOtpLoading(false);
     }
@@ -57,14 +60,15 @@ const Signup = () => {
     }
     setOtpLoading(true);
     try {
-      const res = await axios.post(`${api_base}/verify-otp`, { mobile: formData.mobile, Otp: otp });
+      // ✅ Fixed key: send `otp` (lowercase) instead of `Otp`
+      const res = await axios.post(`${api_base}/verify-otp`, { mobile: formData.mobile, otp });
       if (res.data.success) {
         setOtpVerified(true);
         setErrors({});
       }
     } catch (err) {
       console.error(err);
-      setErrors({ otp: "Invalid or expired OTP" });
+      setErrors({ otp: err.response?.data?.message || "Invalid or expired OTP" });
     } finally {
       setOtpLoading(false);
     }
@@ -148,7 +152,7 @@ const Signup = () => {
                   onClick={otpSent ? handleVerifyOtp : handleSendOtp}
                   disabled={otpLoading || otpVerified}
                 >
-                  {otpSent ? "Verify OTP" : "Send OTP"}
+                  {otpSent ? (otpLoading ? "Verifying..." : "Verify OTP") : (otpLoading ? "Sending..." : "Send OTP")}
                 </button>
               </div>
 

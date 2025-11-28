@@ -3,7 +3,8 @@ import "./checkout.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
-const currencyFormat = (n) => `₹${Number(n).toFixed(2)}`;
+// Show amounts as whole numbers
+const currencyFormat = (n) => `₹${Math.round(n)}`;
 
 const Checkout = () => {
   const [cart, setCart] = useState([]);
@@ -18,38 +19,40 @@ const Checkout = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [placing, setPlacing] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  // Fetch cart from backend
   useEffect(() => {
     fetch("http://localhost:3000/cart", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.cart?.items?.length > 0) {
-          const products = data.cart.items.map(item => ({
+          const products = data.cart.items.map((item) => ({
             id: item.productId._id,
             name: item.productId.ProductName,
             price: item.productId.ProductPrice,
             qty: item.quantity,
             img: item.productId.Photos?.startsWith("http")
               ? item.productId.Photos
-              : `http://localhost:3000/images/${item.productId.Photos?.replace("images/","")}`,
+              : `http://localhost:3000/images/${item.productId.Photos?.replace(
+                  "images/",
+                  ""
+                )}`,
           }));
           setCart(products);
           setCartId(data.cart._id);
         }
       })
-      .catch(err => console.error("Failed to fetch cart:", err));
+      .catch((err) => console.error("Failed to fetch cart:", err));
   }, [token]);
 
-  const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+  // Calculate amounts as integers
+  const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const shipping = subtotal > 2000 || subtotal === 0 ? 0 : 99;
-  const gst = +(subtotal * 0.18).toFixed(2);
-  const total = subtotal + shipping + gst;
+  const gst = Math.round(subtotal * 0.18);
+  const total = subtotal + gst + shipping;
 
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
@@ -57,59 +60,86 @@ const Checkout = () => {
   };
 
   const validate = () => {
-    if (cart.length === 0) { alert("Your cart is empty."); return false; }
-    if (!billing.name || !billing.email || !billing.phone) {
-      alert("Please fill in Name, Email & Phone.");
-      return false;
-    }
+    if (cart.length === 0) return alert("Your cart is empty.");
+    if (!billing.name || !billing.email || !billing.phone)
+      return alert("Please fill in Name, Email & Phone.");
     return true;
   };
 
-  const placeOrder = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-    setPlacing(true);
+ const placeOrder = async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
+  setPlacing(true);
 
-    try {
-      const res = await fetch(`http://localhost:3000/place-order/${cartId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+  try {
+    const cgst = Math.round(subtotal * 0.09);
+    const sgst = Math.round(subtotal * 0.09);
+    const totalAmount = subtotal + cgst + sgst;
+
+    // Prepare items for backend
+    const orderItems = cart.map((item) => ({
+      id: item.id,
+      qty: item.qty,
+      price: item.price,
+      productId: item.id, // must match backend schema
+      quantity: item.qty,
+      priceAtBuy: item.price,
+    }));
+
+    const res = await fetch(`http://localhost:3000/place-order`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        items: orderItems,
+        paymentMethod,
+        address: {
           houseNumber: billing.address,
           buildingName: billing.name,
           city: billing.city,
           pincode: billing.pincode,
-        }),
-      });
+        },
+      }),
+    });
 
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.message || "Order failed");
-        setPlacing(false);
-        return;
-      }
+    const data = await res.json();
 
-      setOrderPlaced(true);
-      setCart([]);
-      localStorage.removeItem("cartId");
-    } catch (error) {
-      alert("Something went wrong.");
+    if (!res.ok) {
+      alert(data.message || "Order failed");
+      setPlacing(false);
+      return;
     }
-    setPlacing(false);
-  };
+
+    // Online payment redirect
+    if (paymentMethod === "upi" || paymentMethod === "card") {
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      } else {
+        alert("Failed to initiate payment");
+      }
+    } else {
+      // COD
+      window.location.href = "http://localhost:3001/payment";
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong.");
+  }
+
+  setPlacing(false);
+};
+
 
   return (
     <div>
       <Header />
-
       <div className="checkout-root">
         <h1 className="page-title">Checkout</h1>
 
         <div className="checkout-grid">
-          {/* LEFT - Billing Form */}
           <div className="panel billing-panel">
             <div className="panel-inner">
               <h2>Billing & Shipping</h2>
@@ -121,41 +151,71 @@ const Checkout = () => {
                     name="name"
                     value={billing.name}
                     onChange={handleBillingChange}
-                    placeholder="Meet Sharma"
+                    required
+                  />
+                </label>
+                <label>
+                  Email
+                  <input
+                    name="email"
+                    type="email"
+                    value={billing.email}
+                    onChange={handleBillingChange}
                     required
                   />
                 </label>
 
-                <label>Email
-                  <input name="email" type="email" value={billing.email} onChange={handleBillingChange} required />
-                </label>
-
                 <div className="row-two">
-                  <label>Phone
-                    <input name="phone" value={billing.phone} onChange={handleBillingChange} required />
+                  <label>
+                    Phone
+                    <input
+                      name="phone"
+                      value={billing.phone}
+                      onChange={handleBillingChange}
+                      required
+                    />
                   </label>
-
-                  <label>Pincode
-                    <input name="pincode" value={billing.pincode} onChange={handleBillingChange} />
+                  <label>
+                    Pincode
+                    <input
+                      name="pincode"
+                      value={billing.pincode}
+                      onChange={handleBillingChange}
+                    />
                   </label>
                 </div>
 
-                <label>Address
-                  <textarea name="address" value={billing.address} onChange={handleBillingChange} rows="3" />
+                <label>
+                  Address
+                  <textarea
+                    name="address"
+                    value={billing.address}
+                    onChange={handleBillingChange}
+                    rows="3"
+                  />
                 </label>
-
-                <label>City
+                <label>
+                  City
                   <input name="city" value={billing.city} onChange={handleBillingChange} />
                 </label>
 
-                {/* Payment Method */}
                 <div className="payment-block">
                   <h3>Payment Method</h3>
                   <div className="payment-options">
-                    {["upi","card","cod"].map(op => (
+                    {["upi", "card", "cod"].map((op) => (
                       <label key={op} className={paymentMethod === op ? "active" : ""}>
-                        <input type="radio" name="payment" value={op} checked={paymentMethod === op} onChange={() => setPaymentMethod(op)} />
-                        {op === "upi" ? "UPI / Google Pay" : op === "card" ? "Credit / Debit Card" : "Cash on Delivery"}
+                        <input
+                          type="radio"
+                          name="payment"
+                          value={op}
+                          checked={paymentMethod === op}
+                          onChange={() => setPaymentMethod(op)}
+                        />
+                        {op === "upi"
+                          ? "UPI / Google Pay"
+                          : op === "card"
+                          ? "Credit / Debit Card"
+                          : "Cash on Delivery"}
                       </label>
                     ))}
                   </div>
@@ -163,18 +223,16 @@ const Checkout = () => {
 
                 <div className="form-actions">
                   <button className="place-btn" type="submit" disabled={placing}>
-                    {placing ? "Placing order..." : `Place order — ${currencyFormat(total)}`}
+                    {placing ? "Processing..." : `Pay — ${currencyFormat(total)}`}
                   </button>
                 </div>
               </form>
             </div>
           </div>
 
-          {/* RIGHT - Summary */}
           <aside className="panel summary-panel">
             <div className="panel-inner">
               <h2>Order Summary</h2>
-
               <div className="items-list">
                 {cart.length === 0 ? (
                   <div className="empty-cart">Your cart is empty</div>
@@ -195,23 +253,27 @@ const Checkout = () => {
               </div>
 
               <div className="price-breakdown">
-                <div className="row"><span>Subtotal</span><span>{currencyFormat(subtotal)}</span></div>
-                <div className="row"><span>GST (18%)</span><span>{currencyFormat(gst)}</span></div>
-                <div className="row"><span>Shipping</span><span>{shipping === 0 ? "FREE" : currencyFormat(shipping)}</span></div>
-                <div className="row total"><strong>Total</strong><strong>{currencyFormat(total)}</strong></div>
-              </div>
-
-              {orderPlaced && (
-                <div className="order-success">
-                  <div className="success-emoji">✅</div>
-                  <div className="success-text">Order placed successfully!</div>
+                <div className="row">
+                  <span>Subtotal</span>
+                  <span>{currencyFormat(subtotal)}</span>
                 </div>
-              )}
+                <div className="row">
+                  <span>GST (18%)</span>
+                  <span>{currencyFormat(gst)}</span>
+                </div>
+                <div className="row">
+                  <span>Shipping</span>
+                  <span>{shipping === 0 ? "FREE" : currencyFormat(shipping)}</span>
+                </div>
+                <div className="row total">
+                  <strong>Total</strong>
+                  <strong>{currencyFormat(total)}</strong>
+                </div>
+              </div>
             </div>
           </aside>
         </div>
       </div>
-
       <Footer />
     </div>
   );

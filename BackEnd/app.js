@@ -1,3 +1,5 @@
+
+require("dotenv").config();
 // app.js
 const express = require("express");
 const app = express();
@@ -10,13 +12,19 @@ const User = require("./Model/UserSchema");
 const Product = require("./Model/Product.add.admin");
 const Cart = require("./Model/Cart");
 const Order = require("./Model/order");
+const OrderTracking = require("./Model/order.traking");
 const bodyParser = require("body-parser");
 const tempOtp = {};
+const twilio = require("twilio");
+// Twilio Client
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
 require("./db/conn");
 require("./Model/mobile");
 require("./Model/order.traking");
 const cors = require('cors');
-
+const { PaymentHandler, validateHMAC_SHA256, APIException } = require("./payment/PaymentHandler");
+const crypto = require("crypto");
 app.use(cors());
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
@@ -26,17 +34,11 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(
-  "/images",
-  express.static("D:\\Job\\Telve\\tolvv\\public\\images")
+    "/images",
+    express.static("D:\\Job\\Telve\\tolvv\\public\\images")
 );
 // Multer setup
 const OTP_EXPIRY_TIME = 5 * 60 * 1000;
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
-
 // JWT authentication middleware
 const authenticate = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -51,38 +53,69 @@ const authenticate = (req, res, next) => {
     }
 };
 
+app.use(express.urlencoded({ extended: true }));
 /* -----------------------
    ROUTES
 ----------------------- */
-
 // Send OTP
+// 📌 SEND OTP API
 app.post("/send-otp", async (req, res) => {
-    const { mobile } = req.body;
-    if (!mobile) return res.status(400).json({ success: false, message: "Mobile number is required." });
-    if (!/^[6-9]\d{9}$/.test(mobile)) return res.status(400).json({ success: false, message: "Invalid phone number." });
+  const { mobile } = req.body;
 
-    const Otp = Math.floor(1000 + Math.random() * 9000).toString();
-    tempOtp[mobile] = { Otp, expiresAt: Date.now() + OTP_EXPIRY_TIME };
-    console.log(`OTP for ${mobile} is ${Otp}`);
-    res.json({ success: true, message: 'OTP sent successfully.' });
+  if (!mobile)
+    return res.status(400).json({ success: false, message: "Mobile number is required." });
+
+  if (!/^[6-9]\d{9}$/.test(mobile))
+    return res.status(400).json({ success: false, message: "Invalid phone number." });
+
+  try {
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+    tempOtp[mobile] = {
+      otp,
+      expiresAt: Date.now() + OTP_EXPIRY_TIME,
+    };
+
+    // 📩 Send SMS using Twilio
+    await client.messages.create({
+      body: `Your OTP is ${otp}`,
+      to: `+91${mobile}`, // User phone
+      from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number
+    });
+
+    console.log(`OTP sent to ${mobile}: ${otp}`);
+    res.json({ success: true, message: "OTP sent successfully." });
+
+  } catch (error) {
+    console.error("Twilio error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send OTP. Check Twilio account details.",
+      error: error.message,
+    });
+  }
 });
 
-// Verify OTP
-app.post("/verify-otp", async (req, res) => {
-    const { mobile, Otp } = req.body;
-    if (!mobile || !Otp) return res.status(400).json({ success: false, message: "Mobile number and OTP are required." });
+// 📌 VERIFY OTP
+// 📌 VERIFY OTP
+app.post("/verify-otp", (req, res) => {
+  const { mobile, otp } = req.body;
 
-    const record = tempOtp[mobile];
-    if (!record) return res.status(400).json({ success: false, message: "OTP not found or expired. Please request a new OTP." });
-    if (record.Otp !== Otp) return res.status(400).json({ success: false, message: "Entered OTP is invalid." });
-    if (Date.now() > record.expiresAt) {
-        delete tempOtp[mobile];
-        return res.status(400).json({ success: false, message: "OTP has expired. Please request a new OTP." });
-    }
+  if (!tempOtp[mobile])
+    return res.status(400).json({ success: false, message: "OTP not found. Please resend." });
 
-    tempOtp[mobile].verified = true;
-    res.json({ success: true, message: "OTP verified successfully." });
+  if (tempOtp[mobile].expiresAt < Date.now())
+    return res.status(400).json({ success: false, message: "OTP has expired." });
+
+  if (tempOtp[mobile].otp !== otp)
+    return res.status(400).json({ success: false, message: "Invalid OTP." });
+
+  tempOtp[mobile].verified = true;
+
+  res.json({ success: true, message: "OTP verified successfully." });
 });
+
+
 
 // Signup
 app.post("/signup", async (req, res) => {
@@ -115,40 +148,60 @@ app.post("/signup", async (req, res) => {
 
 // Login
 app.post("/login", async (req, res) => {
-    const { mobile , password } = req.body;
+    const { mobile, password } = req.body;
     if (!mobile || !password) return res.status(400).json({ message: "Mobile number and password are required" });
 
     try {
         const user = await User.findOne({ mobile });
-        if (!user) return res.status(400).json({ message: "Please sign up first" });
+        if (!user) return res.status(400).json({ message: "User not found. Please sign up." });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "24h" });
+        // Include email and mobile in JWT
+        const token = jwt.sign(
+            { id: user._id, role: user.role, email: user.email, mobile: user.mobile },
+            process.env.JWT_SECRET,
+            { expiresIn: "24h" }
+        );
+
         res.status(200).json({ message: "Login successful", token, role: user.role, userId: user._id });
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({ error: "Server error" });
+        res.status(500).json({ message: "Server error" });
     }
 });
 
+
 // Forgot password
+// Forgot password - updated to send SMS
+// Send OTP
 app.post("/forgot-password", async (req, res) => {
     const { mobile } = req.body;
     if (!mobile) return res.status(400).json({ message: "Mobile number is required." });
 
     try {
         const user = await User.findOne({ mobile });
-        if (!user) return res.status(404).json({ message: "User not found with this mobile number." });
+        if (!user) return res.status(404).json({ message: "User not found." });
 
-        const Otp = Math.floor(1000 + Math.random() * 9000).toString();
-        tempOtp[mobile] = { Otp, expiresAt: Date.now() + OTP_EXPIRY_TIME };
-        console.log(`Forgot password OTP for ${mobile} is ${Otp}`);
+        const otp = Math.floor(1000 + Math.random() * 9000).toString();
+        tempOtp[mobile] = { otp, expiresAt: Date.now() + OTP_EXPIRY_TIME };
+
+        console.log(`Sending OTP to +91${mobile}: ${otp}`); // debug
+
+        try {
+            await client.messages.create({
+                body: `Your password reset OTP is ${otp}`,
+                to: `+91${mobile}`,
+                from: process.env.TWILIO_PHONE_NUMBER,
+            });
+        } catch (err) {
+            console.warn(`Twilio error: ${err.message}`);
+        }
 
         res.status(200).json({ message: "OTP sent successfully." });
-    } catch (error) {
-        console.error("Forgot password error:", error);
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ message: "Server error" });
     }
 });
@@ -156,20 +209,18 @@ app.post("/forgot-password", async (req, res) => {
 // Verify reset OTP
 app.post("/verify-reset-otp", async (req, res) => {
     const { mobile, Otp } = req.body;
-    if (!mobile || !Otp) return res.status(400).json({ message: "Mobile number and OTP are required." });
-
     const record = tempOtp[mobile];
-    if (!record) return res.status(400).json({ message: "OTP not found or expired. Please request a new OTP." });
-    if (record.Otp !== Otp) return res.status(400).json({ message: "Invalid OTP." });
+    if (!record) return res.status(400).json({ message: "OTP not found or expired." });
+
+    if (record.otp !== Otp) return res.status(400).json({ message: "Invalid OTP." });
     if (Date.now() > record.expiresAt) {
         delete tempOtp[mobile];
-        return res.status(400).json({ message: "OTP expired. Please request a new OTP." });
+        return res.status(400).json({ message: "OTP expired." });
     }
 
     tempOtp[mobile].verified = true;
     res.status(200).json({ message: "OTP verified successfully." });
 });
-
 // Reset password
 app.post("/reset-password", async (req, res) => {
     const { mobile, newPassword } = req.body;
@@ -278,53 +329,273 @@ app.post("/add-to-cart", authenticate, async (req, res) => {
 });
 
 // Place order
-app.post('/place-order/:cartId', authenticate, async (req, res) => {
-    try {
-        const { cartId } = req.params;
-        const { houseNumber, buildingName, societyName, road, landmark, city, pincode } = req.body;
-        if (!city || !pincode) return res.status(400).json({ message: 'Missing delivery address.' });
+// Place order
+// app.post("/place-order", authenticate, async (req, res) => {
+//   try {
+//     const { items, paymentMethod, address } = req.body;
 
-        const cart = await Cart.findById(cartId).populate('items.productId');
-        if (!cart || cart.items.length === 0) return res.status(404).json({ message: 'Cart not found or empty.' });
+//     if (!items || items.length === 0)
+//       return res.status(400).json({ message: "Cart is empty" });
+//     if (!address || !address.city || !address.pincode)
+//       return res.status(400).json({ message: "Address incomplete" });
 
-        let totalAmount = 0;
-        cart.items.forEach(item => {
-            if (item.productId?.ProductPrice) {
-                totalAmount += item.quantity * item.productId.ProductPrice;
-            }
-        });
+//     let subtotal = 0;
+//     items.forEach(item => subtotal += item.price * item.qty);
 
-        const cgst = totalAmount * 0.025;
-        const sgst = totalAmount * 0.025;
-        const other = totalAmount * 0.02;
-        const finalAmount = totalAmount + cgst + sgst + other;
+//     const cgst = +(subtotal * 0.09).toFixed(2);
+//     const sgst = +(subtotal * 0.09).toFixed(2);
+//     const totalAmount = +(subtotal + cgst + sgst).toFixed(2);
 
-        const order = new Order({
-            cartId: cart._id,
-            userId: req.user.id,
-            items: cart.items,
-            subtotal: totalAmount,
-            cgst, sgst,
-            totalAmount: finalAmount,
-            address: { houseNumber, buildingName, societyName, road, landmark, city, pincode },
-            status: 'Pending'
-        });
+//     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
-        await order.save();
+//     // Save order to DB
+//    const newOrder = new Order({
+//   userId: req.user.id,
+//   customOrderId,
+//   items: items.map(i => ({
+//     productId: i.id,
+//     quantity: i.qty,
+//     priceAtBuy: i.price
+//   })),
+//   subtotal,
+//   cgst,
+//   sgst,
+//   totalAmount,
+//   paymentMethod,
+//   orderStatus: "Pending",   // Delivery status
+//   status: "PENDING",        // Payment will update later
+//   address
+// });
 
-        // Clear cart
-        cart.items = [];
-        cart.totalPrice = 0;
-        await cart.save();
 
-        res.status(201).json({ message: 'Order placed successfully.', order });
-    } catch (err) {
-        console.error("Place order error:", err);
-        res.status(500).json({ message: 'Server error', error: err });
-    }
+//     await newOrder.save();
+
+//     await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
+
+//     if (paymentMethod === "card" || paymentMethod === "upi") {
+//       const paymentHandler = PaymentHandler.getInstance();
+//       const sessionResp = await paymentHandler.orderSession({
+//         order_id: customOrderId,          // mandatory
+//         amount: Number(totalAmount.toFixed(2)), // must be `amount`
+//         currency: "INR",
+//         customer_id: req.user.id.toString(),
+//         customer_mobile: req.user.mobile,
+//         return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:3000/payment-callback"
+//       });
+
+//       if (sessionResp?.payment_links?.web) {
+//         return res.status(201).json({
+//           message: "Order placed, redirecting to payment",
+//           redirect: sessionResp.payment_links.web
+//         });
+//       }
+
+//       return res.status(500).json({ message: "Payment session creation failed" });
+//     }
+
+//     res.status(201).json({ message: "Order placed successfully", orderId: customOrderId });
+//   } catch (err) {
+//     console.error("Place order error:", err);
+//     if (err instanceof APIException) {
+//       return res.status(400).json({
+//         message: "Payment API error",
+//         error: err.errorMessage || err.message,
+//         code: err.errorCode
+//       });
+//     }
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+// app.post("/payment-callback", async (req, res) => {
+//   const { order_id } = req.body;
+//   const paymentHandler = PaymentHandler.getInstance();
+
+//   try {
+//     if (!validateHMAC_SHA256(req.body, paymentHandler.getResponseKey())) {
+//       return res.status(400).send("Invalid signature");
+//     }
+
+//     const orderStatusResp = await paymentHandler.orderStatus(order_id);
+//     await Order.findOneAndUpdate(
+//       { customOrderId: order_id },
+//       { status: orderStatusResp.status }
+//     );
+
+//     res.send(`<h1>Payment ${orderStatusResp.status}</h1>`);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Payment verification failed");
+//   }
+// });
+
+app.post("/place-order", authenticate, async (req, res) => {
+  try {
+    const { items, paymentMethod, address } = req.body;
+
+    if (!items || !items.length)
+      return res.status(400).json({ message: "Cart is empty" });
+
+    let subtotal = 0;
+    items.forEach(item => subtotal += item.price * item.qty);
+
+    const cgst = +(subtotal * 0.09).toFixed(2);
+    const sgst = +(subtotal * 0.09).toFixed(2);
+    const totalAmount = +(subtotal + cgst + sgst).toFixed(2);
+
+    const customOrderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+
+    // ✅ 1. CREATE ORDER
+    const newOrder = await Order.create({
+      userId: req.user.id,
+      customOrderId,
+      items: items.map(i => ({
+        productId: i.id,
+        quantity: i.qty,
+        priceAtBuy: i.price
+      })),
+      subtotal,
+      cgst,
+      sgst,
+      totalAmount,
+      paymentMethod,
+      status: "PENDING",
+      address
+    });
+
+    // ✅ 2. CREATE DELIVERY TRACKING (THIS WAS MISSING)
+    await OrderTracking.create({
+      orderId: customOrderId,
+      deliveryStatus: "ORDER_PLACED",
+      timeline: [
+        {
+          status: "ORDER_PLACED",
+          note: "Order successfully placed",
+          updatedAt: new Date()
+        }
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    await Cart.updateOne({ userId: req.user.id }, { $set: { items: [] } });
+
+    res.status(201).json({
+      success: true,
+      message: "Order placed successfully",
+      orderId: customOrderId,
+      totalAmount
+    });
+
+  } catch (error) {
+    console.error("Order error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
+
 // Get cart
+
+app.post("/payment-callback", async (req, res) => {
+  const { order_id } = req.body;
+  const paymentHandler = PaymentHandler.getInstance();
+
+  try {
+    if (!validateHMAC_SHA256(req.body, paymentHandler.getResponseKey())) {
+      return res.status(400).send("Invalid signature");
+    }
+
+    // Get actual payment status from HDFC
+    const orderStatusResp = await paymentHandler.orderStatus(order_id);
+    const paymentStatus = orderStatusResp.status;  // <-- FIXED
+
+    // Save payment status + raw response
+    await Order.findOneAndUpdate(
+      { customOrderId: order_id },
+      {
+        status: paymentStatus,       // CHARGED / FAILED
+        hdfcResponse: orderStatusResp
+      },
+      { new: true }
+    );
+
+    res.send(`<h1>Payment ${paymentStatus}</h1>`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Payment verification failed");
+  }
+});
+
+// Get order status by MongoDB _id
+// app.get("/order/status/:id", authenticate, async (req, res) => {
+//   try {
+//     const order = await Order.findById(req.params.id).populate("items.productId");
+
+//     if (!order) {
+//       return res.status(404).json({ message: "Order not found" });
+//     }
+
+//     res.status(200).json({
+//       orderId: order._id,
+//       customOrderId: order.customOrderId,
+//       paymentStatus: order.status,        // CHARGED / FAILED / PENDING
+//       deliveryStatus: order.orderStatus, // Pending / Shipped / Delivered
+//       totalAmount: order.totalAmount,
+//       createdAt: order.createdAt,
+//       items: order.items.map(item => ({
+//         productName: item.productId.ProductName,
+//         quantity: item.quantity,
+//         price: item.priceAtBuy
+//       }))
+//     });
+//   } catch (error) {
+//     console.error("Order status error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+app.get("/order/status/:orderId", authenticate, async (req, res) => {
+  try {
+    const order = await Order.findOne({ customOrderId: req.params.orderId })
+      .populate("items.productId");
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    res.json({
+      orderId: order.customOrderId,
+      paymentStatus: order.status,
+      deliveryStatus: order.orderStatus,
+      totalAmount: order.totalAmount,
+      createdAt: order.createdAt,
+      items: order.items.map(item => ({
+        productName: item.productId.ProductName,
+        quantity: item.quantity,
+        price: item.priceAtBuy
+      }))
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+app.get("/order/details/:orderId", authenticate, async (req, res) => {
+  try {
+    const order = await Order.findOne({ customOrderId: req.params.orderId });
+    const tracking = await OrderTracking.findOne({ orderId: req.params.orderId });
+
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    res.json({
+      orderId: order.customOrderId,
+      paymentStatus: order.status,
+      totalAmount: order.totalAmount,
+      deliveryStatus: tracking?.deliveryStatus || "ORDER_PLACED",
+      timeline: tracking?.timeline || []
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 app.get('/cart', authenticate, async (req, res) => {
     try {
         const cart = await Cart.findOne({ userId: req.user.id }).populate('items.productId');
@@ -378,56 +649,15 @@ app.get("/products/category/:category", async (req, res) => {
     }
 });
 // Place order from checkout
-app.post("/order/checkout", authenticate, async (req, res) => {
-  try {
-    const { items, address, paymentMethod } = req.body;
+// Place order from checkout with custom order ID
 
-    if (!items || items.length === 0) {
-      return res.status(400).json({ message: "Cart is empty" });
-    }
-    if (!address || !address.city || !address.pincode) {
-      return res.status(400).json({ message: "Address is incomplete" });
-    }
 
-    let total = 0;
-    items.forEach((i) => {
-      total += i.price * i.qty;
-    });
-
-    const newOrder = new Order({
-      userId: req.user.id,
-      items: items.map((i) => ({
-        productId: i.id,
-        quantity: i.qty,
-        priceAtBuy: i.price,
-      })),
-      totalAmount: total,
-      paymentMethod,
-      status: "Pending",
-      address,
-    });
-
-    await newOrder.save();
-
-    // clear cart after ordering
-    await Cart.findOneAndUpdate(
-      { userId: req.user.id },
-      { $set: { items: [] } }
-    );
-
-    res.status(201).json({
-      success: true,
-      message: "Order placed successfully",
-      orderId: newOrder._id,
-    });
-  } catch (err) {
-    console.error("Checkout Order Error:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 
 // Start server
 server.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });
+
+
+
