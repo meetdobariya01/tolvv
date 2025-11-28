@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
+import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 
 const Faqs = () => {
   return (
@@ -25,9 +26,7 @@ const Faqs = () => {
       >
         <div className="container text-center">
           {/* Header */}
-          <h1 className="the-artisan-font">
-            Faqs
-          </h1>
+          <h1 className="the-artisan-font">Faqs</h1>
           <h5
             className="mb-4"
             style={{
@@ -60,28 +59,7 @@ const Faqs = () => {
             style={{ maxWidth: "800px", fontSize: "15px", color: "#000" }}
           >
             <hr />
-            <p>
-              1. What makes your self-care products different from others in the
-              market?
-            </p>
-            <hr />
-            <p>2. Are your products natural, organic, or cruelty-free?</p>
-            <hr />
-            <p>3. Are your products dermatologically or clinically tested?</p>
-            <hr />
-            <p>4. Where do you source your ingredients from?</p>
-            <hr />
-            <p>5. Are your products safe for sensitive skin?</p>
-            <hr />
-            <p>6. Where can I buy your products – online or in store?</p>
-            <hr />
-            <p>7. Do you ship internationally?</p>
-            <hr />
-            <p>8. What is your return or exchange policy?</p>
-            <hr />
-            <p>9. Are they suitable for men, women, and teenagers alike?</p>
-            <hr />
-            <p>10. Are your products safe during pregnancy or breastfeeding?</p>
+            <Allfaqs />
             <hr />
           </div>
         </div>

@@ -25,56 +25,49 @@ const Benifits = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1 className="the-artisan-font">
-            Benefits
-          </h1>
+          <h1 className="the-artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
           <p
             className="mx-auto"
             style={{
-              maxWidth: "900px",
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
             }}
           >
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-            ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-            consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate
-            velit esse molestie consequat, vel illum dolore eu feugiat nulla
-            facilisis at vero eros et accumsan et iusto odio dignissim qui
-            blandit praesent luptatum zzril delenit Lorem ipsum dolor sit amet,
-            consectetuer adipiscing elit, sed diam nonummy nibh euismod
-            tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            Our Zodiac Collection blends luxurious skincare with the energy of
+            your sign, creating a ritual that feels personally designed for you.
+            Each soap, body lotion, bath gel, and perfume is infused with
+            mood-enhancing aromas, skin-loving botanicals, and intention-driven
+            formulations that resonate with your zodiac’s natural traits.
+            Whether you’re a fiery Aries seeking invigorating freshness or a
+            calm Pisces craving soothing hydration, every product aligns with
+            the essence of your cosmic personality.
           </p>
 
           {/* Paragraph 2 */}
           <p
             className="mx-auto mt-4"
             style={{
-              maxWidth: "900px",
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
             }}
           >
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-            volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-            ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-            consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate
-            velit esse molestie consequat, vel illum dolore eu feugiat nulla
-            facilisis at vero eros et accumsan et iusto odio dignissim qui
-            blandit praesent luptatum zzril delenit.
+            These products don’t just nourish your skin; they elevate your
+            spirit. Feel the difference as signature fragrances boost your mood,
+            celestial ingredients restore balance, and your daily routine
+            transforms into a grounding, empowering ritual. With every use,
+            you’re not just caring for your body—you’re connecting with your
+            inner energy, enhancing your aura, and celebrating the unique magic
+            of your zodiac sign.
           </p>
         </div>
       </div>
 
-        {/* Footer Section */}
-        <Footer />
+      {/* Footer Section */}
+      <Footer />
     </div>
   );
 };

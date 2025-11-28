@@ -1,5 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { NavLink } from "react-router-dom";
 import { FaInstagram, FaEnvelope } from "react-icons/fa";
 
 export const Footer = () => {
@@ -18,12 +19,50 @@ export const Footer = () => {
             <div className="col-md-3 col-6">
               <h6 className="fw-bold text-uppercase mb-3">Discover</h6>
               <ul className="list-unstyled small">
-                <li className="mb-2">Bath Gel</li>
-                <li className="mb-2">Bath Lotion</li>
-                <li className="mb-2">Soap</li>
-                <li className="mb-2">Eau de Perfumes</li>
-                <li className="mb-2">Essential Oil</li>
-                <li className="mb-2">Candles</li>
+                <li className="mb-2">
+                  <NavLink
+                    to="/product"
+                    className="text-decoration-none text-light"
+                  >
+                    Bath Gel
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink
+                    to="/product"
+                    className="text-decoration-none text-light"
+                  >
+                    Bath Lotion
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink
+                    to="/product"
+                    className="text-decoration-none text-light"
+                  >
+                    Soap
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink
+                    to="/product"
+                    className="text-decoration-none text-light"
+                  >
+                    Eau de Perfumes
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink
+                    to="/product"
+                    className="text-decoration-none text-light"
+                  >
+                    Essential Oil
+                  </NavLink>
+                </li>
               </ul>
             </div>
 
@@ -32,7 +71,10 @@ export const Footer = () => {
               <h6 className="fw-bold text-uppercase mb-3">Know Us</h6>
               <ul className="list-unstyled small">
                 <li className="mb-2">
-                  <a href="/connect" className="text-white text-decoration-none">
+                  <a
+                    href="/connect"
+                    className="text-white text-decoration-none"
+                  >
                     Connect
                   </a>
                 </li>
