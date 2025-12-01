@@ -10,23 +10,9 @@ import "./homepage.css";
 import Homeproduct from "../../components/category/home-product/homeproduct";
 import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
+import Zodic from "../Zodiacs/zodics";
 
 const Homepage = () => {
-  const zodiacSigns = [
-    { name: "Aries", color: "#7E0D0D", image: "./images/zodiac/1.png" },
-    { name: "Taurus", color: "#7B8E2E", image: "./images/zodiac/2.png" },
-    { name: "Gemini", color: "#C6932C", image: "./images/zodiac/3.png" },
-    { name: "Cancer", color: "#B2B2B2", image: "./images/zodiac/4.png" },
-    { name: "Leo", color: "#E0B900", image: "./images/zodiac/5.png" },
-    { name: "Virgo", color: "#E66B3E", image: "./images/zodiac/6.png" },
-    { name: "Libra", color: "#FF766B", image: "./images/zodiac/7.png" },
-    { name: "Scorpio", color: "#111111", image: "./images/zodiac/8.png" },
-    { name: "Sagittarius", color: "#6E4FA8", image: "./images/zodiac/9.png" },
-    { name: "Capricorn", color: "#E7E1C5", image: "./images/zodiac/10.png" },
-    { name: "Aquarius", color: "#6CC0C9", image: "./images/zodiac/11.png" },
-    { name: "Pisces", color: "#003E5E", image: "./images/zodiac/12.png" },
-  ];
-
   const productss = [
     { name: "BATH GEL" },
     { name: "BATH LOTION" },
@@ -133,107 +119,8 @@ const Homepage = () => {
       {/* Products Section */}
       <Homeproduct />
 
-      {/* Category Section */}
-      {/* <Category /> */}
-
-      {/* New Zodiac Section */}
-      <div className="twelve-section">
-        <div className=" d-flex flex-column flex-md-row align-items-center justify-content-center text-white p-4 container">
-          {/* Left Section */}
-          <div className="left-text text-center text-md-start mb-4 mb-md-0 pe-md-5">
-            <h2 className="tangerine-bold">The Twelve</h2>
-            <p className="subtitle">
-              EXPLORE BY YOUR SUN,
-              <br />
-              MOON OR RISING SIGN
-            </p>
-          </div>
-
-          {/* Zodiac Grid */}
-          <div className="zodiac-grid container">
-            <div className="row g-4 justify-content-center">
-              {zodiacSigns.map((sign, index) => (
-                <div
-                  key={index}
-                  className="col-6 col-sm-4 col-md-3 text-center"
-                >
-                  <div
-                    className="zodiac-circle mx-auto"
-                    style={{ backgroundColor: sign.color }}
-                  >
-                    <img
-                      src={sign.image}
-                      alt={sign.name}
-                      className="zodiac-image"
-                    />
-                  </div>
-                  <p className="zodiac-name mt-2">{sign.name}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Vertical Text */}
-          <div className="vertical-text d-none d-md-block">
-            <span>NURTURE YOUR NATURE</span>
-          </div>
-        </div>
-      </div>
-
-      {/*Red Section can be added here*/}
-      <section className="aries-section text-center">
-        <div className="aries-content container">
-          <h1 className="aries-title">Aries</h1>
-          <div className="aries-icon-circle">
-            <img
-              src="./images/zodiac/1.png"
-              alt="Aries Icon"
-              className="aries-icon-img"
-            />
-          </div>
-
-          <p className="aries-date">Date : March 21 - April 19</p>
-
-          <p className="aries-description">
-            Aries, the natural ruler of healthy self-esteem, ego, fresh
-            beginnings, spring, and physical presence, embodies the essence of
-            selfhood. It is the sign of initiation—the spark that gives rise to
-            identity and expression. At its core, Aries represents the formation
-            of a strong, authentic sense of Self. Yet true evolution for Aries
-            comes not only through bold individuality, but also through learning
-            adaptability—acting with conviction while recognizing its role as a
-            vital part of the greater whole.
-          </p>
-
-          <p className="aries-details">
-            <span>Corresponding Letters : A, L, E, I, O</span> &nbsp;&nbsp; |
-            &nbsp;&nbsp; <span>Astral Energy : Courage</span> &nbsp;&nbsp; |
-            &nbsp;&nbsp; <span>Stamina</span>
-            <br />
-            <span>Colour : Red</span> &nbsp;&nbsp; | &nbsp;&nbsp;
-            <span>Element : Fire</span> &nbsp;&nbsp; | &nbsp;&nbsp;
-            <span>Ruling Planet : Mars</span>
-          </p>
-        </div>
-
-        <div className="aries-images container d-flex justify-content-center align-items-end gap-5 flex-wrap">
-          <img
-            src="./images/ginger.png"
-            alt="Ginger"
-            className="half-out-image"
-          />
-          <img
-            src="./images/Cinnamon.png"
-            alt="Cinnamon"
-            className="half-out-image"
-          />
-          <img
-            src="./images/coconut.png"
-            alt="Coconut"
-            className="half-out-image"
-          />
-        </div>
-      </section>
+      {/* Zodics section */}
+      <Zodic />
 
       {/* products grid */}
       <Product />
