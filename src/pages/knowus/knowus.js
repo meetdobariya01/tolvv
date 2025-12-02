@@ -16,7 +16,7 @@ const Knowus = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <img src="./images/know-us.png" alt="Hero" className="hero-image" />
+        <img src="./images/know-us.jpg" alt="Hero" className="hero-image" />
       </motion.div>
 
       <div
