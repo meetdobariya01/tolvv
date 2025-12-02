@@ -330,111 +330,14 @@ app.post("/add-to-cart", authenticate, async (req, res) => {
 
 // Place order
 // Place order
-// app.post("/place-order", authenticate, async (req, res) => {
-//   try {
-//     const { items, paymentMethod, address } = req.body;
-
-//     if (!items || items.length === 0)
-//       return res.status(400).json({ message: "Cart is empty" });
-//     if (!address || !address.city || !address.pincode)
-//       return res.status(400).json({ message: "Address incomplete" });
-
-//     let subtotal = 0;
-//     items.forEach(item => subtotal += item.price * item.qty);
-
-//     const cgst = +(subtotal * 0.09).toFixed(2);
-//     const sgst = +(subtotal * 0.09).toFixed(2);
-//     const totalAmount = +(subtotal + cgst + sgst).toFixed(2);
-
-//     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
-
-//     // Save order to DB
-//    const newOrder = new Order({
-//   userId: req.user.id,
-//   customOrderId,
-//   items: items.map(i => ({
-//     productId: i.id,
-//     quantity: i.qty,
-//     priceAtBuy: i.price
-//   })),
-//   subtotal,
-//   cgst,
-//   sgst,
-//   totalAmount,
-//   paymentMethod,
-//   orderStatus: "Pending",   // Delivery status
-//   status: "PENDING",        // Payment will update later
-//   address
-// });
-
-
-//     await newOrder.save();
-
-//     await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
-
-//     if (paymentMethod === "card" || paymentMethod === "upi") {
-//       const paymentHandler = PaymentHandler.getInstance();
-//       const sessionResp = await paymentHandler.orderSession({
-//         order_id: customOrderId,          // mandatory
-//         amount: Number(totalAmount.toFixed(2)), // must be `amount`
-//         currency: "INR",
-//         customer_id: req.user.id.toString(),
-//         customer_mobile: req.user.mobile,
-//         return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:3000/payment-callback"
-//       });
-
-//       if (sessionResp?.payment_links?.web) {
-//         return res.status(201).json({
-//           message: "Order placed, redirecting to payment",
-//           redirect: sessionResp.payment_links.web
-//         });
-//       }
-
-//       return res.status(500).json({ message: "Payment session creation failed" });
-//     }
-
-//     res.status(201).json({ message: "Order placed successfully", orderId: customOrderId });
-//   } catch (err) {
-//     console.error("Place order error:", err);
-//     if (err instanceof APIException) {
-//       return res.status(400).json({
-//         message: "Payment API error",
-//         error: err.errorMessage || err.message,
-//         code: err.errorCode
-//       });
-//     }
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
-
-// app.post("/payment-callback", async (req, res) => {
-//   const { order_id } = req.body;
-//   const paymentHandler = PaymentHandler.getInstance();
-
-//   try {
-//     if (!validateHMAC_SHA256(req.body, paymentHandler.getResponseKey())) {
-//       return res.status(400).send("Invalid signature");
-//     }
-
-//     const orderStatusResp = await paymentHandler.orderStatus(order_id);
-//     await Order.findOneAndUpdate(
-//       { customOrderId: order_id },
-//       { status: orderStatusResp.status }
-//     );
-
-//     res.send(`<h1>Payment ${orderStatusResp.status}</h1>`);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Payment verification failed");
-//   }
-// });
-
 app.post("/place-order", authenticate, async (req, res) => {
   try {
     const { items, paymentMethod, address } = req.body;
 
-    if (!items || !items.length)
+    if (!items || items.length === 0)
       return res.status(400).json({ message: "Cart is empty" });
+    if (!address || !address.city || !address.pincode)
+      return res.status(400).json({ message: "Address incomplete" });
 
     let subtotal = 0;
     items.forEach(item => subtotal += item.price * item.qty);
@@ -443,58 +346,66 @@ app.post("/place-order", authenticate, async (req, res) => {
     const sgst = +(subtotal * 0.09).toFixed(2);
     const totalAmount = +(subtotal + cgst + sgst).toFixed(2);
 
-    const customOrderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+    const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
-    // ✅ 1. CREATE ORDER
-    const newOrder = await Order.create({
-      userId: req.user.id,
-      customOrderId,
-      items: items.map(i => ({
-        productId: i.id,
-        quantity: i.qty,
-        priceAtBuy: i.price
-      })),
-      subtotal,
-      cgst,
-      sgst,
-      totalAmount,
-      paymentMethod,
-      status: "PENDING",
-      address
-    });
-
-    // ✅ 2. CREATE DELIVERY TRACKING (THIS WAS MISSING)
-    await OrderTracking.create({
-      orderId: customOrderId,
-      deliveryStatus: "ORDER_PLACED",
-      timeline: [
-        {
-          status: "ORDER_PLACED",
-          note: "Order successfully placed",
-          updatedAt: new Date()
-        }
-      ],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
-
-    await Cart.updateOne({ userId: req.user.id }, { $set: { items: [] } });
-
-    res.status(201).json({
-      success: true,
-      message: "Order placed successfully",
-      orderId: customOrderId,
-      totalAmount
-    });
-
-  } catch (error) {
-    console.error("Order error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
+    // Save order to DB
+   const newOrder = new Order({
+  userId: req.user.id,
+  customOrderId,
+  items: items.map(i => ({
+    productId: i.id,
+    quantity: i.qty,
+    priceAtBuy: i.price
+  })),
+  subtotal,
+  cgst,
+  sgst,
+  totalAmount,
+  paymentMethod,
+  orderStatus: "Pending",   // Delivery status
+  status: "PENDING",        // Payment will update later
+  address
 });
 
 
-// Get cart
+    await newOrder.save();
+
+    await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
+
+    if (paymentMethod === "card" || paymentMethod === "upi") {
+      const paymentHandler = PaymentHandler.getInstance();
+      const sessionResp = await paymentHandler.orderSession({
+        order_id: customOrderId,          // mandatory
+        amount: Number(totalAmount.toFixed(2)), // must be `amount`
+        currency: "INR",
+        customer_id: req.user.id.toString(),
+        customer_mobile: req.user.mobile,
+        return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:3000/payment-callback"
+      });
+
+      if (sessionResp?.payment_links?.web) {
+        return res.status(201).json({
+          message: "Order placed, redirecting to payment",
+          redirect: sessionResp.payment_links.web
+        });
+      }
+
+      return res.status(500).json({ message: "Payment session creation failed" });
+    }
+
+    res.status(201).json({ message: "Order placed successfully", orderId: customOrderId });
+  } catch (err) {
+    console.error("Place order error:", err);
+    if (err instanceof APIException) {
+      return res.status(400).json({
+        message: "Payment API error",
+        error: err.errorMessage || err.message,
+        code: err.errorCode
+      });
+    }
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 app.post("/payment-callback", async (req, res) => {
   const { order_id } = req.body;
@@ -505,26 +416,115 @@ app.post("/payment-callback", async (req, res) => {
       return res.status(400).send("Invalid signature");
     }
 
-    // Get actual payment status from HDFC
     const orderStatusResp = await paymentHandler.orderStatus(order_id);
-    const paymentStatus = orderStatusResp.status;  // <-- FIXED
-
-    // Save payment status + raw response
     await Order.findOneAndUpdate(
       { customOrderId: order_id },
-      {
-        status: paymentStatus,       // CHARGED / FAILED
-        hdfcResponse: orderStatusResp
-      },
-      { new: true }
+      { status: orderStatusResp.status }
     );
 
-    res.send(`<h1>Payment ${paymentStatus}</h1>`);
+    res.send(`<h1>Payment ${orderStatusResp.status}</h1>`);
   } catch (err) {
     console.error(err);
     res.status(500).send("Payment verification failed");
   }
 });
+
+// app.post("/place-order", authenticate, async (req, res) => {
+//   try {
+//     const { items, paymentMethod, address } = req.body;
+
+//     if (!items || !items.length)
+//       return res.status(400).json({ message: "Cart is empty" });
+
+//     let subtotal = 0;
+//     items.forEach(item => subtotal += item.price * item.qty);
+
+//     const cgst = +(subtotal * 0.09).toFixed(2);
+//     const sgst = +(subtotal * 0.09).toFixed(2);
+//     const totalAmount = +(subtotal + cgst + sgst).toFixed(2);
+
+//     const customOrderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+
+//     // ✅ 1. CREATE ORDER
+//     const newOrder = await Order.create({
+//       userId: req.user.id,
+//       customOrderId,
+//       items: items.map(i => ({
+//         productId: i.id,
+//         quantity: i.qty,
+//         priceAtBuy: i.price
+//       })),
+//       subtotal,
+//       cgst,
+//       sgst,
+//       totalAmount,
+//       paymentMethod,
+//       status: "PENDING",
+//       address
+//     });
+
+//     // ✅ 2. CREATE DELIVERY TRACKING (THIS WAS MISSING)
+//     await OrderTracking.create({
+//       orderId: customOrderId,
+//       deliveryStatus: "ORDER_PLACED",
+//       timeline: [
+//         {
+//           status: "ORDER_PLACED",
+//           note: "Order successfully placed",
+//           updatedAt: new Date()
+//         }
+//       ],
+//       createdAt: new Date(),
+//       updatedAt: new Date()
+//     });
+
+//     await Cart.updateOne({ userId: req.user.id }, { $set: { items: [] } });
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Order placed successfully",
+//       orderId: customOrderId,
+//       totalAmount
+//     });
+
+//   } catch (error) {
+//     console.error("Order error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+
+// // Get cart
+
+// app.post("/payment-callback", async (req, res) => {
+//   const { order_id } = req.body;
+//   const paymentHandler = PaymentHandler.getInstance();
+
+//   try {
+//     if (!validateHMAC_SHA256(req.body, paymentHandler.getResponseKey())) {
+//       return res.status(400).send("Invalid signature");
+//     }
+
+//     // Get actual payment status from HDFC
+//     const orderStatusResp = await paymentHandler.orderStatus(order_id);
+//     const paymentStatus = orderStatusResp.status;  // <-- FIXED
+
+//     // Save payment status + raw response
+//     await Order.findOneAndUpdate(
+//       { customOrderId: order_id },
+//       {
+//         status: paymentStatus,       // CHARGED / FAILED
+//         hdfcResponse: orderStatusResp
+//       },
+//       { new: true }
+//     );
+
+//     res.send(`<h1>Payment ${paymentStatus}</h1>`);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Payment verification failed");
+//   }
+// });
 
 // Get order status by MongoDB _id
 // app.get("/order/status/:id", authenticate, async (req, res) => {

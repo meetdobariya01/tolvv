@@ -19,7 +19,7 @@ app.use('/images', express.static(path.join(__dirname,'../../public/images')));
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['http://localhost:3000', 'http://localhost:3001','http://localhost:3002'],
   credentials: true
 }));
 

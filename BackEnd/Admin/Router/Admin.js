@@ -235,48 +235,28 @@ router.get("/stats/order-status-summary", adminAuth, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-router.put("/orders/:orderId/status", adminAuth, async (req, res) => {
-try {
-const { orderStatus } = req.body;
+router.put("/orders/:id/status", async (req, res) => {
+  try {
+    const { status } = req.body;
 
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
 
-const order = await Order.findOneAndUpdate(
-{ customOrderId: req.params.orderId },
-{ orderStatus },
-{ new: true }
-);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
 
+    res.json(order);
 
-if (!order) {
-return res.status(404).json({ message: "Order not found" });
-}
-
-
-await OrderTracking.findOneAndUpdate(
-{ orderId: req.params.orderId },
-{
-$set: { status: orderStatus },
-$push: {
-history: {
-status: orderStatus,
-note: `Updated to ${orderStatus}`,
-updatedAt: new Date()
-}
-}
-},
-{ upsert: true, new: true }
-);
-
-
-res.json({
-message: "Order status updated",
-order
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
-} catch (err) {
-console.error(err);
-res.status(500).json({ message: "Server error" });
-}
-});
+
+
 
 
 // Update order payment status or add custom fields
