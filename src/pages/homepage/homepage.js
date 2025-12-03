@@ -109,7 +109,23 @@ const Homepage = () => {
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/hero-section1.png"
+              src="./images/carousel-1.jpg"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+
+           <Carousel.Item>
+            <img
+              className="d-block w-100 h-auto carousel-img"
+              src="./images/carousel-2.jpg"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+
+           <Carousel.Item>
+            <img
+              className="d-block w-100 h-auto carousel-img"
+              src="./images/carousel-3.jpg"
               alt="Second slide"
             />
           </Carousel.Item>
