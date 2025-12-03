@@ -51,8 +51,8 @@ const Checkout = () => {
   // Calculate amounts as integers
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const shipping = subtotal > 2000 || subtotal === 0 ? 0 : 99;
-  const gst = Math.round(subtotal * 0.18);
-  const total = subtotal + gst + shipping;
+
+  const total = subtotal ;
 
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
@@ -72,9 +72,8 @@ const Checkout = () => {
   setPlacing(true);
 
   try {
-    const cgst = Math.round(subtotal * 0.09);
-    const sgst = Math.round(subtotal * 0.09);
-    const totalAmount = subtotal + cgst + sgst;
+
+    const totalAmount = subtotal;
 
     // Prepare items for backend
     const orderItems = cart.map((item) => ({
@@ -123,7 +122,6 @@ const Checkout = () => {
       // COD
       window.location.href = "http://localhost:3001/payment";
     }
-
   } catch (error) {
     console.error(error);
     alert("Something went wrong.");
@@ -256,10 +254,6 @@ const Checkout = () => {
                 <div className="row">
                   <span>Subtotal</span>
                   <span>{currencyFormat(subtotal)}</span>
-                </div>
-                <div className="row">
-                  <span>GST (18%)</span>
-                  <span>{currencyFormat(gst)}</span>
                 </div>
                 <div className="row">
                   <span>Shipping</span>

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./zodics.css";
+import axios from "axios";
 
 const Zodic = () => {
   const zodiacData = {
@@ -337,8 +339,58 @@ const Zodic = () => {
     { name: "Pisces", color: "#003E5E", image: "./images/zodiac/12.png" },
   ];
 
+  const [activeKey, setActiveKey] = useState(null);
+  const [productsByZodiac, setProductsByZodiac] = useState({});
+  const navigate = useNavigate();
+  const Zodiac = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
+  const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(zodiacData["Aries"]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/products");
+        const data = res.data;
 
+        const grouped = {};
+        Zodiac.forEach((cat) => (grouped[cat] = []));
+
+        data.forEach((prod) => {
+          const Zodiac = prod.Zodiac?.trim();
+          if (grouped[Zodiac]) {
+            // 🚫 Prevent duplicates
+            if (!grouped[Zodiac].find((p) => p._id === prod._id)) {
+              grouped[Zodiac].push(prod);
+            }
+          }
+        });
+
+        setProductsByZodiac(grouped);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+    const handleBuyNow = async (productId) => {
+    if (!token) {
+      alert("Please login first!");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await axios.post(
+        "http://localhost:3000/add-to-cart",
+        { productId, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      navigate("/cart");
+    } catch (err) {
+      console.error("Add to cart failed:", err);
+      alert("Failed to add product to cart.");
+    }
+  };
   return (
     <div>
       {/* TOP SECTION */}
@@ -425,26 +477,26 @@ const Zodic = () => {
         {/* PRODUCTS */}
         {/* PRODUCTS – WHITE BACKGROUND */}
         <div className="product-wrapper py-5">
-          <h2 className="product-heading mb-4 text-center">Zodiacs Products</h2>
+          <h2 className="product-heading mb-4 text-center">{selectedZodiac.name} Products</h2>
 
           <div className="container">
             <div className="row justify-content-center">
-              {selectedZodiac.products.map((p, index) => (
+              {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
                 <div
                   className="col-6 col-md-4 col-lg-2 product-card"
                   key={index}
                 >
                   <div className="card product-box">
-                    <img src={p.img} alt={p.name} className="product-img" />
-
+                    <img src={p.Photos} alt={p.ProductName} className="product-img" />
                     <div className="product-info">
-                      <p className="name">{p.name}</p>
+                      <p className="name">{p.ProductName}</p>
+                      <p className="size">₹{p.ProductPrice}</p>
                       <p className="size">{p.size}</p>
 
                       <div className="underline" />
-
                       {/* Buy Now Button */}
-                      <button className="buy-btn">Buy Now</button>
+                      <button className="buy-btn"
+                      onClick={() => handleBuyNow(p._id)}>Buy Now</button>
                     </div>
                   </div>
                 </div>

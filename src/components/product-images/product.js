@@ -2,7 +2,7 @@ import React from "react";
 import "./product.css";
 
 const itemsData = [
-  { name: "BATH GEL", img: "./images/bath-gel.jpg" },
+  { name: "BATH GEL", img: "./images/1764148102954_bath-gel-back.jpg" },
   { name: "BATH LOTION", img: "./images/body-lotion.jpg" },
   { name: "SOAP", img: "./images/soap.jpg" },
   { name: "ESSENTIAL OIL", img: "./images/oil.jpg" },

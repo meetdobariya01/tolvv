@@ -1,3 +1,4 @@
+const { type } = require('@testing-library/user-event/dist/type');
 const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
@@ -6,7 +7,8 @@ const ProductSchema = new mongoose.Schema({
   Category: { type: String },
   Zodiac: { type: String }, // optional if used
   Description: { type: String },
-  Image: { type: String }
+  Image: { type: String },
+  size: {type:String}
 });
 
 module.exports = mongoose.model('Product', ProductSchema);
