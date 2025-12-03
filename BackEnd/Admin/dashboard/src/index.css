@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&family=Mozilla+Headline:wght@200..700&display=swap');
+
+.text-font {
+  font-family: 'Mozilla Headline', sans-serif;
+}
+.font-login {
+  font-family: 'Libertinus Sans', sans-serif;
+}
