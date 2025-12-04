@@ -130,4 +130,7 @@
   .product-box {
     padding: 10px 5px;
   }
+  .product-heading {
+    font-size: 60px;
+  }
 }

@@ -8,6 +8,18 @@
   font-size: 100px;
   font-style: normal;
 }
+@media (max-width: 768px) {
+  .the-artisan-font{
+    font-size: 70px;
+  }
+}
+@media (max-width: 576px) {
+  .the-artisan-font{
+    font-size: 60px;
+    text-align: center;
+  }
+}
+
 /* Homepage styles */
 .carousel-container {
   width: 100%;
@@ -20,6 +32,7 @@
   height: 100%; /* full screen height */
   object-fit: cover;
 }
+
 
 @media (max-width: 768px) {
   .carousel-img {

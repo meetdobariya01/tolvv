@@ -12,7 +12,6 @@ const Header = () => {
     <>
       <header className="tolvv-header shadow-sm">
         <Navbar expand="lg" expanded={expanded} className="container">
-
           {/* Mobile Toggle */}
           <Navbar.Toggle
             aria-controls="navbar-nav"
@@ -23,7 +22,7 @@ const Header = () => {
           </Navbar.Toggle>
 
           {/* CENTER LOGO (Mobile) */}
-          <Navbar.Brand className="mx-auto d-lg-none">
+          <Navbar.Brand as={NavLink} to="/" className="mx-auto d-lg-none">
             <img
               src="./images/logo-tolvv.png"
               className="tolvv-logo"
@@ -34,29 +33,44 @@ const Header = () => {
           <Navbar.Collapse id="navbar-nav">
             {/* LEFT MENU */}
             <Nav className="left-nav d-flex align-items-center gap-5 mx-auto">
-              <NavLink className="menu-text" to="/product">PRODUCTS</NavLink>
-              <NavLink className="menu-text" to="/twelve">THE TWELVEs</NavLink>
-              <NavLink className="menu-text" to="/benefits">BENEFITS</NavLink>
+              <NavLink className="menu-text" to="/product">
+                PRODUCTS
+              </NavLink>
+              <NavLink className="menu-text" to="/twelve">
+                THE TWELVEs
+              </NavLink>
+              <NavLink className="menu-text" to="/benefits">
+                BENEFITS
+              </NavLink>
             </Nav>
 
             {/* CENTER LOGO (Desktop Only) */}
             <div className="d-none d-lg-flex justify-content-center mx-4">
               <NavLink to="/" className="logo-link">
-                <img src="./images/logo-tolvv.png" className="tolvv-logo" alt="TOLVV" />
+                <img
+                  src="./images/logo-tolvv.png"
+                  className="tolvv-logo"
+                  alt="TOLVV"
+                />
               </NavLink>
             </div>
 
             {/* RIGHT MENU */}
             <Nav className="right-nav d-flex align-items-center gap-5 mx-auto">
-              <NavLink className="menu-text" to="/know-us">KNOW US</NavLink>
-              <NavLink className="menu-text" to="/faqs">FAQs</NavLink>
-              <NavLink className="menu-text" to="/connect">CONNECT</NavLink>
+              <NavLink className="menu-text" to="/know-us">
+                KNOW US
+              </NavLink>
+              <NavLink className="menu-text" to="/faqs">
+                FAQs
+              </NavLink>
+              <NavLink className="menu-text" to="/connect">
+                CONNECT
+              </NavLink>
             </Nav>
           </Navbar.Collapse>
 
           {/* ICONS */}
           <div className="icon-area d-flex align-items-center gap-3 ms-auto">
-
             {/* SEARCH ICON */}
             <button
               className="nav-link p-0 bg-transparent border-0"
@@ -80,11 +94,7 @@ const Header = () => {
       {showSearch && (
         <div className="search-overlay">
           <div className="search-box">
-            <input
-              type="text"
-              placeholder="Search..."
-              autoFocus
-            />
+            <input type="text" placeholder="Search..." autoFocus />
             <button className="close-btn" onClick={() => setShowSearch(false)}>
               <FiX size={24} />
             </button>
