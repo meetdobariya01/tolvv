@@ -5,7 +5,7 @@ import Footer from "../../components/footer/footer";
 
 // Show amounts as whole numbers
 const currencyFormat = (n) => `₹${Math.round(n)}`;
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Checkout = () => {
   const [cart, setCart] = useState([]);
   const [cartId, setCartId] = useState("");
@@ -23,7 +23,7 @@ const Checkout = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://localhost:4000/cart", {
+    fetch(`${API_URL}/cart`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -36,7 +36,7 @@ const Checkout = () => {
             qty: item.quantity,
             img: item.productId.Photos?.startsWith("http")
               ? item.productId.Photos
-              : `http://localhost:4000/images/${item.productId.Photos?.replace(
+              : `${API_URL}/images/${item.productId.Photos?.replace(
                   "images/",
                   ""
                 )}`,
@@ -85,7 +85,7 @@ const Checkout = () => {
       priceAtBuy: item.price,
     }));
 
-    const res = await fetch(`http://localhost:4000/place-order`, {
+    const res = await fetch(`${API_URL}/place-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

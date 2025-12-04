@@ -5,6 +5,9 @@ import Footer from "../../components/footer/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+
 const Mainproduct = () => {
   const [activeKey, setActiveKey] = useState(null);
   const [productsByCategory, setProductsByCategory] = useState({});
@@ -16,7 +19,7 @@ const Mainproduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/products");
+        const res = await axios.get(`${API_URL}/products`);
         const data = res.data;
 
         const grouped = {};
@@ -49,7 +52,7 @@ const Mainproduct = () => {
 
     try {
       await axios.post(
-        "http://localhost:4000/add-to-cart",
+        `${API_URL}/add-to-cart`,
         { productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -85,7 +88,7 @@ const Mainproduct = () => {
                             item.Photos
                               ? item.Photos.startsWith("http")
                                 ? item.Photos
-                                : `http://localhost:4000/images/${item.Photos.replace("images/", "")}`
+                                : `${API_URL}/images/${item.Photos.replace("images/", "")}`
                               : "/images/default.jpg"
                           }
                           style={{ height: "220px", objectFit: "cover" }}

@@ -338,6 +338,7 @@ const Zodic = () => {
     { name: "Aquarius", color: "#6CC0C9", image: "./images/zodiac/11.png" },
     { name: "Pisces", color: "#003E5E", image: "./images/zodiac/12.png" },
   ];
+const API_URL = process.env.REACT_APP_API_URL;
 
   const [activeKey, setActiveKey] = useState(null);
   const [productsByZodiac, setProductsByZodiac] = useState({});
@@ -348,7 +349,7 @@ const Zodic = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/products");
+        const res = await axios.get(`${API_URL}/products`);
         const data = res.data;
 
         const grouped = {};
@@ -381,7 +382,7 @@ const Zodic = () => {
 
     try {
       await axios.post(
-        "http://localhost:4000/add-to-cart",
+        `${API_URL}/add-to-cart`,
         { productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

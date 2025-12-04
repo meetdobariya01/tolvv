@@ -6,7 +6,7 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
 
-const api_base = "http://localhost:4000";
+const api_base = process.env.REACT_APP_API_URL;
 
 const Signup = () => {
   const navigate = useNavigate();

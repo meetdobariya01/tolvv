@@ -5,6 +5,9 @@ import { NavLink } from "react-router-dom";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
+
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -13,7 +16,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/cart", {
+        const res = await axios.get(`${API_URL}/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -26,7 +29,7 @@ const Cart = () => {
             img: item.productId?.Photos
               ? item.productId.Photos.startsWith("http")
                 ? item.productId.Photos
-                : `http://localhost:4000/images/${item.productId.Photos.replace("images/", "")}`
+                : `${API_URL}/images/${item.productId.Photos.replace("images/", "")}`
               : "/images/default.jpg",
             desc: item.productId?.Description || "",
           })).filter((i) => i.id); // remove null product IDs
@@ -52,7 +55,7 @@ const Cart = () => {
 
     try {
       await axios.post(
-        "http://localhost:4000/add-to-cart",
+        `${API_URL}/add-to-cart`,
         { productId: id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -80,7 +83,7 @@ const Cart = () => {
 
   const removeItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/cart/remove/${id}`, {
+      await axios.delete(`${API_URL}/cart/remove/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
