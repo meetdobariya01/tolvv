@@ -23,7 +23,7 @@ const Checkout = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://localhost:3000/cart", {
+    fetch("http://localhost:4000/cart", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -36,7 +36,7 @@ const Checkout = () => {
             qty: item.quantity,
             img: item.productId.Photos?.startsWith("http")
               ? item.productId.Photos
-              : `http://localhost:3000/images/${item.productId.Photos?.replace(
+              : `http://localhost:4000/images/${item.productId.Photos?.replace(
                   "images/",
                   ""
                 )}`,
@@ -85,7 +85,7 @@ const Checkout = () => {
       priceAtBuy: item.price,
     }));
 
-    const res = await fetch(`http://localhost:3000/place-order`, {
+    const res = await fetch(`http://localhost:4000/place-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

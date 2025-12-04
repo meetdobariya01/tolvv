@@ -27,7 +27,7 @@ const { PaymentHandler, validateHMAC_SHA256, APIException } = require("./payment
 const crypto = require("crypto");
 app.use(cors());
 const server = http.createServer(app);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -377,7 +377,7 @@ app.post("/place-order", authenticate, async (req, res) => {
         currency: "INR",
         customer_id: req.user.id.toString(),
         customer_mobile: req.user.mobile,
-        return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:3000/payment"
+        return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:4000/payment"
       });
 
       if (sessionResp?.payment_links?.web) {

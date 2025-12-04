@@ -348,7 +348,7 @@ const Zodic = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/products");
+        const res = await axios.get("http://localhost:4000/products");
         const data = res.data;
 
         const grouped = {};
@@ -381,7 +381,7 @@ const Zodic = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/add-to-cart",
+        "http://localhost:4000/add-to-cart",
         { productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

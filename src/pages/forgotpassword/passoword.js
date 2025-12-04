@@ -13,7 +13,7 @@ const Forgotpassword = () => {
   const [step, setStep] = useState(1); // 1 = send OTP, 2 = verify OTP, 3 = reset password
   const [message, setMessage] = useState("");
 
-  const API_BASE = "http://localhost:3000"; // adjust if deployed
+  const API_BASE = "http://localhost:4000"; // adjust if deployed
 
   // Step 1: Send OTP
   const handleSendOtp = async (e) => {

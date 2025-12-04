@@ -6,7 +6,7 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
 
-const api_base = "http://localhost:3000";
+const api_base = "http://localhost:4000";
 
 const Signup = () => {
   const navigate = useNavigate();

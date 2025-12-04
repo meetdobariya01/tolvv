@@ -13,7 +13,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/cart", {
+        const res = await axios.get("http://localhost:4000/cart", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -26,7 +26,7 @@ const Cart = () => {
             img: item.productId?.Photos
               ? item.productId.Photos.startsWith("http")
                 ? item.productId.Photos
-                : `http://localhost:3000/images/${item.productId.Photos.replace("images/", "")}`
+                : `http://localhost:4000/images/${item.productId.Photos.replace("images/", "")}`
               : "/images/default.jpg",
             desc: item.productId?.Description || "",
           })).filter((i) => i.id); // remove null product IDs
@@ -52,7 +52,7 @@ const Cart = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/add-to-cart",
+        "http://localhost:4000/add-to-cart",
         { productId: id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -80,7 +80,7 @@ const Cart = () => {
 
   const removeItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/cart/remove/${id}`, {
+      await axios.delete(`http://localhost:4000/cart/remove/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

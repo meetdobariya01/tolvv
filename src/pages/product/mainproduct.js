@@ -16,7 +16,7 @@ const Mainproduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/products");
+        const res = await axios.get("http://localhost:4000/products");
         const data = res.data;
 
         const grouped = {};
@@ -49,7 +49,7 @@ const Mainproduct = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/add-to-cart",
+        "http://localhost:4000/add-to-cart",
         { productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -85,7 +85,7 @@ const Mainproduct = () => {
                             item.Photos
                               ? item.Photos.startsWith("http")
                                 ? item.Photos
-                                : `http://localhost:3000/images/${item.Photos.replace("images/", "")}`
+                                : `http://localhost:4000/images/${item.Photos.replace("images/", "")}`
                               : "/images/default.jpg"
                           }
                           style={{ height: "220px", objectFit: "cover" }}
