@@ -531,28 +531,7 @@
 // app.js
 require("dotenv").config();
 
-const cluster = require("cluster");
-const os = require("os");
 
-const numCPUs = process.env.ENABLE_CLUSTER === "true" ? os.cpus().length : 1;
-
-if (cluster.isMaster && numCPUs > 1) {
-  console.log(`Master ${process.pid} is running — forking ${numCPUs} workers`);
-  for (let i = 0; i < numCPUs; i++) cluster.fork();
-
-  cluster.on("exit", (worker, code, signal) => {
-    console.warn(`Worker ${worker.process.pid} died (code ${code}, signal ${signal}). Restarting...`);
-    cluster.fork();
-  });
-
-  // Graceful shutdown master on signals
-  process.on("SIGINT", () => {
-    console.log("Master shutting down...");
-    for (const id in cluster.workers) cluster.workers[id].kill();
-    process.exit(0);
-  });
-
-} else {
   // Worker process — main server code runs here
   const express = require("express");
   const http = require("http");
@@ -1056,7 +1035,7 @@ app.post("/payment-callback", async (req, res) => {
     console.log(`Worker ${process.pid} exiting...`);
     server.close(() => process.exit(0));
   });
-}
+
 
 
 
