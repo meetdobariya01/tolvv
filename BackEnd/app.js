@@ -1,50 +1,23 @@
 
 require("dotenv").config();
-
-const cluster = require("cluster");
-const os = require("os");
-
-const numCPUs = process.env.ENABLE_CLUSTER === "true" ? os.cpus().length : 1;
-
-if (cluster.isMaster && numCPUs > 1) {
-  console.log(`Master ${process.pid} is running — forking ${numCPUs} workers`);
-  for (let i = 0; i < numCPUs; i++) cluster.fork();
-
-  cluster.on("exit", (worker, code, signal) => {
-    console.warn(`Worker ${worker.process.pid} died (code ${code}, signal ${signal}). Restarting...`);
-    cluster.fork();
-  });
-
-  // Graceful shutdown master on signals
-  process.on("SIGINT", () => {
-    console.log("Master shutting down...");
-    for (const id in cluster.workers) cluster.workers[id].kill();
-    process.exit(0);
-  });
-
-} else {
-  // Worker process — main server code runs here
-  const express = require("express");
-  const http = require("http");
-  const bcrypt = require("bcryptjs");
-  const jwt = require("jsonwebtoken");
-  const bodyParser = require("body-parser");
-  const cors = require("cors");
-  const crypto = require("crypto");
-
-  // Models
-  const User = require("./Model/UserSchema");
-  const Product = require("./Model/Product.add.admin");
-  const Cart = require("./Model/Cart");
-  const Order = require("./Model/order");
-  const OrderTracking = require("./Model/order.traking");
-
-  // Payment handler (your custom module)
-  const { PaymentHandler, validateHMAC_SHA256, APIException } = require("./payment/PaymentHandler");
-
-  // Twilio
-  const twilio = require("twilio");
-  const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+// app.js
+const express = require("express");
+const app = express();
+const http = require("http");
+const multer = require('multer');
+const path = require('path');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require("./Model/UserSchema");
+const Product = require("./Model/Product.add.admin");
+const Cart = require("./Model/Cart");
+const Order = require("./Model/order");
+const OrderTracking = require("./Model/order.traking");
+const bodyParser = require("body-parser");
+const tempOtp = {};
+const twilio = require("twilio");
+// Twilio Client
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 require("./db/conn");
 require("./Model/mobile");
@@ -509,19 +482,49 @@ app.get('/cart', authenticate, async (req, res) => {
         console.error("Get cart error:", error);
         res.status(500).json({ message: 'Server error' });
     }
-  });
+});
 
-  // Start server (worker)
-  server.listen(port, () => {
-    console.log(`Worker ${process.pid} — Server running on port: ${port}`);
-  });
+// Remove item
+app.delete('/cart/remove/:productId', authenticate, async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ userId: req.user.id });
+        if (!cart) return res.status(404).json({ message: 'Cart not found' });
+        cart.items = cart.items.filter(item => item.productId.toString() !== req.params.productId);
+        await cart.save();
+        res.status(200).json({ message: 'Item removed from cart', cart });
+    } catch (error) {
+        console.error("Remove item error:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+// GET /products - fetch all products
+app.get("/products", async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.status(200).json(products);
+    } catch (error) {
+        console.error("Fetch products error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
-  // Graceful shutdown of worker
-  process.on("SIGINT", () => {
-    console.log(`Worker ${process.pid} exiting...`);
-    server.close(() => process.exit(0));
-  });
-}
+// GET /products/category/:category - fetch products by category
+app.get("/products/category/:category", async (req, res) => {
+    try {
+        const { category } = req.params;
+        const products = category === "All"
+            ? await Product.find()
+            : await Product.find({ Category: category });
+        res.status(200).json(products);
+    } catch (error) {
+        console.error("Fetch products by category error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
+// Start server
+server.listen(port, () => {
+    console.log(`Server running on port: ${port}`);
+});
 
 
