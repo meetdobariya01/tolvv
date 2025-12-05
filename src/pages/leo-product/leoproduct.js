@@ -2,11 +2,11 @@ import React from "react";
 import "./leoproduct.css";
 
 const itemsData = [
-  { name: "BATH GEL", img: "./images/product/bath-gel/leo-bath-gel.jpg" },
-  { name: "BATH LOTION", img: "./images/product/body-lotion/leo-body-lotion.jpg" },
-  { name: "SOAP", img: "./images/product/soap/leo-soap.jpg" },
-  { name: "ESSENTIAL OIL", img: "./images/product/essential-oil/leo-essential-oil.jpg" },
-  { name: "EAU DE PERFUMES", img: "./images/product/perfume/leo-perfume.jpg" },
+  { name: "BATH GEL", img: "./images/leo/leo-bath-gel.jpg" },
+  { name: "BATH LOTION", img: "./images/leo/leo-body-lotion.jpg" },
+  { name: "SOAP", img: "./images/leo/leo-soap.jpg" },
+  { name: "ESSENTIAL OIL", img: "./images/leo/leo-essential-oil.jpg" },
+  { name: "EAU DE PERFUMES", img: "./images/leo/leo-perfume.jpg" },
 ];
 
 const Leoproduct = () => {

@@ -7,13 +7,18 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-
 const Mainproduct = () => {
   const [activeKey, setActiveKey] = useState(null);
   const [productsByCategory, setProductsByCategory] = useState({});
   const navigate = useNavigate();
 
-  const categories = ["Bath Gel", "Soap", "Perfume", "Essential Oil", "Body Lotion"];
+  const categories = [
+    "Bath Gel",
+    "Soap",
+    "Perfume",
+    "Essential Oil",
+    "Body Lotion",
+  ];
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -73,7 +78,9 @@ const Mainproduct = () => {
               key={index}
               eventKey={index.toString()}
               onClick={() =>
-                setActiveKey(activeKey === index.toString() ? null : index.toString())
+                setActiveKey(
+                  activeKey === index.toString() ? null : index.toString()
+                )
               }
             >
               <Accordion.Header>{cat}</Accordion.Header>
@@ -88,7 +95,10 @@ const Mainproduct = () => {
                             item.Photos
                               ? item.Photos.startsWith("http")
                                 ? item.Photos
-                                : `${API_URL}/images/${item.Photos.replace("images/", "")}`
+                                : `${API_URL}/images/${item.Photos.replace(
+                                    "images/",
+                                    ""
+                                  )}`
                               : "/images/default.jpg"
                           }
                           style={{ height: "220px", objectFit: "cover" }}
@@ -98,13 +108,19 @@ const Mainproduct = () => {
                           <Card.Title style={{ fontSize: "18px" }}>
                             {item.ProductName}
                           </Card.Title>
-                          <p className="text-muted" style={{ fontSize: "14px" }}>{item.size}</p>
-                          <p className="fw-bold text-muted mb-2">₹{item.ProductPrice}</p>
+                          <p
+                            className="text-muted"
+                            style={{ fontSize: "14px" }}
+                          >
+                            {item.size}
+                          </p>
+                          <p className="fw-bold text-muted mb-2">
+                            ₹{item.ProductPrice}
+                          </p>
 
                           <Button
-                            variant="primary"
                             size="sm"
-                            className="rounded-0 w-100"
+                            className="rounded-0 w-100 btn btn-outline-dark"
                             onClick={() => handleBuyNow(item._id)}
                           >
                             BUY NOW
