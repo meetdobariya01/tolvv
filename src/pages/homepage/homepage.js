@@ -408,7 +408,7 @@ const Homepage = () => {
             {/* Right Image Section */}
             <div className="col-lg-5 col-md-8 col-sm-10 text-center">
               <img
-                src="./images/bath-gel.jpg"
+                src="./images/body-lotion.jpg"
                 alt="Tolvv Product"
                 className="img-fluid rounded shadow"
                 style={{

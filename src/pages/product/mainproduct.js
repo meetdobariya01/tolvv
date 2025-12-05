@@ -88,7 +88,7 @@ const Mainproduct = () => {
                             item.Photos
                               ? item.Photos.startsWith("http")
                                 ? item.Photos
-                                : `${API_URL}/images/${item.Photos.replace("images/", "")}`
+                                : `${process.env.REACT_APP_API_URL}/images/${item.Photos.replace("images/", "")}`
                               : "/images/default.jpg"
                           }
                           style={{ height: "220px", objectFit: "cover" }}
