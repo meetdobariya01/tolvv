@@ -98,6 +98,7 @@ const Mainproduct = () => {
                           <Card.Title style={{ fontSize: "18px" }}>
                             {item.ProductName}
                           </Card.Title>
+                          <p className="text-muted" style={{ fontSize: "14px" }}>{item.size}</p>
                           <p className="fw-bold text-muted mb-2">₹{item.ProductPrice}</p>
 
                           <Button

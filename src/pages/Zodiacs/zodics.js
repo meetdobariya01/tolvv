@@ -491,8 +491,9 @@ const API_URL = process.env.REACT_APP_API_URL;
                     <img src={p.Photos} alt={p.ProductName} className="product-img" />
                     <div className="product-info">
                       <p className="name">{p.ProductName}</p>
+                         <p className="size">{p.size}</p>
                       <p className="size">₹{p.ProductPrice}</p>
-                      <p className="size">{p.size}</p>
+                   
 
                       <div className="underline" />
                       {/* Buy Now Button */}

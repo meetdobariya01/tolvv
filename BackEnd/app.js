@@ -52,13 +52,8 @@ const authenticate = (req, res, next) => {
     return res.status(401).json({ message: 'Invalid token' });
   }
 };
-
 app.use(express.urlencoded({ extended: true }));
-/* -----------------------
-   ROUTES
------------------------ */
-// Send OTP
-// 📌 SEND OTP API
+
 app.post("/send-otp", async (req, res) => {
   const { mobile } = req.body;
 
@@ -96,8 +91,6 @@ app.post("/send-otp", async (req, res) => {
   }
 });
 
-// 📌 VERIFY OTP
-// 📌 VERIFY OTP
 app.post("/verify-otp", (req, res) => {
   const { mobile, otp } = req.body;
 
@@ -114,9 +107,6 @@ app.post("/verify-otp", (req, res) => {
 
   res.json({ success: true, message: "OTP verified successfully." });
 });
-
-
-
 // Signup
 app.post("/signup", async (req, res) => {
   const { fname, lname, password, mobile, role } = req.body;
@@ -526,5 +516,3 @@ app.get("/products/category/:category", async (req, res) => {
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
-
-
