@@ -24,7 +24,7 @@ const Twelve = () => {
       icon: "./images/zodiac/1.png",
       description:
         "Aries is bold, fiery, and instinctive—driven by courage, ambition, and passion. They lead naturally, embrace challenges, and inspire fearless action.",
-      letters: "A, L, E, I, O",
+      letters: "A, L, E",
       energy: "Courage",
       stamina: "High",
       colorText: "Red",
@@ -51,7 +51,7 @@ const Twelve = () => {
       icon: "./images/zodiac/2.png",
       description:
         "Taurus is steady, loyal, and grounded—valuing comfort, beauty, and stability. Patient and persistent, they build lasting success through calm determination and consistency.",
-      letters: "B, V, U, W",
+      letters: "B, V, U",
       energy: "Stability",
       stamina: "Strong",
       colorText: "Green",
@@ -105,7 +105,7 @@ const Twelve = () => {
       icon: "./images/zodiac/4.png",
       description:
         "Cancer is emotional, intuitive, and nurturing—loyal and protective. They value family, empathy, and emotional security, offering gentle, healing love.",
-      letters: "D, M, N",
+      letters: "D, H",
       energy: "Emotional Intelligence",
       stamina: "Moderate",
       colorText: "Blue",
@@ -132,7 +132,7 @@ const Twelve = () => {
       icon: "./images/zodiac/5.png",
       description:
         "Leo is confident, charismatic, and warm-hearted—generous and loyal. They inspire, lead with passion, shine brightly, and embrace joyful self-expression.",
-      letters: "S, T",
+      letters: "M, T",
       energy: "Confidence",
       stamina: "High",
       colorText: "Gold",
@@ -159,7 +159,7 @@ const Twelve = () => {
       icon: "./images/zodiac/6.png",
       description:
         "Virgo is intelligent, detail-oriented, and analytical—calm, humble, and caring. They seek order, precision, and improvement, guiding through thoughtful, structured actions.",
-      letters: "P, T",
+      letters: "P, T, N",
       energy: "Precision",
       stamina: "Strong",
       colorText: "Light Green",
@@ -237,7 +237,7 @@ const Twelve = () => {
       icon: "./images/zodiac/9.png",
       description:
         "Sagittarius is adventurous, optimistic, and free-spirited—seeking truth, knowledge, and freedom. They inspire exploration, honesty, positivity, and open-minded living.",
-      letters: "B, D",
+      letters: "B, D, P",
       energy: "Optimism",
       stamina: "High",
       colorText: "Orange",
