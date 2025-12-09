@@ -11,7 +11,6 @@ import Homeproduct from "../../components/category/home-product/homeproduct";
 import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 import Zodic from "../Zodiacs/zodics";
-import WhatsappButton from "../../components/whatsapp/whatsapp";
 
 const Homepage = () => {
   const productss = [
@@ -90,7 +89,7 @@ const Homepage = () => {
           fade
           controls={false}
           indicators={true}
-          interval={3000}
+          interval={2000}
           pause={false}
         >
           {/* REMOVE THIS FIRST IMAGE — replaced with VIDEO */}

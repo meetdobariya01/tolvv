@@ -88,3 +88,11 @@
 .wa-send-btn:hover {
   background: #1ebe5d;
 }
+.wa-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}

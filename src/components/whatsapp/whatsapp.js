@@ -4,12 +4,12 @@ import "./whatsapp.css";
 const WhatsappButton = () => {
   const [open, setOpen] = useState(false);
 
+  // States for inputs
+  const [birthdate, setBirthdate] = useState("");
+  const [firstLetter, setFirstLetter] = useState("");
+
   const handleSend = () => {
-    const birthdate = " "; // your birthdate here
-    const firstLetter = " "; // your first letter here
-
     const message = `My birthdate is: ${birthdate}, The first letter of my name: ${firstLetter}`;
-
     const phone = "919824257356";
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
@@ -27,8 +27,29 @@ const WhatsappButton = () => {
               ×
             </span>
           </div>
+
           <div className="wa-popup-body">
-            <p>Hi 👋 How can we help you?</p>
+            <p>Hi 👋 Please enter your Birthdate and first letter of my name</p>
+
+            {/* Birthdate input */}
+            <input
+              type="date"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
+              className="wa-input"
+              placeholder="Enter your birthdate"
+            />
+
+            {/* First letter input */}
+            <input
+              type="text"
+              maxLength="1"
+              value={firstLetter}
+              onChange={(e) => setFirstLetter(e.target.value)}
+              className="wa-input"
+              placeholder="First letter of your name"
+            />
+
             <button onClick={handleSend} className="wa-send-btn">
               Start Chat
             </button>
