@@ -3,22 +3,23 @@ import "./whatsapp.css";
 
 const WhatsappButton = () => {
   const [open, setOpen] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const handleSend = () => {
-    const birthdate = " "; // your birthdate here
-    const firstLetter = " "; // your first letter here
+    if (sent) return;
 
-    const message = `My birthdate is: ${birthdate}, The first letter of my name: ${firstLetter}`;
-
+    const message = "How can I help you?";
     const phone = "919824257356";
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
+
+    setSent(true);     // prevent multiple messages
+    setOpen(false);    // close popup
   };
 
   return (
     <>
-      {/* Popup */}
       {open && (
         <div className="wa-popup">
           <div className="wa-popup-header">
@@ -27,16 +28,21 @@ const WhatsappButton = () => {
               ×
             </span>
           </div>
+
           <div className="wa-popup-body">
-            <p>Hi 👋 How can we help you?</p>
-            <button onClick={handleSend} className="wa-send-btn">
-              Start Chat
+            <p>Hello 👋</p>
+
+            <button
+              onClick={handleSend}
+              className="wa-send-btn"
+              disabled={sent}
+            >
+              {sent ? "Message Sent ✅" : "Start Chat"}
             </button>
           </div>
         </div>
       )}
 
-      {/* WhatsApp Button */}
       <div className="whatsapp-container" onClick={() => setOpen(true)}>
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
