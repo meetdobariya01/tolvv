@@ -7,13 +7,19 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-
 const Mainproduct = () => {
   const [activeKey, setActiveKey] = useState(null);
   const [productsByCategory, setProductsByCategory] = useState({});
   const navigate = useNavigate();
 
-  const categories = ["Bath Gel", "Soap", "Perfume", "Essential Oil", "Body Lotion"];
+  const categories = [
+    "Bath Gel",
+    "Soap",
+    "Perfume",
+    "Essential Oil",
+    "Body Lotion",
+  ];
+
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -28,7 +34,6 @@ const Mainproduct = () => {
         data.forEach((prod) => {
           const category = prod.Category?.trim();
           if (grouped[category]) {
-            // 🚫 Prevent duplicates
             if (!grouped[category].find((p) => p._id === prod._id)) {
               grouped[category].push(prod);
             }
@@ -40,6 +45,7 @@ const Mainproduct = () => {
         console.error("Failed to fetch products:", err);
       }
     };
+
     fetchProducts();
   }, []);
 
@@ -56,6 +62,7 @@ const Mainproduct = () => {
         { productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       navigate("/cart");
     } catch (err) {
       console.error("Add to cart failed:", err);
@@ -66,6 +73,7 @@ const Mainproduct = () => {
   return (
     <div>
       <Header />
+
       <div className="container py-5">
         <Accordion activeKey={activeKey}>
           {categories.map((cat, index) => (
@@ -73,22 +81,26 @@ const Mainproduct = () => {
               key={index}
               eventKey={index.toString()}
               onClick={() =>
-                setActiveKey(activeKey === index.toString() ? null : index.toString())
+                setActiveKey(
+                  activeKey === index.toString() ? null : index.toString()
+                )
               }
             >
               <Accordion.Header>{cat}</Accordion.Header>
+
               <Accordion.Body>
                 <div className="row">
                   {productsByCategory[cat]?.map((item) => (
                     <div className="col-6 col-md-3 mb-4" key={item._id}>
                       <Card className="border-0 shadow-sm">
+
                         <Card.Img
                           variant="top"
                           src={
                             item.Photos
                               ? item.Photos.startsWith("http")
                                 ? item.Photos
-                                : `${process.env.REACT_APP_API_URL}/images/${item.Photos.replace("images/", "")}`
+                                : `${item.Photos}`
                               : "/images/default.jpg"
                           }
                           style={{ height: "220px", objectFit: "cover" }}
@@ -98,13 +110,21 @@ const Mainproduct = () => {
                           <Card.Title style={{ fontSize: "18px" }}>
                             {item.ProductName}
                           </Card.Title>
-                          <p className="text-muted" style={{ fontSize: "14px" }}>{item.size}</p>
-                          <p className="fw-bold text-muted mb-2">₹{item.ProductPrice}</p>
+
+                          <p
+                            className="text-muted"
+                            style={{ fontSize: "14px" }}
+                          >
+                            {item.size}
+                          </p>
+
+                          <p className="fw-bold text-muted mb-2">
+                            ₹{item.ProductPrice}
+                          </p>
 
                           <Button
-                            variant="primary"
                             size="sm"
-                            className="rounded-0 w-100"
+                            className="rounded-0 w-100 btn btn-outline-dark"
                             onClick={() => handleBuyNow(item._id)}
                           >
                             BUY NOW
@@ -119,6 +139,7 @@ const Mainproduct = () => {
           ))}
         </Accordion>
       </div>
+
       <Footer />
     </div>
   );

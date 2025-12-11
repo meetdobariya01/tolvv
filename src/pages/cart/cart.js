@@ -29,7 +29,7 @@ const Cart = () => {
             img: item.productId?.Photos
               ? item.productId.Photos.startsWith("http")
                 ? item.productId.Photos
-                : `${API_URL}/images/${item.productId.Photos.replace("images/", "")}`
+                : `/images/${item.productId.Photos.replace("images/", "")}`
               : "/images/default.jpg",
             desc: item.productId?.Description || "",
           })).filter((i) => i.id); // remove null product IDs

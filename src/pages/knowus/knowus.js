@@ -54,7 +54,7 @@ const Knowus = () => {
                   fontSize: "28px",
                 }}
               >
-                ADITI & NEHA
+                NEHA & ADITI 
               </h2>
 
               <p style={{ color: "#333", lineHeight: "1.8" }}>
@@ -131,7 +131,7 @@ const Knowus = () => {
             {/* Right Image Section */}
             <div className="col-lg-5 col-md-8 col-sm-10 text-center">
               <img
-                src="./images/bath-gel.jpg"
+                src="./images/tolvv.jpg"
                 alt="Tolvv Product"
                 className="img-fluid rounded shadow"
                 style={{

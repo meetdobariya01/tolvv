@@ -11,6 +11,7 @@ import Homeproduct from "../../components/category/home-product/homeproduct";
 import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 import Zodic from "../Zodiacs/zodics";
+import WhatsappButton from "../../components/whatsapp/whatsapp";
 
 const Homepage = () => {
   const productss = [
@@ -114,15 +115,15 @@ const Homepage = () => {
             />
           </Carousel.Item>
 
-           <Carousel.Item>
+          {/* <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
               src="./images/carousel-2.jpg"
               alt="Second slide"
             />
-          </Carousel.Item>
+          </Carousel.Item> */}
 
-           <Carousel.Item>
+          <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
               src="./images/carousel-3.jpg"
@@ -139,7 +140,7 @@ const Homepage = () => {
       <Zodic />
 
       {/* products grid */}
-      <Product />
+      {/* <Product /> */}
 
       {/* ruling planet */}
 
@@ -332,7 +333,7 @@ const Homepage = () => {
                   fontSize: "28px",
                 }}
               >
-                ADITI & NEHA
+                NEHA & ADITI
               </h2>
 
               <p style={{ color: "#333", lineHeight: "1.8" }}>
@@ -408,7 +409,7 @@ const Homepage = () => {
             {/* Right Image Section */}
             <div className="col-lg-5 col-md-8 col-sm-10 text-center">
               <img
-                src="./images/body-lotion.jpg"
+                src="./images/tolvv.jpg"
                 alt="Tolvv Product"
                 className="img-fluid rounded shadow"
                 style={{
@@ -536,6 +537,7 @@ const Homepage = () => {
         </section>
       </div>
 
+      {/* Footer Component */}
       <Footer />
     </div>
   );

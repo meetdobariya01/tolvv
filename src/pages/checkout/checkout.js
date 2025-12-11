@@ -36,7 +36,7 @@ const Checkout = () => {
             qty: item.quantity,
             img: item.productId.Photos?.startsWith("http")
               ? item.productId.Photos
-              : `${API_URL}/images/${item.productId.Photos?.replace(
+              : `/images/${item.productId.Photos?.replace(
                   "images/",
                   ""
                 )}`,

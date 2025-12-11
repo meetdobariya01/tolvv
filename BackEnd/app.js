@@ -18,7 +18,7 @@ const tempOtp = {};
 const twilio = require("twilio");
 // Twilio Client
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
+const fs = require("fs");
 require("./db/conn");
 require("./Model/mobile");
 require("./Model/order.traking");
@@ -510,6 +510,12 @@ app.get("/products/category/:category", async (req, res) => {
     console.error("Fetch products by category error:", error);
     res.status(500).json({ message: "Server error" });
   }
+});
+app.get("/api/image/:category/:filename", authenticate, (req, res) => {
+  const { category, filename } = req.params;
+  const imagePath = path.join(__dirname, "public", "images", category, filename);
+  if (!fs.existsSync(imagePath)) return res.status(404).json({ message: "Image not found" });
+  res.sendFile(imagePath);
 });
 
 // Start server

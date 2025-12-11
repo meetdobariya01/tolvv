@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { NavLink } from "react-router-dom";
 import { FaInstagram, FaEnvelope } from "react-icons/fa";
+import WhatsappButton from "../whatsapp/whatsapp";
 
 export const Footer = () => {
   return (
@@ -92,7 +93,7 @@ export const Footer = () => {
 
                 <li className="mb-2">
                   <a
-                    href="https://wa.me/9198242573556"
+                    href="https://wa.me/919824257356"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white text-decoration-none"
@@ -169,6 +170,8 @@ export const Footer = () => {
           </div>
         </div>
       </footer>
+
+      <WhatsappButton />
     </div>
   );
 };
