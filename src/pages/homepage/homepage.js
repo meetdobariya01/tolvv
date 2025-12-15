@@ -32,7 +32,7 @@ const Homepage = () => {
       name: "Sun",
       color: "linear-gradient(135deg, #ffcf00, #d4a017)",
       meaning: "Energy",
-    },
+    }, 
     {
       name: "Mercury",
       color: "linear-gradient(135deg, #f3b500, #c79300)",

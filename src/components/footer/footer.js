@@ -163,7 +163,7 @@ export const Footer = () => {
                 className="small text-uppercase mb-0"
                 style={{ letterSpacing: "0.5px", color: "#D6D6D6" }}
               >
-                Copyright 2025. Twelve <br />
+                Copyright 2025. Tolvv <br />
                 All Rights Reserved
               </p>
             </div>

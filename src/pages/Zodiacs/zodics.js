@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
+import Calculator from "../../components/calculator/calculator";
 
 const Zodic = () => {
   const zodiacData = {
@@ -414,7 +415,9 @@ const Zodic = () => {
           <div className="left-text text-center mb-4">
             <h2 className="tangerine-bold">The Twelve</h2>
             <p className="subtitle">EXPLORE BY YOUR SUN, MOON OR RISING SIGN</p>
-            <p className="subtitle">Please Select your Zodics</p>
+            <p className="subtitle">Find your Zodiacs</p>
+             
+             <Calculator/>
           </div>
 
           {/* Zodiac Grid */}
