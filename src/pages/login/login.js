@@ -10,16 +10,19 @@ const api_base = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ mobile: "", password: "" });
+
+  // 🔁 mobile -> email (logic only)
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.mobile) newErrors.mobile = "Mobile number is required";
+    if (!formData.email) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -44,7 +47,9 @@ const Login = () => {
       navigate("/");
     } catch (err) {
       console.error(err);
-      setServerError(err.response?.data?.message || "Server error. Please try again.");
+      setServerError(
+        err.response?.data?.message || "Server error. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -62,22 +67,32 @@ const Login = () => {
         >
           <h3 className="text-center mb-4 fw-bold">Login to Your Account</h3>
 
-          {serverError && <div className="alert alert-danger text-center">{serverError}</div>}
+          {serverError && (
+            <div className="alert alert-danger text-center">
+              {serverError}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
+            {/* Email */}
             <div className="mb-3">
-              <label className="form-label fw-semibold">Mobile Number</label>
+              <label className="form-label fw-semibold">Email</label>
               <input
-                type="text"
-                name="mobile"
-                value={formData.mobile}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 className="form-control pro-input"
-                placeholder="Enter mobile number"
+                placeholder="Enter email"
               />
-              {errors.mobile && <div className="text-danger small mt-1">{errors.mobile}</div>}
+              {errors.email && (
+                <div className="text-danger small mt-1">
+                  {errors.email}
+                </div>
+              )}
             </div>
 
+            {/* Password */}
             <div className="mb-2">
               <label className="form-label fw-semibold">Password</label>
               <input
@@ -88,10 +103,14 @@ const Login = () => {
                 className="form-control pro-input"
                 placeholder="Enter password"
               />
-              {errors.password && <div className="text-danger small mt-1">{errors.password}</div>}
+              {errors.password && (
+                <div className="text-danger small mt-1">
+                  {errors.password}
+                </div>
+              )}
             </div>
 
-            {/* Forgot password link */}
+            {/* Forgot password */}
             <div className="text-end mb-4">
               <NavLink to="/forgot-password" className="pro-link small">
                 Forgot Password?

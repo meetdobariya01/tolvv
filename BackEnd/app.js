@@ -317,8 +317,6 @@ app.post("/add-to-cart", authenticate, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-// Place order
 // Place order
 app.post("/place-order", authenticate, async (req, res) => {
   try {

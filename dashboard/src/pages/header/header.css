@@ -1,0 +1,69 @@
+/* Fancy Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+* { font-family: "Poppins", sans-serif; }
+
+/* SEARCH OVERLAY */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+  z-index: 99999;
+}
+.tolvv-logo{
+    width: 50%;
+}
+.logo-link{
+  text-align: center;
+}
+/* SEARCH BOX */
+.search-box {
+  width: 80%;
+  max-width: 550px;
+  background: #fff;
+  padding: 14px 18px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  animation: slideDown 0.35s ease;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  font-size: 18px;
+  padding: 8px;
+  outline: none;
+  background: transparent;
+}
+.menu-text{
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+    font-size: 17px ;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

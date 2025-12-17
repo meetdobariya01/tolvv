@@ -120,7 +120,7 @@ const Checkout = () => {
       }
     } else {
       // COD
-      window.location.href = "http://localhost:3001/payment";
+      window.location.href = `https://tolvvsigns.com/payment`;
     }
   } catch (error) {
     console.error(error);

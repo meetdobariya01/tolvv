@@ -44,7 +44,9 @@
   font-weight: 600;
   transition: 0.3s ease;
 }
-
+.otp{
+  width: 65%;
+}
 .pro-btn:hover {
   background: #1e4ec7;
 }
@@ -121,4 +123,39 @@
 
 .pro-link:hover {
   text-decoration: underline;
+}
+.social-btn {
+  height: 48px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Google */
+.google-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #000;
+}
+
+.google-btn:hover {
+  background: #f7f7f7;
+}
+
+/* Apple */
+.apple-btn {
+  /* background: #000; */
+  /* color: #fff; */
+  border: 1px solid #ddd;
+}
+
+.apple-btn:hover {
+  background: #f7f7f7;
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+  .social-btn {
+    font-size: 14px;
+  }
 }

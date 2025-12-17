@@ -7,19 +7,21 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
 const Forgotpassword = () => {
-  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [step, setStep] = useState(1); // 1 = send OTP, 2 = verify OTP, 3 = reset password
+  const [step, setStep] = useState(1); // 1=send OTP, 2=verify OTP, 3=reset password
   const [message, setMessage] = useState("");
 
-  const API_BASE = "http://localhost:4000"; // adjust if deployed
+  const API_BASE = process.env.REACT_APP_API_URL;
 
-  // Step 1: Send OTP
+  // STEP 1: Send OTP
   const handleSendOtp = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_BASE}/forgot-password`, { mobile });
+      const res = await axios.post(`${API_BASE}/forgot-password`, {
+        email,
+      });
       setMessage(res.data.message);
       setStep(2);
     } catch (err) {
@@ -27,11 +29,14 @@ const Forgotpassword = () => {
     }
   };
 
-  // Step 2: Verify OTP
+  // STEP 2: Verify OTP
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_BASE}/verify-reset-otp`, { mobile, Otp: otp });
+      const res = await axios.post(`${API_BASE}/verify-reset-otp`, {
+        email,
+        otp,
+      });
       setMessage(res.data.message);
       setStep(3);
     } catch (err) {
@@ -39,14 +44,17 @@ const Forgotpassword = () => {
     }
   };
 
-  // Step 3: Reset Password
+  // STEP 3: Reset Password
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_BASE}/reset-password`, { mobile, newPassword });
+      const res = await axios.post(`${API_BASE}/reset-password`, {
+        email,
+        newPassword,
+      });
       setMessage(res.data.message);
       setStep(1);
-      setMobile("");
+      setEmail("");
       setOtp("");
       setNewPassword("");
     } catch (err) {
@@ -67,19 +75,22 @@ const Forgotpassword = () => {
         >
           <h3 className="text-center mb-3 fw-bold">Forgot Password</h3>
 
-          {message && <p className="text-center text-success">{message}</p>}
+          {message && (
+            <p className="text-center text-success">{message}</p>
+          )}
 
+          {/* STEP 1 */}
           {step === 1 && (
             <form onSubmit={handleSendOtp}>
               <div className="mb-4">
-                <label className="form-label fw-semibold">Mobile Number</label>
+                <label className="form-label fw-semibold">Email</label>
                 <input
-                  type="text"
+                  type="email"
                   required
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="form-control pro-input"
-                  placeholder="Enter your mobile number"
+                  placeholder="Enter your email"
                 />
               </div>
 
@@ -93,6 +104,7 @@ const Forgotpassword = () => {
             </form>
           )}
 
+          {/* STEP 2 */}
           {step === 2 && (
             <form onSubmit={handleVerifyOtp}>
               <div className="mb-4">
@@ -117,10 +129,13 @@ const Forgotpassword = () => {
             </form>
           )}
 
+          {/* STEP 3 */}
           {step === 3 && (
             <form onSubmit={handleResetPassword}>
               <div className="mb-4">
-                <label className="form-label fw-semibold">New Password</label>
+                <label className="form-label fw-semibold">
+                  New Password
+                </label>
                 <input
                   type="password"
                   required

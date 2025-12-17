@@ -4,11 +4,11 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import "./mainproduct.css";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Mainproduct = () => {
-  const [activeKey, setActiveKey] = useState(null);
+  const [activeKey, setActiveKey] = useState("Bath Gel");
   const [productsByCategory, setProductsByCategory] = useState({});
   const navigate = useNavigate();
 
@@ -18,6 +18,7 @@ const Mainproduct = () => {
     "Perfume",
     "Essential Oil",
     "Body Lotion",
+    "Hamper",
   ];
 
   const token = localStorage.getItem("token");
@@ -74,71 +75,63 @@ const Mainproduct = () => {
     <div>
       <Header />
 
-      <div className="container py-5">
-        <Accordion activeKey={activeKey}>
-          {categories.map((cat, index) => (
-            <Accordion.Item
-              key={index}
-              eventKey={index.toString()}
-              onClick={() =>
-                setActiveKey(
-                  activeKey === index.toString() ? null : index.toString()
-                )
+     <div className="container py-5">
+  {/* CATEGORY NAVBAR */}
+  <div className="category-navbar mb-4">
+    {categories.map((cat, index) => (
+      <button
+        key={index}
+        className={`category-btn ${
+          activeKey === cat ? "active" : ""
+        }`}
+        onClick={() => setActiveKey(cat)}
+      >
+        {cat}
+      </button>
+    ))}
+  </div>
+
+  {/* PRODUCT GRID */}
+  <div className="row product-fade">
+    {productsByCategory[activeKey]?.map((item) => (
+      <div
+        className="col-6 col-md-3 mb-4 product-card-animate"
+        key={item._id}
+      >
+        <Card className="product-card">
+          <div className="product-img-wrap">
+            <Card.Img
+              src={
+                item.Photos
+                  ? item.Photos.startsWith("http")
+                    ? item.Photos
+                    : `/images/${item.Photos.replace(
+                        "images/",
+                        ""
+                      )}`
+                  : "/images/default.jpg"
               }
+            />
+          </div>
+
+          <Card.Body className="text-center">
+            <h6 className="product-title zalando-sans-expanded">{item.ProductName}</h6>
+            <p className="product-size zalando-sans-expanded">{item.size}</p>
+            <p className="product-price">₹{item.ProductPrice}</p>
+
+            <Button
+              size="sm"
+              className="buy-btn"
+              onClick={() => handleBuyNow(item._id)}
             >
-              <Accordion.Header>{cat}</Accordion.Header>
-
-              <Accordion.Body>
-                <div className="row">
-                  {productsByCategory[cat]?.map((item) => (
-                    <div className="col-6 col-md-3 mb-4" key={item._id}>
-                      <Card className="border-0 shadow-sm">
-
-                        <Card.Img
-                          variant="top"
-                          src={
-                            item.Photos
-                              ? item.Photos.startsWith("http")
-                                ? item.Photos
-                                : `${item.Photos}`
-                              : "/images/default.jpg"
-                          }
-                          style={{ height: "220px", objectFit: "cover" }}
-                        />
-
-                        <Card.Body className="text-center">
-                          <Card.Title style={{ fontSize: "18px" }}>
-                            {item.ProductName}
-                          </Card.Title>
-
-                          <p
-                            className="text-muted"
-                            style={{ fontSize: "14px" }}
-                          >
-                            {item.size}
-                          </p>
-
-                          <p className="fw-bold text-muted mb-2">
-                            ₹{item.ProductPrice}
-                          </p>
-
-                          <Button
-                            size="sm"
-                            className="rounded-0 w-100 btn btn-outline-dark"
-                            onClick={() => handleBuyNow(item._id)}
-                          >
-                            BUY NOW
-                          </Button>
-                        </Card.Body>
-                      </Card>
-                    </div>
-                  ))}
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          ))}
-        </Accordion>
+              BUY NOW
+            </Button>
+          </Card.Body>
+        </Card>
       </div>
+    ))}
+  </div>
+</div>
 
       <Footer />
     </div>

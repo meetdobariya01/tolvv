@@ -33,6 +33,12 @@ const products = [
     img: "./images/sp.png",
     link: "/product",
   },
+   {
+    name: "Hamper",
+    size: "5 Products",
+    img: "./images/2.png",
+    link: "/product",
+  },
 ];
 const Homeproduct = () => {
   return (

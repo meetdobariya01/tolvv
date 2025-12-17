@@ -95,7 +95,7 @@ const Header = () => {
         <div className="search-overlay">
           <div className="search-box">
             <input type="text" placeholder="Search..." autoFocus />
-            <button className="close-btn" onClick={() => setShowSearch(false)}>
+            <button className="close-btn-1" onClick={() => setShowSearch(false)}>
               <FiX size={24} />
             </button>
           </div>
