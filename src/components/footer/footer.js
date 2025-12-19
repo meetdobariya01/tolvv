@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { NavLink } from "react-router-dom";
 import { FaInstagram, FaEnvelope } from "react-icons/fa";
 import WhatsappButton from "../whatsapp/whatsapp";
+import "./footer.css";
 
 export const Footer = () => {
   return (
@@ -21,46 +22,31 @@ export const Footer = () => {
               <h6 className="fw-bold text-uppercase mb-3">Discover</h6>
               <ul className="list-unstyled small">
                 <li className="mb-2">
-                  <NavLink
-                    to="/product"
-                    className="text-decoration-none text-light"
-                  >
+                  <NavLink to="/product" className="footer-link">
                     Bath Gel
                   </NavLink>
                 </li>
 
                 <li className="mb-2">
-                  <NavLink
-                    to="/product"
-                    className="text-decoration-none text-light"
-                  >
+                  <NavLink to="/product" className="footer-link">
                     Bath Lotion
                   </NavLink>
                 </li>
 
                 <li className="mb-2">
-                  <NavLink
-                    to="/product"
-                    className="text-decoration-none text-light"
-                  >
+                  <NavLink to="/product" className="footer-link">
                     Soap
                   </NavLink>
                 </li>
 
                 <li className="mb-2">
-                  <NavLink
-                    to="/product"
-                    className="text-decoration-none text-light"
-                  >
+                  <NavLink to="/product" className="footer-link">
                     Eau de Perfumes
                   </NavLink>
                 </li>
 
                 <li className="mb-2">
-                  <NavLink
-                    to="/product"
-                    className="text-decoration-none text-light"
-                  >
+                  <NavLink to="/product" className="footer-link">
                     Essential Oil
                   </NavLink>
                 </li>
@@ -72,10 +58,7 @@ export const Footer = () => {
               <h6 className="fw-bold text-uppercase mb-3">Know Us</h6>
               <ul className="list-unstyled small">
                 <li className="mb-2">
-                  <a
-                    href="/connect"
-                    className="text-white text-decoration-none"
-                  >
+                  <a href="/connect" className="footer-link">
                     Connect
                   </a>
                 </li>
@@ -85,7 +68,7 @@ export const Footer = () => {
                     href="https://www.instagram.com/tolvvsigns"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white text-decoration-none"
+                    className="footer-link"
                   >
                     Instagram
                   </a>
@@ -96,7 +79,7 @@ export const Footer = () => {
                     href="https://wa.me/919824257356"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white text-decoration-none"
+                    className="footer-link"
                   >
                     WhatsApp
                   </a>
@@ -108,7 +91,29 @@ export const Footer = () => {
             <div className="col-md-3 col-6">
               <h6 className="fw-bold text-uppercase mb-3">Policy</h6>
               <ul className="list-unstyled small">
-                <li className="mb-2">Terms of Use</li>
+                <li className="mb-2">
+                  <NavLink to="/privacy-policy" className="footer-link">
+                    Privacy policy
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/terms-and-condition" className="footer-link">
+                    Terms & Conditions
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/shipping-policy" className="footer-link">
+                    Shipping policy
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/refund-policy" className="footer-link">
+                    Refund policy
+                  </NavLink>
+                </li>
               </ul>
 
               {/* Social Icons */}

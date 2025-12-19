@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  FiSearch,
+  FiShoppingCart,
+  FiUser,
+  FiMenu,
+  FiX
+} from "react-icons/fi";
 import "./header.css";
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
-  const [showSearch, setShowSearch] = useState(false); // ADDED
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (!searchText.trim()) return;
+
+    navigate(`/product?search=${encodeURIComponent(searchText)}`);
+    setShowSearch(false);
+    setSearchText("");
+  };
 
   return (
     <>
@@ -21,7 +37,7 @@ const Header = () => {
             {expanded ? <FiX size={26} /> : <FiMenu size={26} />}
           </Navbar.Toggle>
 
-          {/* CENTER LOGO (Mobile) */}
+          {/* Mobile Logo */}
           <Navbar.Brand as={NavLink} to="/" className="mx-auto d-lg-none">
             <img
               src="./images/logo-tolvv.png"
@@ -44,7 +60,7 @@ const Header = () => {
               </NavLink>
             </Nav>
 
-            {/* CENTER LOGO (Desktop Only) */}
+            {/* CENTER LOGO (Desktop) */}
             <div className="d-none d-lg-flex justify-content-center mx-4">
               <NavLink to="/" className="logo-link">
                 <img
@@ -71,7 +87,7 @@ const Header = () => {
 
           {/* ICONS */}
           <div className="icon-area d-flex align-items-center gap-3 ms-auto">
-            {/* SEARCH ICON */}
+            {/* SEARCH */}
             <button
               className="nav-link p-0 bg-transparent border-0"
               onClick={() => setShowSearch(true)}
@@ -90,12 +106,25 @@ const Header = () => {
         </Navbar>
       </header>
 
-      {/* SEARCH BAR POPUP */}
+      {/* SEARCH POPUP */}
       {showSearch && (
         <div className="search-overlay">
           <div className="search-box">
-            <input type="text" placeholder="Search..." autoFocus />
-            <button className="close-btn-1" onClick={() => setShowSearch(false)}>
+            <input
+              type="text"
+              placeholder="Search products..."
+              autoFocus
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+
+            
+
+            <button
+              className="close-btn-1"
+              onClick={() => setShowSearch(false)}
+            >
               <FiX size={24} />
             </button>
           </div>

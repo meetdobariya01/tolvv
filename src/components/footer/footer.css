@@ -1,0 +1,12 @@
+.footer-link {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .footer-link:hover {
+    color: #f5c16c;
+  }
+  
+  .footer-link.active {
+    font-weight: 600;
+  }
