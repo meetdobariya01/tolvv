@@ -44,7 +44,7 @@ const Homeproduct = () => {
   return (
     <div>
       <section className="product-section">
-        <h2 className="product-heading">Products</h2>
+        <h2 className="product-heading the-artisan-font">Products</h2>
 
         <div className="container">
           <div className="row justify-content-center">

@@ -9,7 +9,7 @@ const Zodic = () => {
     Aries: {
       name: "Aries",
       date: "March 21 - April 19",
-      color: "#7E0D0D",
+      color: "#7A1318",
       icon: "./images/zodiac/1.png",
       description:
         "Aries is bold, fiery, and instinctive—driven by courage, ambition, and passion. They lead naturally, embrace challenges, and inspire fearless action.",
@@ -36,7 +36,7 @@ const Zodic = () => {
     Taurus: {
       name: "Taurus",
       date: "April 20 - May 20",
-      color: "#7B8E2E",
+      color: "#7A8B3D",
       icon: "./images/zodiac/2.png",
       description:
         "Taurus is steady, loyal, and grounded—valuing comfort, beauty, and stability. Patient and persistent, they build lasting success through calm determination and consistency.",
@@ -63,7 +63,7 @@ const Zodic = () => {
     Gemini: {
       name: "Gemini",
       date: "May 21 - June 20",
-      color: "#C6932C",
+      color: "#BB892C",
       icon: "./images/zodiac/3.png",
       description:
         "Gemini is curious, witty, and adaptable—thriving on communication and learning. Creative and versatile, they inspire innovation and fresh perspectives.",
@@ -90,7 +90,7 @@ const Zodic = () => {
     Cancer: {
       name: "Cancer",
       date: "June 21 - July 22",
-      color: "#B2B2B2",
+      color: "#8A8C8E",
       icon: "./images/zodiac/4.png",
       description:
         "Cancer is emotional, intuitive, and nurturing—loyal and protective. They value family, empathy, and emotional security, offering gentle, healing love.",
@@ -117,7 +117,7 @@ const Zodic = () => {
     Leo: {
       name: "Leo",
       date: "July 23 - August 22",
-      color: "#E0B900",
+      color: "#E8C43A",
       icon: "./images/zodiac/5.png",
       description:
         "Leo is confident, charismatic, and warm-hearted—generous and loyal. They inspire, lead with passion, shine brightly, and embrace joyful self-expression.",
@@ -144,7 +144,7 @@ const Zodic = () => {
     Virgo: {
       name: "Virgo",
       date: "August 23 - September 22",
-      color: "#E66B3E",
+      color: "#DC4D2D",
       icon: "./images/zodiac/6.png",
       description:
         "Virgo is intelligent, detail-oriented, and analytical—calm, humble, and caring. They seek order, precision, and improvement, guiding through thoughtful, structured actions..",
@@ -170,7 +170,7 @@ const Zodic = () => {
     Libra: {
       name: "Libra",
       date: "September 23 - October 22",
-      color: "#FF766B",
+      color: "#FF4E4C",
       icon: "./images/zodiac/7.png",
       description:
         "Libra is social, graceful, and fair—seeking harmony, beauty, and meaningful relationships. They balance emotions, inspire peace, and live elegantly.",
@@ -196,7 +196,7 @@ const Zodic = () => {
     Scorpio: {
       name: "Scorpio",
       date: "October 23 - November 21",
-      color: "#111111",
+      color: "#000000",
       icon: "./images/zodiac/8.png",
       description:
         "Scorpio is intense, mysterious, and transformative—loyal, passionate, and insightful. They embrace power, authenticity, and emotional depth, inspiring personal growth.",
@@ -222,7 +222,7 @@ const Zodic = () => {
     Sagittarius: {
       name: "Sagittarius",
       date: "November 22 - December 21",
-      color: "#6E4FA8",
+      color: "#74489D",
       icon: "./images/zodiac/9.png",
       description:
         "Sagittarius is adventurous, optimistic, and free-spirited—seeking truth, knowledge, and freedom. They inspire exploration, honesty, positivity, and open-minded living.",
@@ -248,7 +248,7 @@ const Zodic = () => {
     Capricorn: {
       name: "Capricorn",
       date: "December 22 - January 19",
-      color: "#E7E1C5",
+      color: "#F1E1CF",
       icon: "./images/zodiac/10.png",
       description:
         "Capricorn is disciplined, ambitious, and practical—valuing structure, patience, and hard work. They lead steadily, achieving long-term success through dedication.",
@@ -274,7 +274,7 @@ const Zodic = () => {
     Aquarius: {
       name: "Aquarius",
       date: "January 20 - February 18",
-      color: "#6CC0C9",
+      color: "#519AA2",
       icon: "./images/zodiac/11.png",
       description:
         "Aquarius is innovative, independent, and visionary—valuing freedom, originality, and humanitarian ideals. They inspire change, think differently, and improve society.",
@@ -300,7 +300,7 @@ const Zodic = () => {
     Pisces: {
       name: "Pisces",
       date: "February 19 - March 20",
-      color: "#003E5E",
+      color: "#043D5D",
       icon: "./images/zodiac/12.png",
       description:
         "Pisces is sensitive, intuitive, and artistic—compassionate and spiritual. They inspire creativity, empathy, healing, and kindness, seeing the world through soulful perception.",
@@ -326,18 +326,18 @@ const Zodic = () => {
   };
 
   const zodiacSigns = [
-    { name: "Aries", color: "#7E0D0D", image: "./images/zodiac/1.png" },
-    { name: "Taurus", color: "#7B8E2E", image: "./images/zodiac/2.png" },
-    { name: "Gemini", color: "#C6932C", image: "./images/zodiac/3.png" },
-    { name: "Cancer", color: "#B2B2B2", image: "./images/zodiac/4.png" },
-    { name: "Leo", color: "#E0B900", image: "./images/zodiac/5.png" },
-    { name: "Virgo", color: "#E66B3E", image: "./images/zodiac/6.png" },
-    { name: "Libra", color: "#FF766B", image: "./images/zodiac/7.png" },
-    { name: "Scorpio", color: "#111111", image: "./images/zodiac/8.png" },
-    { name: "Sagittarius", color: "#6E4FA8", image: "./images/zodiac/9.png" },
-    { name: "Capricorn", color: "#E7E1C5", image: "./images/zodiac/10.png" },
-    { name: "Aquarius", color: "#6CC0C9", image: "./images/zodiac/11.png" },
-    { name: "Pisces", color: "#003E5E", image: "./images/zodiac/12.png" },
+    { name: "Aries", color: "#7A1318", image: "./images/zodiac/1.png" },
+    { name: "Taurus", color: "#7A8B3D", image: "./images/zodiac/2.png" },
+    { name: "Gemini", color: "#BB892C", image: "./images/zodiac/3.png" },
+    { name: "Cancer", color: "#8A8C8E", image: "./images/zodiac/4.png" },
+    { name: "Leo", color: "#E8C43A", image: "./images/zodiac/5.png" },
+    { name: "Virgo", color: "#DC4D2D", image: "./images/zodiac/6.png" },
+    { name: "Libra", color: "#FF4E4C", image: "./images/zodiac/7.png" },
+    { name: "Scorpio", color: "#000000", image: "./images/zodiac/8.png" },
+    { name: "Sagittarius", color: "#74489D", image: "./images/zodiac/9.png" },
+    { name: "Capricorn", color: "#F1E1CF", image: "./images/zodiac/10.png" },
+    { name: "Aquarius", color: "#519AA2", image: "./images/zodiac/11.png" },
+    { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
   ];
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -415,7 +415,7 @@ const Zodic = () => {
           <div className="left-text text-center mb-4">
             <h2 className="tangerine-bold">The Twelve</h2>
             <p className="subtitle">EXPLORE BY YOUR SUN, MOON OR RISING SIGN</p>
-            <p className="subtitle">Find your Zodiacs</p>
+            <p className="subtitle">Find Your Zodiac Sign</p>
              
              <Calculator/>
           </div>
@@ -531,7 +531,7 @@ const Zodic = () => {
                   className="col-6 col-md-4 col-lg-2 product-card"
                   key={index}
                 >
-                  <div className="card product-box">
+                  <div className="card product-box h-100">
                     <img
                       src={p.Photos}
                       alt={p.ProductName}

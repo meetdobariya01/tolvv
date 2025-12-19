@@ -29,7 +29,7 @@ export const Footer = () => {
 
                 <li className="mb-2">
                   <NavLink to="/product" className="footer-link">
-                    Bath Lotion
+                    Body Lotion
                   </NavLink>
                 </li>
 
@@ -41,13 +41,19 @@ export const Footer = () => {
 
                 <li className="mb-2">
                   <NavLink to="/product" className="footer-link">
-                    Eau de Perfumes
+                    Eau de Parfum
                   </NavLink>
                 </li>
 
                 <li className="mb-2">
                   <NavLink to="/product" className="footer-link">
                     Essential Oil
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/product" className="footer-link">
+                    Gift Box
                   </NavLink>
                 </li>
               </ul>
@@ -83,36 +89,6 @@ export const Footer = () => {
                   >
                     WhatsApp
                   </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 3 */}
-            <div className="col-md-3 col-6">
-              <h6 className="fw-bold text-uppercase mb-3">Policy</h6>
-              <ul className="list-unstyled small">
-                <li className="mb-2">
-                  <NavLink to="/privacy-policy" className="footer-link">
-                    Privacy policy
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/terms-and-condition" className="footer-link">
-                    Terms & Conditions
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/shipping-policy" className="footer-link">
-                    Shipping policy
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/refund-policy" className="footer-link">
-                    Refund policy
-                  </NavLink>
                 </li>
               </ul>
 
@@ -153,6 +129,36 @@ export const Footer = () => {
                   <FaEnvelope />
                 </a>
               </div>
+            </div>
+
+            {/* Column 3 */}
+            <div className="col-md-3 col-6">
+              <h6 className="fw-bold text-uppercase mb-3">Policy</h6>
+              <ul className="list-unstyled small">
+                <li className="mb-2">
+                  <NavLink to="/privacy-policy" className="footer-link">
+                    Privacy policy
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/terms-and-condition" className="footer-link">
+                    Terms & Conditions
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/shipping-policy" className="footer-link">
+                    Shipping policy
+                  </NavLink>
+                </li>
+
+                <li className="mb-2">
+                  <NavLink to="/refund-policy" className="footer-link">
+                    Refund policy
+                  </NavLink>
+                </li>
+              </ul>
             </div>
 
             {/* Column 4 (Logo + Copyright) */}
