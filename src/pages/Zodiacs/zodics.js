@@ -531,7 +531,7 @@ const Zodic = () => {
                   className="col-6 col-md-4 col-lg-2 product-card"
                   key={index}
                 >
-                  <div className="card product-box h-100">
+                  <div className="card product-box">
                     <img
                       src={p.Photos}
                       alt={p.ProductName}

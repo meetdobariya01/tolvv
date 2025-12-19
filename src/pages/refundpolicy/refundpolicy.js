@@ -52,7 +52,7 @@ const RefundPolicy = () => {
 
                     <p>
                       All payment details are stored as per RBI guidelines and
-                      are managed and provided by <strong>Razorpay</strong> as a
+                      are managed and provided by <strong>HDFC </strong> as a
                       payment gateway.
                     </p>
 

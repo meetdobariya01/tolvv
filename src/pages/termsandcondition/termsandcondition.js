@@ -46,7 +46,7 @@ const Termsconditions = () => {
                     <p>
                       The terms <strong>"We" / "Us" / "Our" / ”Company”</strong>{" "}
                       individually and collectively refer to{" "}
-                      <strong>Tolvv</strong> and the terms{" "}
+                      <strong>OM</strong> and the terms{" "}
                       <strong>"Visitor" / "User"</strong> refer to the users.
                     </p>
 
