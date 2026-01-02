@@ -387,25 +387,55 @@ const Zodic = () => {
     fetchProducts();
   }, []);
 
-  const handleBuyNow = async (productId) => {
-    if (!token) {
-      alert("Please login first!");
-      navigate("/login");
-      return;
-    }
+  // const handleBuyNow = async (productId) => {
 
-    try {
-      await axios.post(
-        `${API_URL}/add-to-cart`,
-        { productId, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      navigate("/cart");
-    } catch (err) {
-      console.error("Add to cart failed:", err);
-      alert("Failed to add product to cart.");
-    }
-  };
+  //   if (!token) {
+  //     alert("Please login first!");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     await axios.post(
+  //       `${API_URL}/add-to-cart`,
+  //       { productId, quantity: 1 },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+  //     navigate("/cart");
+  //   } catch (err) {
+  //     console.error("Add to cart failed:", err);
+  //     alert("Failed to add product to cart.");
+  //   }
+  // };
+const handleBuyNow = async (productId) => {
+  if (!token) {
+    alert("Please login first!");
+    return navigate("/login");
+  }
+
+  try {
+    await axios.post(
+      `${API_URL}/add-to-cart`,
+      {
+        productId,
+        quantity: 1,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    navigate("/cart");
+  } catch (err) {
+    console.error("Add to cart failed:", err.response || err.message);
+    alert(err.response?.data?.message || "Failed to add product to cart.");
+  }
+};
+
+
   return (
     <div>
       {/* TOP SECTION */}

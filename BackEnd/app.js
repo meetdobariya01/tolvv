@@ -367,7 +367,6 @@ app.post("/place-order", authenticate, async (req, res) => {
         customer_mobile: req.user.mobile,
         return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:4000/payment"
       });
-
       if (sessionResp?.payment_links?.web) {
         return res.status(201).json({
           message: "Order placed, redirecting to payment",
