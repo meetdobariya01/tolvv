@@ -29,3 +29,64 @@
 .buy-btn:hover {
   background: #333;
 }
+/* GRID LAYOUT */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 992px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* CARD */
+.product-box {
+  display: flex;
+  flex-direction: column;
+  height: 360px;              /* 🔥 REQUIRED */
+}
+
+/* IMAGE */
+.product-img {
+  height: 180px;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* INFO */
+.product-info {
+  flex: 1;                    /* 🔥 THIS WAS MISSING */
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 10px;
+}
+
+/* NAME */
+.product-info .name {
+  font-size: 14px;
+  font-weight: 600;
+  height: 40px;
+  overflow: hidden;
+color: #000;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* SIZE + PRICE */
+.product-info .size,
+.product-info .price {
+  font-size: 13px;
+  margin: 4px 0;
+  color: #000;
+}

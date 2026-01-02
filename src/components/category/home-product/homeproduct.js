@@ -51,7 +51,7 @@ const Homeproduct = () => {
             {products.map((p, index) => (
               <div className="col-6 col-md-4 col-lg-2 product-card" key={index}>
                 <NavLink to={p.link} className="card product-box">
-                  <img src={p.img} alt={p.name} className="product-img" />
+                  <img src={p.img} alt={p.name} className="product-img-1" />
 
                   <div className="product-info">
                     <p className="name">

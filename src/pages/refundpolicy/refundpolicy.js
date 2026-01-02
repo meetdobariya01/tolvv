@@ -15,7 +15,7 @@ const RefundPolicy = () => {
   return (
     <div>
       {/* Header Section */}
-      <Header />
+      <Header />  
       <Container fluid className="py-5 bg-light">
         <Container>
           {/* Page Header */}

@@ -442,7 +442,7 @@ const Twelve = () => {
             <p className="subtitle">EXPLORE BY YOUR SUN, MOON OR RISING SIGN</p>
             <p className="subtitle">Find your Zodiacs</p>
 
-            <Calculator/>
+            <Calculator />
           </div>
 
           {/* Zodiac Grid */}
@@ -545,32 +545,29 @@ const Twelve = () => {
         {/* PRODUCTS */}
         {/* PRODUCTS – WHITE BACKGROUND */}
         <div className="product-wrapper py-5">
-          <h2 className="product-heading mb-4 text-center">
+          <h2 className="product-heading mb-4 the-artisan-font text-center">
             {selectedZodiac.name} Products
           </h2>
 
           <div className="container">
-            <div className="row justify-content-center">
+            <div className="product-grid">
               {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-                <div
-                  className="col-6 col-md-4 col-lg-2 product-card"
-                  key={index}
-                >
-                  <div className="card product-box">
+                <div className="product-card" key={index}>
+                  <div className="product-box">
                     <img
                       src={p.Photos}
                       alt={p.ProductName}
                       className="product-img"
                     />
+
                     <div className="product-info">
                       <p className="name">{p.ProductName}</p>
                       <p className="size">{p.size}</p>
-                      <p className="size">₹{p.ProductPrice}</p>
+                      <p className="price">₹{p.ProductPrice}</p>
 
                       <div className="underline" />
-                      {/* Buy Now Button */}
                       <button
-                        className="buy-btn"
+                        className="buy-btn mt-1"
                         onClick={() => handleBuyNow(p._id)}
                       >
                         Buy Now
