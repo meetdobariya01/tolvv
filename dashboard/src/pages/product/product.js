@@ -3,8 +3,8 @@ import axios from "axios";
 import { Button, Modal, Form, Table } from "react-bootstrap";
 import Header from "../header/header";
 
-const API_BASE = "http://localhost:5000/api/admin/products";
-const IMAGE_BASE = "http://localhost:5000";
+const API_BASE = "http://localhost:4000/api/admin/products";
+const IMAGE_BASE = "http://localhost:4000";
 
 const getAdminAxiosConfig = () => {
   const token = localStorage.getItem("adminToken");

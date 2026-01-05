@@ -1,4 +1,46 @@
 
+// require("dotenv").config();
+// // app.js
+// const express = require("express");
+// const app = express();
+// const http = require("http");
+// const multer = require('multer');
+// const path = require('path');
+// const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
+// const User = require("./Model/UserSchema");
+// const Product = require("./Model/Product.add.admin");
+// const Cart = require("./Model/Cart");
+// const Order = require("./Model/order");
+// const OrderTracking = require("./Model/order.traking");
+// const bodyParser = require("body-parser");
+// const tempOtp = {};
+// const twilio = require("twilio");
+// // Twilio Client
+// const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+// const fs = require("fs");
+// require("./db/conn");
+// require("./Model/mobile");
+// require("./Model/order.traking");
+// const cors = require('cors');
+// const { PaymentHandler, validateHMAC_SHA256, APIException } = require("./payment/PaymentHandler");
+// const crypto = require("crypto");
+// app.use(cors());
+// const server = http.createServer(app);
+// const port = process.env.PORT || 4000;
+
+// app.use(express.json());
+// app.use(bodyParser.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.static('public'));
+// app.use(
+//   "/images",
+//   express.static("D:\\Job\\Telve\\tolvv\\public\\images")
+// );
+// // Multer setup
+// const OTP_EXPIRY_TIME = 5 * 60 * 1000;
+// // JWT authentication middleware
+
 require("dotenv").config();
 // app.js
 const express = require("express");
@@ -12,23 +54,39 @@ const User = require("./Model/UserSchema");
 const Product = require("./Model/Product.add.admin");
 const Cart = require("./Model/Cart");
 const Order = require("./Model/order");
-const OrderTracking = require("./Model/order.traking");
+//const OrderTracking = require("./Model/order.traking");
 const bodyParser = require("body-parser");
 const tempOtp = {};
-const twilio = require("twilio");
-// Twilio Client
-const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-const fs = require("fs");
+const nodemailer = require("nodemailer");
+const tempEmailOtp = {};
+const asyncHandler = require("express-async-handler");
 require("./db/conn");
 require("./Model/mobile");
 require("./Model/order.traking");
 const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+//const Shiprocket = require("../Model/order.traking"");
+//const { createShiprocketOrder } = require("../services/shiprocket.service");
+
 const { PaymentHandler, validateHMAC_SHA256, APIException } = require("./payment/PaymentHandler");
 const crypto = require("crypto");
-app.use(cors());
+//app.use(cors());
+const { OAuth2Client } = require("google-auth-library");
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const server = http.createServer(app);
 const port = process.env.PORT || 4000;
-
+const transporter = nodemailer.createTransport({
+    service: "gmail", // or your Hostinger email SMTP
+    auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+   }
+});
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,227 +98,376 @@ app.use(
 // Multer setup
 const OTP_EXPIRY_TIME = 5 * 60 * 1000;
 // JWT authentication middleware
-const authenticate = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ message: 'No token provided' });
 
+
+
+const authenticate = async (req, res, next) => {
   try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ message: 'No token provided' });
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    return next();
+
+    // Check if user still exists
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: 'User no longer exists. Please login again.' });
+    }
+
+    req.user = user;
+    next();
   } catch (error) {
+    console.error("Authentication error:", error);
     return res.status(401).json({ message: 'Invalid token' });
   }
 };
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/send-otp", async (req, res) => {
-  const { mobile } = req.body;
+  const { email } = req.body;
 
-  if (!mobile)
-    return res.status(400).json({ success: false, message: "Mobile number is required." });
-
-  if (!/^[6-9]\d{9}$/.test(mobile))
-    return res.status(400).json({ success: false, message: "Invalid phone number." });
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: "Email is required.",
+    });
+  }
 
   try {
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
-    tempOtp[mobile] = {
+    tempOtp[email] = {
       otp,
       expiresAt: Date.now() + OTP_EXPIRY_TIME,
     };
 
-    // 📩 Send SMS using Twilio
-    await client.messages.create({
-      body: `Your OTP is ${otp}`,
-      to: `+91${mobile}`, // User phone
-      from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number
+    await transporter.sendMail({
+  from: `"Tolvv Support" <no-reply@tolvv.com>`,
+  replyTo: "no-reply@tolvv.com",
+  to: email,
+  subject: "OTP Verification – Secure Login",
+  html: `
+    <div style="font-family: Arial, sans-serif; color:#333;">
+      <p>Dear User,</p>
+
+      <p>We received a request to log in to your account.</p>
+
+      <p>Your OTP code is:</p>
+
+      <div style="
+        font-size: 28px;
+        font-weight: bold;
+        color: #000;
+        text-align: center;
+        letter-spacing: 6px;
+        margin: 20px 0;
+      ">
+        ${otp}
+      </div>
+
+      <p><strong>⏳ Valid for 5 minutes</strong></p>
+
+      <p style="font-size: 13px; color: #555;">
+        For your security:
+        <br/>• Do not share this OTP with anyone
+        <br/>• Our team will never ask for your OTP
+      </p>
+
+      <p>
+        Regards,<br/>
+        <strong>Tolvv – Nurture your Nature</strong><br/>
+        Support Team
+      </p>
+    </div>
+  `,
+});
+
+
+    console.log(`OTP sent to ${email}: ${otp}`);
+
+    res.json({
+      success: true,
+      message: "OTP sent successfully.",
     });
-
-    console.log(`OTP sent to ${mobile}: ${otp}`);
-    res.json({ success: true, message: "OTP sent successfully." });
-
   } catch (error) {
-    console.error("Twilio error:", error);
+    console.error("Email error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to send OTP. Check Twilio account details.",
-      error: error.message,
+      message: "Failed to send OTP.",
     });
   }
 });
-
 app.post("/verify-otp", (req, res) => {
-  const { mobile, otp } = req.body;
+  const { email, otp } = req.body;
 
-  if (!tempOtp[mobile])
+  if (!tempOtp[email])
     return res.status(400).json({ success: false, message: "OTP not found. Please resend." });
 
-  if (tempOtp[mobile].expiresAt < Date.now())
+  if (tempOtp[email].expiresAt < Date.now())
     return res.status(400).json({ success: false, message: "OTP has expired." });
 
-  if (tempOtp[mobile].otp !== otp)
+  if (tempOtp[email].otp !== otp)
     return res.status(400).json({ success: false, message: "Invalid OTP." });
 
-  tempOtp[mobile].verified = true;
-
+  tempOtp[email].verified = true;
   res.json({ success: true, message: "OTP verified successfully." });
 });
 // Signup
 app.post("/signup", async (req, res) => {
-  const { fname, lname, password, mobile, role } = req.body;
-  if (!fname || !lname || !password || !mobile) {
-    return res.status(400).json({ message: "All fields including mobile number are required" });
-  }
-  if (!tempOtp[mobile] || !tempOtp[mobile].verified) {
-    return res.status(400).json({ message: "Mobile number not verified. Please verify OTP first." });
+  const { fname, lname, email, password, mobile, role } = req.body;
+
+  if (!fname || !lname || !email || !password || !mobile) {
+    return res.status(400).json({
+      message: "All fields are required",
+    });
   }
 
   try {
-    const userExists = await User.findOne({ mobile });
-    if (userExists) return res.status(400).json({ message: "Mobile number already registered" });
+    const mobileExists = await User.findOne({ mobile });
+    if (mobileExists) {
+      return res.status(400).json({ message: "Mobile number already registered" });
+    }
+
+    const emailExists = await User.findOne({ email });
+    if (emailExists) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
 
     const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    const user = new User({ fname, lname, password: hashed, mobile, role: role || 'user' });
+    const user = new User({
+      fname,
+      lname,
+      email,
+      mobile,
+      password: hashedPassword,
+      role: role || "user",
+    });
+
     await user.save();
-
-    delete tempOtp[mobile];
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Signup error:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
 // Login
 app.post("/login", async (req, res) => {
-  const { mobile, password } = req.body;
-  if (!mobile || !password) return res.status(400).json({ message: "Mobile number and password are required" });
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
 
   try {
-    const user = await User.findOne({ mobile });
-    if (!user) return res.status(400).json({ message: "User not found. Please sign up." });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    if (user.googleAuth) {
+      return res.status(400).json({
+        message: "This account uses Google login. Please sign in with Google.",
+      });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-    // Include email and mobile in JWT
     const token = jwt.sign(
-      { id: user._id, role: user.role, email: user.email, mobile: user.mobile },
+      { id: user._id, role: user.role, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
 
-    res.status(200).json({ message: "Login successful", token, role: user.role, userId: user._id });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        fname: user.fname,
+        lname: user.lname,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
 
+app.post("/googlelogin", async (req, res) => {
+  try {
+    const { token } = req.body;
 
+    if (!token) {
+      return res.status(400).json({ success: false, message: "Token is required" });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload?.email) {
+      return res.status(401).json({ success: false, message: "Invalid Google token" });
+    }
+
+    const { email, given_name, family_name } = payload;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        fname: given_name || "Google",
+        lname: family_name || "User",
+        email,
+        googleAuth: true, // 🔥 REQUIRED
+        // ❌ DO NOT set password
+        // ❌ DO NOT set mobile
+      });
+
+      await user.save();
+    }
+
+    const jwtToken = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    return res.json({ success: true, token: jwtToken });
+
+  } catch (error) {
+    console.error("Google login error:", error);
+    return res.status(401).json({ success: false, message: "Google login failed" });
+  }
+});
 // Forgot password
 // Forgot password - updated to send SMS
 // Send OTP
 app.post("/forgot-password", async (req, res) => {
-  const { mobile } = req.body;
-  if (!mobile) return res.status(400).json({ message: "Mobile number is required." });
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
 
   try {
-    const user = await User.findOne({ mobile });
-    if (!user) return res.status(404).json({ message: "User not found." });
-
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    tempOtp[mobile] = { otp, expiresAt: Date.now() + OTP_EXPIRY_TIME };
-
-    console.log(`Sending OTP to +91${mobile}: ${otp}`); // debug
-
-    try {
-      await client.messages.create({
-        body: `Your password reset OTP is ${otp}`,
-        to: `+91${mobile}`,
-        from: process.env.TWILIO_PHONE_NUMBER,
-      });
-    } catch (err) {
-      console.warn(`Twilio error: ${err.message}`);
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "OTP sent successfully." });
-  } catch (err) {
-    console.error(err);
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    tempEmailOtp[email] = {
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000,
+      verified: false,
+    };
+
+    await transporter.sendMail({
+      from: `"Tolvv Support" <${process.env.MAIL_USER}>`,
+      to: email,
+      subject: "Password Reset OTP",
+      html: `
+        <h3>Password Reset</h3>
+        <p>Your OTP is:</p>
+        <h2>${otp}</h2>
+        <p>This OTP is valid for 5 minutes.</p>
+      `,
+    });
+
+    console.log(`OTP sent to ${email}: ${otp}`);
+
+    res.status(200).json({ message: "OTP sent to email successfully" });
+  } catch (error) {
+    console.error("Forgot password error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
 
 // Verify reset OTP
 app.post("/verify-reset-otp", async (req, res) => {
-  const { mobile, Otp } = req.body;
-  const record = tempOtp[mobile];
-  if (!record) return res.status(400).json({ message: "OTP not found or expired." });
+  const { email, otp } = req.body;
 
-  if (record.otp !== Otp) return res.status(400).json({ message: "Invalid OTP." });
-  if (Date.now() > record.expiresAt) {
-    delete tempOtp[mobile];
-    return res.status(400).json({ message: "OTP expired." });
+  const record = tempEmailOtp[email];
+  if (!record) {
+    return res.status(400).json({ message: "OTP not found or expired" });
   }
 
-  tempOtp[mobile].verified = true;
-  res.status(200).json({ message: "OTP verified successfully." });
+  if (Date.now() > record.expiresAt) {
+    delete tempEmailOtp[email];
+    return res.status(400).json({ message: "OTP expired" });
+  }
+
+  if (record.otp !== otp) {
+    return res.status(400).json({ message: "Invalid OTP" });
+  }
+
+  record.verified = true;
+
+  res.status(200).json({ message: "OTP verified successfully" });
 });
 // Reset password
 app.post("/reset-password", async (req, res) => {
-  const { mobile, newPassword } = req.body;
-  if (!mobile || !newPassword) return res.status(400).json({ message: "Mobile and new password are required." });
+  const { email, newPassword } = req.body;
 
-  const record = tempOtp[mobile];
-  if (!record || !record.verified) return res.status(400).json({ message: "OTP not verified." });
+  const record = tempEmailOtp[email];
+  if (!record || !record.verified) {
+    return res.status(400).json({ message: "OTP not verified" });
+  }
 
   try {
-    const user = await User.findOne({ mobile });
-    if (!user) return res.status(404).json({ message: "User not found." });
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-    await user.save();
+    await User.updateOne(
+      { email },
+      { $set: { password: hashedPassword } }
+    );
 
-    delete tempOtp[mobile];
-    res.status(200).json({ message: "Password reset successfully." });
+    delete tempEmailOtp[email];
+
+    res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
-    console.error("Reset password error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
 
 // User dashboard
-app.get("/user/dashboard", authenticate, async (req, res) => {
-  if (req.user.role !== 'user') return res.status(403).json({ message: "Access denied: Users only" });
-  try {
-    const availableProducts = await Product.find();
-    const userOrders = await Order.find({ userId: req.user.id }).populate('items.productId').sort({ createdAt: -1 });
+// app.get("/user/dashboard", authenticate, async (req, res) => {
+//   if (req.user.role !== 'user') return res.status(403).json({ message: "Access denied: Users only" });
+//   try {
+//     const availableProducts = await Product.find();
+//     const userOrders = await Order.find({ userId: req.user.id }).populate('items.productId').sort({ createdAt: -1 });
 
-    const orderDetails = userOrders.map(order => ({
-      orderId: order._id,
-      status: order.status,
-      totalAmount: order.totalAmount,
-      deliveryAddress: order.address,
-      placedAt: order.createdAt,
-      items: order.items.map(item => ({
-        productName: item.productId ? item.productId.ProductName : 'Product Not Found',
-        quantity: item.quantity,
-        pricePerItem: item.productId ? item.productId.ProductPrice : 0
-      }))
-    }));
+//     const orderDetails = userOrders.map(order => ({
+//       orderId: order._id,
+//       status: order.status,
+//       totalAmount: order.totalAmount,
+//       deliveryAddress: order.address,
+//       placedAt: order.createdAt,
+//       items: order.items.map(item => ({
+//         productName: item.productId ? item.productId.ProductName : 'Product Not Found',
+//         quantity: item.quantity,
+//         pricePerItem: item.productId ? item.productId.ProductPrice : 0
+//       }))
+//     }));
 
-    res.status(200).json({ message: "Welcome to User Dashboard", availableProducts, orders: orderDetails });
-  } catch (error) {
-    console.error("User dashboard error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+//     res.status(200).json({ message: "Welcome to User Dashboard", availableProducts, orders: orderDetails });
+//   } catch (error) {
+//     console.error("User dashboard error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
 
 // Categories
 app.get("/categories", async (req, res) => {
