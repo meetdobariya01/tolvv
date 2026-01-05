@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Accordion, Card, Button } from "react-bootstrap";
+import { Accordion, Card, Button, Container, Row, Col } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
@@ -19,6 +20,14 @@ const Mainproduct = () => {
     "Essential Oil",
     "Body Lotion",
     "Hamper",
+  ];
+  const products = [
+    { title: "Bath Gel", size: "200 ml", img: "/images/bl.png" },
+    { title: "Body Lotion", size: "200 ml", img: "/images/bb.png" },
+    { title: "Perfume", size: "50 ml", img: "/images/pr.png" },
+    { title: "Essential Oil", size: "30 ml", img: "/images/eo.png" },
+    { title: "Soap", size: "100 gsm", img: "/images/sp.png" },
+    { title: "Hampers", size: "", img: "/images/hamper.jpg" },
   ];
 
   const token = localStorage.getItem("token");
@@ -99,7 +108,7 @@ const Mainproduct = () => {
 
       <div className="container py-5">
         {/* CATEGORY NAVBAR */}
-        <div className="category-navbar mb-4">
+        {/* <div className="category-navbar mb-4">
           {categories.map((cat, index) => (
             <button
               key={index}
@@ -109,10 +118,42 @@ const Mainproduct = () => {
               {cat}
             </button>
           ))}
-        </div>
+        </div> */}
+
+        <section className="products-section-grid">
+          <Container>
+            <Row className="gx-4 gy-3 mb-5">
+              {products.map((item, index) => (
+                <Col
+                  key={index}
+                  xs={4} // ✅ MOBILE → 2 ITEMS
+                  sm={6}
+                  md={4}
+                  lg={2}
+                >
+                  <div className="product-card">
+                    <div className="product-img-card">
+                      <img src={item.img} alt={item.title} />
+                    </div>
+
+                    <div className="product-info-collection">
+                      <h5>
+                        {item.title} <span>›</span>
+                      </h5>
+                      <div className="underline" />
+                      <p>{item.size}</p>
+                    </div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Container>
+        </section>
+        <hr />
 
         {/* PRODUCT GRID */}
-        <div className="row product-fade">
+        <div className="row product-fade mt-4">
+          <h2 className="products-heading">Products Name</h2>
           {productsByCategory[activeKey]?.map((item) => (
             <div
               className="col-6 col-md-3 mb-4 product-card-animate"
@@ -150,13 +191,14 @@ const Mainproduct = () => {
 
                   <div className="product-divider"></div>
 
-                  <Button
-                    size="sm"
-                    className="cart-btn w-50"
-                    onClick={() => handleBuyNow(item._id)}
+                  <NavLink
+                    to={`/productdetails`}
+                    className="text-decoration-none"
                   >
-                    ADD TO CART
-                  </Button>
+                    <Button size="sm" className="cart-btn w-50">
+                      ADD TO CART
+                    </Button>
+                  </NavLink>
                 </Card.Body>
               </Card>
             </div>
