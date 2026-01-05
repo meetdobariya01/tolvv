@@ -1,7 +1,7 @@
 /* Page Wrapper */
 .pro-login-wrapper {
   /* height: 100vh; */
-  background: #f3f4f6; /* Light corporate grey */
+  background: #D1D3D4; /* Light corporate grey */
   padding: 20px;
 }
 
@@ -9,9 +9,8 @@
 .pro-login-card {
   width: 100%;
   max-width: 420px;
-  background: #ffffff;
+  background: transparent;
   border-radius: 18px;
-  border: 1px solid #e5e7eb; 
   transition: 0.3s ease;
 }
 
@@ -24,7 +23,6 @@
 .pro-input {
   height: 48px;
   border-radius: 12px;
-  border: 2px solid #e5e7eb;
   transition: 0.25s ease;
   font-size: 15px;
 }

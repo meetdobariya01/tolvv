@@ -10,3 +10,6 @@
   .footer-link.active {
     font-weight: 600;
   }
+  .footer{
+    line-height: 35px;
+  }

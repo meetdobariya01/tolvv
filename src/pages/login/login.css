@@ -1,23 +1,23 @@
 /* Page Wrapper */
 .pro-login-wrapper {
   /* height: 100vh; */
-  background: #f3f4f6; /* Light corporate grey */
+  background: #D1D3D4; /* Light corporate grey */
   padding: 20px;
 }
 
 /* Login Card */
-.pro-login-card {
+.pro-loginpage-card {
   width: 100%;
   max-width: 420px;
-  background: #ffffff;
+  background: transparent;
   border-radius: 18px;
-  border: 1px solid #e5e7eb; 
+  /* border: 1px solid #e5e7eb;  */
   transition: 0.3s ease;
 }
 
-.pro-login-card:hover {
+.pro-loginpage-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0px 8px 25px rgba(0,0,0,0.08);
+  /* box-shadow: 0px 8px 25px rgba(0,0,0,0.08); */
 }
 
 /* Inputs */
@@ -62,7 +62,7 @@
 
 /* Responsive */
 @media (max-width: 576px) {
-  .pro-login-card {
+  .pro-loginpage-card {
     padding: 2rem !important;
   }
 }
@@ -93,10 +93,10 @@
 }
 
 /* Premium card design */
-.pro-login-card {
-  background: #ffffff;
+.pro-loginpage-card {
+  background: transparent;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  /* box-shadow: 0 8px 25px rgba(0,0,0,0.08); */
 }
 
 /* Button premium look */

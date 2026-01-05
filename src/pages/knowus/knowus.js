@@ -21,7 +21,7 @@ const Knowus = () => {
 
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container text-center">
           {/* Heading */}
@@ -46,7 +46,7 @@ const Knowus = () => {
             </div>
 
             {/* Right Text */}
-            <div className="col-lg-6 col-md-10 col-sm-12 text-center text-lg-start">
+            <div className="col-lg-6 col-md-10 col-sm-12 text-center ">
               <h2
                 className="fw-bold mb-4"
                 style={{
@@ -88,14 +88,14 @@ const Knowus = () => {
 
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container">
-          <div className="row align-items-center justify-content-center text-center text-lg-start">
+          <div className="row align-items-center justify-content-center text-center ">
             {/* Left Text Section */}
             <div className="col-lg-6 col-md-10 col-sm-12 mb-4 mb-lg-0">
               <h2
-                className="fw-bold mb-4 text-center text-lg-start"
+                className="fw-bold mb-4 text-center "
                 style={{
                   fontFamily: "'Playfair Display', serif",
                   fontSize: "28px",

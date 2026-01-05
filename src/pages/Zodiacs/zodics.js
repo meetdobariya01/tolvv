@@ -549,7 +549,9 @@ const handleBuyNow = async (productId) => {
 
         {/* PRODUCTS */}
         {/* PRODUCTS – WHITE BACKGROUND */}
-        <div className="product-wrapper py-5">
+
+      </section>
+              <div className="product-wrapper py-5">
           <h2 className="product-heading the-artisan-font mb-4 text-center">
             {selectedZodiac.name} Products
           </h2>
@@ -584,7 +586,6 @@ const handleBuyNow = async (productId) => {
             </div>
           </div>
         </div>
-      </section>
     </div>
   );
 };

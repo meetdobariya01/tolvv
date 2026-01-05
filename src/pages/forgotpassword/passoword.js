@@ -83,7 +83,7 @@ const Forgotpassword = () => {
           {step === 1 && (
             <form onSubmit={handleSendOtp}>
               <div className="mb-4">
-                <label className="form-label fw-semibold">Email</label>
+                <label className="form-label fw-semibold"></label>
                 <input
                   type="email"
                   required
@@ -97,7 +97,7 @@ const Forgotpassword = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="btn w-100 py-2 pro-btn"
+                className="btn-outline-dark w-100 py-2 btn"
               >
                 Send OTP
               </motion.button>
@@ -158,7 +158,7 @@ const Forgotpassword = () => {
 
           <p className="text-center mt-3 small">
             Remember your password?
-            <NavLink to="/login" className="pro-link ms-1">
+            <NavLink to="/login" className="pro-link ms-1 text-dark">
               Back to Login
             </NavLink>
           </p>

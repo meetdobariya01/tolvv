@@ -60,7 +60,6 @@ const Faqs = () => {
           >
             <hr />
             <Allfaqs />
-            <hr />
           </div>
         </div>
       </div>

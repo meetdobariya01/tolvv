@@ -253,22 +253,15 @@ const Homepage = () => {
 
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
-        <div className="container text-center">
+        <div className="container text-center benifits-section">
           {/* Heading */}
           <h1 className="fw-light mb-5 the-artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
           <p
             className="mx-auto"
-            style={{
-              // maxWidth: "900px",
-              color: "#333",
-              lineHeight: "1.8",
-              fontSize: "16px",
-              width: "60%",
-            }}
           >
             Our Zodiac Collection blends luxurious skincare with the energy of
             your sign, creating a ritual that feels personally designed for you.
@@ -283,13 +276,6 @@ const Homepage = () => {
           {/* Paragraph 2 */}
           <p
             className="mx-auto mt-4"
-            style={{
-              // maxWidth: "900px",
-              color: "#333",
-              lineHeight: "1.8",
-              fontSize: "16px",
-              width: "60%",
-            }}
           >
             These products don’t just nourish your skin; they elevate your
             spirit. Feel the difference as signature fragrances boost your mood,
@@ -303,7 +289,7 @@ const Homepage = () => {
       </div>
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container text-center">
           {/* Heading */}
@@ -367,7 +353,7 @@ const Homepage = () => {
       </div>
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container">
           <div className="row align-items-center justify-content-center text-center">
@@ -425,7 +411,7 @@ const Homepage = () => {
       </div>
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container text-center">
           {/* Header */}
@@ -459,11 +445,10 @@ const Homepage = () => {
           {/* FAQ List */}
           <div
             className="text-start mt-5 mx-auto"
-            style={{ maxWidth: "800px", fontSize: "15px", color: "#000" }}
+            style={{ fontSize: "15px", color: "#000" }}
           >
             <hr />
             <Allfaqs />
-            <hr />
           </div>
         </div>
       </div>
@@ -523,7 +508,7 @@ const Homepage = () => {
                   />
                 </Form.Group>
 
-                <div className="text-center">
+                <div className="">
                   <Button
                     className="send-btn p-2"
                     variant="outline-dark"

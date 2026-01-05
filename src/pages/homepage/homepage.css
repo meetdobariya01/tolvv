@@ -1,21 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Allura&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
-
-.the-artisan-font{
+.the-artisan-font {
   font-family: "DM Serif Display", serif;
   font-weight: 400;
   font-size: 70px;
   font-style: normal;
 }
 @media (max-width: 768px) {
-  .the-artisan-font{
+  .the-artisan-font {
     font-size: 70px;
   }
 }
 @media (max-width: 576px) {
-  .the-artisan-font{
+  .the-artisan-font {
     font-size: 60px;
     text-align: center;
   }
@@ -33,7 +32,6 @@
   height: 100%; /* full screen height */
   object-fit: cover;
 }
-
 
 @media (max-width: 768px) {
   .carousel-img {
@@ -214,7 +212,6 @@
   height: auto;
   object-fit: contain;
 }
-
 
 .zodiac-grid {
   flex: 1;
@@ -455,7 +452,6 @@
   }
 }
 
-
 /* New Product Section */
 .product-section {
   background-color: #fff;
@@ -504,10 +500,18 @@
     transform: translateY(0);
   }
 }
-
+.benifits-section {
+  color: "#333";
+  line-height: 1.8;
+  font-size: 16px;
+  width: 60%;
+}
 /* Responsive Adjustments */
 @media (max-width: 576px) {
   .product-box {
     font-size: 0.8rem;
+  }
+  .benifits-section {
+    width: 90%;
   }
 }

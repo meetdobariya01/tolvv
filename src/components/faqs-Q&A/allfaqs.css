@@ -1,57 +1,67 @@
-/* Single column layout */
-.faq-wrapper.single {
-  max-width: 900px;
-  margin: 50px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+/* Wrapper */
+.faq-wrapper.minimal {
+  max-width: 1100px;
+  /* margin: 80px auto; */
+  /* padding: 0 20px; */
 }
 
-.faq-box {
-  background: #f8f8f8;
-  border-radius: 10px;
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: 0.3s ease;
+/* Each FAQ row */
+.faq-line {
+  padding: 5px 0;
 }
 
-.faq-box:hover {
-  background: #f0f0f0;
-}
-
+/* Question row */
 .faq-question {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
 }
 
+/* Question number */
 .q-num {
-  color: #1968ff;
-  font-weight: 600;
-  margin-right: 12px;
-}
-
-.faq-question p {
-  flex: 1;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
+  color: #111;
+  min-width: 24px;
 }
 
-.arrow {
-  font-size: 16px;
-  font-weight: bold;
-  transition: 0.3s;
+/* Question text */
+.faq-question p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #111;
+  margin: 0;
 }
 
+/* Divider line */
+.faq-divider {
+  height: 1px;
+  background: #555;
+  margin-top: 22px;
+}
+
+/* Answer */
 .faq-answer {
   overflow: hidden;
-  margin-top: 10px;
+  margin-top: 14px;
+  padding-left: 36px;
 }
 
 .faq-answer p {
-  font-size: 15px;
-  line-height: 1.5;
-  color: #555;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #444;
+  margin: 0;
 }
 
-/* Responsive is automatically single row */
+/* Mobile */
+@media (max-width: 575px) {
+  .faq-wrapper.minimal {
+    /* margin: 50px auto; */
+  }
+
+  .faq-question p {
+    font-size: 14px;
+  }
+}
