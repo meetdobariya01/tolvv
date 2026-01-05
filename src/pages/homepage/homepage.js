@@ -11,6 +11,7 @@ import Homeproduct from "../../components/category/home-product/homeproduct";
 import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 import Zodic from "../Zodiacs/zodics";
+import Moonsection from "../../components/moonsection/moonsection";
 
 const Homepage = () => {
   const productss = [
@@ -141,113 +142,13 @@ const Homepage = () => {
       {/* products grid */}
       {/* <Product /> */}
 
-      {/* ruling planet */}
-
-      <div
-        className="container-fluid py-5 text-center"
-        style={{ backgroundColor: "#d6d8da" }}
-      >
-        <h3
-          className="fw-bold mb-5 animate__animated animate__fadeInDown"
-          style={{ letterSpacing: "2px" }}
-        >
-          EXPLORE BY YOUR RULING PLANET
-        </h3>
-
-        <div className="row justify-content-center g-5">
-          {planets.map((planet, index) => (
-            <div
-              className="col-6 col-sm-4 col-md-3 col-lg-1 d-flex flex-column align-items-center animate__animated animate__zoomIn"
-              style={{
-                animationDelay: `${index * 0.2}s`,
-                animationDuration: "1s",
-              }}
-              key={index}
-            >
-              <div
-                style={{
-                  background: planet.color,
-                  width: "90px",
-                  height: "90px",
-                  borderRadius: "50%",
-                  boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
-                }}
-              ></div>
-
-              <p className="mt-3 fw-semibold">{planet.name}</p>
-
-              <div
-                style={{
-                  width: "2px",
-                  height: "40px",
-                  backgroundColor: "black",
-                  marginTop: "5px",
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    width: "0",
-                    height: "0",
-                    borderLeft: "5px solid transparent",
-                    borderRight: "5px solid transparent",
-                    borderTop: "8px solid black",
-                    position: "absolute",
-                    bottom: "-8px",
-                    left: "-4px",
-                  }}
-                ></div>
-              </div>
-
-              <p className="mt-2 fw-medium">{planet.meaning}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      
+     
 
       {/* moon section */}
-      <div className="moon-wrapper d-flex justify-content-center align-items-center">
-        <div className="container text-white py-5">
-          <div className="row align-items-center">
-            {/* LEFT SIDE */}
-            <div className="col-12 col-md-6 position-relative text-center mb-5 mb-md-0">
-              {/* Moon */}
-              <img
-                src="./images/moon.png"
-                alt="Moon"
-                className="moon-img fade-in-scale"
-              />
+      <Moonsection/>
 
-              {/* Text on Moon */}
-              <h1 className="moon-title fade-in-up">MOON</h1>
-            </div>
-
-            {/* RIGHT SIDE */}
-            <div className="col-12 col-md-6 fade-in-right text-center text-md-start">
-              <p>
-                The King and the Great Father embody the archetypes of the
-                Sun—the source of all light and life, both earthly and
-                spiritual. The Sun uplifts and energizes, offering inspiration,
-                balance, and renewal. It rules over healthy self-esteem, life
-                purpose, creativity, healing, and vitality, illuminating the
-                path toward wholeness and strength.
-              </p>
-
-              <div className="details mt-4 d-flex flex-wrap gap-4 justify-content-center justify-content-md-start">
-                <span>Astral Energy : Vitality</span>
-                <span>Colour : Gold</span>
-                <span>Element : Fire</span>
-                <span>Rules : Leo</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* moon bottom */}
-
-      {/* Leo products */}
-      <Leoproduct />
+     
 
       {/* benifits */}
 

@@ -12,33 +12,22 @@
   animation: fadeDown 1s ease;
 }
 
+/* ✅ IMPORTANT: let Bootstrap control flex */
 .products-row {
   justify-content: center;
   row-gap: 30px;
 }
 
-
 .product-col {
   position: relative;
-  padding: 15px;
+  padding: 10px;
 }
-
-
-/* .product-col:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 10%;
-  height: 80%;
-  width: 1px;
-  background: #777;
-} */
 
 .underline {
   height: 1px;
   background: black;
   width: 80%;
-  margin:0 0 5px 0;
+  margin: 0 0 5px 0;
   transition: width 0.3s ease;
 }
 
@@ -47,6 +36,7 @@
   animation: fadeUp 0.8s ease forwards;
   transition: transform 0.4s ease;
   background: transparent;
+  width: 100%;
 }
 
 .product-card:hover {
@@ -54,13 +44,13 @@
 }
 
 .product-img-card {
-  /* background: #f5f5f5; */
   margin-bottom: 20px;
 }
 
 .product-img-card img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
+  display: block;
   transition: transform 0.5s ease;
 }
 
@@ -111,29 +101,14 @@
   }
 }
 
-/* Responsive */
-@media (max-width: 991px) {
-  .product-col:not(:last-child)::after {
-    display: none;
-  }
-
-  .products-row {
-    gap: 30px;
-  }
-}
+/* ✅ MOBILE FIX — spacing only, NOT width */
 @media (max-width: 575px) {
   .product-col {
-    margin-bottom: 25px;
-  }
-}
-@media (max-width: 575px) {
-  .product-col {
-    flex: 0 0 50%;
-    max-width: 50%;
+    padding: 8px;
   }
 
-  .product-info-collection h5,
-  .product-info-collection p {
-    text-align: left;
+  .products-heading {
+    font-size: 26px;
+    margin-bottom: 30px;
   }
 }
