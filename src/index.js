@@ -78,6 +78,7 @@ import Termsconditions from './pages/termsandcondition/termsandcondition';
 import Privacypolicy from './pages/privacypolicy/privacypolicy';
 import ProductPage from './pages/ProductPage.jsx/ProductPage';
 import Productdetails from './pages/productdetails/productdetails';
+import Category from './components/category/category';
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -105,6 +106,7 @@ root.render(
       <Route path="/refund-policy" element={<RefundPolicy/>} />
       <Route path="/ProductPage" element={<ProductPage/>} />
       <Route path="/productdetails" element={<Productdetails/>} />
+      <Route path="/category" element={<Category/>} />
         <Route path="*" element={<Error/>} />
       </Routes>
     </Router>

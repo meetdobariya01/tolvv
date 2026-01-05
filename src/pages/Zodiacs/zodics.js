@@ -564,7 +564,7 @@ const Zodic = () => {
             <div className="product-grid">
               {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
                 <div className="product-card" key={index}>
-                  <div className="product-box">
+                  <div className="product-box-zodiac">
                     <img
                       src={p.Photos}
                       alt={p.ProductName}
