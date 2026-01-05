@@ -688,10 +688,11 @@ const Signup = () => {
           <form onSubmit={handleSubmit}>
             {/* First Name */}
             <div className="mb-3">
-              <label className="form-label fw-semibold">First Name</label>
+              <label className="form-label fw-semibold"></label>
               <input
                 type="text"
                 name="fname"
+                placeholder="First Name"
                 className="form-control pro-input"
                 value={formData.fname}
                 onChange={handleChange}
@@ -701,11 +702,12 @@ const Signup = () => {
 
             {/* Last Name */}
             <div className="mb-3">
-              <label className="form-label fw-semibold">Last Name</label>
+              <label className="form-label fw-semibold"></label>
               <input
                 type="text"
                 name="lname"
                 className="form-control pro-input"
+                placeholder="Last Name"
                 value={formData.lname}
                 onChange={handleChange}
               />
@@ -714,10 +716,11 @@ const Signup = () => {
 
             {/* Mobile */}
             <div className="mb-3">
-              <label className="form-label fw-semibold">Mobile Number</label>
+              <label className="form-label fw-semibold"></label>
               <input
                 type="text"
                 name="mobile"
+                placeholder="Mobile Number"
                 className="form-control pro-input"
                 value={formData.mobile}
                 onChange={handleChange}
@@ -727,19 +730,20 @@ const Signup = () => {
 
             {/* Email + OTP */}
             <div className="mb-3">
-              <label className="form-label fw-semibold">Email</label>
+              <label className="form-label fw-semibold"></label>
               <div className="d-flex gap-2">
                 <input
                   type="email"
                   name="email"
                   className="form-control pro-input"
+                  placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
                   disabled={otpVerified}
                 />
                 <button
                   type="button"
-                  className="btn btn-outline-primary"
+                  className="btn btn-outline-dark"
                   onClick={otpSent ? handleVerifyOtp : handleSendOtp}
                   disabled={otpLoading || otpVerified}
                 >
@@ -765,10 +769,11 @@ const Signup = () => {
 
             {/* Password */}
             <div className="mb-4">
-              <label className="form-label fw-semibold">Password</label>
+              <label className="form-label fw-semibold"></label>
               <input
                 type="password"
                 name="password"
+                placeholder="Password"
                 className="form-control pro-input"
                 value={formData.password}
                 onChange={handleChange}
@@ -779,7 +784,7 @@ const Signup = () => {
             {serverError && <p className="text-danger text-center">{serverError}</p>}
 
             <motion.button
-              className="btn w-100 py-2 pro-btn"
+              className="btn w-100 py-2 btn-outline-dark"
               type="submit"
               disabled={loading}
             >
@@ -823,7 +828,7 @@ const Signup = () => {
             </div>
             <p className="text-center mt-3 small">
               Already have an account?
-              <NavLink to="/login" className="pro-link ms-1">Login</NavLink>
+              <NavLink to="/login" className="pro-link ms-1 text-dark">Login</NavLink>
             </p>
           </form>
         </motion.div>

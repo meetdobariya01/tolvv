@@ -233,9 +233,9 @@ const Login = () => {
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="pro-login-card p-5 rounded-4 shadow-sm"
+          className="pro-loginpage-card p-5 rounded-4 shadow-sm"
         >
-          <h3 className="text-center mb-4 fw-bold">Login to Your Account</h3>
+          <h3 className="text-center mb-4 fw-bold">Hello</h3>
 
           {serverError && (
             <div className="alert alert-danger text-center">{serverError}</div>
@@ -244,7 +244,7 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             {/* Email */}
             <div className="mb-3">
-              <label className="form-label fw-semibold">Email</label>
+              <label className="form-label fw-semibold"></label>
               <input
                 type="email"
                 name="email"
@@ -260,7 +260,7 @@ const Login = () => {
 
             {/* Password */}
             <div className="mb-2">
-              <label className="form-label fw-semibold">Password</label>
+              <label className="form-label fw-semibold"></label>
               <input
                 type="password"
                 name="password"
@@ -276,7 +276,7 @@ const Login = () => {
 
             {/* Forgot password */}
             <div className="text-end mb-4">
-              <NavLink to="/forgot-password" className="pro-link small">
+              <NavLink to="/forgot-password" className="pro-link small text-dark  ">
                 Forgot Password?
               </NavLink>
             </div>
@@ -285,7 +285,7 @@ const Login = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="btn w-100 py-2 pro-btn"
+              className="btn btn-outline-dark w-100 py-2 "
               type="submit"
               disabled={loading}
             >
@@ -295,7 +295,7 @@ const Login = () => {
             {/* Signup link */}
             <p className="text-center mt-3 small">
               Don't have an account?
-              <NavLink to="/signup" className="pro-link ms-1">
+              <NavLink to="/signup" className="pro-link text-dark ms-1">
                 Sign up
               </NavLink>
             </p>

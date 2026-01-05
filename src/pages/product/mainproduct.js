@@ -75,63 +75,94 @@ const Mainproduct = () => {
     <div>
       <Header />
 
-     <div className="container py-5">
-  {/* CATEGORY NAVBAR */}
-  <div className="category-navbar mb-4">
-    {categories.map((cat, index) => (
-      <button
-        key={index}
-        className={`category-btn ${
-          activeKey === cat ? "active" : ""
-        }`}
-        onClick={() => setActiveKey(cat)}
-      >
-        {cat}
-      </button>
-    ))}
-  </div>
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
 
-  {/* PRODUCT GRID */}
-  <div className="row product-fade">
-    {productsByCategory[activeKey]?.map((item) => (
-      <div
-        className="col-6 col-md-3 mb-4 product-card-animate"
-        key={item._id}
-      >
-        <Card className="product-card">
-          <div className="product-img-wrap">
-            <Card.Img
-              src={
-                item.Photos
-                  ? item.Photos.startsWith("http")
-                    ? item.Photos
-                    : `/images/${item.Photos.replace(
-                        "images/",
-                        ""
-                      )}`
-                  : "/images/default.jpg"
-              }
-            />
-          </div>
+        <div className="hero-content">
+          <h1>
+            CELESTIAL
+            <br />
+            CARE
+          </h1>
 
-          <Card.Body className="text-center">
-            <h6 className="product-title zalando-sans-expanded">{item.ProductName}</h6>
-            <p className="product-size zalando-sans-expanded">{item.size}</p>
-            <p className="product-price">₹{item.ProductPrice}</p>
+          <p className="hero-subtitle">
+            Crafted for your
+            <br />
+            skin’s glow.
+          </p>
 
-            <Button
-              size="sm"
-              className="buy-btn"
-              onClick={() => handleBuyNow(item._id)}
+          <p className="hero-desc">
+            Explore products from bath gels to essential oils & candles
+          </p>
+        </div>
+      </section>
+
+      <div className="container py-5">
+        {/* CATEGORY NAVBAR */}
+        <div className="category-navbar mb-4">
+          {categories.map((cat, index) => (
+            <button
+              key={index}
+              className={`category-btn ${activeKey === cat ? "active" : ""}`}
+              onClick={() => setActiveKey(cat)}
             >
-              BUY NOW
-            </Button>
-          </Card.Body>
-        </Card>
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* PRODUCT GRID */}
+        <div className="row product-fade">
+          {productsByCategory[activeKey]?.map((item) => (
+            <div
+              className="col-6 col-md-3 mb-4 product-card-animate"
+              key={item._id}
+            >
+              <Card className="product-card">
+                <div className="product-img-wrap">
+                  <Card.Img
+                    src={
+                      item.Photos
+                        ? item.Photos.startsWith("http")
+                          ? item.Photos
+                          : `/images/${item.Photos.replace("images/", "")}`
+                        : "/images/default.jpg"
+                    }
+                  />
+                </div>
+
+                <Card.Body className="product-info">
+                  <div className="product-top">
+                    <div className="title-wrap">
+                      <h6 className="product-title">
+                        {item.ProductName} <span className="arrow">›</span>
+                      </h6>
+                      <p className="product-size">{item.size}</p>
+                    </div>
+
+                    <div className="price-wrap">
+                      <span className="price-dot"></span>
+                      <span className="product-price">
+                        ₹ {item.ProductPrice}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="product-divider"></div>
+
+                  <Button
+                    size="sm"
+                    className="cart-btn w-50"
+                    onClick={() => handleBuyNow(item._id)}
+                  >
+                    ADD TO CART
+                  </Button>
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
-</div>
 
       <Footer />
     </div>

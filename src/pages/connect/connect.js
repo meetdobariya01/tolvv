@@ -80,7 +80,7 @@ const Connect = () => {
                   />
                 </Form.Group>
 
-                <div className="text-center">
+                <div className="">
                   <Button className="send-btn p-2" variant="outline-dark" type="submit">
                     SEND A REQUEST
                   </Button>

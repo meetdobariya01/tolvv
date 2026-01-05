@@ -54,24 +54,12 @@ const Allfaqs = () => {
 
   return (
     <div>
-      <div className="faq-wrapper single">
+      <div className="faq-wrapper minimal">
         {faqData.map((item, index) => (
-          <motion.div
-            key={index}
-            className="faq-box"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-          >
+          <div className="faq-line" key={index}>
             <div className="faq-question" onClick={() => toggleFAQ(index)}>
-              <span className="q-num">Q{index + 1}</span>
+              <span className="q-num">{index + 1}.</span>
               <p>{item.q}</p>
-              <motion.span
-                animate={{ rotate: activeIndex === index ? 90 : 0 }}
-                className="arrow"
-              >
-                ⮞
-              </motion.span>
             </div>
 
             <AnimatePresence>
@@ -87,7 +75,9 @@ const Allfaqs = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+
+            <div className="faq-divider"></div>
+          </div>
         ))}
       </div>
     </div>

@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
+import "./benifits.css";
 
 const Benifits = () => {
   return (
@@ -21,9 +22,9 @@ const Benifits = () => {
 
       <div
         className="container-fluid py-5"
-        style={{ backgroundColor: "#e5e6e8" }}
+        style={{ backgroundColor: "#D1D3D4" }}
       >
-        <div className="container text-center">
+        <div className="container text-center benifits-section">
           {/* Heading */}
           <h1 className="the-artisan-font">Benefits</h1>
 
