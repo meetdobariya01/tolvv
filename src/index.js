@@ -105,7 +105,7 @@ root.render(
       <Route path="/shipping-policy" element={<ShippingPolicy />} />
       <Route path="/refund-policy" element={<RefundPolicy/>} />
       <Route path="/ProductPage" element={<ProductPage/>} />
-      <Route path="/productdetails" element={<Productdetails/>} />
+        <Route path="/productdetails/:id" element={<Productdetails />} />
       <Route path="/category" element={<Category/>} />
         <Route path="*" element={<Error/>} />
       </Routes>

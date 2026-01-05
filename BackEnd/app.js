@@ -197,6 +197,19 @@ app.post("/send-otp", async (req, res) => {
     });
   }
 });
+// Add this to your app.js
+app.get("/api/products/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    console.error("Fetch single product error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 app.post("/verify-otp", (req, res) => {
   const { email, otp } = req.body;
 
@@ -501,7 +514,7 @@ app.get("/products/zodiac/:zodiac", async (req, res) => {
 });
 
 // Add to cart
-app.post("/add-to-cart", authenticate, async (req, res) => {
+app.post("/api/add-to-cart", authenticate, async (req, res) => {
   const { productId, quantity } = req.body;
   if (!productId) return res.status(400).json({ message: 'Product ID is required' });
 
@@ -524,76 +537,163 @@ app.post("/add-to-cart", authenticate, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 // Place order
+// app.post("/place-order", authenticate, async (req, res) => {
+//   try {
+//     const { items, paymentMethod, address } = req.body;
+
+//     if (!items || items.length === 0)
+//       return res.status(400).json({ message: "Cart is empty" });
+//     if (!address || !address.city || !address.pincode)
+//       return res.status(400).json({ message: "Address incomplete" });
+
+//     let subtotal = 0;
+//     items.forEach(item => subtotal += item.price * item.qty);
+
+
+//     const totalAmount = +(subtotal).toFixed(2);
+
+//     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
+
+//     // Save order to DB
+//     const newOrder = new Order({
+//       userId: req.user.id,
+//       customOrderId,
+//       items: items.map(i => ({
+//         productId: i.id,
+//         quantity: i.qty,
+//         priceAtBuy: i.price
+//       })),
+//       subtotal,
+//       totalAmount,
+//       paymentMethod,
+//       orderStatus: "Pending",   // Delivery status
+//       status: "PENDING",        // Payment will update later
+//       address
+//     });
+
+
+//     await newOrder.save();
+
+//     await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
+
+//     if (paymentMethod === "card" || paymentMethod === "upi") {
+//       const paymentHandler = PaymentHandler.getInstance();
+//       const sessionResp = await paymentHandler.orderSession({
+//         order_id: customOrderId,          // mandatory
+//         amount: Number(totalAmount.toFixed(2)), // must be `amount`
+//         currency: "INR",
+//         customer_id: req.user.id.toString(),
+//         customer_mobile: req.user.mobile,
+//         return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:4000/payment"
+//       });
+//       if (sessionResp?.payment_links?.web) {
+//         return res.status(201).json({
+//           message: "Order placed, redirecting to payment",
+//           redirect: sessionResp.payment_links.web
+//         });
+//       }
+
+//       return res.status(500).json({ message: "Payment session creation failed" });
+//     }
+
+//     res.status(201).json({ message: "Order placed successfully", orderId: customOrderId });
+//   } catch (err) {
+//     console.error("Place order error:", err);
+//     if (err instanceof APIException) {
+//       return res.status(400).json({
+//         message: "Payment API error",
+//         error: err.errorMessage || err.message,
+//         code: err.errorCode
+//       });
+//     }
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+// // Updated Backend Merge Route
 app.post("/place-order", authenticate, async (req, res) => {
   try {
     const { items, paymentMethod, address } = req.body;
 
     if (!items || items.length === 0)
       return res.status(400).json({ message: "Cart is empty" });
+
     if (!address || !address.city || !address.pincode)
       return res.status(400).json({ message: "Address incomplete" });
 
     let subtotal = 0;
-    items.forEach(item => subtotal += item.price * item.qty);
+    const orderItems = [];
 
+    // 🔥 FETCH PRODUCT PRICE FROM DB
+    for (const item of items) {
+      const product = await Product.findById(item.productId);
+      if (!product)
+        return res.status(404).json({ message: "Product not found" });
 
-    const totalAmount = +(subtotal).toFixed(2);
+      subtotal += product.ProductPrice * item.quantity;
 
+      orderItems.push({
+        productId: product._id,
+        quantity: item.quantity,
+        priceAtBuy: product.ProductPrice
+      });
+    }
+
+    const totalAmount = Number(subtotal.toFixed(2));
     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
-    // Save order to DB
     const newOrder = new Order({
       userId: req.user.id,
       customOrderId,
-      items: items.map(i => ({
-        productId: i.id,
-        quantity: i.qty,
-        priceAtBuy: i.price
-      })),
+      items: orderItems,
       subtotal,
       totalAmount,
       paymentMethod,
-      orderStatus: "Pending",   // Delivery status
-      status: "PENDING",        // Payment will update later
+      orderStatus: "Pending",
+      status: "PENDING",
       address
     });
 
-
     await newOrder.save();
 
-    await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
+    // 🧹 Clear cart
+    await Cart.findOneAndUpdate(
+      { userId: req.user.id },
+      { $set: { items: [] } }
+    );
 
+    // 💳 Online payment
     if (paymentMethod === "card" || paymentMethod === "upi") {
       const paymentHandler = PaymentHandler.getInstance();
       const sessionResp = await paymentHandler.orderSession({
-        order_id: customOrderId,          // mandatory
-        amount: Number(totalAmount.toFixed(2)), // must be `amount`
+        order_id: customOrderId,
+        amount: totalAmount,
         currency: "INR",
         customer_id: req.user.id.toString(),
         customer_mobile: req.user.mobile,
-        return_url: process.env.PAYMENT_CALLBACK_URL || "http://localhost:4000/payment"
+        return_url:
+          process.env.PAYMENT_CALLBACK_URL ||
+          "http://localhost:4000/payment",
       });
+
       if (sessionResp?.payment_links?.web) {
         return res.status(201).json({
           message: "Order placed, redirecting to payment",
-          redirect: sessionResp.payment_links.web
+          redirect: sessionResp.payment_links.web,
         });
       }
 
-      return res.status(500).json({ message: "Payment session creation failed" });
+      return res
+        .status(500)
+        .json({ message: "Payment session creation failed" });
     }
 
-    res.status(201).json({ message: "Order placed successfully", orderId: customOrderId });
+    res
+      .status(201)
+      .json({ message: "Order placed successfully", orderId: customOrderId });
   } catch (err) {
     console.error("Place order error:", err);
-    if (err instanceof APIException) {
-      return res.status(400).json({
-        message: "Payment API error",
-        error: err.errorMessage || err.message,
-        code: err.errorCode
-      });
-    }
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -663,7 +763,7 @@ app.get("/order/details/:orderId", authenticate, async (req, res) => {
   }
 });
 
-app.get('/cart', authenticate, async (req, res) => {
+app.get("/api/cart", authenticate, async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.user.id }).populate('items.productId');
     if (!cart) return res.status(200).json({ message: 'Cart is empty', cart: [] });
@@ -679,7 +779,7 @@ app.get('/cart', authenticate, async (req, res) => {
 });
 
 // Remove item
-app.delete('/cart/remove/:productId', authenticate, async (req, res) => {
+app.delete('/api/cart/remove/:productId', authenticate, async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.user.id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
@@ -721,6 +821,54 @@ app.get("/api/image/:category/:filename", authenticate, (req, res) => {
   if (!fs.existsSync(imagePath)) return res.status(404).json({ message: "Image not found" });
   res.sendFile(imagePath);
 });
+app.post("/merge", authenticate, async (req, res) => {
+  try {
+    const { guestItems } = req.body;
+
+    if (!Array.isArray(guestItems) || guestItems.length === 0) {
+      return res.status(400).json({ message: "No items to merge" });
+    }
+
+    let cart = await Cart.findOne({ userId: req.user._id });
+
+    if (!cart) {
+      cart = new Cart({
+        userId: req.user._id,
+        items: [],
+      });
+    }
+
+    guestItems.forEach((item) => {
+      if (!item.productId || !item.quantity) return;
+
+      const existingItem = cart.items.find(
+        (ci) => ci.productId.toString() === item.productId.toString()
+      );
+
+      if (existingItem) {
+        existingItem.quantity += Number(item.quantity);
+      } else {
+        cart.items.push({
+          productId: item.productId,
+          quantity: Number(item.quantity),
+        });
+      }
+    });
+
+    await cart.save();
+
+    res.status(200).json({
+      message: "Cart merged successfully",
+      cart,
+    });
+
+  } catch (error) {
+    console.error("MERGE ERROR:", error);
+    res.status(500).json({ message: "Merge failed" });
+  }
+});
+
+
 
 // Start server
 server.listen(port, () => {
