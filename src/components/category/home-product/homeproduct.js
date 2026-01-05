@@ -1,70 +1,73 @@
 import React from "react";
 import "./homeproduct.css";
-import { NavLink } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
 
 const products = [
   {
-    name: "Bath Gel",
+    title: "Bath Gel",
     size: "200 ml",
-    img: "./images/bb.png",
-    link: "/product",
+    img: "/images/bl.png",
   },
   {
-    name: "Body Lotion",
+    title: "Body Lotion",
     size: "200 ml",
-    img: "./images/bl.png",
-    link: "/product",
+    img: "/images/bb.png",
   },
   {
-    name: "Perfume",
+    title: "Perfume",
     size: "50 ml",
-    img: "./images/pr.png",
-    link: "/product",
+    img: "/images/pr.png",
   },
   {
-    name: "Essential Oil",
+    title: "Essential Oil",
     size: "30 ml",
-    img: "./images/eo.png",
-    link: "/product",
+    img: "/images/eo.png",
   },
   {
-    name: "Soap",
-    size: "100 gm",
-    img: "./images/sp.png",
-    link: "/product",
+    title: "Soap",
+    size: "100 gsm",
+    img: "/images/sp.png",
   },
-   {
-    name: "Hamper",
-    size: "5 Products",
-    img: "./images/2.png",
-    link: "/product",
+  {
+    title: "Hampers",
+    size: "",
+    img: "/images/hamper.jpg",
   },
 ];
 const Homeproduct = () => {
   return (
     <div>
-      <section className="product-section">
-        <h2 className="product-heading the-artisan-font">Products</h2>
+      <section className="products-section">
+        <Container>
+          <h2 className="products-heading">Products</h2>
 
-        <div className="container">
-          <div className="row justify-content-center">
-            {products.map((p, index) => (
-              <div className="col-6 col-md-4 col-lg-2 product-card" key={index}>
-                <NavLink to={p.link} className="card product-box">
-                  <img src={p.img} alt={p.name} className="product-img-1" />
-
-                  <div className="product-info">
-                    <p className="name">
-                      {p.name} <span className="arrow">›</span>
-                    </p>
-                    <p className="size">{p.size}</p>
-                    <div className="underline" />
+          <Row className="products-row">
+            {products.map((item, index) => (
+              <Col
+                xs={6}
+                sm={6}
+                md={4}
+                lg={2}
+                className="product-col"
+                key={index}
+              >
+                <div className="product-card">
+                  <div className="product-img-card">
+                    <img src={item.img} alt={item.title} />
                   </div>
-                </NavLink>
-              </div>
+
+                  <div className="product-info-collection">
+                    <h5>
+                      {item.title} <span>›</span>
+                    </h5>
+                    <div className="underline" />
+                    <p>{item.size}</p>
+                  </div>
+                </div>
+              </Col>
             ))}
-          </div>
-        </div>
+          </Row>
+        </Container>
       </section>
     </div>
   );

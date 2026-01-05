@@ -61,7 +61,7 @@ const Header = () => {
             </Nav>
 
             {/* CENTER LOGO (Desktop) */}
-            <div className="d-none d-lg-flex justify-content-center mx-4">
+            <div className="d-none d-lg-flex justify-content-center ">
               <NavLink to="/" className="logo-link">
                 <img
                   src="./images/logo-tolvv.png"
@@ -86,7 +86,7 @@ const Header = () => {
           </Navbar.Collapse>
 
           {/* ICONS */}
-          <div className="icon-area d-flex align-items-center gap-3 ms-auto">
+          <div className="icon-area d-flex align-items-center gap-4 ms-auto text-light">
             {/* SEARCH */}
             <button
               className="nav-link p-0 bg-transparent border-0"

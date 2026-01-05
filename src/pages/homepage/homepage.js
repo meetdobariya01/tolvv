@@ -32,7 +32,7 @@ const Homepage = () => {
       name: "Sun",
       color: "linear-gradient(135deg, #ffcf00, #d4a017)",
       meaning: "Energy",
-    }, 
+    },
     {
       name: "Mercury",
       color: "linear-gradient(135deg, #f3b500, #c79300)",
@@ -154,7 +154,7 @@ const Homepage = () => {
           EXPLORE BY YOUR RULING PLANET
         </h3>
 
-        <div className="row justify-content-center g-4">
+        <div className="row justify-content-center g-5">
           {planets.map((planet, index) => (
             <div
               className="col-6 col-sm-4 col-md-3 col-lg-1 d-flex flex-column align-items-center animate__animated animate__zoomIn"
@@ -267,6 +267,7 @@ const Homepage = () => {
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
+              width: "60%",
             }}
           >
             Our Zodiac Collection blends luxurious skincare with the energy of
@@ -287,6 +288,7 @@ const Homepage = () => {
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
+              width: "60%",
             }}
           >
             These products don’t just nourish your skin; they elevate your
@@ -324,7 +326,7 @@ const Homepage = () => {
             </div>
 
             {/* Right Text */}
-            <div className="col-lg-6 col-md-10 col-sm-12 text-center text-lg-start">
+            <div className="col-lg-6 col-md-10 col-sm-12 text-center">
               <h2
                 className="fw-bold mb-4"
                 style={{
@@ -368,11 +370,11 @@ const Homepage = () => {
         style={{ backgroundColor: "#e5e6e8" }}
       >
         <div className="container">
-          <div className="row align-items-center justify-content-center text-center text-lg-start">
+          <div className="row align-items-center justify-content-center text-center">
             {/* Left Text Section */}
             <div className="col-lg-6 col-md-10 col-sm-12 mb-4 mb-lg-0">
               <h2
-                className="fw-bold mb-4 text-center text-lg-start"
+                className="fw-bold mb-4 text-center "
                 style={{
                   fontFamily: "'Playfair Display', serif",
                   fontSize: "28px",

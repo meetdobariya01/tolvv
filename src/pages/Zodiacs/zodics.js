@@ -444,7 +444,7 @@ const handleBuyNow = async (productId) => {
           {/* Left */}
           <div className="left-text text-center mb-4">
             <h2 className="tangerine-bold">The Twelve</h2>
-            <p className="subtitle">EXPLORE BY YOUR SUN, MOON OR RISING SIGN</p>
+            <p className="subtitle">EXPLORE BY YOUR SUN, <br/>MOON OR RISING SIGN</p>
             <p className="subtitle">Find Your Zodiac Sign</p>
 
             <Calculator />

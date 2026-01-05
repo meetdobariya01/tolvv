@@ -17,8 +17,11 @@
   animation: fadeIn 0.3s ease;
   z-index: 99999;
 }
+.tolvv-header{
+  background-color: #888889;
+}
 .tolvv-logo{
-    width: 50%;
+    width: 75%;
 }
 .logo-link{
   text-align: center;
@@ -45,7 +48,7 @@
 }
 .menu-text{
     font-weight: 600;
-    color: #000;
+    color: #fff;
     text-decoration: none;
     font-size: 17px ;
 }
