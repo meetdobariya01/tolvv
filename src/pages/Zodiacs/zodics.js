@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
+import { Row, Col } from "react-bootstrap";
+import { motion } from "framer-motion";
 
 const Zodic = () => {
+  const [active, setActive] = useState(null);
   const zodiacData = {
     Aries: {
       name: "Aries",
@@ -407,77 +410,80 @@ const Zodic = () => {
   //     alert("Failed to add product to cart.");
   //   }
   // };
-const handleBuyNow = async (productId) => {
-  if (!token) {
-    alert("Please login first!");
-    return navigate("/login");
-  }
+  const handleBuyNow = async (productId) => {
+    if (!token) {
+      alert("Please login first!");
+      return navigate("/login");
+    }
 
-  try {
-    await axios.post(
-      `${API_URL}/add-to-cart`,
-      {
-        productId,
-        quantity: 1,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+    try {
+      await axios.post(
+        `${API_URL}/add-to-cart`,
+        {
+          productId,
+          quantity: 1,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    navigate("/cart");
-  } catch (err) {
-    console.error("Add to cart failed:", err.response || err.message);
-    alert(err.response?.data?.message || "Failed to add product to cart.");
-  }
-};
-
+      navigate("/cart");
+    } catch (err) {
+      console.error("Add to cart failed:", err.response || err.message);
+      alert(err.response?.data?.message || "Failed to add product to cart.");
+    }
+  };
 
   return (
     <div>
       {/* TOP SECTION */}
       <div className="twelve-section">
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center text-white p-4 container">
-          {/* Left */}
-          <div className="left-text text-center mb-4">
-            <h2 className="tangerine-bold">The Twelve</h2>
-            <p className="subtitle">EXPLORE BY YOUR SUN, <br/>MOON OR RISING SIGN</p>
-            <p className="subtitle">Find Your Zodiac Sign</p>
-
-            <Calculator />
-          </div>
-
-          {/* Zodiac Grid */}
-          <div className="zodiac-grid container">
-            <div className="row g-4 justify-content-center">
-              {zodiacSigns.map((sign, index) => (
-                <div
-                  key={index}
-                  className="col-4 col-sm-4 col-md-3 text-center pointer"
-                  onClick={() => setSelectedZodiac(zodiacData[sign.name])}
-                >
-                  <div
-                    className="zodiac-circle mx-auto"
-                    style={{ backgroundColor: sign.color }}
-                  >
-                    <img
-                      src={sign.image}
-                      alt={sign.name}
-                      className="zodiac-image"
-                    />
-                  </div>
-                  <p className="zodiac-name mt-2">{sign.name}</p>
-                </div>
-              ))}
+        <div className="container">
+          <div className="row align-items-center text-white">
+            {/* LEFT TEXT */}
+            <div className="col-12 col-md-4 text-center text-md-start left-text">
+              <h2 className="tangerine-bold">The Twelve</h2>
+              <p className="subtitle">
+                EXPLORE BY YOUR SUN,
+                <br />
+                MOON OR RISING SIGN
+              </p>
+              <Calculator />
             </div>
-          </div>
 
-          {/* Right Vertical Text */}
-          <div className="vertical-text d-none d-md-block">
-            <span>NURTURE YOUR NATURE</span>
+            {/* ZODIAC GRID */}
+            <div className="col-12 col-md-7 zodiac-grid-wrapper">
+              <div className="row zodiac-row justify-content-center">
+                {zodiacSigns.map((sign, index) => (
+                  <div
+                    key={index}
+                    className="col-3 zodiac-item text-center"
+                    onClick={() => setSelectedZodiac(zodiacData[sign.name])}
+                  >
+                    <div
+                      className="zodiac-circle"
+                      style={{ backgroundColor: sign.color }}
+                    >
+                      <img
+                        src={sign.image}
+                        alt={sign.name}
+                        className="zodiac-image"
+                      />
+                    </div>
+                    <p className="zodiac-name">{sign.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT VERTICAL TEXT */}
+            <div className="col-md-1 d-none d-md-flex justify-content-end">
+              <div className="vertical-text">NURTURE YOUR NATURE</div>
+            </div>
           </div>
         </div>
       </div>
@@ -549,9 +555,7 @@ const handleBuyNow = async (productId) => {
 
         {/* PRODUCTS */}
         {/* PRODUCTS – WHITE BACKGROUND */}
-
-      </section>
-              <div className="product-wrapper py-5">
+        <div className="product-wrapper py-5">
           <h2 className="product-heading the-artisan-font mb-4 text-center">
             {selectedZodiac.name} Products
           </h2>
@@ -586,6 +590,7 @@ const handleBuyNow = async (productId) => {
             </div>
           </div>
         </div>
+      </section>
     </div>
   );
 };
