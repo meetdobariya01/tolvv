@@ -130,7 +130,6 @@
 // //   setPlacing(false);
 // // };
 
-
 // //   return (
 // //     <div>
 // //       <Header />
@@ -274,7 +273,6 @@
 // // };
 
 // // export default Checkout;
-
 
 // import React, { useEffect, useState } from "react";
 // import "./checkout.css";
@@ -551,8 +549,6 @@
 
 // export default Checkout;
 
-
-
 import React, { useEffect, useState } from "react";
 import "./checkout.css";
 import Header from "../../components/header/header";
@@ -677,7 +673,6 @@ const Checkout = () => {
 
       // 💵 COD
       window.location.href = `/order-success/${data.orderId}`;
-
     } catch (error) {
       console.error(error);
       alert("Something went wrong.");
@@ -688,52 +683,103 @@ const Checkout = () => {
   return (
     <div>
       <Header />
-      <div className="checkout-root">
-        <h1 className="page-title">Checkout</h1>
 
-        <div className="checkout-grid">
+      <div className="checkout">
+        <div className="checkout-grid checkout-root">
           <div className="panel billing-panel">
             <div className="panel-inner">
-              <h2>Billing & Shipping</h2>
+              <h2>Shipping Details</h2>
 
               <form onSubmit={placeOrder} className="billing-form" noValidate>
                 <label>
-                  Full name
-                  <input name="name" value={billing.name} onChange={handleBillingChange} required />
+                  <input
+                    name="name"
+                    className="underline-input text-dark"
+                    placeholder="Full name"
+                    value={billing.name}
+                    onChange={handleBillingChange}
+                    required
+                  />
                 </label>
 
                 <label>
-                  Email
-                  <input name="email" type="email" value={billing.email} onChange={handleBillingChange} required />
+                  <input
+                    name="phone"
+                    className="underline-input"
+                    placeholder="Phone"
+                    value={billing.phone}
+                    onChange={handleBillingChange}
+                    required
+                  />
+                </label>
+
+                <label>
+                  <input
+                    name="email"
+                    className="underline-input"
+                    type="email"
+                    placeholder="Email"
+                    value={billing.email}
+                    onChange={handleBillingChange}
+                    required
+                  />
+                </label>
+
+                <label>
+                  <textarea
+                    name="address"
+                    className="underline-input"
+                    placeholder="Address"
+                    value={billing.address}
+                    onChange={handleBillingChange}
+                    rows="1"
+                    required
+                  />
+                </label>
+
+                <label>
+                  <textarea
+                    name="address"
+                    className="underline-input"
+                    placeholder="Apartment No."
+                    value={billing.address}
+                    onChange={handleBillingChange}
+                    rows="1"
+                    required
+                  />
                 </label>
 
                 <div className="row-two">
                   <label>
-                    Phone
-                    <input name="phone" value={billing.phone} onChange={handleBillingChange} required />
+                    <input
+                      name="city"
+                      className="underline-input"
+                      placeholder="City"
+                      value={billing.city}
+                      onChange={handleBillingChange}
+                      required
+                    />
                   </label>
-
                   <label>
-                    Pincode
-                    <input name="pincode" value={billing.pincode} onChange={handleBillingChange} required />
+                    <input
+                      name="pincode"
+                      className="underline-input"
+                      placeholder="Pincode"
+                      value={billing.pincode}
+                      onChange={handleBillingChange}
+                      required
+                    />
                   </label>
                 </div>
 
-                <label>
-                  Address
-                  <textarea name="address" value={billing.address} onChange={handleBillingChange} rows="3" required />
-                </label>
-
-                <label>
-                  City
-                  <input name="city" value={billing.city} onChange={handleBillingChange} required />
-                </label>
-
-                <div className="payment-block">
+                <div className="payment-block mt-4">
                   <h3>Payment Method</h3>
                   <div className="payment-options">
                     {["upi", "card", "cod"].map((op) => (
-                      <label key={op} className={paymentMethod === op ? "active" : ""}>
+                      <label
+                        key={op}
+                        className={paymentMethod === op ? "active" : ""}
+                      >
                         <input
                           type="radio"
                           name="payment"
@@ -751,8 +797,14 @@ const Checkout = () => {
                 </div>
 
                 <div className="form-actions">
-                  <button className="place-btn" type="submit" disabled={placing}>
-                    {placing ? "Processing..." : `Pay — ${currencyFormat(total)}`}
+                  <button
+                    className="btn-outline-dark btn"
+                    type="submit"
+                    disabled={placing}
+                  >
+                    {placing
+                      ? "Processing..."
+                      : `Pay Now— ${currencyFormat(total)}`}
                   </button>
                 </div>
               </form>

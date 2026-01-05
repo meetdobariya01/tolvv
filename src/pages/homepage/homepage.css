@@ -282,7 +282,7 @@
 .aries-section {
   background-color: #a53a32; /* red section */
   color: white;
-  padding: 80px 20px 120px;
+  padding: 80px 0 0 0;
   position: relative;
   overflow: visible;
   text-align: center;
@@ -338,7 +338,7 @@
   height: 150px;
   object-fit: contain;
   position: relative;
-  bottom: -75px; /* half inside red, half outside */
+  /* bottom: -75px;  */
   transition: transform 0.3s ease;
 }
 
