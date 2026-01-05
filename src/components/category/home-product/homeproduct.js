@@ -17,11 +17,11 @@ const Homeproduct = () => {
       <Container>
         <h2 className="products-heading">Products</h2>
 
-        <Row className="gx-2 gy-3">
+        <Row className="gx-4 gy-3">
           {products.map((item, index) => (
             <Col
               key={index}
-              xs={6}      // ✅ MOBILE → 2 ITEMS
+              xs={6} // ✅ MOBILE → 2 ITEMS
               sm={6}
               md={4}
               lg={2}
