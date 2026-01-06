@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import "./checkout.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -20,7 +22,8 @@ const Checkout = () => {
   const [placing, setPlacing] = useState(false);
 
   const token = localStorage.getItem("token");
-
+const location = useLocation();
+  const note = location.state?.note ;
   // -----------------------------
   // FETCH CART (LOGGED-IN USER)
   useEffect(() => {
@@ -93,18 +96,20 @@ const Checkout = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          items: orderItems,
-          paymentMethod,
-          address: {
-            name: billing.name,
-            phone: billing.phone,
-            email: billing.email,
-            address: billing.address,
-            city: billing.city,
-            pincode: billing.pincode,
-          },
-        }),
+       body: JSON.stringify({
+  items: orderItems,
+  paymentMethod,
+  note, // ✅ ADD THIS LINE
+  address: {
+    name: billing.name,
+    phone: billing.phone,
+    email: billing.email,
+    address: billing.address,
+    city: billing.city,
+    pincode: billing.pincode,
+  },
+}),
+
       });
 
       const data = await res.json();

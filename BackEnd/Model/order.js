@@ -29,6 +29,11 @@ const orderSchema = new mongoose.Schema({
     city: String,
     pincode: String
   },
+    note: {
+    type: String, // ✅ ADD THIS
+    default: "",
+  },
+
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

@@ -614,7 +614,7 @@ app.post("/api/add-to-cart", authenticate, async (req, res) => {
 // // Updated Backend Merge Route
 app.post("/place-order", authenticate, async (req, res) => {
   try {
-    const { items, paymentMethod, address } = req.body;
+    const { items, paymentMethod, address,note } = req.body;
 
     if (!items || items.length === 0)
       return res.status(400).json({ message: "Cart is empty" });
@@ -643,17 +643,19 @@ app.post("/place-order", authenticate, async (req, res) => {
     const totalAmount = Number(subtotal.toFixed(2));
     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
-    const newOrder = new Order({
-      userId: req.user.id,
-      customOrderId,
-      items: orderItems,
-      subtotal,
-      totalAmount,
-      paymentMethod,
-      orderStatus: "Pending",
-      status: "PENDING",
-      address
-    });
+  const newOrder = new Order({
+  userId: req.user.id,
+  customOrderId,
+  items: orderItems,
+  subtotal,
+  totalAmount,
+  paymentMethod,
+  orderStatus: "Pending",
+  status: "PENDING",
+  address,
+  note: note || "", // ✅ SAVE NOTE
+});
+
 
     await newOrder.save();
 
@@ -674,7 +676,7 @@ app.post("/place-order", authenticate, async (req, res) => {
         customer_mobile: req.user.mobile,
         return_url:
           process.env.PAYMENT_CALLBACK_URL ||
-          "http://localhost:4000/payment",
+          "http://localhost:4000/payment-callback",
       });
 
       if (sessionResp?.payment_links?.web) {
