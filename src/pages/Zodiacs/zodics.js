@@ -5,6 +5,7 @@ import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
 import { Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
 
 const Zodic = () => {
   const [active, setActive] = useState(null);
@@ -410,33 +411,71 @@ const Zodic = () => {
   //     alert("Failed to add product to cart.");
   //   }
   // };
-  const handleBuyNow = async (productId) => {
-    if (!token) {
-      alert("Please login first!");
-      return navigate("/login");
+  const handleBuyNow = async (product) => {
+    if (!product) return;
+
+    // ✅ LOGGED-IN USER
+    if (token) {
+      try {
+        await axios.post(
+          `${API_URL}/api/add-to-cart`,
+          {
+            productId: product._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        navigate("/cart");
+      } catch (error) {
+        console.error("Add to cart error:", error.response || error);
+
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
     }
 
-    try {
-      await axios.post(
-        `${API_URL}/add-to-cart`,
-        {
-          productId,
-          quantity: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+    // ✅ GUEST USER
+    else {
+      let cart = [];
+
+      try {
+        const stored = Cookies.get("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(cart)) cart = [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find(
+        (item) => item.productId === product._id
       );
 
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          type: "product",
+          productId: product._id,
+          quantity: 1,
+          price: product.ProductPrice,
+          name: product.ProductName,
+          img: product.Photos,
+        });
+      }
+
+      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
       navigate("/cart");
-    } catch (err) {
-      console.error("Add to cart failed:", err.response || err.message);
-      alert(err.response?.data?.message || "Failed to add product to cart.");
     }
   };
+
 
   return (
     <div>
@@ -579,10 +618,11 @@ const Zodic = () => {
                       <div className="underline" />
                       <button
                         className="buy-btn mt-1"
-                        onClick={() => handleBuyNow(p._id)}
+                        onClick={() => handleBuyNow(p)}
                       >
                         Buy Now
                       </button>
+
                     </div>
                   </div>
                 </div>
