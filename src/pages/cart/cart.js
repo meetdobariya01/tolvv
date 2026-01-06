@@ -6,10 +6,20 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
 import Cookies from "js-cookie";
+import "./cart.css";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
+/* Recommended Products for Left Panel */
+const recommendedProducts = {
+  "Body Lotion": { price: 750, desc: "Deeply nourishing body lotion for smooth and hydrated skin." },
+  Perfume: { price: 1200, desc: "Long-lasting premium fragrance crafted with fine oils." },
+  "Essential Oil": { price: 950, desc: "Pure essential oil for relaxation and aromatherapy." },
+  Soap: { price: 350, desc: "Gentle soap made with natural cleansing ingredients." },
+};
+
 const Cart = () => {
+  const [selectedProduct, setSelectedProduct] = useState("Body Lotion"); // For left panel highlight
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -22,8 +32,8 @@ const Cart = () => {
   const fetchCart = useCallback(async () => {
     setLoading(true);
 
-    // ✅ LOGGED IN USER
     if (token) {
+      // Logged-in user
       try {
         const res = await axios.get(`${API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -32,7 +42,6 @@ const Cart = () => {
         const items =
           res.data?.cart?.items?.map((item) => {
             const photo = item.productId?.Photos;
-
             return {
               id: item.productId?._id,
               name: item.productId?.ProductName || "Product",
@@ -47,19 +56,14 @@ const Cart = () => {
           }) || [];
 
         setCartItems(items);
-        setTotalPrice(
-          items.reduce((sum, i) => sum + i.price * i.qty, 0)
-        );
+        setTotalPrice(items.reduce((sum, i) => sum + i.price * i.qty, 0));
       } catch (err) {
         console.error("Failed to fetch cart:", err);
         setCartItems([]);
       }
-    }
-
-    // ✅ GUEST USER
-    else {
+    } else {
+      // Guest user
       let guestCart = [];
-
       try {
         const stored = Cookies.get("guestCart");
         guestCart = stored ? JSON.parse(stored) : [];
@@ -70,7 +74,6 @@ const Cart = () => {
 
       const formatted = guestCart.map((item) => {
         const photo = item.img;
-
         return {
           id: item.productId,
           name: item.name || "Product",
@@ -85,9 +88,7 @@ const Cart = () => {
       });
 
       setCartItems(formatted);
-      setTotalPrice(
-        formatted.reduce((sum, i) => sum + i.price * i.qty, 0)
-      );
+      setTotalPrice(formatted.reduce((sum, i) => sum + i.price * i.qty, 0));
     }
 
     setLoading(false);
@@ -101,7 +102,6 @@ const Cart = () => {
   // UPDATE GUEST CART
   const updateGuestCart = (items) => {
     setCartItems(items);
-
     Cookies.set(
       "guestCart",
       JSON.stringify(
@@ -115,7 +115,6 @@ const Cart = () => {
       ),
       { expires: 7 }
     );
-
     setTotalPrice(items.reduce((sum, i) => sum + i.price * i.qty, 0));
   };
 
@@ -206,64 +205,73 @@ const Cart = () => {
   return (
     <>
       <Header />
-      <div className="container py-5">
-        <h2 className="text-center fw-bold mb-5">🛒 Your Shopping Cart</h2>
+      <div className="cart-wrapper">
+        <div className="container">
+          <div className="row min-vh-100">
 
-        <div className="row g-4">
-          <div className="col-lg-8">
-            {cartItems.map((item) => (
-              <motion.div
-                key={item.id}
-                className="card p-3 mb-3 border-0 shadow-sm rounded-4"
-              >
-                <div className="row align-items-center">
-                  <div className="col-3">
-                    <img
-                      src={item.img}
-                      className="img-fluid rounded"
-                      alt={item.name}
-                    />
-                  </div>
-
-                  <div className="col-6">
-                    <h6 className="fw-bold">{item.name}</h6>
-                    <p className="text-muted">₹{item.price}</p>
-                  </div>
-
-                  <div className="col-3 text-end">
-                    <div className="d-flex justify-content-end mb-2">
-                      <button className="btn btn-sm btn-light" onClick={() => decreaseQty(item.id)}>
-                        −
-                      </button>
-                      <span className="mx-2">{item.qty}</span>
-                      <button className="btn btn-sm btn-light" onClick={() => increaseQty(item.id)}>
-                        +
-                      </button>
-                    </div>
-
-                    <button
-                      className="btn btn-link text-danger p-0"
-                      onClick={() => removeItem(item.id)}
-                    >
-                      <FiTrash2 />
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="col-lg-4">
-            <div className="card p-4 border-0 shadow-sm rounded-4">
-              <h5 className="fw-bold mb-3">Order Summary</h5>
-              <div className="d-flex justify-content-between">
-                <span>Total</span>
-                <strong>₹{totalPrice}</strong>
-              </div>
-              <button className="btn btn-dark w-100 mt-4" onClick={handleCheckout}>
-                Checkout
-              </button>
+            {/* LEFT SIDE: Recommended Products */}
+            <div className="col-lg-6 left-panel">
+              <h6 className="section-title">You may also like</h6>
+              <ul className="suggest-list">
+                {Object.keys(recommendedProducts).map((item) => (
+                  <li
+                    key={item}
+                    className={item === selectedProduct ? "active" : ""}
+                    onClick={() => setSelectedProduct(item)}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            {/* RIGHT SIDE: Cart Items */}
+            <div className="col-lg-6 right-panel my-5">
+              <div className="cart-header">
+                <h6>CART</h6>
+                <span className="close">×</span>
+              </div>
+
+              {cartItems.map((item) => (
+                <motion.div key={item.id} className="cartpage-item mb-3 p-3 border rounded-3">
+                  <div className="row align-items-center">
+                    <div className="col-3">
+                      <img src={item.img} className="img-fluid rounded" alt={item.name} />
+                    </div>
+                    <div className="col-6">
+                      <h6 className="fw-bold">{item.name}</h6>
+                      <p className="text-muted">₹{item.price}</p>
+                      <div className="qty-box mt-2">
+                        <button onClick={() => decreaseQty(item.id)}>-</button>
+                        <span className="mx-2">{item.qty}</span>
+                        <button onClick={() => increaseQty(item.id)}>+</button>
+                      </div>
+                    </div>
+                    <div className="col-3 text-end">
+                      <span className="delete btn btn-link text-danger p-0" onClick={() => removeItem(item.id)}>
+                        <FiTrash2 />
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+
+              {/* TOTAL */}
+              <div className="total-box mt-4 p-3 border rounded-3">
+                <div className="row-line d-flex justify-content-between">
+                  <span>Subtotal</span>
+                  <span>₹{totalPrice}</span>
+                </div>
+                <div className="row-line bold d-flex justify-content-between mt-2">
+                  <span>Total</span>
+                  <span>₹{totalPrice}</span>
+                </div>
+                <button className="btn btn-outline-dark w-100 mt-3" onClick={handleCheckout}>
+                  CHECKOUT
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
