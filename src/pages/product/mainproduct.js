@@ -153,7 +153,7 @@ const Mainproduct = () => {
 
         {/* PRODUCT GRID */}
         <div className="row product-fade mt-4">
-          <h2 className="products-heading">Products Name</h2>
+          <h2 className="products-page-heading text-center the-artisan-font">Products Name</h2>
           {productsByCategory[activeKey]?.map((item) => (
             <div
               className="col-6 col-md-3 mb-4 product-card-animate"
@@ -182,7 +182,7 @@ const Mainproduct = () => {
                     </div>
 
                     <div className="price-wrap">
-                      <span className="price-dot"></span>
+                      {/* <span className="price-dot"></span> */}
                       <span className="product-price">
                         ₹ {item.ProductPrice}
                       </span>

@@ -142,13 +142,8 @@ const Homepage = () => {
       {/* products grid */}
       {/* <Product /> */}
 
-      
-     
-
       {/* moon section */}
-      <Moonsection/>
-
-     
+      <Moonsection />
 
       {/* benifits */}
 
@@ -161,9 +156,7 @@ const Homepage = () => {
           <h1 className="fw-light mb-5 the-artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
-          <p
-            className="mx-auto"
-          >
+          <p className="mx-auto">
             Our Zodiac Collection blends luxurious skincare with the energy of
             your sign, creating a ritual that feels personally designed for you.
             Each soap, body lotion, bath gel, and perfume is infused with
@@ -175,9 +168,7 @@ const Homepage = () => {
           </p>
 
           {/* Paragraph 2 */}
-          <p
-            className="mx-auto mt-4"
-          >
+          <p className="mx-auto mt-4">
             These products don’t just nourish your skin; they elevate your
             spirit. Feel the difference as signature fragrances boost your mood,
             celestial ingredients restore balance, and your daily routine
