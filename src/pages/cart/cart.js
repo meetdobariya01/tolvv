@@ -1,215 +1,135 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { FiTrash2 } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
-import Header from "../../components/header/header";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./cart.css";
 import Footer from "../../components/footer/footer";
-import axios from "axios";
+import Header from "../../components/header/header";
 
-const API_URL = process.env.REACT_APP_API_URL;
+/* PRODUCTS */
+const products = {
+  "Body Lotion": {
+    price: 750,
+    desc: "Deeply nourishing body lotion for smooth and hydrated skin.",
+  },
+  Perfume: {
+    price: 1200,
+    desc: "Long-lasting premium fragrance crafted with fine oils.",
+  },
+  "Essential Oil": {
+    price: 950,
+    desc: "Pure essential oil for relaxation and aromatherapy.",
+  },
+  Soap: {
+    price: 350,
+    desc: "Gentle soap made with natural cleansing ingredients.",
+  },
+};
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const token = localStorage.getItem("token");
+  const [selectedProduct, setSelectedProduct] = useState("Body Lotion");
+  const [qty, setQty] = useState(1);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/cart`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  const product = products[selectedProduct];
+  const total = product.price * qty;
 
-        if (res.data?.cart?.items?.length > 0) {
-          const items = res.data.cart.items.map((item) => ({
-            id: item.productId?._id,
-            name: item.productId?.ProductName,
-            price: item.productId?.ProductPrice,
-            qty: item.quantity,
-            img: item.productId?.Photos
-              ? item.productId.Photos.startsWith("http")
-                ? item.productId.Photos
-                : `/images/${item.productId.Photos.replace("images/", "")}`
-              : "/images/default.jpg",
-            desc: item.productId?.Description || "",
-          })).filter((i) => i.id); // remove null product IDs
-
-          setCartItems(items);
-
-          // sum = price * qty
-          const total = items.reduce((t, i) => t + i.price * i.qty, 0);
-          setTotalPrice(total);
-        }
-      } catch (err) {
-        console.error("Failed to fetch cart:", err);
-      }
-    };
-
-    fetchCart();
-  }, [token]);
-
-
-  const increaseQty = async (id) => {
-    const item = cartItems.find((i) => i.id === id);
-    if (!item) return;
-
-    try {
-      await axios.post(
-        `${API_URL}/add-to-cart`,
-        { productId: id, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      updateQty(id, item.qty + 1);
-    } catch (err) {
-      console.error("Failed to increase qty:", err);
-    }
-  };
-
-  const decreaseQty = async (id) => {
-    const item = cartItems.find((i) => i.id === id);
-    if (!item || item.qty <= 1) return;
-
-    updateQty(id, item.qty - 1);
-  };
-
-  const updateQty = (id, qty) => {
-    setCartItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, qty } : i))
-    );
-    const item = cartItems.find((i) => i.id === id);
-    setTotalPrice((prev) => prev + item.price * (qty - item.qty));
-  };
-
-  const removeItem = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/cart/remove/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const item = cartItems.find((i) => i.id === id);
-      setCartItems((prev) => prev.filter((i) => i.id !== id));
-      setTotalPrice((prev) => prev - item.price * item.qty);
-    } catch (err) {
-      console.error("Failed to remove item:", err);
-    }
+  const handleProductClick = (item) => {
+    const slug = item.toLowerCase().replace(/\s+/g, "-");
+    navigate("./mainproduct");
   };
 
   return (
     <div>
       <Header />
-      <div className="container py-5">
-        <motion.h2
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-4 text-center  your-cart-title"
-        >
-          🛒 Your Cart
-        </motion.h2>
 
-        <div className="row g-4">
-          <div className="col-lg-8">
-            {cartItems.map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-                className="card p-3 shadow-sm border-0 rounded-4 mb-3"
-              >
-                <div className="row align-items-center">
-                  <div className="col-md-3 text-center">
-                    <motion.img
-                      src={item.img}
-                      className="img-fluid rounded-4"
-                      alt={item.name}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                      style={{ height: 150, width: "100%", objectFit: "cover" }}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <h5 className="fw-bold">{item.name}</h5>
-                    <p className="text-muted small">{item.desc}</p>
-                    <p className="fw-semibold mb-1">₹{item.price}</p>
-                  </div>
-                  <div className="col-md-3 text-center">
-                    <div className="d-flex justify-content-center align-items-center mb-2">
-                      <button className="btn btn-outline-dark px-3" onClick={() => decreaseQty(item.id)}>
-                        −
-                      </button>
-                      <span className="px-3 fw-bold">{item.qty}</span>
-                      <button className="btn btn-outline-dark px-3" onClick={() => increaseQty(item.id)}>
-                        +
-                      </button>
-                    </div>
+      <div className="cart-wrapper">
+        <div className="container">
+          <div className="row min-vh-100">
 
-                    <motion.button
-                      whileHover={{ scale: 1.15 }}
-                      className="btn btn-danger rounded-circle"
-                      onClick={() => removeItem(item.id)}
-                    >
-                      <FiTrash2 />
-                    </motion.button>
+            {/* LEFT SIDE */}
+            <div className="col-lg-6 left-panel">
+              <h6 className="section-title">You may also like</h6>
+
+              <ul className="suggest-list">
+                {Object.keys(products).map((item) => (
+                  <li
+                    key={item}
+                    className={item === selectedProduct ? "active" : ""}
+                    onClick={() => handleProductClick(item)}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="col-lg-6 right-panel my-5">
+              <div className="cart-header">
+                <h6>CART</h6>
+                <span className="close">×</span>
+              </div>
+
+              {/* PRODUCT DETAIL */}
+              <div className="cartpage-item">
+                <div className="product-img" />
+
+                <div className="product-info">
+                  <p className="fw-bold">{selectedProduct}</p>
+                  <p className="small text-muted">{product.desc}</p>
+
+                  <div className="qty-box">
+                    <button onClick={() => qty > 1 && setQty(qty - 1)}>
+                      -
+                    </button>
+                    <span>{qty}</span>
+                    <button onClick={() => setQty(qty + 1)}>+</button>
                   </div>
                 </div>
-              </motion.div>
-            ))}
 
-            {cartItems.length === 0 && (
-              <motion.h4
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center text-muted mt-4"
-              >
-                Your cart is empty!
-              </motion.h4>
-            )}
-          </div>
-
-          <div className="col-lg-4">
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="card p-4 shadow-lg border-0 rounded-4"
-            >
-              <h4 className="fw-bold mb-3">Order Summary</h4>
-
-              <div className="d-flex justify-content-between mb-2">
-                <span className="fw-semibold">Subtotal:</span>
-                <span>₹{totalPrice}</span>
+                <div className="price">
+                  ₹ {total}
+                  <span className="delete">🗑</span>
+                </div>
               </div>
 
-              <div className="d-flex justify-content-between mb-2">
-                <span className="fw-semibold">Shipping:</span>
-                <span>₹0 (Free)</span>
+              {/* SHIPPING */}
+              <div className="shipping mt-5">
+                <h6>Estimate shipping</h6>
+                <input placeholder="Country >" />
+                <input placeholder="City >" />
+                <input placeholder="Postal / ZIP Code >" />
+                <button className="btn btn-outline-dark">
+                  CHECK DURATION
+                </button>
               </div>
 
-              <hr />
-
-              <div className="d-flex justify-content-between mb-3">
-                <h5 className="fw-bold">Total:</h5>
-                <h5 className="fw-bold">₹{totalPrice}</h5>
+              {/* NOTE */}
+              <div className="note mt-5 rounded">
+                <h6>Add a note</h6>
+                <textarea />
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn btn-dark w-100 py-2 rounded-4 fw-semibold"
-              >
-                <NavLink
-                  to="/check-out"
-                  className="text-white text-decoration-none d-block w-100 h-100"
-                >
-                  Proceed to Checkout
-                </NavLink>
-              </motion.button>
-            </motion.div>
+              {/* TOTAL */}
+              <div className="total-box">
+                <div className="row-line">
+                  <span>Subtotal</span>
+                  <span>₹ {total}</span>
+                </div>
+                <div className="row-line bold">
+                  <span>Total</span>
+                  <span>₹ {total}</span>
+                </div>
+
+                <button className="btn btn-outline-dark">
+                  CHECKOUT
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

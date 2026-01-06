@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
+import  "./productdetails.css";
 
 const products = {
   bath: {
@@ -67,6 +68,16 @@ const Productdetails = () => {
   return (
     <div>
       <Header />
+      <section className="zodiac-hero">
+        <motion.img
+          src="/images/tolvv.jpg" // 👈 your banner image
+          alt="Hero Banner"
+          className="zodiac-hero-img"
+          initial={{ scale: 1.08, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+      </section>
 
       <Container fluid className="py-5 container">
         <Row className="align-items-start">

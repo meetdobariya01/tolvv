@@ -2,12 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Allura&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
 
-.the-artisan-font {
+/* .the-artisan-font {
   font-family: "DM Serif Display", serif;
   font-weight: 400;
   font-size: 70px;
   font-style: normal;
-}
+} */
 @media (max-width: 768px) {
   .the-artisan-font {
     font-size: 70px;
@@ -238,7 +238,7 @@
   transform: rotate(180deg);
   font-weight: 700;
   letter-spacing: 3px;
-  position: absolute;
+  /* position: absolute; */
   right: 20px;
   top: 44%;
   transform: translateY(-50%) rotate(180deg);
@@ -274,8 +274,8 @@
 }
 
 .aries-icon-img {
-  /* width: 100%;
-  height: 100%; */
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 

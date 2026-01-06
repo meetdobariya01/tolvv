@@ -3,26 +3,30 @@ import { useNavigate } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
+import { Row, Col } from "react-bootstrap";
+import { motion } from "framer-motion";
+import Cookies from "js-cookie";
 
 const Zodic = () => {
+  const [active, setActive] = useState(null);
   const zodiacData = {
     Aries: {
       name: "Aries",
       date: "March 21 - April 19",
-      color: "#7A1318",
+      color: "#C10230",
       icon: "./images/zodiac/1.png",
       description:
-        "Aries, the natural ruler of healthy self-esteem, ego, fresh beginnings, spring, and physical presence, embodies the essence of selfhood. It is the sign of initiation—the spark that givesrise to identity and expression. At its core, Aries represents the formation of a strong, authentic sense of Self. Yet true evolution for Aries comes not only through bold individuality, but also through learning adaptability—acting with conviction while recognizing its role as a vital part of the greater whole.",
+        "Aries, the natural ruler of healthy self-esteem, ego, fresh beginnings, spring, and physical presence, embodies the essence of selfhood. It is the sign of initiation—the spark that gives rise to identity and expression. At its core, Aries represents the formation of a strong, authentic sense of Self. Yet true evolution for Aries comes not only through bold individuality, but also through learning adaptability—acting with conviction while recognizing its role as a vital part of the greater whole.",
       letters: "A, L, E, I, O",
-      energy: "Courage, Stamina",
+      energy: "Courage, Smamina",
       stamina: "High",
       colorText: "Red",
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "./images/ginger.png",
-        "./images/cinnamon.png",
-        "./images/coconut.png",
+        "./images/ingredient/7.png",
+        "./images/ingredient/8.png",
+        "./images/ingredient/9.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -36,20 +40,20 @@ const Zodic = () => {
     Taurus: {
       name: "Taurus",
       date: "April 20 - May 20",
-      color: "#7A8B3D",
+      color: "#4D5A31",
       icon: "./images/zodiac/2.png",
       description:
         "Grounded, sensual, and steadfast — Taurus reigns as the most earthy of the earth signs, embodying loyalty, prosperity, and a deep-rooted kindness. This sign’s true evolution lies in mastering the art of balance — embracing inevitable change while staying connected to its innate power to create, nurture, and build enduring foundations.",
       letters: "B, V, U",
-      energy: "Stability, Sensuality",
+      energy: "Stability, sensuality",
       stamina: "Strong",
       colorText: "Forest Green",
       element: "Earth",
       planet: "Venus",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/18.png",
+        "./images/ingredient/19.png",
+        "./images/ingredient/4.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -63,20 +67,20 @@ const Zodic = () => {
     Gemini: {
       name: "Gemini",
       date: "May 21 - June 20",
-      color: "#BB892C",
+      color: "#7E622D",
       icon: "./images/zodiac/3.png",
       description:
         "Masters of the information age, Geminis are natural shape shifters — swift, curious, and everevolving. They move effortlessly between realms of thought and feeling, bridging the conscious and the unseen, the earthly and the divine. Intelligent, expressive, and endlessly adaptable, Gemini’s true growth unfolds when they release the need for mental control and surrender to stillness — allowing truth to rise naturally into clarity and deeper understanding.",
       letters: "K, Chh, Gh, Q, C",
       energy: "Divine Intelligence",
       stamina: "Medium",
-      colorText: "Orange",
+      colorText: "Orange ",
       element: "Air",
       planet: "Mercury",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/1.png",
+        "./images/ingredient/5.png",
+        "./images/ingredient/13.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -90,20 +94,20 @@ const Zodic = () => {
     Cancer: {
       name: "Cancer",
       date: "June 21 - July 22",
-      color: "#8A8C8E",
+      color: "#5F504D",
       icon: "./images/zodiac/4.png",
       description:
         "The Cancer archetype embodies The Great Mother and The Queen — the divine nurturer within us all. Guided by instinct and attuned to the needs of others, Cancer offers unconditional care and emotional depth. Ruled by the Moon, they ebb and flow with life’s unseen tides, sensing what lies beneath the surface. Natural homemakers and protectors, their evolution comes through expanding that sacred sense of belonging — extending the love of home and family to embrace the earth and all living beings.",
-      letters: "D, H",
+      letters: "Dd, H",
       energy: "Caring, Empathy",
       stamina: "Moderate",
-      colorText: "Deep Blue, Violets",
+      colorText: "Deep Blue, Violet",
       element: "Water",
       planet: "The Moon",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/7.png",
+        "./images/ingredient/21.png",
+        "./images/ingredient/4.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -117,7 +121,7 @@ const Zodic = () => {
     Leo: {
       name: "Leo",
       date: "July 23 - August 22",
-      color: "#E8C43A",
+      color: "#D7982B",
       icon: "./images/zodiac/5.png",
       description:
         "Like the Lion, Leo stands proud — confident, noble, and generous at heart. Playful and expressive, they thrive in the spotlight, drawn to create, perform, and be seen. Yet true Leo maturity unfolds in the realization that their purpose is not to be the light’s source, but its radiant expression — to shine with warmth, creativity, and love, offering their brilliance as a gift of joy and blessing to the world.",
@@ -128,9 +132,10 @@ const Zodic = () => {
       element: "Fire",
       planet: "The Sun",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/14.png",
+        "./images/ingredient/8.png",
+        "./images/ingredient/15.png",
+         "./images/ingredient/16.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -144,20 +149,20 @@ const Zodic = () => {
     Virgo: {
       name: "Virgo",
       date: "August 23 - September 22",
-      color: "#DC4D2D",
+      color: "#85422B",
       icon: "./images/zodiac/6.png",
       description:
         "The grounded face of Mercury, Virgo embodies precision, practicality, and quiet mastery. Attuned to body, mind, and environment, Virgos move through life with purpose and care, guided by an innate desire for order and well-being. Their true evolution begins when they transcend the divide born from constant self-critique and analysis — awakening instead to a higher wisdom of inclusiveness, compassion, and the seamless unity between themselves and the world they so thoughtfully tend.",
-      letters: "P,Tha, N, T, sha",
+      letters: "P, Tha, N, T, Sha",
       energy: "Analysis, Order",
       stamina: "Strong",
       colorText: "Brown",
       element: "Earth",
       planet: "Mercury",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/1.png",
+        "./images/ingredient/20.png",
+        "./images/ingredient/22.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -170,7 +175,7 @@ const Zodic = () => {
     Libra: {
       name: "Libra",
       date: "September 23 - October 22",
-      color: "#FF4E4C",
+      color: "#AE1857",
       icon: "./images/zodiac/7.png",
       description:
         "Bearers of beauty, balance, and justice, Libras embody grace in connection. Naturally social and harmonizing, they seek depth and wisdom in partnership, valuing relationships as mirrors of growth and meaning. Libra’s true evolution unfolds in the realization that wholeness begins within — that through self-awareness and authentic connection, they serve both personal harmony and the greater equilibrium of all life.",
@@ -181,9 +186,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Venus",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/1.png",
+        "./images/ingredient/17.png",
+        "./images/ingredient/19.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -196,7 +201,7 @@ const Zodic = () => {
     Scorpio: {
       name: "Scorpio",
       date: "October 23 - November 21",
-      color: "#000000",
+      color: "#2D2A26",
       icon: "./images/zodiac/8.png",
       description:
         "The innate master of transformation, Scorpio governs the realms of rebirth, depth, and emotional power. Co-ruled by Mars and Pluto, this sign moves through life with intensity and purpose, unafraid to explore the shadows in pursuit of truth. Scorpio’s true liberation arises in the cycle of surrender — in releasing the identities they so passionately build, only to be reborn, again and again, into greater authenticity and freedom.",
@@ -207,9 +212,9 @@ const Zodic = () => {
       element: "Water",
       planet: "Pluto / Mars",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/12.png",
+        "./images/ingredient/6.png",
+        "./images/ingredient/11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -222,20 +227,20 @@ const Zodic = () => {
     Sagittarius: {
       name: "Sagittarius",
       date: "November 22 - December 21",
-      color: "#74489D",
+      color: "#490E67",
       icon: "./images/zodiac/9.png",
       description:
         "Sagittarius, the Zodiac’s freedom-loving explorer, thrives on curiosity, philosophy, and visionary ideals. Open-minded and discerning, they recognize the limits of all belief systems, finding meaning in both worldly journeys and inner, spiritual quests. True evolution for Sagittarius comes when they surrender the pursuit of perfection, embracing instead the rich, messy reality of humanity as it is — discovering joy and wisdom in life’s imperfect truths.",
       letters: "Bh, Dh, Ph, Ddh",
-      energy: "Freedom, Devinity",
+      energy: "Freedom, Divinity",
       stamina: "High",
       colorText: "Purple",
       element: "Fire",
       planet: "Jupiter",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/10.png",
+        "./images/ingredient/9.png",
+        "./images/ingredient/11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -248,7 +253,7 @@ const Zodic = () => {
     Capricorn: {
       name: "Capricorn",
       date: "December 22 - January 19",
-      color: "#F1E1CF",
+      color: "#726B54",
       icon: "./images/zodiac/10.png",
       description:
         "Ruled by Saturn, Capricorn excels at constructing both tangible and mental frameworks. Practical, disciplined, and results-driven, they often shine in business and endeavours requiring focus and mastery. True Capricorn maturity arises when they move beyond merely preserving tradition, channelling their drive to create innovative structures that serve, uplift, and honour the evolving world around them.",
@@ -259,9 +264,10 @@ const Zodic = () => {
       element: "Earth",
       planet: "Saturn",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/1.png",
+        "./images/ingredient/21.png",
+        "./images/ingredient/22.png",
+        "./images/ingredient/23.png",  
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -274,20 +280,20 @@ const Zodic = () => {
     Aquarius: {
       name: "Aquarius",
       date: "January 20 - February 18",
-      color: "#519AA2",
+      color: "#005D63",
       icon: "./images/zodiac/11.png",
       description:
         "Co-ruled by Saturn and Uranus, Aquarius embodies the spirit of creative individuality. Independent yet deeply connected, they navigate life with intellect, originality, and a forward-thinking edge. Often altruistic and socially aware, Aquarians thrive on innovation and postconventional insight. Their true evolution emerges when they recognize that personal growth and the advancement of humanity are intertwined — that the highest expression of their power lies in serving the greater whole.",
       letters: "G, S, Sh",
-      energy: "Visionary, Creativity",
+      energy: "Visionary Creativity",
       stamina: "Medium",
       colorText: "Turquoise",
       element: "Air",
-      planet: "Saturn & Uranus",
+      planet: "Uranus / Saturn",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/5.png",
+        "./images/ingredient/6.png",
+        "./images/ingredient/4.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -300,20 +306,21 @@ const Zodic = () => {
     Pisces: {
       name: "Pisces",
       date: "February 19 - March 20",
-      color: "#043D5D",
+      color: "#006098",
       icon: "./images/zodiac/12.png",
       description:
-        "The imaginative mystic of the Zodiac, Pisces embodies a rich tapestry of intuition, empathy, spirituality, and artistic sensitivity. Deeply attuned to the interconnectedness of all life, they move through the world with compassion and devotion. True growth for Pisces comes not from retreating into illusion, but from embracing the courage to transform themselves — and, in doing so, to leave a meaningful imprint on the world around them.",
+        "Pisces is sensitive, intuitive, and artistic—compassionate and spiritual. They inspire creativity, empathy, healing, and kindness, seeing the world through soulful perception.",
       letters: "D, Ch, Z, Th",
-      energy: "Cretivity, Mysticism",
+      energy: "Creativity, Mysticism",
       stamina: "Low",
-      colorText: "sea foam green",
+      colorText: "Sea Foam Green",
       element: "Water",
       planet: "Neptune / Jupiter",
       herbs: [
-        "./images/cinnamon.png",
-        "./images/coconut.png",
-        "./images/ginger.png",
+        "./images/ingredient/1.png",
+        "./images/ingredient/10.png",
+        "./images/ingredient/3.png",
+        "./images/ingredient/4.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -326,7 +333,7 @@ const Zodic = () => {
   };
 
   const zodiacSigns = [
-    { name: "Aries", color: "none", image: "./images/zodiac/aries.png" },
+    { name: "Aries", color: "#7A1318", image: "./images/zodiac/1.png" },
     { name: "Taurus", color: "#7A8B3D", image: "./images/zodiac/2.png" },
     { name: "Gemini", color: "#BB892C", image: "./images/zodiac/3.png" },
     { name: "Cancer", color: "#8A8C8E", image: "./images/zodiac/4.png" },
@@ -407,78 +414,118 @@ const Zodic = () => {
   //     alert("Failed to add product to cart.");
   //   }
   // };
-  const handleBuyNow = async (productId) => {
-    if (!token) {
-      alert("Please login first!");
-      return navigate("/login");
+  const handleBuyNow = async (product) => {
+    if (!product) return;
+
+    // ✅ LOGGED-IN USER
+    if (token) {
+      try {
+        await axios.post(
+          `${API_URL}/api/add-to-cart`,
+          {
+            productId: product._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        navigate("/cart");
+      } catch (error) {
+        console.error("Add to cart error:", error.response || error);
+
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
     }
 
-    try {
-      await axios.post(
-        `${API_URL}/add-to-cart`,
-        {
-          productId,
-          quantity: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    // ✅ GUEST USER
+    else {
+      let cart = [];
 
+      try {
+        const stored = Cookies.get("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(cart)) cart = [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find((item) => item.productId === product._id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          type: "product",
+          productId: product._id,
+          quantity: 1,
+          price: product.ProductPrice,
+          name: product.ProductName,
+          img: product.Photos,
+        });
+      }
+
+      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
       navigate("/cart");
-    } catch (err) {
-      console.error("Add to cart failed:", err.response || err.message);
-      alert(err.response?.data?.message || "Failed to add product to cart.");
     }
   };
 
   return (
     <div>
       {/* TOP SECTION */}
-      <div className="twelve-section">
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center text-white p-4 container">
-          {/* Left */}
-          <div className="left-text text-center mb-4">
-            <h2 className="tangerine-bold">The Twelve</h2>
-            <p className="subtitle">
-              EXPLORE BY YOUR SUN, <br /> MOON OR RISING SIGN
-            </p>
-            <p className="subtitle">Find Your Zodiac Sign</p>
-
-            <Calculator />
-          </div>
-
-          {/* Zodiac Grid */}
-          <div className="zodiac-grid container">
-            <div className="row g-4 justify-content-center p-5 ">
-              {zodiacSigns.map((sign, index) => (
-                <div
-                  key={index}
-                  className="col-4 col-sm-4 col-md-3 text-center pointer"
-                  onClick={() => setSelectedZodiac(zodiacData[sign.name])}
-                >
-                  <div
-                    className="zodiac-circle mx-auto"
-                    style={{ backgroundColor: sign.color }}
-                  >
-                    <img
-                      src={sign.image}
-                      alt={sign.name}
-                      className="zodiac-image"
-                    />
-                  </div>
-                  <p className="zodiac-name mt-2">{sign.name}</p>
-                </div>
-              ))}
+      <div className="twelve-section py-5">
+        <div className="container">
+          <div className="row align-items-center text-white">
+            {/* LEFT TEXT */}
+            <div className="col-12 col-md-4 text-center  left-text">
+              <h2 className="tangerine-bold">The Twelve</h2>
+              <p className="subtitle">
+                EXPLORE BY YOUR SUN,
+                <br />
+                MOON OR RISING SIGN
+              </p>
+              <p className="subtitle">Find your Zodiac</p>
+              <div className="mb-5">
+                <Calculator />
+              </div>
             </div>
-          </div>
 
-          {/* Right Vertical Text */}
-          <div className="vertical-text d-none d-md-block">
-            <span>NURTURE YOUR NATURE</span>
+            {/* ZODIAC GRID */}
+            <div className="col-12 col-md-7 zodiac-grid-wrapper">
+              <div className="row zodiac-row justify-content-center">
+                {zodiacSigns.map((sign, index) => (
+                  <div
+                    key={index}
+                    className="col-3 zodiac-item text-center"
+                    onClick={() => setSelectedZodiac(zodiacData[sign.name])}
+                  >
+                    <div
+                      className="zodiac-circle"
+                      // style={{ backgroundColor: sign.color }}
+                    >
+                      <img
+                        src={sign.image}
+                        alt={sign.name}
+                        className="zodiac-image"
+                      />
+                    </div>
+                    <p className="zodiac-name">{sign.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT VERTICAL TEXT */}
+            <div className="col-md-1 d-none d-md-flex justify-content-end">
+              <div className="vertical-text">NURTURE YOUR NATURE</div>
+            </div>
           </div>
         </div>
       </div>
@@ -488,7 +535,7 @@ const Zodic = () => {
         className="aries-section text-center"
         style={{ backgroundColor: selectedZodiac.color }}
       >
-        <div className="aries-content container">
+        <div className="aries-content inter container">
           <h1
             className="aries-title"
             style={{
@@ -550,42 +597,42 @@ const Zodic = () => {
 
         {/* PRODUCTS */}
         {/* PRODUCTS – WHITE BACKGROUND */}
-      </section>
-      <div className="product-wrapper py-5">
-        <h2 className="product-heading the-artisan-font mb-4 text-center">
-          {selectedZodiac.name} Products
-        </h2>
+        <div className="product-wrapper py-5">
+          <h2 className="product-heading  mb-4 text-center">
+            {selectedZodiac.name} Products
+          </h2>
 
-        <div className="container">
-          <div className="product-grid">
-            {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-              <div className="product-card" key={index}>
-                <div className="product-box-zodiac">
-                  <img
-                    src={p.Photos}
-                    alt={p.ProductName}
-                    className="product-img"
-                  />
+          <div className="container">
+            <div className="product-grid">
+              {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
+                <div className="product-card" key={index}>
+                  <div className="product-box-zodiac">
+                    <img
+                      src={p.Photos}
+                      alt={p.ProductName}
+                      className="zodiac-product-img"
+                    />
 
-                  <div className="product-info">
-                    <p className="name">{p.ProductName}</p>
-                    <p className="size">{p.size}</p>
-                    <p className="price">₹{p.ProductPrice}</p>
+                    <div className="product-info">
+                      <p className="name">{p.ProductName}</p>
+                      <p className="size">{p.size}</p>
+                      <p className="zodiac-price">₹{p.ProductPrice}</p>
 
-                    <div className="underline" />
-                    <button
-                      className="buy-btn mt-1"
-                      onClick={() => handleBuyNow(p._id)}
-                    >
-                      Buy Now
-                    </button>
+                      <div className="underline" />
+                      <button
+                        className="buy-btn mt-1"
+                        onClick={() => handleBuyNow(p)}
+                      >
+                        Buy Now
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
