@@ -347,14 +347,9 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // Shipping & Note
-  const [shipping, setShipping] = useState({
-    country: "",
-    state: "",
-    zip: "",
-  });
+  // Shipping + Note
+  const [shipping, setShipping] = useState({ country: "", city: "", zip: "" });
   const [note, setNote] = useState("");
-  const [deliveryStatus, setDeliveryStatus] = useState("");
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -437,26 +432,65 @@ const Cart = () => {
     fetchCart();
   }, [fetchCart]);
 
-  // ---------------- DELIVERY CHECK ----------------
-  const checkDelivery = () => {
-    const { country, state, zip } = shipping;
+  // ---------------- GUEST CART UPDATE ----------------
+  const updateGuestCart = (items) => {
+    setCartItems(items);
+    Cookies.set(
+      "guestCart",
+      JSON.stringify(
+        items.map((i) => ({
+          productId: i.id,
+          quantity: i.qty,
+          price: i.price,
+          img: i.img,
+          note,
+        }))
+      ),
+      { expires: 2 }
+    );
+    setTotalPrice(items.reduce((sum, i) => sum + i.price * i.qty, 0));
+  };
 
-    if (!country || !state || !zip) {
-      setDeliveryStatus("❌ Please enter Country, State and Pincode");
+  // ---------------- QUANTITY ----------------
+  const increaseQty = async (id) => {
+    if (token) {
+      await axios.post(
+        `${API_URL}/api/add-to-cart`,
+        { productId: id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchCart();
       return;
     }
+    updateGuestCart(cartItems.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i)));
+  };
 
-    if (country.toLowerCase() !== "india") {
-      setDeliveryStatus("❌ Delivery available only in India");
+  const decreaseQty = async (id) => {
+    const item = cartItems.find((i) => i.id === id);
+    if (!item || item.qty <= 1) return;
+
+    if (token) {
+      await axios.post(
+        `${API_URL}/api/add-to-cart`,
+        { productId: id, quantity: -1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchCart();
       return;
     }
+    updateGuestCart(cartItems.map((i) => (i.id === id ? { ...i, qty: i.qty - 1 } : i)));
+  };
 
-    if (zip.length !== 6 || isNaN(zip)) {
-      setDeliveryStatus("❌ Invalid Indian pincode");
+  // ---------------- REMOVE ----------------
+  const removeItem = async (id) => {
+    if (token) {
+      await axios.delete(`${API_URL}/api/cart/remove/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchCart();
       return;
     }
-
-    setDeliveryStatus("✅ Delivery available to your location");
+    updateGuestCart(cartItems.filter((i) => i.id !== id));
   };
 
   // ---------------- CHECKOUT ----------------
@@ -466,11 +500,7 @@ const Cart = () => {
   };
 
   if (loading)
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: "70vh" }}>
-        Loading...
-      </div>
-    );
+    return <div className="d-flex justify-content-center align-items-center" style={{ height: "70vh" }}>Loading...</div>;
 
   return (
     <>
@@ -516,13 +546,13 @@ const Cart = () => {
                       <h6>{item.name}</h6>
                       <p>₹{item.price}</p>
                       <div className="qty-box">
-                        <button>-</button>
+                        <button onClick={() => decreaseQty(item.id)}>-</button>
                         <span>{item.qty}</span>
-                        <button>+</button>
+                        <button onClick={() => increaseQty(item.id)}>+</button>
                       </div>
                     </div>
                     <div className="col-3 text-end">
-                      <FiTrash2 className="text-danger cursor-pointer" />
+                      <FiTrash2 className="text-danger cursor-pointer" onClick={() => removeItem(item.id)} />
                     </div>
                   </div>
                 </motion.div>
@@ -531,49 +561,25 @@ const Cart = () => {
               {/* SHIPPING */}
               <div className="border rounded-3 p-3 mt-4">
                 <h6>Estimate shipping</h6>
-                <input
-                  className="form-control mb-2"
-                  placeholder="Country"
-                  onChange={(e) => setShipping({ ...shipping, country: e.target.value })}
-                />
-                <input
-                  className="form-control mb-2"
-                  placeholder="State"
-                  onChange={(e) => setShipping({ ...shipping, state: e.target.value })}
-                />
-                <input
-                  className="form-control mb-2"
-                  placeholder="Pincode"
-                  onChange={(e) => setShipping({ ...shipping, zip: e.target.value })}
-                />
-                <button className="btn btn-outline-dark w-100" onClick={checkDelivery}>
-                  CHECK DURATION
-                </button>
-
-                {deliveryStatus && (
-                  <p
-                    className="mt-2"
-                    style={{ color: deliveryStatus.includes("✅") ? "green" : "red" }}
-                  >
-                    {deliveryStatus}
-                  </p>
-                )}
+                <input className="form-control mb-2" placeholder="Country" onChange={(e) => setShipping({ ...shipping, country: e.target.value })} />
+                <input className="form-control mb-2" placeholder="City" onChange={(e) => setShipping({ ...shipping, city: e.target.value })} />
+                <input className="form-control mb-3" placeholder="Postal / ZIP Code" onChange={(e) => setShipping({ ...shipping, zip: e.target.value })} />
+                <button className="btn btn-outline-dark w-100">CHECK DURATION</button>
               </div>
 
               {/* NOTE */}
               <div className="mt-4">
                 <h6>Add a note</h6>
-                <textarea
-                  className="form-control"
-                  rows="4"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
+                <textarea className="form-control" rows="4" value={note} onChange={(e) => setNote(e.target.value)} />
               </div>
 
               {/* TOTAL */}
               <div className="border rounded-3 p-3 mt-4">
                 <div className="d-flex justify-content-between">
+                  <span>Subtotal</span>
+                  <span>₹{totalPrice}</span>
+                </div>
+                <div className="d-flex justify-content-between fw-bold mt-2">
                   <span>Total</span>
                   <span>₹{totalPrice}</span>
                 </div>
@@ -581,8 +587,8 @@ const Cart = () => {
                   CHECKOUT
                 </button>
               </div>
-
             </div>
+
           </div>
         </div>
       </div>

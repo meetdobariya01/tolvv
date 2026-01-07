@@ -42,8 +42,12 @@ const planetData = [
     bg: "#144d38",
     description:
       "Venus embodies the divine desire for self-renewal and the innate love of beauty within us. She is the inner Artist — the force that transforms both self and world through love, aesthetics, and creative expression. Venus invites us to cultivate connection — whether through our relationship with nature and the material world, as reflected in Taurus, or through harmony, culture, and human connection, as expressed through Libra.",
-    meta: { energy: "Love", colour: "Green", element: "Earth", rules: "Taurus & Libra" },
-    zodiac: "Taurus",
+    meta: {
+      energy: "Loveing",
+      colour: "Green",
+      element: "Air",
+      rules: "Taurus & Libra",
+    },
   },
   {
     name: "Mars",
@@ -52,8 +56,12 @@ const planetData = [
     bg: "#6e1515",
     description:
       "Mars, the Proud Warrior, embodies the spirit of courage and the fire of empowerment within us all. It represents our capacity for action — our passion, daring, and strength of will. As ruler of Aries, Mars governs the formation and expression of self-identity, while its co-rulership with Pluto over Scorpio speaks to the deeper process of transformation — the continual rebirth of the self through challenge and change.",
-    meta: { energy: "Empowering", colour: "Red", element: "Fire", rules: "Aries" },
-    zodiac: "Aries",
+    meta: {
+      energy: "Empowering",
+      colour: "Red",
+      element: "Fire",
+      rules: "Aries & Scorpio",
+    },
   },
   {
     name: "Jupiter",
@@ -106,7 +114,7 @@ const Moonsection = () => {
         <Container>
           <h2 className="planet-heading">EXPLORE BY YOUR RULING PLANET</h2>
 
-          <Row className="justify-content-center">
+          <Row className="justify-content-center moon-planet">
             {planetData.map((p, i) => (
               <Col
                 key={i}
@@ -154,12 +162,8 @@ const Moonsection = () => {
               {/* RIGHT – TEXT */}
               <Col md={7} className="moon-right">
                 <p className="moon-description">{planet.description}</p>
-                <div className="moon-meta">
-                  <span>Astral Energy : {planet.meta.energy}</span>
-                  <span>Colour : {planet.meta.colour}</span>
-                  <span>Element : {planet.meta.element}</span>
-                  <span>Rules : {planet.meta.rules}</span>
-                </div>
+                <p className="moon-description inter">{planet.description}</p>
+
               </Col>
             </Row>
           </Container>

@@ -99,7 +99,7 @@ root.render(
         <Route path="/cart" element={<Cart />} />
         <Route path="/Check-out" element={<Checkout />} />
         <Route path="/twelve" element={<Twelve />} />
-        <Route path="/payment" element={<Payment/>}/>
+       <Route path="/payment-success/:orderId" element={<Payment />} />
         <Route path="/privacy-policy" element={<Privacypolicy />} />
       <Route path="/terms-and-condition" element={<Termsconditions />} />
       <Route path="/shipping-policy" element={<ShippingPolicy />} />

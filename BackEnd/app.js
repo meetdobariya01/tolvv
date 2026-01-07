@@ -612,9 +612,97 @@ app.post("/api/add-to-cart", authenticate, async (req, res) => {
 //   }
 // });
 // // Updated Backend Merge Route
+// app.post("/place-order", authenticate, async (req, res) => {
+//   try {
+//     const { items, paymentMethod, address,note } = req.body;
+
+//     if (!items || items.length === 0)
+//       return res.status(400).json({ message: "Cart is empty" });
+
+//     if (!address || !address.city || !address.pincode)
+//       return res.status(400).json({ message: "Address incomplete" });
+
+//     let subtotal = 0;
+//     const orderItems = [];
+
+//     // 🔥 FETCH PRODUCT PRICE FROM DB
+//     for (const item of items) {
+//       const product = await Product.findById(item.productId);
+//       if (!product)
+//         return res.status(404).json({ message: "Product not found" });
+
+//       subtotal += product.ProductPrice * item.quantity;
+
+//       orderItems.push({
+//         productId: product._id,
+//         quantity: item.quantity,
+//         priceAtBuy: product.ProductPrice
+//       });
+//     }
+
+//     const totalAmount = Number(subtotal.toFixed(2));
+//     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
+
+//   const newOrder = new Order({
+//   userId: req.user.id,
+//   customOrderId,
+//   items: orderItems,
+//   subtotal,
+//   totalAmount,
+//   paymentMethod,
+//   orderStatus: "Pending",
+//   status: "PENDING",
+//   address,
+//   note: note || "", // ✅ SAVE NOTE
+// });
+
+
+//     await newOrder.save();
+
+//     // 🧹 Clear cart
+//     await Cart.findOneAndUpdate(
+//       { userId: req.user.id },
+//       { $set: { items: [] } }
+//     );
+
+//     // 💳 Online payment
+//     if (paymentMethod === "card" || paymentMethod === "upi") {
+//       const paymentHandler = PaymentHandler.getInstance();
+//       const sessionResp = await paymentHandler.orderSession({
+//         order_id: customOrderId,
+//         amount: totalAmount,
+//         currency: "INR",
+//         customer_id: req.user.id.toString(),
+//         customer_mobile: req.user.mobile,
+//         return_url:
+//           process.env.PAYMENT_CALLBACK_URL ||
+//           "http://localhost:4000/payment-callback",
+//       });
+
+//       if (sessionResp?.payment_links?.web) {
+//         return res.status(201).json({
+//           message: "Order placed, redirecting to payment",
+//           redirect: sessionResp.payment_links.web,
+//         });
+//       }
+
+//       return res
+//         .status(500)
+//         .json({ message: "Payment session creation failed" });
+//     }
+
+//     res
+//       .status(201)
+//       .json({ message: "Order placed successfully", orderId: customOrderId });
+//   } catch (err) {
+//     console.error("Place order error:", err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
 app.post("/place-order", authenticate, async (req, res) => {
   try {
-    const { items, paymentMethod, address,note } = req.body;
+    const { items, paymentMethod, address, note } = req.body;
 
     if (!items || items.length === 0)
       return res.status(400).json({ message: "Cart is empty" });
@@ -625,7 +713,7 @@ app.post("/place-order", authenticate, async (req, res) => {
     let subtotal = 0;
     const orderItems = [];
 
-    // 🔥 FETCH PRODUCT PRICE FROM DB
+    // 🔐 PRICE VALIDATION
     for (const item of items) {
       const product = await Product.findById(item.productId);
       if (!product)
@@ -640,32 +728,81 @@ app.post("/place-order", authenticate, async (req, res) => {
       });
     }
 
-    const totalAmount = Number(subtotal.toFixed(2));
+    const totalAmount = Math.round(subtotal);
     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
 
-  const newOrder = new Order({
-  userId: req.user.id,
-  customOrderId,
-  items: orderItems,
-  subtotal,
-  totalAmount,
-  paymentMethod,
-  orderStatus: "Pending",
-  status: "PENDING",
-  address,
-  note: note || "", // ✅ SAVE NOTE
-});
-
+    // 📦 CREATE ORDER
+    const newOrder = new Order({
+      userId: req.user.id,
+      customOrderId,
+      items: orderItems,
+      subtotal: totalAmount,
+      totalAmount,
+      paymentMethod,
+      orderStatus: "Pending",
+      status: paymentMethod === "cod" ? "COD_CONFIRMED" : "PAYMENT_PENDING",
+      address,
+      note: note || ""
+    });
 
     await newOrder.save();
 
-    // 🧹 Clear cart
+    // 🧹 CLEAR CART
     await Cart.findOneAndUpdate(
       { userId: req.user.id },
       { $set: { items: [] } }
     );
 
-    // 💳 Online payment
+    /* ================= EMAIL SECTION ================= */
+
+    const user = await User.findById(req.user.id);
+    const products = await Product.find({
+      _id: { $in: orderItems.map(i => i.productId) }
+    });
+
+    const itemsHtml = orderItems.map(i => {
+      const product = products.find(
+        p => p._id.toString() === i.productId.toString()
+      );
+      return `<li>${product.ProductName} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
+    }).join("");
+
+    // 📧 USER EMAIL
+    transporter.sendMail({
+      from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
+      to: user.email,
+      subject: "✅ Order Confirmed – Tolvv",
+      html: `
+        <h2>Thank you for your order 🎉</h2>
+        <p><strong>Order ID:</strong> ${customOrderId}</p>
+        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+        <p><strong>Total:</strong> ₹${totalAmount}</p>
+        <ul>${itemsHtml}</ul>
+        <p>We’ll notify you once your order is shipped.</p>
+      `
+    }).catch(err => console.error("User mail error:", err));
+
+    // 📧 ADMIN EMAIL
+    transporter.sendMail({
+      from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
+      to: process.env.ADMIN_EMAIL,
+      subject: "🚨 New Order Received – Tolvv",
+      html: `
+        <h2>🛒 New Order Placed</h2>
+        <p><strong>Order ID:</strong> ${customOrderId}</p>
+        <p><strong>Customer:</strong> ${address.buildingName || "N/A"}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Phone:</strong> ${user.mobile}</p>
+        <p><strong>Payment:</strong> ${paymentMethod}</p>
+        <p><strong>Total:</strong> ₹${totalAmount}</p>
+        <p><strong>Address:</strong> ${address.houseNumber}, ${address.city} - ${address.pincode}</p>
+        <ul>${itemsHtml}</ul>
+        ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
+      `
+    }).catch(err => console.error("Admin mail error:", err));
+
+    /* ================= PAYMENT ================= */
+
     if (paymentMethod === "card" || paymentMethod === "upi") {
       const paymentHandler = PaymentHandler.getInstance();
       const sessionResp = await paymentHandler.orderSession({
@@ -676,51 +813,143 @@ app.post("/place-order", authenticate, async (req, res) => {
         customer_mobile: req.user.mobile,
         return_url:
           process.env.PAYMENT_CALLBACK_URL ||
-          "http://localhost:4000/payment-callback",
+          "http://localhost:4000/payment-callback"
       });
 
       if (sessionResp?.payment_links?.web) {
         return res.status(201).json({
           message: "Order placed, redirecting to payment",
-          redirect: sessionResp.payment_links.web,
+          redirect: sessionResp.payment_links.web
         });
       }
 
-      return res
-        .status(500)
-        .json({ message: "Payment session creation failed" });
+      return res.status(500).json({ message: "Payment session creation failed" });
     }
 
-    res
-      .status(201)
-      .json({ message: "Order placed successfully", orderId: customOrderId });
+    // 💵 COD RESPONSE
+    res.status(201).json({
+      message: "Order placed successfully",
+      orderId: customOrderId
+    });
+
   } catch (err) {
     console.error("Place order error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
+app.post("/payment/webhook", express.json(), async (req, res) => {
+  try {
+    // 🔐 BASIC AUTH SECURITY
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Basic ")) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const decoded = Buffer.from(authHeader.split(" ")[1], "base64")
+      .toString("utf-8")
+      .split(":");
+
+    const [username, password] = decoded;
+
+    if (
+      username !== process.env.HDFC_WEBHOOK_USERNAME ||
+      password !== process.env.HDFC_WEBHOOK_PASSWORD
+    ) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // 📦 WEBHOOK PAYLOAD
+    const {
+      order_id,
+      payment_status,
+      amount_paid,
+      transaction_id,
+    } = req.body;
+
+    if (!order_id || !payment_status || !amount_paid || !transaction_id) {
+      return res.status(400).json({ message: "Invalid webhook payload" });
+    }
+
+    // 🔍 FIND ORDER
+    const order = await Order.findOne({ customOrderId: order_id });
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // 💰 AMOUNT VERIFICATION
+    if (Math.round(amount_paid) !== Math.round(order.totalAmount)) {
+      order.status = "AMOUNT_MISMATCH";
+      await order.save();
+      return res.status(400).json({ message: "Amount mismatch" });
+    }
+
+    // ✅ PAYMENT STATUS UPDATE
+    if (payment_status === "SUCCESS") {
+      order.status = "PAID";
+      order.orderStatus = "Confirmed";
+      order.paymentId = transaction_id;
+      order.paidAt = new Date();
+    } else {
+      order.status = "PAYMENT_FAILED";
+    }
+
+    await order.save();
+
+    console.log("✅ Webhook processed for:", order_id);
+    res.status(200).json({ message: "Webhook processed successfully" });
+
+  } catch (error) {
+    console.error("❌ Webhook error:", error);
+    res.status(500).json({ message: "Webhook processing failed" });
+  }
+});
+
 app.post("/payment-callback", async (req, res) => {
-  const { order_id } = req.body;
   const paymentHandler = PaymentHandler.getInstance();
 
   try {
+    // 🔐 Signature validation
     if (!validateHMAC_SHA256(req.body, paymentHandler.getResponseKey())) {
-      return res.status(400).send("Invalid signature");
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/payment-failed`
+      );
     }
 
+    const { order_id } = req.body;
+
     const orderStatusResp = await paymentHandler.orderStatus(order_id);
+
+    // Update order
     await Order.findOneAndUpdate(
       { customOrderId: order_id },
-      { status: orderStatusResp.status }
+      {
+        status: orderStatusResp.status === "CHARGED" ? "PAID" : "FAILED",
+        orderStatus:
+          orderStatusResp.status === "CHARGED" ? "Confirmed" : "Payment Failed"
+      }
     );
 
-    res.send(`<h1>Payment ${orderStatusResp.status}</h1>`);
+    // ✅ Redirect to frontend success page
+    if (orderStatusResp.status === "CHARGED") {
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/payment-success/${order_id}`
+      );
+    }
+
+    // ❌ Failure redirect
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/payment-failed/${order_id}`
+    );
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Payment verification failed");
+    console.error("Payment callback error:", err);
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/payment-failed`
+    );
   }
 });
+
 
 app.get("/order/status/:orderId", authenticate, async (req, res) => {
   try {
@@ -761,6 +990,23 @@ app.get("/order/details/:orderId", authenticate, async (req, res) => {
     });
 
   } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+app.get("/order/:orderId", authenticate, async (req, res) => {
+  try {
+    const order = await Order.findOne({
+      customOrderId: req.params.orderId,
+      userId: req.user.id
+    }).populate("userId", "name email");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json(order);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });

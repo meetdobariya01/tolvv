@@ -15,7 +15,7 @@ const Homeproduct = () => {
   return (
     <section className="products-section">
       <Container>
-        <h2 className="products-heading">Products</h2>
+        <h2 className="products-heading allura-regular">Products</h2>
 
         <Row className="gx-4 gy-3">
           {products.map((item, index) => (
