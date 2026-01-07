@@ -6,7 +6,7 @@ import Footer from "../../components/footer/footer";
 import axios from "axios";
 import "./mainproduct.css";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
 const Mainproduct = () => {
   const [activeKey, setActiveKey] = useState("Bath Gel");
@@ -20,12 +20,17 @@ const Mainproduct = () => {
     { title: "Perfume", size: "50 ml", img: "/images/pr.png", category: "Perfume" },
     { title: "Essential Oil", size: "30 ml", img: "/images/eo.png", category: "Essential Oil" },
     { title: "Soap", size: "100 gsm", img: "/images/sp.png", category: "Soap" },
-    { title: "Hamper", size: "", img: "/images/hamper.jpg", category: "Hamper" },
+    { title: "Hamper", size: "5 Products", img: "/images/hamper.jpg", category: "Hamper" },
   ];
 
   const categories = products.map((p) => p.category);
 
-  const token = localStorage.getItem("token");
+  // ✅ Helper to construct correct image URL
+  const getImageUrl = (path) => {
+    if (!path) return `${API_URL}/images/default.jpg`;
+    if (path.startsWith("http")) return path;
+    return `${API_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+  };
 
   // ✅ Fetch products from API
   useEffect(() => {
@@ -88,7 +93,14 @@ const Mainproduct = () => {
                     style={{ cursor: "pointer" }}
                   >
                     <div className="product-img-card">
-                      <img src={item.img} alt={item.title} />
+                      <img
+                        src={getImageUrl(item.img)}
+                        alt={item.title}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `/images/default.jpg`;
+                        }}
+                      />
                     </div>
                     <div className="product-info-collection">
                       <h5>{item.title} <span>›</span></h5>
@@ -108,42 +120,45 @@ const Mainproduct = () => {
         <div id="product-grid" className="row product-fade mt-4">
           <h2 className="products-heading">{activeKey}</h2>
 
-          {productsByCategory[activeKey]?.map((item) => (
-            <div className="col-6 col-md-3 mb-4 product-card-animate" key={item._id}>
-              <Card className="product-card">
-                <div className="product-img-wrap">
-                  <Card.Img
-                    src={
-                      item.Photos
-                        ? item.Photos.startsWith("http")
-                          ? item.Photos
-                          : `/images/${item.Photos.replace("images/", "")}`
-                        : "/images/default.jpg"
-                    }
-                  />
-                </div>
-
-                <Card.Body className="product-info">
-                  <div className="product-top">
-                    <div className="title-wrap">
-                      <h6 className="product-title">{item.ProductName} <span>›</span></h6>
-                      <p className="product-size">{item.size}</p>
-                    </div>
-                    <div className="price-wrap">
-                      <span className="price-dot"></span>
-                      <span className="product-price">₹ {item.ProductPrice}</span>
-                    </div>
+          {productsByCategory[activeKey]?.length > 0 ? (
+            productsByCategory[activeKey].map((item) => (
+              <div className="col-6 col-md-3 mb-4 product-card-animate" key={item._id}>
+                <Card className="product-card">
+                  <div className="product-img-wrap">
+                    <Card.Img
+                      src={getImageUrl(item.Photos)}
+                      alt={item.ProductName}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `${API_URL}/images/default.jpg`;
+                      }}
+                    />
                   </div>
 
-                  <div className="product-divider"></div>
+                  <Card.Body className="product-info">
+                    <div className="product-top">
+                      <div className="title-wrap">
+                        <h6 className="product-title">{item.ProductName} <span>›</span></h6>
+                        <p className="product-size">{item.size}</p>
+                      </div>
+                      <div className="price-wrap">
+                        <span className="price-dot"></span>
+                        <span className="product-price">₹ {item.ProductPrice}</span>
+                      </div>
+                    </div>
 
-                  <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn w-100">VIEW PRODUCT</Button>
-                  </NavLink>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
+                    <div className="product-divider"></div>
+
+                    <NavLink to={`/productdetails/${item._id}`}>
+                      <Button size="sm" className="cart-btn w-100">VIEW PRODUCT</Button>
+                    </NavLink>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))
+          ) : (
+            <p className="text-center mt-4">No products available in this category.</p>
+          )}
         </div>
       </div>
 
