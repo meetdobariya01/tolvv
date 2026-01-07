@@ -506,13 +506,13 @@ const Cart = () => {
     <>
       <Header />
 
-      <div className="cart-wrapper">
+      <div className="cart-wrapper sora">
         <div className="container">
           <div className="row min-vh-100">
 
             {/* LEFT */}
             <div className="col-lg-6 left-panel">
-              <h6>You may also like</h6>
+              <h6 className="mb-5">You may also like</h6>
               <ul className="suggest-list">
                 {Object.keys(recommendedProducts).map((item) => (
                   <li

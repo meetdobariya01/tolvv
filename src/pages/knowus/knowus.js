@@ -46,7 +46,7 @@ const Knowus = () => {
             </div>
 
             {/* Right Text */}
-            <div className="col-lg-6 col-md-10 col-sm-12 text-center ">
+            <div className="col-lg-6 col-md-10 col-sm-12 text-center sora">
               <h2
                 className="fw-bold mb-4"
                 style={{
@@ -87,11 +87,11 @@ const Knowus = () => {
       </div>
 
       <div
-        className="container-fluid py-5"
+        className="container-fluid py-5 "
         style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container">
-          <div className="row align-items-center justify-content-center text-center ">
+          <div className="row align-items-center justify-content-center text-center sora">
             {/* Left Text Section */}
             <div className="col-lg-6 col-md-10 col-sm-12 mb-4 mb-lg-0">
               <h2

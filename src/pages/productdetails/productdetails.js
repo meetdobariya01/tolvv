@@ -6,10 +6,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import Cookies from "js-cookie";
+
 const productInfo = {
   bath: {
     title: "BATH GEL",
-    icons: ["No Harmful Chemicals", "Paraben Free", "Skin Friendly", "Cruelty Free"],
+    icons: [
+      "No Harmful Chemicals",
+      "Paraben Free",
+      "Skin Friendly",
+      "Cruelty Free",
+    ],
     howToUse:
       "Wet your skin, then work a small amount of 12’s Bath Gel into a lather using a loofah or your hands. Gently massage over your body, rinse thoroughly and pat dry.",
     ingredients:
@@ -41,8 +47,10 @@ const productInfo = {
     icons: ["Natural Oils", "Skin Safe", "Vegan", "Long Lasting"],
     howToUse:
       "12’s Perfumes are designed for gentle elegance. Spray on pulse points like wrists and neck to uplift your spirit.",
-    ingredients: "Denatured Spirit, Aromatic Substances, Dipropylene Glycol, Quantum Satis",
-    caution: "Flammable. Keep away from heat and direct sunlight. Avoid Eye Contact.",
+    ingredients:
+      "Denatured Spirit, Aromatic Substances, Dipropylene Glycol, Quantum Satis",
+    caution:
+      "Flammable. Keep away from heat and direct sunlight. Avoid Eye Contact.",
   },
   bodylotion: {
     title: "BODY LOTION",
@@ -51,7 +59,8 @@ const productInfo = {
       "Apply on slightly damp skin. Gently massage in upward circular motions until fully absorbed for a radiant glow.",
     ingredients:
       "Aloe Vera Extract, Honey, Vitamin E Acetate, Shea Butter, Jojoba Seed Oil, Hyaluronic Acid",
-    caution: "Store in a cool, dry place away from direct sunlight. Avoid eye contact.",
+    caution:
+      "Store in a cool, dry place away from direct sunlight. Avoid eye contact.",
   },
   hamper: {
     title: "CURATED ZODIAC HAMPER",
@@ -84,7 +93,7 @@ const categoryMap = {
 const Productdetails = () => {
   const { id } = useParams();
   const navigate = useNavigate(); // ✅ Added this
-
+  const [active, setActive] = useState("bath");
   const [activeTab, setActiveTab] = useState("bath");
   const [dbProduct, setDbProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -93,7 +102,9 @@ const Productdetails = () => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:4000/api/products/${id}`);
+        const response = await axios.get(
+          `http://localhost:4000/api/products/${id}`
+        );
         const product = response.data;
         setDbProduct(product);
 
@@ -110,114 +121,134 @@ const Productdetails = () => {
     if (id) fetchProductData();
   }, [id]);
 
-const addToGuestCart = () => {
-  let cart = [];
-
-  try {
-    const stored = Cookies.get("guestCart");
-    cart = stored ? JSON.parse(stored) : [];
-    if (!Array.isArray(cart)) cart = [];
-  } catch {
-    cart = [];
-  }
-
-  const existing = cart.find(
-    (item) => item.productId === dbProduct._id
-  );
-
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({
-      type: "product",
-      productId: dbProduct._id,
-      quantity: 1,
-      price: dbProduct.ProductPrice,
-      name: dbProduct.ProductName,
-      img: dbProduct.Photos,
-    });
-  }
-
-  Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-  navigate("/cart");
-};
-
-const addToCart = async () => {
-  if (!dbProduct) return;
-
-  const token = localStorage.getItem("token");
-
-  // ✅ USER LOGGED IN
-  if (token) {
-    try {
-      await axios.post(
-        "http://localhost:4000/api/add-to-cart",
-        {
-          productId: dbProduct._id,
-          quantity: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      navigate("/cart");
-    } catch (error) {
-      console.error("Add to cart error:", error.response?.data || error);
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
-    }
-  }
-
-  // ✅ GUEST USER
-  else {
+  const addToGuestCart = () => {
     let cart = [];
 
     try {
       const stored = Cookies.get("guestCart");
       cart = stored ? JSON.parse(stored) : [];
+      if (!Array.isArray(cart)) cart = [];
     } catch {
       cart = [];
     }
 
-    const existing = cart.find((i) => i.productId === dbProduct._id);
+    const existing = cart.find((item) => item.productId === dbProduct._id);
 
     if (existing) {
       existing.quantity += 1;
     } else {
       cart.push({
+        type: "product",
         productId: dbProduct._id,
         quantity: 1,
         price: dbProduct.ProductPrice,
+        name: dbProduct.ProductName,
+        img: dbProduct.Photos,
       });
     }
 
     Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
     navigate("/cart");
-  }
-};
+  };
 
+  const addToCart = async () => {
+    if (!dbProduct) return;
 
+    const token = localStorage.getItem("token");
 
+    // ✅ USER LOGGED IN
+    if (token) {
+      try {
+        await axios.post(
+          "http://localhost:4000/api/add-to-cart",
+          {
+            productId: dbProduct._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
+        navigate("/cart");
+      } catch (error) {
+        console.error("Add to cart error:", error.response?.data || error);
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    }
 
-  if (loading) return <div className="text-center py-5"><h3>Loading...</h3></div>;
-  if (!dbProduct) return <div className="text-center py-5"><h3>Product Not Found</h3></div>;
+    // ✅ GUEST USER
+    else {
+      let cart = [];
+
+      try {
+        const stored = Cookies.get("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find((i) => i.productId === dbProduct._id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: dbProduct._id,
+          quantity: 1,
+          price: dbProduct.ProductPrice,
+        });
+      }
+
+      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
+      navigate("/cart");
+    }
+  };
+
+  if (loading)
+    return (
+      <div className="text-center py-5">
+        <h3>Loading...</h3>
+      </div>
+    );
+  if (!dbProduct)
+    return (
+      <div className="text-center py-5">
+        <h3>Product Not Found</h3>
+      </div>
+    );
 
   return (
     <div>
       <Header />
-      <Container fluid className="py-5 container">
+
+      <section className="zodiac-hero">
+        <motion.img
+          src="/images/tolvv.jpg " // 👈 your banner image
+          alt="Hero Banner"
+          className="zodiac-hero-img"
+          initial={{ scale: 1.08, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+      </section>
+
+      <Container fluid className="py-5 container sora">
         <Row className="align-items-start">
           <Col md={6}>
             <motion.img
               key={dbProduct.Photos}
-              src={dbProduct.Photos.startsWith("http") ? dbProduct.Photos : `http://localhost:4000${dbProduct.Photos}`}
+              src={
+                dbProduct.Photos.startsWith("http")
+                  ? dbProduct.Photos
+                  : `http://localhost:4000${dbProduct.Photos}`
+              }
               alt={dbProduct.ProductName}
               className="img-fluid rounded shadow-sm w-100"
               style={{ objectFit: "cover", maxHeight: "600px" }}
@@ -235,19 +266,30 @@ const addToCart = async () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h1 className="fw-bold">{dbProduct.ProductName}</h1>
-                <h3 className="text-muted mb-4">{productInfo[activeTab]?.title}</h3>
+                <h1 className="fw-bold playfair-display">
+                  {dbProduct.ProductName}
+                </h1>
+                <h3 className="text-muted playfair-display mb-4">
+                  {productInfo[activeTab]?.title}
+                </h3>
 
                 {dbProduct.Category === "Hamper" && (
                   <div className="mb-3">
-                    <span className="badge bg-dark me-2">Zodiac: {dbProduct.Zodiac}</span>
-                    <span className="badge bg-secondary">Size: {dbProduct.size}</span>
+                    <span className="badge bg-dark me-2">
+                      Zodiac: {dbProduct.Zodiac}
+                    </span>
+                    <span className="badge bg-secondary">
+                      Size: {dbProduct.size}
+                    </span>
                   </div>
                 )}
 
                 <div className="mb-4 d-flex flex-wrap gap-2">
                   {productInfo[activeTab]?.icons.map((icon, idx) => (
-                    <span key={idx} className="badge bg-light text-dark border p-2 px-3">
+                    <span
+                      key={idx}
+                      className="badge bg-light text-dark border p-2 px-3"
+                    >
                       {icon}
                     </span>
                   ))}
@@ -258,19 +300,47 @@ const addToCart = async () => {
                   <p>{productInfo[activeTab]?.howToUse}</p>
 
                   <h6 className="fw-bold">INGREDIENTS</h6>
-                  <p className="text-secondary">{productInfo[activeTab]?.ingredients}</p>
+                  <p className="text-secondary">
+                    {productInfo[activeTab]?.ingredients}
+                  </p>
 
-                  <h6 className="text-danger fw-bold">CAUTION</h6>
-                  <p className="small text-danger">{productInfo[activeTab]?.caution}</p>
+                  <h6 className=" fw-bold">CAUTION</h6>
+                  <p className="small ">{productInfo[activeTab]?.caution}</p>
                 </div>
 
                 <h2 className="mt-4">₹{dbProduct.ProductPrice}</h2>
-                <button onClick={addToCart} className="btn btn-dark btn-lg mt-3 px-5 w-100">
+                <button
+                  onClick={addToCart}
+                  className="btn btn-dark btn-lg mt-3 px-5 "
+                >
                   ADD TO CART
                 </button>
               </motion.div>
             </AnimatePresence>
           </Col>
+        </Row>
+
+        <hr />
+        {/* PRODUCT SWITCHER */}
+        <Row className="mt-5 text-center">
+          {[
+            { key: "bath", label: "BATH LOTION" },
+            { key: "soap", label: "SOAP" },
+            { key: "oil", label: "ESSENTIAL OIL" },
+            { key: "eaudeperfumes", label: "EAU DE PERFUMES" },
+            { key: "bodylotion", label: "BATH GEL" },
+          ].map((item) => (
+            <Col xs={4} md={2} key={item.key}>
+              <span
+                className={`product-link ${
+                  active === item.key ? "active" : ""
+                }`}
+                onClick={() => setActive(item.key)}
+              >
+                {item.label}
+              </span>
+            </Col>
+          ))}
         </Row>
       </Container>
       <Footer />

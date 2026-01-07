@@ -135,7 +135,7 @@ const Zodic = () => {
         "./images/ingredient/14.png",
         "./images/ingredient/8.png",
         "./images/ingredient/15.png",
-         "./images/ingredient/16.png",
+        "./images/ingredient/16.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -267,7 +267,7 @@ const Zodic = () => {
         "./images/ingredient/1.png",
         "./images/ingredient/21.png",
         "./images/ingredient/22.png",
-        "./images/ingredient/23.png",  
+        "./images/ingredient/23.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -461,7 +461,6 @@ const Zodic = () => {
       //   (item) => item.productId === product._id
       // );
 
-
       // try {
       //   const stored = Cookies.get("guestCart");
       //   cart = stored ? JSON.parse(stored) : [];
@@ -489,7 +488,6 @@ const Zodic = () => {
       navigate("/cart");
     }
   };
-
 
   return (
     <div>
@@ -530,7 +528,7 @@ const Zodic = () => {
                         className="zodiac-image"
                       />
                     </div>
-                    <p className="zodiac-name">{sign.name}</p>
+                    <p className="zodiac-name sora">{sign.name}</p>
                   </div>
                 ))}
               </div>
@@ -549,7 +547,7 @@ const Zodic = () => {
         className="aries-section text-center"
         style={{ backgroundColor: selectedZodiac.color }}
       >
-        <div className="aries-content inter container">
+        <div className="aries-content inter container sora">
           <h1
             className="aries-title"
             style={{
@@ -616,7 +614,7 @@ const Zodic = () => {
             {selectedZodiac.name} Products
           </h2>
 
-          <div className="container">
+          <div className="container sora">
             <div className="product-grid">
               {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
                 <div className="product-card" key={index}>
@@ -639,7 +637,6 @@ const Zodic = () => {
                       >
                         Buy Now
                       </button>
-
                     </div>
                   </div>
                 </div>

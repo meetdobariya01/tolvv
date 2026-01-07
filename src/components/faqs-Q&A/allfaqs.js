@@ -54,7 +54,7 @@ const Allfaqs = () => {
 
   return (
     <div>
-      <div className="faq-wrapper minimal">
+      <div className="faq-wrapper minimal sora">
         {faqData.map((item, index) => (
           <div className="faq-line" key={index}>
             <div className="faq-question" onClick={() => toggleFAQ(index)}>

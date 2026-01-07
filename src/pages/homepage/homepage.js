@@ -151,7 +151,7 @@ const Homepage = () => {
         className="container-fluid py-5"
         style={{ backgroundColor: "#D1D3D4" }}
       >
-        <div className="container text-center benifits-section">
+        <div className="container text-center benifits-section sora">
           {/* Heading */}
           <h1 className="fw-light mb-5 the-artisan-font">Benefits</h1>
 
@@ -204,7 +204,7 @@ const Homepage = () => {
             </div>
 
             {/* Right Text */}
-            <div className="col-lg-6 col-md-10 col-sm-12 text-center">
+            <div className="col-lg-6 col-md-10 col-sm-12 text-center sora">
               <h2
                 className="fw-bold mb-4"
                 style={{
@@ -248,7 +248,7 @@ const Homepage = () => {
         style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container">
-          <div className="row align-items-center justify-content-center text-center">
+          <div className="row align-items-center justify-content-center text-center sora">
             {/* Left Text Section */}
             <div className="col-lg-6 col-md-10 col-sm-12 mb-4 mb-lg-0">
               <h2
@@ -322,7 +322,7 @@ const Homepage = () => {
 
           {/* Description */}
           <p
-            className="text-center mx-auto"
+            className="text-center mx-auto sora "
             style={{
               maxWidth: "800px",
               color: "#333",
@@ -346,7 +346,7 @@ const Homepage = () => {
       </div>
       <div className="" style={{ backgroundColor: "" }}>
         {/* Contact Form Section */}
-        <section className="form-section">
+        <section className="form-section sora">
           <Container>
             <motion.div
               className="form-content"

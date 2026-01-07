@@ -26,7 +26,7 @@ const Connect = () => {
         </motion.div>
 
         {/* Connect Form Section */}
-        <section className="form-section">
+        <section className="form-section sora">
           <Container>
             <motion.div
               className="form-content"

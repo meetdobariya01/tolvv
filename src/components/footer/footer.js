@@ -16,7 +16,7 @@ export const Footer = () => {
         }}
       >
         <div className="container">
-          <div className="row gy-4 footer">
+          <div className="row gy-4 footer sora">
             {/* Column 1 */}
             <div className="col-md-3 col-6">
               <h6 className="fw-bold text-uppercase mb-3">Discover</h6>

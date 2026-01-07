@@ -24,7 +24,7 @@ const Benifits = () => {
         className="container-fluid py-5"
         style={{ backgroundColor: "#D1D3D4" }}
       >
-        <div className="container text-center benifits-section">
+        <div className="container text-center benifits-section sora">
           {/* Heading */}
           <h1 className="the-artisan-font">Benefits</h1>
 

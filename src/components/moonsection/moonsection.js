@@ -12,7 +12,12 @@ const planetData = [
     bg: "#5b2a6d",
     description:
       "The King and the Great Father embody the archetypes of the Sun—the source of all light and life, both earthly and spiritual. The Sun uplifts and energizes, offering inspiration, balance and renewal. It rules over healthy self-esteem, life purpose, creativity, healing, and vitality, illuminating the path toward wholeness and strength.",
-    meta: { energy: "Peaceful", colour: "Violet", element: "Water", rules: "Cancer" },
+    meta: {
+      energy: "Peaceful",
+      colour: "Violet",
+      element: "Water",
+      rules: "Cancer",
+    },
     zodiac: "Cancer",
   },
   {
@@ -32,8 +37,13 @@ const planetData = [
     bg: "#8a5f12",
     description:
       "The Winged Messenger of the Gods, Mercury, serves as the vital bridge between the solar and lunar forces within us. Long revered as the archetype of duality and fluidity, Mercury represents the ancient source of non-binary thought and the seamless flow between masculine and feminine energies — both physical and energetic. In alchemy, Mercury is depicted as a being of perfect balance, half male and half female. It governs the realms of the mind — our thoughts, perceptions, intellect, connection, and communication.",
-    meta: { energy: "Harmonizing", colour: "Orange", element: "Air", rules: "Gemini & Virgo" },
-    zodiac: "Gemini",
+    meta: {
+      energy: "Harmonizing",
+      colour: "Orange",
+      element: "Air",
+      rules: "Gemini & Virgo",
+    },
+    zodiac: "Gemini & Virgo",
   },
   {
     name: "Venus",
@@ -70,8 +80,13 @@ const planetData = [
     bg: "#1f226b",
     description:
       "Jupiter, the beloved Wise Man of the cosmos and our inner world, governs faith, wisdom, and the shared values that shape culture and society. As the ruler of philosophy and spiritual exploration, Jupiter invites us to seek meaning — to question who we are, why we are here, and how we might expand our consciousness through knowledge, belief, and experience.",
-    meta: { energy: "Expansiveness", colour: "Blue", element: "Fire", rules: "Sagittarius" },
-    zodiac: "Sagittarius",
+    meta: {
+      energy: "Expansiveness",
+      colour: "Blue",
+      element: "Fire",
+      rules: "Sagittarius & Pisces",
+    },
+    zodiac: "Sagittarius & Pisces",
   },
   {
     name: "Saturn",
@@ -80,8 +95,13 @@ const planetData = [
     bg: "#1a1a1a",
     description:
       "The Wise Elder Woman of the cosmos and our inner world, she guides us toward profound self-knowledge through direct experience with Source. Her teachings are rooted in silence, discipline, time, and a grounded connection to reality. She embodies the art of boundaries and the practice of self-mastery — inviting us to cultivate inner strength, discipline, and the refinement of our skills and spirit.",
-    meta: { energy: "Wisdom, Mastery", colour: "Black", element: "Earth", rules: "Capricorn" },
-    zodiac: "Capricorn",
+    meta: {
+      energy: "Wisdom, Mastery",
+      colour: "Black",
+      element: "Earth",
+      rules: "Capricorn & Aquarius",
+    },
+    zodiac: "Capricorn & Aquarius",
   },
 ];
 
@@ -124,15 +144,17 @@ const Moonsection = () => {
                 className="text-center planet-item "
               >
                 <motion.div
-                  className={`planet-circle ${activePlanet === p.name ? "active" : ""}`}
+                  className={`planet-circle  ${
+                    activePlanet === p.name ? "active" : ""
+                  }`}
                   style={{ background: p.color }}
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setActivePlanet(p.name)}
                 />
-                <p className="planet-name">{p.name}</p>
+                <p className="planet-name sora">{p.name}</p>
                 <div className="planet-arrow"></div>
-                <span className="planet-mood">{p.mood}</span>
+                <span className="planet-mood sora">{p.mood}</span>
               </Col>
             ))}
           </Row>
@@ -154,16 +176,24 @@ const Moonsection = () => {
               {/* LEFT – CIRCLE + TITLE */}
               <Col md={5} className="moon-left">
                 <div className="moon-visual">
-                  <div className="moon-big-circle" style={{ background: planet.color }} />
-                  <h1 className="moon-big-title">{planet.name}</h1>
+                  <div
+                    className="moon-big-circle"
+                    style={{ background: planet.color }}
+                  />
+                  <h1 className="moon-big-title playfair-display">{planet.name}</h1>
                 </div>
               </Col>
 
               {/* RIGHT – TEXT */}
               <Col md={7} className="moon-right">
-                <p className="moon-description">{planet.description}</p>
-                <p className="moon-description inter">{planet.description}</p>
-
+                <p className="moon-description sora">{planet.description}</p>
+                {/* <p className="moon-description inter">{planet.description}</p> */}
+                <div className="moon-meta sora">
+                  <span>Astral Energy : {planet.meta.energy}</span>
+                  <span>Colour : {planet.meta.colour}</span>
+                  <span>Element : {planet.meta.element}</span>
+                  <span>Rules : {planet.meta.rules}</span>
+                </div>
               </Col>
             </Row>
           </Container>

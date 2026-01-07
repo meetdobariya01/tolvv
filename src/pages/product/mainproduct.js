@@ -15,12 +15,37 @@ const Mainproduct = () => {
 
   // ✅ Category cards (clickable)
   const products = [
-    { title: "Bath Gel", size: "200 ml", img: "/images/bl.png", category: "Bath Gel" },
-    { title: "Body Lotion", size: "200 ml", img: "/images/bb.png", category: "Body Lotion" },
-    { title: "Perfume", size: "50 ml", img: "/images/pr.png", category: "Perfume" },
-    { title: "Essential Oil", size: "30 ml", img: "/images/eo.png", category: "Essential Oil" },
+    {
+      title: "Bath Gel",
+      size: "200 ml",
+      img: "/images/bl.png",
+      category: "Bath Gel",
+    },
+    {
+      title: "Body Lotion",
+      size: "200 ml",
+      img: "/images/bb.png",
+      category: "Body Lotion",
+    },
+    {
+      title: "Perfume",
+      size: "50 ml",
+      img: "/images/pr.png",
+      category: "Perfume",
+    },
+    {
+      title: "Essential Oil",
+      size: "30 ml",
+      img: "/images/eo.png",
+      category: "Essential Oil",
+    },
     { title: "Soap", size: "100 gsm", img: "/images/sp.png", category: "Soap" },
-    { title: "Hamper", size: "", img: "/images/hamper.jpg", category: "Hamper" },
+    {
+      title: "Hamper",
+      size: "",
+      img: "/images/hamper.jpg",
+      category: "Hamper",
+    },
   ];
 
   const categories = products.map((p) => p.category);
@@ -69,9 +94,19 @@ const Mainproduct = () => {
       <section className="hero-section">
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1>CELESTIAL<br />CARE</h1>
-          <p className="hero-subtitle">Crafted for your<br />skin’s glow.</p>
-          <p className="hero-desc">Explore products from bath gels to essential oils</p>
+          <h1>
+            CELESTIAL
+            <br />
+            CARE
+          </h1>
+          <p className="hero-subtitle">
+            Crafted for your
+            <br />
+            skin’s glow.
+          </p>
+          <p className="hero-desc">
+            Explore products from bath gels to essential oils
+          </p>
         </div>
       </section>
 
@@ -91,7 +126,9 @@ const Mainproduct = () => {
                       <img src={item.img} alt={item.title} />
                     </div>
                     <div className="product-info-collection">
-                      <h5>{item.title} <span>›</span></h5>
+                      <h5>
+                        {item.title} <span>›</span>
+                      </h5>
                       <div className="underline" />
                       <p>{item.size}</p>
                     </div>
@@ -106,10 +143,13 @@ const Mainproduct = () => {
 
         {/* PRODUCT GRID */}
         <div id="product-grid" className="row product-fade mt-4">
-          <h2 className="products-heading">{activeKey}</h2>
+          <h2 className="products-heading allura-regular">{activeKey}</h2>
 
           {productsByCategory[activeKey]?.map((item) => (
-            <div className="col-6 col-md-3 mb-4 product-card-animate" key={item._id}>
+            <div
+              className="col-6 col-md-3 mb-4 product-card-animate"
+              key={item._id}
+            >
               <Card className="product-card">
                 <div className="product-img-wrap">
                   <Card.Img
@@ -123,22 +163,28 @@ const Mainproduct = () => {
                   />
                 </div>
 
-                <Card.Body className="product-info">
+                <Card.Body className="product-info sora">
                   <div className="product-top">
                     <div className="title-wrap">
-                      <h6 className="product-title">{item.ProductName} <span>›</span></h6>
+                      <h6 className="product-page-title">
+                        {item.ProductName} <span>›</span>
+                      </h6>
                       <p className="product-size">{item.size}</p>
                     </div>
                     <div className="price-wrap">
-                      <span className="price-dot"></span>
-                      <span className="product-price">₹ {item.ProductPrice}</span>
+                      {/* <span className="price-dot"></span> */}
+                      <span className="product-price">
+                        ₹ {item.ProductPrice}
+                      </span>
                     </div>
                   </div>
 
                   <div className="product-divider"></div>
 
                   <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn w-100">VIEW PRODUCT</Button>
+                    <Button size="sm" className="cart-btn  w-md-50">
+                      VIEW PRODUCT
+                    </Button>
                   </NavLink>
                 </Card.Body>
               </Card>

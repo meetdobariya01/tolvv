@@ -720,7 +720,7 @@ const Checkout = () => {
     <div>
       <Header />
 
-      <div className="checkout">
+      <div className="checkout sora">
         <div className="checkout-grid checkout-root">
           <div className="panel billing-panel">
             <div className="panel-inner">
