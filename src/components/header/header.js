@@ -40,9 +40,8 @@ const Header = () => {
           {/* Mobile Logo */}
           <Navbar.Brand as={NavLink} to="/" className="mx-auto d-lg-none">
             <img
-              src="./images/logo-tolvv.png"
+              src="/images/logo-tolvv.png"
               className="tolvv-logo"
-              alt="TOLVV"
             />
           </Navbar.Brand>
 

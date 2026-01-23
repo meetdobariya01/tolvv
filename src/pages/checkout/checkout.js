@@ -3,7 +3,7 @@ import "./checkout.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API_URL = process.env.REACT_APP_API_URL;
 const currencyFormat = (n) => `₹${Math.round(n)}`;
 
 const Checkout = () => {
@@ -15,31 +15,34 @@ const Checkout = () => {
     address: "",
     city: "",
     pincode: "",
-    note: "", 
   });
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [placing, setPlacing] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  const getImageUrl = (path) => {
-    if (!path) return `${API_URL}/images/default.jpg`;
-    if (path.startsWith("http")) return path;
-    return `${API_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+  // ================= HELPER =================
+  const saveGuestCart = () => {
+    // Save guest cart locally
+    const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+    return guestCart;
   };
+
+  const clearGuestCart = () => localStorage.removeItem("guestCart");
 
   // ================= FETCH & MERGE CART =================
   useEffect(() => {
     const mergeCart = async () => {
       if (!token) {
-        const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-        setCart(guestCart);
+        // No user logged in: load guest cart
+        setCart(saveGuestCart());
         return;
       }
 
       try {
-        const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+        const guestCart = saveGuestCart();
 
+        // Merge guest cart with user cart
         if (guestCart.length > 0) {
           await fetch(`${API_URL}/merge`, {
             method: "POST",
@@ -49,9 +52,10 @@ const Checkout = () => {
             },
             body: JSON.stringify({ guestItems: guestCart }),
           });
-          localStorage.removeItem("guestCart");
+          clearGuestCart();
         }
 
+        // Fetch user cart
         const res = await fetch(`${API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -63,7 +67,9 @@ const Checkout = () => {
             name: item.productId.ProductName,
             price: item.productId.ProductPrice,
             qty: item.quantity,
-            img: getImageUrl(item.productId.Photos),
+            img: item.productId.Photos?.startsWith("http")
+              ? item.productId.Photos
+              : `/images/${item.productId.Photos?.replace("images/", "")}`,
           }));
           setCart(products);
         }
@@ -75,9 +81,11 @@ const Checkout = () => {
     mergeCart();
   }, [token]);
 
+  // ================= TOTAL =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const total = subtotal;
 
+  // ================= HANDLERS =================
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
     setBilling((b) => ({ ...b, [name]: value }));
@@ -121,17 +129,17 @@ const Checkout = () => {
         body: JSON.stringify({
           items: orderItems,
           paymentMethod,
-          customerName: billing.name,
-          customerEmail: billing.email,
           address: {
             houseNumber: billing.address,
             buildingName: billing.name,
             city: billing.city,
             pincode: billing.pincode,
-            phone: billing.phone,
+            mobile: billing.phone   // ✅ SEND PHONE
           },
-          note: billing.note || "",
+          customerName: billing.name,
+          customerEmail: billing.email
         }),
+
       });
 
       const data = await res.json();
@@ -153,9 +161,8 @@ const Checkout = () => {
         return;
       }
 
-      // 💵 COD: show success page
-      alert(`Order placed successfully! Order ID: ${data.orderId}`);
-      window.location.href = "/payment"; // redirect to payment confirmation page
+      // 💵 COD
+      window.location.href = `/payment`;
     } catch (error) {
       console.error(error);
       alert("Something went wrong.");
@@ -167,7 +174,7 @@ const Checkout = () => {
     <div>
       <Header />
 
-      <div className="checkout">
+      <div className="checkout sora">
         <div className="checkout-grid checkout-root">
           <div className="panel billing-panel">
             <div className="panel-inner">
@@ -243,18 +250,6 @@ const Checkout = () => {
                   </label>
                 </div>
 
-                {/* ✅ Note field */}
-                <label>
-                  <textarea
-                    name="note"
-                    className="underline-input"
-                    placeholder="Order note (optional)"
-                    value={billing.note}
-                    onChange={handleBillingChange}
-                    rows="2"
-                  />
-                </label>
-
                 <div className="payment-block mt-4">
                   <h3>Payment Method</h3>
                   <div className="payment-options">
@@ -272,8 +267,8 @@ const Checkout = () => {
                         {op === "upi"
                           ? "UPI / Google Pay"
                           : op === "card"
-                          ? "Credit / Debit Card"
-                          : "Cash on Delivery"}
+                            ? "Credit / Debit Card"
+                            : "Cash on Delivery"}
                       </label>
                     ))}
                   </div>
@@ -301,15 +296,7 @@ const Checkout = () => {
               <div className="items-list">
                 {cart.map((it) => (
                   <div className="cart-item" key={it.id}>
-                    <img
-                      src={it.img}
-                      alt={it.name}
-                      className="cart-thumb"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `${API_URL}/images/default.jpg`;
-                      }}
-                    />
+                    <img src={it.img} alt={it.name} className="cart-thumb" />
                     <div className="cart-meta">
                       <div className="name">{it.name}</div>
                       <div className="meta-row">

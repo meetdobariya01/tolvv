@@ -80,7 +80,8 @@ const orderSchema = new mongoose.Schema({
     road: String,
     landmark: String,
     city: String,
-    pincode: String
+    pincode: String,
+    mobile: String
   },
 
   note: { type: String, default: "" }

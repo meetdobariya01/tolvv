@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import "./moonsection.css";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const planetData = [
   {
@@ -33,7 +37,7 @@ const planetData = [
     description:
       "The Winged Messenger of the Gods, Mercury, serves as the vital bridge between the solar and lunar forces within us. Long revered as the archetype of duality and fluidity, Mercury represents the ancient source of non-binary thought and the seamless flow between masculine and feminine energies — both physical and energetic. In alchemy, Mercury is depicted as a being of perfect balance, half male and half female. It governs the realms of the mind — our thoughts, perceptions, intellect, connection, and communication.",
     meta: { energy: "Harmonizing", colour: "Orange", element: "Air", rules: "Gemini & Virgo" },
-    zodiac: "Gemini",
+    zodiac: "Gemini & Virgo",
   },
   {
     name: "Venus",
@@ -42,12 +46,8 @@ const planetData = [
     bg: "#144d38",
     description:
       "Venus embodies the divine desire for self-renewal and the innate love of beauty within us. She is the inner Artist — the force that transforms both self and world through love, aesthetics, and creative expression. Venus invites us to cultivate connection — whether through our relationship with nature and the material world, as reflected in Taurus, or through harmony, culture, and human connection, as expressed through Libra.",
-    meta: {
-      energy: "Loveing",
-      colour: "Green",
-      element: "Air",
-      rules: "Taurus & Libra",
-    },
+    meta: { energy: "Loveing", colour: "Green", element: "Air", rules: "Taurus & Libra" },
+    zodiac: "Taurus & Libra",
   },
   {
     name: "Mars",
@@ -56,12 +56,8 @@ const planetData = [
     bg: "#6e1515",
     description:
       "Mars, the Proud Warrior, embodies the spirit of courage and the fire of empowerment within us all. It represents our capacity for action — our passion, daring, and strength of will. As ruler of Aries, Mars governs the formation and expression of self-identity, while its co-rulership with Pluto over Scorpio speaks to the deeper process of transformation — the continual rebirth of the self through challenge and change.",
-    meta: {
-      energy: "Empowering",
-      colour: "Red",
-      element: "Fire",
-      rules: "Aries & Scorpio",
-    },
+    meta: { energy: "Empowering", colour: "Red", element: "Fire", rules: "Aries & Scorpio" },
+    zodiac: "Aries & Scorpio",
   },
   {
     name: "Jupiter",
@@ -70,8 +66,8 @@ const planetData = [
     bg: "#1f226b",
     description:
       "Jupiter, the beloved Wise Man of the cosmos and our inner world, governs faith, wisdom, and the shared values that shape culture and society. As the ruler of philosophy and spiritual exploration, Jupiter invites us to seek meaning — to question who we are, why we are here, and how we might expand our consciousness through knowledge, belief, and experience.",
-    meta: { energy: "Expansiveness", colour: "Blue", element: "Fire", rules: "Sagittarius" },
-    zodiac: "Sagittarius",
+    meta: { energy: "Expansiveness", colour: "Blue", element: "Fire", rules: "Sagittarius & Pisces" },
+    zodiac: "Sagittarius & Pisces",
   },
   {
     name: "Saturn",
@@ -80,8 +76,8 @@ const planetData = [
     bg: "#1a1a1a",
     description:
       "The Wise Elder Woman of the cosmos and our inner world, she guides us toward profound self-knowledge through direct experience with Source. Her teachings are rooted in silence, discipline, time, and a grounded connection to reality. She embodies the art of boundaries and the practice of self-mastery — inviting us to cultivate inner strength, discipline, and the refinement of our skills and spirit.",
-    meta: { energy: "Wisdom, Mastery", colour: "Black", element: "Earth", rules: "Capricorn" },
-    zodiac: "Capricorn",
+    meta: { energy: "Wisdom, Mastery", colour: "Black", element: "Earth", rules: "Capricorn & Aquarius" },
+    zodiac: "Capricorn & Aquarius",
   },
 ];
 
@@ -89,17 +85,24 @@ const Moonsection = () => {
   const [activePlanet, setActivePlanet] = useState("Moon");
   const [planetProducts, setPlanetProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const planet = planetData.find((p) => p.name === activePlanet);
 
-  // Fetch products whenever the planet changes
+  // Fetch products for the selected planet
   useEffect(() => {
     if (!planet?.zodiac) return;
     setLoading(true);
 
-    axios
-      .get(`http://localhost:4000/products/zodiac/${planet.zodiac}`)
-      .then((res) => setPlanetProducts(res.data))
+    const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
+
+    Promise.all(
+      zodiacs.map((zodiac) =>
+        axios.get(`${API_URL}/products/zodiac/${zodiac}`).then((res) => res.data)
+      )
+    )
+      .then((results) => setPlanetProducts(results.flat()))
       .catch((err) => {
         console.error(err);
         setPlanetProducts([]);
@@ -107,22 +110,64 @@ const Moonsection = () => {
       .finally(() => setLoading(false));
   }, [planet]);
 
+  // Buy Now logic (same as Zodiac section)
+  const handleBuyNow = async (product) => {
+    if (!product) return;
+
+    if (token) {
+      // Logged-in user
+      try {
+        await axios.post(
+          `${API_URL}/api/add-to-cart`,
+          { productId: product._id, quantity: 1 },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        navigate("/cart");
+      } catch (error) {
+        console.error("Add to cart error:", error.response || error);
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    } else {
+      // Guest user
+      let cart = [];
+      try {
+        const stored = Cookies.get("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(cart)) cart = [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find((item) => item.productId === product._id);
+      if (existing) existing.quantity += 1;
+      else
+        cart.push({
+          type: "product",
+          productId: product._id,
+          quantity: 1,
+          price: product.ProductPrice,
+          name: product.ProductName,
+          img: product.Photos,
+        });
+
+      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
+      navigate("/cart");
+    }
+  };
+
   return (
     <>
-      {/* 🌍 PLANET SELECTOR */}
+      {/* PLANET SELECTOR */}
       <section className="planet-section">
         <Container>
           <h2 className="planet-heading">EXPLORE BY YOUR RULING PLANET</h2>
-
           <Row className="justify-content-center moon-planet">
             {planetData.map((p, i) => (
-              <Col
-                key={i}
-                xs={4}
-                sm={3}
-                md={1}
-                className="text-center planet-item "
-              >
+              <Col key={i} xs={4} sm={3} md={1} className="text-center planet-item">
                 <motion.div
                   className={`planet-circle ${activePlanet === p.name ? "active" : ""}`}
                   style={{ background: p.color }}
@@ -130,16 +175,16 @@ const Moonsection = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setActivePlanet(p.name)}
                 />
-                <p className="planet-name">{p.name}</p>
+                <p className="planet-name sora">{p.name}</p>
                 <div className="planet-arrow"></div>
-                <span className="planet-mood">{p.mood}</span>
+                <span className="planet-mood sora">{p.mood}</span>
               </Col>
             ))}
           </Row>
         </Container>
       </section>
 
-      {/* 🌙 PLANET DETAIL */}
+      {/* PLANET DETAILS */}
       <AnimatePresence mode="wait">
         <motion.section
           key={planet.name}
@@ -151,26 +196,27 @@ const Moonsection = () => {
         >
           <Container>
             <Row className="align-items-center moon-layout">
-              {/* LEFT – CIRCLE + TITLE */}
               <Col md={5} className="moon-left">
                 <div className="moon-visual">
                   <div className="moon-big-circle" style={{ background: planet.color }} />
-                  <h1 className="moon-big-title">{planet.name}</h1>
+                  <h1 className="moon-big-title playfair-display">{planet.name}</h1>
                 </div>
               </Col>
-
-              {/* RIGHT – TEXT */}
               <Col md={7} className="moon-right">
-                <p className="moon-description">{planet.description}</p>
-                <p className="moon-description inter">{planet.description}</p>
-
+                <p className="moon-description sora">{planet.description}</p>
+                <div className="moon-meta sora">
+                  <span>Astral Energy : {planet.meta.energy}</span>
+                  <span>Colour : {planet.meta.colour}</span>
+                  <span>Element : {planet.meta.element}</span>
+                  <span>Rules : {planet.meta.rules}</span>
+                </div>
               </Col>
             </Row>
           </Container>
         </motion.section>
       </AnimatePresence>
 
-      {/* 🧴 PRODUCTS */}
+      {/* PRODUCTS */}
       <section className="moon-products">
         <Container>
           {loading ? (
@@ -178,26 +224,28 @@ const Moonsection = () => {
           ) : planetProducts.length === 0 ? (
             <p>No products found for {planet.name}</p>
           ) : (
-            <Row>
-              {planetProducts.map((item) => (
-                <Col xs={6} md={4} key={item._id}>
-                  <motion.div
-                    className="product-box"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
+            <div className="product-grid">
+              {planetProducts.map((product) => (
+                <div className="product-card" key={product._id}>
+                  <div className="product-box-zodiac">
                     <img
-                      src={`http://localhost:4000${item.Photos}`}
-                      alt={item.ProductName}
-                      style={{ width: "100%", height: "auto" }}
+                      src={`${product.Photos}`}
+                      alt={product.ProductName}
+                      className="zodiac-product-img"
                     />
-                    <h4>{item.ProductName}</h4>
-                    <p>Price: ₹{item.ProductPrice}</p>
-                    <p>Category: {item.Category}</p>
-                  </motion.div>
-                </Col>
+                    <div className="product-info">
+                      <p className="name">{product.ProductName}</p>
+                      <p className="size">{product.size}</p>
+                      <p className="zodiac-price">₹{product.ProductPrice}</p>
+                      <div className="underline" />
+                      <button className="buy-btn mt-1" onClick={() => handleBuyNow(product)}>
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </Row>
+            </div>
           )}
         </Container>
       </section>

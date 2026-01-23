@@ -12,6 +12,8 @@ import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 import Zodic from "../Zodiacs/zodics";
 import Moonsection from "../../components/moonsection/moonsection";
+import { useState } from "react";
+import { Alert, Spinner } from "react-bootstrap";
 
 const Homepage = () => {
   const productss = [
@@ -78,6 +80,63 @@ const Homepage = () => {
     },
     hover: { scale: 1.05, boxShadow: "0px 10px 25px rgba(0,0,0,0.1)" },
   };
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: ""
+  });
+
+  const [sending, setSending] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { name, email, phone, subject, message } = form;
+
+    if (!name || !email || !phone || !subject || !message) {
+      alert("All fields are required");
+      return;
+    }
+
+    setSending(true);
+
+    try {
+      const res = await fetch(`${API_URL}/connect`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send message");
+      }
+
+      alert("Message sent successfully!");
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: ""
+      });
+
+    } catch (err) {
+      console.error("Connect error:", err);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <div>
@@ -142,8 +201,13 @@ const Homepage = () => {
       {/* products grid */}
       {/* <Product /> */}
 
+
+
+
       {/* moon section */}
       <Moonsection />
+
+
 
       {/* benifits */}
 
@@ -156,7 +220,9 @@ const Homepage = () => {
           <h1 className="fw-light mb-5 the-artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
-          <p className="mx-auto">
+          <p
+            className="mx-auto"
+          >
             Our Zodiac Collection blends luxurious skincare with the energy of
             your sign, creating a ritual that feels personally designed for you.
             Each soap, body lotion, bath gel, and perfume is infused with
@@ -168,7 +234,9 @@ const Homepage = () => {
           </p>
 
           {/* Paragraph 2 */}
-          <p className="mx-auto mt-4">
+          <p
+            className="mx-auto mt-4"
+          >
             These products don’t just nourish your skin; they elevate your
             spirit. Feel the difference as signature fragrances boost your mood,
             celestial ingredients restore balance, and your daily routine
@@ -346,7 +414,8 @@ const Homepage = () => {
       </div>
       <div className="" style={{ backgroundColor: "" }}>
         {/* Contact Form Section */}
-        <section className="form-section">
+        {/* Contact Form Section */}
+        <section className="form-section sora">
           <Container>
             <motion.div
               className="form-content"
@@ -355,31 +424,49 @@ const Homepage = () => {
               transition={{ duration: 1, delay: 0.3 }}
             >
               <div className="text-center">
-                <h2 className=" the-artisan-font">Connect</h2>
+                <h2 className="the-artisan-font">Connect</h2>
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 
               <p className="text-center mt-4 text-uppercase connect-desc">
-                CONTACT US TO DISCUSS YOUR QUESTIONS OR CONNECT FOR
-                COLLABORATION
+                CONTACT US TO DISCUSS YOUR QUESTIONS OR CONNECT FOR COLLABORATION
               </p>
 
-              <Form className="connect-form mt-4">
+              <Form className="connect-form mt-4" onSubmit={handleSubmit}>
                 <Form.Group className="mb-4">
-                  <Form.Control type="text" placeholder="YOUR NAME" />
+                  <Form.Control
+                    type="text"
+                    placeholder="YOUR NAME"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                  />
                 </Form.Group>
 
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-4">
-                      <Form.Control type="email" placeholder="YOUR EMAIL" />
+                      <Form.Control
+                        type="email"
+                        placeholder="YOUR EMAIL"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                      />
                     </Form.Group>
                   </Col>
+
                   <Col md={6}>
                     <Form.Group className="mb-4">
                       <Form.Control
                         type="text"
                         placeholder="YOUR PHONE NUMBER"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -389,6 +476,10 @@ const Homepage = () => {
                   <Form.Control
                     type="text"
                     placeholder="SUBJECT OF YOUR CONCERNS"
+                    name="subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                    required
                   />
                 </Form.Group>
 
@@ -397,22 +488,32 @@ const Homepage = () => {
                     as="textarea"
                     rows={4}
                     placeholder="YOUR MESSAGE"
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    required
                   />
                 </Form.Group>
 
-                <div className="">
-                  <Button
-                    className="send-btn p-2"
-                    variant="outline-dark"
-                    type="submit"
-                  >
-                    SEND A REQUEST
-                  </Button>
-                </div>
+                <Button
+                  className="send-btn p-2"
+                  variant="outline-dark"
+                  type="submit"
+                  disabled={sending}
+                >
+                  {sending ? (
+                    <>
+                      <Spinner animation="border" size="sm" /> Sending...
+                    </>
+                  ) : (
+                    "SEND A REQUEST"
+                  )}
+                </Button>
               </Form>
             </motion.div>
           </Container>
         </section>
+
       </div>
 
       {/* Footer Component */}

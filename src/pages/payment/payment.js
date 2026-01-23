@@ -20,17 +20,19 @@ const Payment = () => {
           </div>
 
           {/* Heading */}
-          <h2 className="pay-title animate__animated animate__fadeInUp">
+          {/* <h2 className="pay-title animate__animated animate__fadeInUp">
             Payment Successful!
+          </h2> */}
+          <h2 className="pay-title animate__animated animate__fadeInUp">
+            Order Conformed!
           </h2>
-
           {/* Subtext */}
           <p className="pay-subtitle">
-            Thank you for your purchase. Your order has been confirmed.
+            Thank you for your purchase.
           </p>
 
           {/* Customer Details */}
-       
+        
 
           {/* Button */}
           <NavLink

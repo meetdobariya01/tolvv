@@ -135,7 +135,7 @@ const Zodic = () => {
         "./images/ingredient/14.png",
         "./images/ingredient/8.png",
         "./images/ingredient/15.png",
-         "./images/ingredient/16.png",
+        "./images/ingredient/16.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -267,7 +267,7 @@ const Zodic = () => {
         "./images/ingredient/1.png",
         "./images/ingredient/21.png",
         "./images/ingredient/22.png",
-        "./images/ingredient/23.png",  
+        "./images/ingredient/23.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -346,6 +346,20 @@ const Zodic = () => {
     { name: "Aquarius", color: "#519AA2", image: "./images/zodiac/11.png" },
     { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
   ];
+  const xyz= [
+    {name: "Aries",xyz1:"Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products"},
+    {name: "Taurus", xyz1:"Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products"},
+    {name: "Gemini", xyz1:"Experience the goodness of Lavender, Lemon and Basil in our Gemini products ."},
+    {name: "Cancer", xyz1:"Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products"},
+    {name: "Leo", xyz1:"Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products"},
+    {name: "Virgo", xyz1:"Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products"},
+    {name: "Libra", xyz1:"Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products"},
+    {name: "Scorpio", xyz1:"Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products"},
+    {name: "Sagittarius", xyz1:"Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products"},
+    {name: "Capricorn", xyz1:"Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products"},
+    {name: "Aquarius", xyz1:"Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products"},
+    {name: "Pisces", xyz1:"Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products"},
+  ]
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [activeKey, setActiveKey] = useState(null);
@@ -461,7 +475,6 @@ const Zodic = () => {
       //   (item) => item.productId === product._id
       // );
 
-
       // try {
       //   const stored = Cookies.get("guestCart");
       //   cart = stored ? JSON.parse(stored) : [];
@@ -489,7 +502,6 @@ const Zodic = () => {
       navigate("/cart");
     }
   };
-
 
   return (
     <div>
@@ -530,7 +542,7 @@ const Zodic = () => {
                         className="zodiac-image"
                       />
                     </div>
-                    <p className="zodiac-name">{sign.name}</p>
+                    <p className="zodiac-name sora">{sign.name}</p>
                   </div>
                 ))}
               </div>
@@ -549,12 +561,12 @@ const Zodic = () => {
         className="aries-section text-center"
         style={{ backgroundColor: selectedZodiac.color }}
       >
-        <div className="aries-content inter container">
+        <div className="aries-content inter container sora">
           <h1
             className="aries-title"
-            style={{
-              color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            }}
+            // style={{
+            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+            // }}
           >
             {selectedZodiac.name}
           </h1>
@@ -569,27 +581,27 @@ const Zodic = () => {
 
           <p
             className="aries-date"
-            style={{
-              color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            }}
+            // style={{
+            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+            // }}
           >
             Date : {selectedZodiac.date}
           </p>
 
           <p
             className="aries-description"
-            style={{
-              color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            }}
+            // style={{
+            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+            // }}
           >
             {selectedZodiac.description}
           </p>
 
           <p
             className="aries-details"
-            style={{
-              color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            }}
+            // style={{
+            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+            // }}
           >
             <span>Corresponding Letters : {selectedZodiac.letters}</span> &nbsp;
             | &nbsp;
@@ -612,11 +624,11 @@ const Zodic = () => {
         {/* PRODUCTS */}
         {/* PRODUCTS – WHITE BACKGROUND */}
         <div className="product-wrapper py-5">
-          <h2 className="product-heading  mb-4 text-center">
-            {selectedZodiac.name} Products
+          <h2 className="product-text mb-4 text-center sora">
+            {xyz.find((item)=>item.name===selectedZodiac.name)?.xyz1}
           </h2>
 
-          <div className="container">
+          <div className="container sora">
             <div className="product-grid">
               {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
                 <div className="product-card" key={index}>
@@ -639,7 +651,6 @@ const Zodic = () => {
                       >
                         Buy Now
                       </button>
-
                     </div>
                   </div>
                 </div>
