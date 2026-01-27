@@ -47,10 +47,10 @@
   background: transparent;
 }
 .menu-text{
-    font-weight: 600;
+    /* font-weight: 600; */
     color: #fff;
     text-decoration: none;
-    font-size: 17px ;
+    font-size: 20px ;
 }
 
 /* CLOSE BUTTON */

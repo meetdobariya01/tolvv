@@ -17,7 +17,7 @@
   position: relative;
   height: 85vh;
   width: 100%;
-  background-image: url("../../../public/images/Vector.png"); /* your image */
+  background-image: url("../../../public/images/bg.png"); /* your image */
   background-size: cover;
   background-position: center;
   display: flex;

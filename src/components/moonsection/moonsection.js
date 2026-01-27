@@ -226,7 +226,7 @@ const Moonsection = () => {
           ) : (
             <div className="product-grid">
               {planetProducts.map((product) => (
-                <div className="product-card" key={product._id}>
+                <div className="product-card p-1" key={product._id}>
                   <div className="product-box-zodiac">
                     <img
                       src={`${product.Photos}`}
@@ -235,9 +235,9 @@ const Moonsection = () => {
                     />
                     <div className="product-info">
                       <p className="name">{product.ProductName}</p>
-                      <p className="size">{product.size}</p>
                       <p className="zodiac-price">₹{product.ProductPrice}</p>
                       <div className="underline" />
+                      <p className="size">{product.size}</p>
                       <button className="buy-btn mt-1" onClick={() => handleBuyNow(product)}>
                         Buy Now
                       </button>

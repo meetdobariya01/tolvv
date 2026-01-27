@@ -150,7 +150,7 @@ const Mainproduct = () => {
               className="col-6 col-md-3 mb-4 product-card-animate"
               key={item._id}
             >
-              <Card className="product-card">
+              <Card className="product-card p-2">
                 <div className="product-img-wrap">
                   <Card.Img
                     src={
@@ -172,7 +172,7 @@ const Mainproduct = () => {
                       <p className="product-size">{item.size}</p>
                     </div>
                     <div className="price-wrap">
-                      {/* <span className="price-dot"></span> */}
+                      <span className="price-dot"></span>
                       <span className="product-price">
                         ₹ {item.ProductPrice}
                       </span>

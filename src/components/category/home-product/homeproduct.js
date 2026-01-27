@@ -57,7 +57,7 @@ const Homeproduct = () => {
               md={4}
               lg={2}
             >
-              <div className="product-card">
+              <div className="product-card-collection">
                 <Link to={item.link} className="text-decoration-none">
                   <div className="product-img-card">
                     <img src={item.img} alt={item.title} />

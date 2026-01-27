@@ -256,13 +256,13 @@ const Homepage = () => {
           <h1 className="fw-light mb-5 the-artisan-font">Know Us</h1>
 
           {/* Row */}
-          <div className="row align-items-center justify-content-center">
+          <div className="row align-items-center justify-content-center gap-5">
             {/* Left Image */}
             <div className="col-lg-5 col-md-6 col-sm-12 mb-4 mb-lg-0">
               <img
                 src="./images/know-us.jpeg"
                 alt="Founders"
-                className="img-fluid rounded shadow"
+                className="img-fluid "
                 style={{
                   width: "100%",
                   height: "auto",
@@ -316,7 +316,7 @@ const Homepage = () => {
         style={{ backgroundColor: "#D1D3D4" }}
       >
         <div className="container">
-          <div className="row align-items-center justify-content-center text-center">
+          <div className="row align-items-center justify-content-center text-center gap-5">
             {/* Left Text Section */}
             <div className="col-lg-6 col-md-10 col-sm-12 mb-4 mb-lg-0">
               <h2
@@ -356,9 +356,9 @@ const Homepage = () => {
             {/* Right Image Section */}
             <div className="col-lg-5 col-md-8 col-sm-10 text-center">
               <img
-                src="./images/tolvv.jpg"
+                src="./images/hamper-tolvv.png"
                 alt="Tolvv Product"
-                className="img-fluid rounded shadow"
+                className="img-fluid"
                 style={{
                   width: "100%",
                   height: "auto",
