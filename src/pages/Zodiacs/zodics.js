@@ -24,7 +24,7 @@ const Zodic = () => {
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "./images/ingredient/7.png",
+        "./images/ingredient/co.png",
         "./images/ingredient/8.png",
         "./images/ingredient/9.png",
       ],
@@ -347,19 +347,55 @@ const Zodic = () => {
     { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
   ];
   const xyz = [
-    { name: "Aries", xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products" },
-    { name: "Taurus", xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products" },
-    { name: "Gemini", xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products ." },
-    { name: "Cancer", xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products" },
-    { name: "Leo", xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products" },
-    { name: "Virgo", xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products" },
-    { name: "Libra", xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products" },
-    { name: "Scorpio", xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products" },
-    { name: "Sagittarius", xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products" },
-    { name: "Capricorn", xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products" },
-    { name: "Aquarius", xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products" },
-    { name: "Pisces", xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products" },
-  ]
+    {
+      name: "Aries",
+      xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products",
+    },
+    {
+      name: "Taurus",
+      xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products",
+    },
+    {
+      name: "Gemini",
+      xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products .",
+    },
+    {
+      name: "Cancer",
+      xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products",
+    },
+    {
+      name: "Leo",
+      xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products",
+    },
+    {
+      name: "Virgo",
+      xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products",
+    },
+    {
+      name: "Libra",
+      xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products",
+    },
+    {
+      name: "Scorpio",
+      xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products",
+    },
+    {
+      name: "Sagittarius",
+      xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products",
+    },
+    {
+      name: "Capricorn",
+      xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products",
+    },
+    {
+      name: "Aquarius",
+      xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products",
+    },
+    {
+      name: "Pisces",
+      xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products",
+    },
+  ];
   const API_URL = process.env.REACT_APP_API_URL;
 
   // const [activeKey, setActiveKey] = useState(null);
@@ -528,8 +564,10 @@ const Zodic = () => {
             </div>
 
             {/* RIGHT VERTICAL TEXT */}
-            <div className="col-md-1 d-none d-md-flex justify-content-end">
-              <div className="vertical-text">NURTURE YOUR NATURE</div>
+            <div className="col-md-1 d-none d-md-flex ">
+              <div className="vertical-text">
+                NURTURE <span className="fw-light">YOUR</span> NATURE
+              </div>
             </div>
           </div>
         </div>
@@ -611,7 +649,7 @@ const Zodic = () => {
             <div className="product-grid">
               {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
                 <div className="product-card" key={index}>
-                  <div className="product-box-zodiac">
+                  <div className="product-box-zodiac p-1">
                     <img
                       src={p.Photos}
                       alt={p.ProductName}
@@ -631,6 +669,7 @@ const Zodic = () => {
                       </div>
 
                       <div className="underline" />
+                      <p className="size">{p.size}</p>
                       <button
                         className="buy-btn mt-1"
                         onClick={() => handleBuyNow(p)}

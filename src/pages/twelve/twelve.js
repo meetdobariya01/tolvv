@@ -17,7 +17,7 @@ const Twelve = () => {
 
       <section className="zodiac-hero">
         <motion.img
-          src="/images/tolvv.jpg" // 👈 your banner image
+          src="/images/bg.png" // 👈 your banner image
           alt="Hero Banner"
           className="zodiac-hero-img"
           initial={{ scale: 1.08, opacity: 0 }}

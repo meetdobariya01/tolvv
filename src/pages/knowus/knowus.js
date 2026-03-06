@@ -16,7 +16,7 @@ const Knowus = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <img src="./images/know-us.jpg" alt="Hero" className="hero-image" />
+        <img src="./images/bg.png" alt="Hero" className="hero-image" />
       </motion.div>
 
       <div
@@ -36,7 +36,7 @@ const Knowus = () => {
               <img
                 src="./images/know-us.jpeg"
                 alt="Founders"
-                className="img-fluid rounded shadow"
+                className="img-fluid "
                 style={{
                   width: "100%",
                   height: "auto",
@@ -131,9 +131,9 @@ const Knowus = () => {
             {/* Right Image Section */}
             <div className="col-lg-5 col-md-8 col-sm-10 text-center">
               <img
-                src="./images/tolvv.jpg"
+                src="./images/hamper-tolvv.png"
                 alt="Tolvv Product"
-                className="img-fluid rounded shadow"
+                className="img-fluid  "
                 style={{
                   width: "100%",
                   height: "auto",

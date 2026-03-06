@@ -17,7 +17,7 @@ const Faqs = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <img src="./images/faqs.png" alt="Hero" className="hero-image" />
+        <img src="./images/bg.png" alt="Hero" className="hero-image" />
       </motion.div>
 
       <div

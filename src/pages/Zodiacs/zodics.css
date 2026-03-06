@@ -52,7 +52,7 @@
 .product-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 30px;
+  gap: 10px;
 }
 
 @media (max-width: 992px) {
@@ -75,9 +75,9 @@
 
 /* IMAGE */
 .zodiac-product-img {
-  height: 180px;
+  height: auto;
   width: 100%;
-  object-fit: contain;
+  /* object-fit: contain; */
 }
 
 /* PRODUCT INFO */
@@ -174,8 +174,8 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  opacity: 0.7;
-  transition: 0.3s ease;
+  /* opacity: 0.7; */
+  /* transition: 0.3s ease; */
 }
 
 .zodiac-item.active,
@@ -196,8 +196,8 @@
 
 /* ZODIAC ICON IMAGE */
 .zodiac-image {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
 }
 
@@ -215,7 +215,7 @@
   transform: rotate(180deg);
   letter-spacing: 4px;
   font-size: 25px;
-  opacity: 0.7;
+  /* opacity: 0.7; */
 }
 
 /* MOBILE FIX */
