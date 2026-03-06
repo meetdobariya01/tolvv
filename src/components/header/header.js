@@ -1,134 +1,151 @@
 import React, { useState } from "react";
-import { Navbar, Nav } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
-import {
-  FiSearch,
-  FiShoppingCart,
-  FiUser,
-  FiMenu,
-  FiX
-} from "react-icons/fi";
+import { Navbar, Nav, Container, Form, FormControl } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
+import { Dropdown } from "react-bootstrap";
 import "./header.css";
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const navigate = useNavigate();
-
-  const handleSearch = () => {
-    if (!searchText.trim()) return;
-
-    navigate(`/product?search=${encodeURIComponent(searchText)}`);
-    setShowSearch(false);
-    setSearchText("");
-  };
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <>
-      <header className="tolvv-header shadow-sm">
-        <Navbar expand="lg" expanded={expanded} className="container">
-          {/* Mobile Toggle */}
-          <Navbar.Toggle
-            aria-controls="navbar-nav"
-            className="border-0"
-            onClick={() => setExpanded(expanded ? false : "expanded")}
-          >
-            {expanded ? <FiX size={26} /> : <FiMenu size={26} />}
-          </Navbar.Toggle>
-
-          {/* Mobile Logo */}
-          <Navbar.Brand as={NavLink} to="/" className="mx-auto d-lg-none">
+      <Navbar expand="lg" className="custom-navbar py-3" expanded={expanded}>
+        <Container>
+          {/* Logo */}
+          <Navbar.Brand as={NavLink} to="/" className="logo">
             <img
               src="/images/logo-tolvv.png"
-              className="tolvv-logo"
+              alt="Tolvv Logo"
+              className="logo-img"
             />
           </Navbar.Brand>
 
-          <Navbar.Collapse id="navbar-nav">
-            {/* LEFT MENU */}
-            <Nav className="left-nav d-flex align-items-center gap-5 mx-auto">
-              <NavLink className="menu-text" to="/product">
+          {/* Mobile Toggle */}
+          {/* Mobile Icons */}
+          <div className="mobile-icons d-lg-none d-flex align-items-center gap-3">
+            {searchOpen ? (
+              <FiX onClick={() => setSearchOpen(false)} />
+            ) : (
+              <FiSearch onClick={() => setSearchOpen(true)} />
+            )}
+
+            <NavLink to="/cart" className="text-dark">
+              <FiShoppingCart size={22} />
+            </NavLink>
+            <Dropdown align="end" className="sora">
+              <Dropdown.Toggle
+                variant="link"
+                className="p-0 border-0 text-dark"
+                id="user-dropdown"
+              >
+                <FiUser size={22} />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item as={NavLink} to="/login">
+                  Login
+                </Dropdown.Item>
+                <Dropdown.Item as={NavLink} to="/profile">
+                  Profile
+                </Dropdown.Item>
+         
+                <Dropdown.Divider />
+                <Dropdown.Item as={NavLink} to="/logout">
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            {expanded ? (
+              <FiX onClick={() => setExpanded(false)} />
+            ) : (
+              <FiMenu onClick={() => setExpanded(true)} />
+            )}
+          </div>
+
+          <Navbar.Collapse>
+            <Nav className="mx-auto nav-links gap-0 gap-lg-4">
+              <Nav.Link as={NavLink} to="/product">
                 PRODUCTS
-              </NavLink>
-              <NavLink className="menu-text" to="/twelve">
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/twelve">
                 THE TWELVEs
-              </NavLink>
-              <NavLink className="menu-text" to="/benefits">
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/benefits">
                 BENEFITS
-              </NavLink>
-            </Nav>
-
-            {/* CENTER LOGO (Desktop) */}
-            <div className="d-none d-lg-flex justify-content-center ">
-              <NavLink to="/" className="logo-link">
-                <img
-                  src="./images/logo-tolvv.png"
-                  className="tolvv-logo"
-                  alt="TOLVV"
-                />
-              </NavLink>
-            </div>
-
-            {/* RIGHT MENU */}
-            <Nav className="right-nav d-flex align-items-center gap-5 mx-auto">
-              <NavLink className="menu-text" to="/know-us">
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/know-us">
                 KNOW US
-              </NavLink>
-              <NavLink className="menu-text" to="/faqs">
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/faqs">
                 FAQs
-              </NavLink>
-              <NavLink className="menu-text" to="/connect">
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/connect">
                 CONNECT
-              </NavLink>
+              </Nav.Link>
             </Nav>
+
+            {/* Right Icons */}
+            <div className="icons d-none d-lg-flex gap-4">
+              {searchOpen ? (
+                <FiX onClick={() => setSearchOpen(false)} />
+              ) : (
+                <FiSearch onClick={() => setSearchOpen(true)} />
+              )}
+              <NavLink to="/cart" className="text-dark">
+                <FiShoppingCart size={22} />
+              </NavLink>
+              <Dropdown align="end" className="sora">
+                <Dropdown.Toggle
+                  variant="link"
+                  className="p-0 border-0 text-dark"
+                  id="user-dropdown"
+                >
+                  <FiUser size={22} />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item as={NavLink} to="/login">
+                    Login
+                  </Dropdown.Item>
+                  <Dropdown.Item as={NavLink} to="/profile">
+                    Profile
+                  </Dropdown.Item>
+                 
+                  <Dropdown.Divider />
+                  <Dropdown.Item as={NavLink} to="/logout">
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           </Navbar.Collapse>
+        </Container>
 
-          {/* ICONS */}
-          <div className="icon-area d-flex align-items-center gap-4 ms-auto text-light">
-            {/* SEARCH */}
-            <button
-              className="nav-link p-0 bg-transparent border-0"
-              onClick={() => setShowSearch(true)}
+        {/* Animated Search Bar */}
+        <AnimatePresence>
+          {searchOpen && (
+            <motion.div
+              className="search-bar"
+              initial={{ y: -80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -80, opacity: 0 }}
+              transition={{ duration: 0.4 }}
             >
-              <FiSearch className="header-icon" size={20} />
-            </button>
-
-            <NavLink to="/cart" className="nav-link p-0">
-              <FiShoppingCart className="header-icon" size={20} />
-            </NavLink>
-
-            <NavLink to="/login" className="nav-link p-0">
-              <FiUser className="header-icon" size={20} />
-            </NavLink>
-          </div>
-        </Navbar>
-      </header>
-
-      {/* SEARCH POPUP */}
-      {showSearch && (
-        <div className="search-overlay">
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Search products..."
-              autoFocus
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-
-            
-
-            <button
-              className="close-btn-1"
-              onClick={() => setShowSearch(false)}
-            >
-              <FiX size={24} />
-            </button>
-          </div>
-        </div>
-      )}
+              <Form className="search-form">
+                <FormControl
+                  type="search"
+                  placeholder="Search products..."
+                  className="search-input"
+                />
+              </Form>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Navbar>
     </>
   );
 };

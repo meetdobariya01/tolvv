@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import Product from "../../components/product-images/product";
 import Category from "../../components/category/category";
 import "./homepage.css";
 import Homeproduct from "../../components/category/home-product/homeproduct";
@@ -87,7 +86,7 @@ const Homepage = () => {
     email: "",
     phone: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
   const [sending, setSending] = useState(false);
@@ -112,7 +111,7 @@ const Homepage = () => {
       const res = await fetch(`${API_URL}/connect`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
@@ -127,9 +126,8 @@ const Homepage = () => {
         email: "",
         phone: "",
         subject: "",
-        message: ""
+        message: "",
       });
-
     } catch (err) {
       console.error("Connect error:", err);
       alert("Failed to send message. Please try again.");
@@ -169,45 +167,37 @@ const Homepage = () => {
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/carousel-1.jpg"
+              src="./images/baner-1.jpg"
               alt="Second slide"
             />
           </Carousel.Item>
 
-          {/* <Carousel.Item>
+          <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/carousel-2.jpg"
+              src="./images/baner-2.jpg"
               alt="Second slide"
             />
-          </Carousel.Item> */}
+          </Carousel.Item>
 
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/carousel-3.jpg"
-              alt="Second slide"
+              src="./images/baner-3.jpg"
+              alt="third slide"
             />
           </Carousel.Item>
         </Carousel>
       </div>
 
-      {/* Products Section */}
-      <Homeproduct />
-
       {/* Zodics section */}
       <Zodic />
-
-      {/* products grid */}
-      {/* <Product /> */}
-
-
-
 
       {/* moon section */}
       <Moonsection />
 
-
+      {/* Products Section */}
+      <Homeproduct />
 
       {/* benifits */}
 
@@ -217,12 +207,10 @@ const Homepage = () => {
       >
         <div className="container text-center benifits-section">
           {/* Heading */}
-          <h1 className="fw-light mb-5 the-artisan-font">Benefits</h1>
+          <h1 className="fw-light mb-5 artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
-          <p
-            className="mx-auto"
-          >
+          <p className="mx-auto">
             Our Zodiac Collection blends luxurious skincare with the energy of
             your sign, creating a ritual that feels personally designed for you.
             Each soap, body lotion, bath gel, and perfume is infused with
@@ -234,9 +222,7 @@ const Homepage = () => {
           </p>
 
           {/* Paragraph 2 */}
-          <p
-            className="mx-auto mt-4"
-          >
+          <p className="mx-auto mt-4">
             These products don’t just nourish your skin; they elevate your
             spirit. Feel the difference as signature fragrances boost your mood,
             celestial ingredients restore balance, and your daily routine
@@ -253,7 +239,7 @@ const Homepage = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1 className="fw-light mb-5 the-artisan-font">Know Us</h1>
+          <h1 className="fw-light mb-5 artisan-font">Know Us</h1>
 
           {/* Row */}
           <div className="row align-items-center justify-content-center gap-5">
@@ -375,9 +361,9 @@ const Homepage = () => {
       >
         <div className="container text-center">
           {/* Header */}
-          <h1 className="the-artisan-font">Faqs</h1>
+          <h1 className="artisan-font">Faqs</h1>
           <h5
-            className="mb-4"
+            className="my-4"
             style={{
               fontSize: "16px",
               letterSpacing: "1px",
@@ -390,16 +376,15 @@ const Homepage = () => {
 
           {/* Description */}
           <p
-            className="text-center mx-auto"
+            className="sora text-start"
             style={{
-              maxWidth: "800px",
-              color: "#333",
+              color: "#000",
               fontSize: "15px",
               lineHeight: "1.8",
             }}
           >
             We've picked our most frequently asked questions. Here you can find
-            out the information you are interested in.
+            out the information you are interested in
           </p>
 
           {/* FAQ List */}
@@ -407,7 +392,7 @@ const Homepage = () => {
             className="text-start mt-5 mx-auto"
             style={{ fontSize: "15px", color: "#000" }}
           >
-            <hr />
+            {/* <hr /> */}
             <Allfaqs />
           </div>
         </div>
@@ -424,12 +409,13 @@ const Homepage = () => {
               transition={{ duration: 1, delay: 0.3 }}
             >
               <div className="text-center">
-                <h2 className="the-artisan-font">Connect</h2>
+                <h2 className="artisan-font">Connect</h2>
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 
               <p className="text-center mt-4 text-uppercase connect-desc">
-                CONTACT US TO DISCUSS YOUR QUESTIONS OR CONNECT FOR COLLABORATION
+                CONTACT US TO DISCUSS YOUR QUESTIONS OR CONNECT FOR
+                COLLABORATION
               </p>
 
               <Form className="connect-form mt-4" onSubmit={handleSubmit}>
@@ -513,7 +499,6 @@ const Homepage = () => {
             </motion.div>
           </Container>
         </section>
-
       </div>
 
       {/* Footer Component */}

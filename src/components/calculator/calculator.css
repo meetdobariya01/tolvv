@@ -1,6 +1,6 @@
 .zod-btn {
-  background: #fff;
-  color: #000;
+  background: transparent;
+  color: #fff;
   padding: 14px 28px;
   font-size: 18px;
   border: none;
@@ -9,11 +9,14 @@
   font-weight: 600;
   transition: 0.3s;
 }
-
+.heading-calculator{
+  font-size: 24px;
+  margin-bottom: 20px;
+}
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,12 +52,12 @@
 }
 
 .calc-btn {
-  width: 100%;
+  width: 50%;
   padding: 12px;
-  background: #6a00ff;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #000;
+  color: #000;
+  border-radius: 5px;
   margin-top: 10px;
   font-size: 18px;
   cursor: pointer;
@@ -74,7 +77,8 @@
 .result {
   margin-top: 15px;
   font-size: 20px;
-  font-weight: bold;
+  /* font-weight: bold; */
+  color: #777878;
 }
 .modal-content {
   position: relative;

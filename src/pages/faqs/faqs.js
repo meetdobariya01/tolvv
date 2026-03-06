@@ -26,7 +26,7 @@ const Faqs = () => {
       >
         <div className="container text-center">
           {/* Header */}
-          <h1 className="the-artisan-font">Faqs</h1>
+          <h1 className="artisan-font">Faqs</h1>
           <h5
             className="mb-4"
             style={{
@@ -34,6 +34,7 @@ const Faqs = () => {
               letterSpacing: "1px",
               color: "#000",
               textTransform: "uppercase",
+              marginTop: "20px",
             }}
           >
             QUESTIONS YOU MAY HAVE

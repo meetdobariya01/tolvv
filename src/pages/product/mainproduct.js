@@ -93,18 +93,14 @@ const Mainproduct = () => {
       {/* HERO SECTION */}
       <section className="hero-section">
         <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <h1>
-            CELESTIAL
-            <br />
-            CARE
+        <div className="hero-content text-dark  ">
+          <h1 className="gt-super">
+            CELESTIAL CARE
           </h1>
-          <p className="hero-subtitle">
-            Crafted for your
-            <br />
-            skin’s glow.
+          <p className="hero-subtitle sora">
+            Crafted for your skin’s glow.
           </p>
-          <p className="hero-desc">
+          <p className="hero-desc sora">
             Explore products from bath gels to essential oils
           </p>
         </div>
@@ -114,11 +110,12 @@ const Mainproduct = () => {
         {/* CATEGORY GRID */}
         <section className="products-section-grid">
           <Container>
-            <Row className="gx-4 gy-3 mb-5">
+            <Row className="gx-3 gy-3 mb-5">
+              <h2 className="products-heading artisan-font mt-5">All Sun Signs</h2>
               {products.map((item, index) => (
                 <Col key={index} xs={4} sm={6} md={4} lg={2}>
                   <div
-                    className="product-card"
+                    className="product-card p-2"
                     onClick={() => handleCategoryClick(item.category)}
                     style={{ cursor: "pointer" }}
                   >
@@ -129,7 +126,7 @@ const Mainproduct = () => {
                       <h5>
                         {item.title} <span>›</span>
                       </h5>
-                      <div className="underline" />
+                      <div className="underline" /> 
                       <p>{item.size}</p>
                     </div>
                   </div>
@@ -143,7 +140,7 @@ const Mainproduct = () => {
 
         {/* PRODUCT GRID */}
         <div id="product-grid" className="row product-fade mt-4">
-          <h2 className="products-heading allura-regular">{activeKey}</h2>
+          <h2 className="products-heading artisan-font">{activeKey}</h2>
 
           {productsByCategory[activeKey]?.map((item) => (
             <div
@@ -167,12 +164,14 @@ const Mainproduct = () => {
                   <div className="product-top">
                     <div className="title-wrap">
                       <h6 className="product-page-title">
-                        {item.ProductName} <span>›</span>
+                        <NavLink className="text-decoration-none text-dark" to={`/productdetails/${item._id}`}>
+                          {item.ProductName} <span>›</span>
+                        </NavLink>
                       </h6>
                       <p className="product-size">{item.size}</p>
                     </div>
                     <div className="price-wrap">
-                      <span className="price-dot"></span>
+                      {/* <span className="price-dot"></span> */}
                       <span className="product-price">
                         ₹ {item.ProductPrice}
                       </span>
@@ -182,8 +181,8 @@ const Mainproduct = () => {
                   <div className="product-divider"></div>
 
                   <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn  w-md-50">
-                      VIEW PRODUCT
+                    <Button size="sm" className="cart-btn text-uppercase w-md-50">
+                      Add to Cart
                     </Button>
                   </NavLink>
                 </Card.Body>

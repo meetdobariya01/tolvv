@@ -29,26 +29,24 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-const mergeGuestCart = async (token) => {
-  const guestCart = Cookies.get("guestCart");
-  if (!guestCart) return;
+  const mergeGuestCart = async (token) => {
+    const guestCart = Cookies.get("guestCart");
+    if (!guestCart) return;
 
-  const guestItems = JSON.parse(guestCart);
+    const guestItems = JSON.parse(guestCart);
 
-  await axios.post(
-    `${api_base}/merge`,
-    { guestItems },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    await axios.post(
+      `${api_base}/merge`,
+      { guestItems },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    }
-  );
+    );
 
-  Cookies.remove("guestCart");
-};
-
-
+    Cookies.remove("guestCart");
+  };
 
   // -----------------------------
   // Email / Password login
@@ -70,14 +68,11 @@ const mergeGuestCart = async (token) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       // ✅ CORRECT FUNCTION CALL
-   await mergeGuestCart(token);
-
+      await mergeGuestCart(token);
 
       navigate("/cart");
     } catch (err) {
-      setServerError(
-        err.response?.data?.message || "Invalid credentials"
-      );
+      setServerError(err.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
@@ -114,7 +109,7 @@ const mergeGuestCart = async (token) => {
   return (
     <div>
       <Header />
-      <div className="pro-login-wrapper d-flex align-items-center justify-content-center">
+      <div className="pro-loginpage-wrapper d-flex align-items-center justify-content-center">
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -134,7 +129,7 @@ const mergeGuestCart = async (token) => {
               type="email"
               name="email"
               placeholder="Email"
-              className="form-control mb-3"
+              className="form-control mb-3 underline-input"
               value={formData.email}
               onChange={handleChange}
             />
@@ -143,17 +138,21 @@ const mergeGuestCart = async (token) => {
               type="password"
               name="password"
               placeholder="Password"
-              className="form-control mb-3"
+              className="form-control mb-3 underline-input"
               value={formData.password}
               onChange={handleChange}
             />
 
-            <button className="btn btn-dark w-100" disabled={loading}>
+            <button className="btn btn-outline-dark w-100" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
-          <div className="text-center my-3">OR</div>
+          <div className="d-flex align-items-center my-4">
+            <hr className="flex-grow-1" />
+            <span className="mx-2 text-muted small">OR</span>
+            <hr className="flex-grow-1" />
+          </div>
 
           <GoogleLogin
             onSuccess={handleGoogleLogin}
@@ -161,7 +160,7 @@ const mergeGuestCart = async (token) => {
           />
 
           <p className="text-center mt-3">
-            No account? <NavLink to="/signup">Sign up</NavLink>
+            No account? <NavLink className="text-decoration-none text-dark" to="/signup">Sign up</NavLink>
           </p>
         </motion.div>
       </div>

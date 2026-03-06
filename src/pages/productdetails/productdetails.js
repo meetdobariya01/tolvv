@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // ✅ Added useNavigate
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Nav } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -10,11 +10,11 @@ const API_URL = process.env.REACT_APP_API_URL;
 const productInfo = {
   bath: {
     title: "BATH GEL",
-    icons: [
-      "No Harmful Chemicals",
-      "Paraben Free",
-      "Skin Friendly",
-      "Cruelty Free",
+    images: [
+      "/images/icon-1.png",
+      "/images/icon-2.png",
+      "/images/icon-3.png",
+      "/images/icon-4.png",
     ],
     howToUse:
       "Wet your skin, then work a small amount of 12’s Bath Gel into a lather using a loofah or your hands. Gently massage over your body, rinse thoroughly and pat dry.",
@@ -25,7 +25,12 @@ const productInfo = {
   },
   soap: {
     title: "SOAP",
-    icons: ["Natural Oils", "Paraben Free", "Skin Safe", "Vegan"],
+    images: [
+      "/images/icon-1.png",
+      "/images/icon-2.png",
+      "/images/icon-3.png",
+      "/images/icon-4.png",
+    ],
     howToUse:
       "Rediscover purity in every wash. Gentle ingredients inspired by nature, free from harshness.",
     ingredients:
@@ -35,7 +40,12 @@ const productInfo = {
   },
   oil: {
     title: "ESSENTIAL OIL",
-    icons: ["Pure Oil", "No Additives", "Therapeutic", "Cruelty Free"],
+    images: [
+      "/images/icon-1.png",
+      "/images/icon-2.png",
+      "/images/icon-3.png",
+      "/images/icon-4.png",
+    ],
     howToUse:
       "12’s Essential Oil is best used in three ways—by inhaling through a diffuser, applying on your skin after mixing with a carrier oil, or adding to your bath after proper dilution.",
     ingredients: "100% Pure Essential Oil Extracts, Natural Essential Oils.",
@@ -44,7 +54,12 @@ const productInfo = {
   },
   eaudeperfumes: {
     title: "PERFUMES",
-    icons: ["Natural Oils", "Skin Safe", "Vegan", "Long Lasting"],
+    images: [
+      "/images/icon-1.png",
+      "/images/icon-2.png",
+      "/images/icon-3.png",
+      "/images/icon-4.png",
+    ],
     howToUse:
       "12’s Perfumes are designed for gentle elegance. Spray on pulse points like wrists and neck to uplift your spirit.",
     ingredients:
@@ -54,7 +69,12 @@ const productInfo = {
   },
   bodylotion: {
     title: "BODY LOTION",
-    icons: ["Moisturizing", "No Additives", "Therapeutic", "Skin Friendly"],
+    images: [
+      "/images/icon-1.png",
+      "/images/icon-2.png",
+      "/images/icon-3.png",
+      "/images/icon-4.png",
+    ],
     howToUse:
       "Apply on slightly damp skin. Gently massage in upward circular motions until fully absorbed for a radiant glow.",
     ingredients:
@@ -64,7 +84,12 @@ const productInfo = {
   },
   hamper: {
     title: "CURATED ZODIAC HAMPER",
-    icons: ["Complete Care", "Premium Gift", "Zodiac Inspired", "Cruelty Free"],
+    images: [
+      "/images/icon-1.png",
+      "/images/icon-2.png",
+      "/images/icon-3.png",
+      "/images/icon-4.png",
+    ],
     howToUse:
       "This hamper contains a curated selection of products. Refer to each individual product within the hamper for specific usage instructions.",
     ingredients:
@@ -102,9 +127,7 @@ const Productdetails = () => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `${API_URL}/api/products/${id}`
-        );
+        const response = await axios.get(`${API_URL}/api/products/${id}`);
         const product = response.data;
         setDbProduct(product);
 
@@ -169,7 +192,7 @@ const Productdetails = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         navigate("/cart");
@@ -230,7 +253,7 @@ const Productdetails = () => {
 
       <section className="zodiac-hero">
         <motion.img
-          src="/images/tolvv.jpg " // 👈 your banner image
+          src="/images/bg.png" // 👈 your banner image
           alt="Hero Banner"
           className="zodiac-hero-img"
           initial={{ scale: 1.08, opacity: 0 }}
@@ -250,7 +273,7 @@ const Productdetails = () => {
                   : `${dbProduct.Photos}`
               }
               alt={dbProduct.ProductName}
-              className="img-fluid rounded shadow-sm w-100"
+              className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
               style={{ objectFit: "cover", maxHeight: "600px" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -266,14 +289,14 @@ const Productdetails = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h1 className="fw-bold playfair-display">
+                <h1 className="fw-bold playfair-display text-uppercase mb-3">
                   {dbProduct.ProductName}
                 </h1>
-                <h3 className="text-muted playfair-display mb-4">
+                {/* <h3 className="text-muted playfair-display mb-4">
                   {productInfo[activeTab]?.title}
-                </h3>
+                </h3> */}
 
-                {dbProduct.Category === "Hamper" && (
+                {/* {dbProduct.Category === "Hamper" && (
                   <div className="mb-3">
                     <span className="badge bg-dark me-2">
                       Zodiac: {dbProduct.Zodiac}
@@ -282,38 +305,49 @@ const Productdetails = () => {
                       Size: {dbProduct.size}
                     </span>
                   </div>
-                )}
+                )} */}
 
-                <div className="mb-4 d-flex flex-wrap gap-2">
-                  {productInfo[activeTab]?.icons.map((icon, idx) => (
-                    <span
-                      key={idx}
-                      className="badge bg-light text-dark border p-2 px-3"
-                    >
-                      {icon}
-                    </span>
+                <Row className="mb-4 g-3">
+                  {productInfo[activeTab]?.images?.map((img, idx) => (
+                    <Col xs={6} md={3} key={idx} className="text-center">
+                      <motion.img
+                        src={img}
+                        alt="feature icon"
+                        className="img-fluid"
+                        style={{ maxHeight: "100px" }}
+                        whileHover={{ scale: 1.08 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    </Col>
                   ))}
-                </div>
+                </Row>
 
                 <div className="details-text">
                   <h6 className="fw-bold">HOW TO USE</h6>
                   <p>{productInfo[activeTab]?.howToUse}</p>
 
                   <h6 className="fw-bold">INGREDIENTS</h6>
-                  <p className="text-secondary">
-                    {productInfo[activeTab]?.ingredients}
-                  </p>
+                  <p>{productInfo[activeTab]?.ingredients}</p>
 
                   <h6 className=" fw-bold">CAUTION</h6>
                   <p className="small ">{productInfo[activeTab]?.caution}</p>
                 </div>
 
+                <Nav.Link
+                  href="/refund-policy"
+                  className="text-decoration-none"
+                >
+                  <h6 className=" fw-bold">
+                    Refund Policy <span>›</span>
+                  </h6>
+                </Nav.Link>
+
                 <h2 className="mt-4">₹{dbProduct.ProductPrice}</h2>
                 <button
                   onClick={addToCart}
-                  className="btn btn-dark btn-lg mt-3 px-5 "
+                  className="btn btn-outline-dark  mt-3  "
                 >
-                  ADD TO CART
+                  ADD TO CART 🛒
                 </button>
               </motion.div>
             </AnimatePresence>
@@ -329,6 +363,7 @@ const Productdetails = () => {
             { key: "oil", label: "ESSENTIAL OIL" },
             { key: "eaudeperfumes", label: "EAU DE PERFUMES" },
             { key: "bodylotion", label: "BATH GEL" },
+            { key: "hamper", label: "HAMPER" },
           ].map((item) => (
             <Col xs={4} md={2} key={item.key}>
               <span
