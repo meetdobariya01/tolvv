@@ -56,7 +56,7 @@ const Checkout = () => {
         }
 
         // Fetch user cart
-        const res = await fetch(`${API_URL}/api/cart`, {
+        const res = await fetch(`${API_URL}/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -120,7 +120,7 @@ const Checkout = () => {
         quantity: item.qty,
       }));
 
-      const res = await fetch(`${API_URL}/place-order`, {
+      const res = await fetch(`${API_URL}/orders/place`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -151,11 +151,26 @@ const Checkout = () => {
       }
 
       // 🔁 ONLINE PAYMENT
+      // 🔁 ONLINE PAYMENT
       if (paymentMethod === "upi" || paymentMethod === "card") {
-        if (data.redirect) {
-          window.location.href = data.redirect;
+
+        const paymentRes = await fetch(
+          `${API_URL}/payment/initiate/${data.orderId}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const paymentData = await paymentRes.json();
+
+        if (paymentData.redirect) {
+          window.location.href = paymentData.redirect;
           return;
         }
+
         alert("Failed to initiate payment");
         setPlacing(false);
         return;
@@ -253,7 +268,7 @@ const Checkout = () => {
                 <div className="payment-block mt-4">
                   <h3>Payment Method</h3>
                   <div className="payment-options">
-                    {["upi", "card", "cod"].map((op) => (
+                    {["upi", "card"].map((op) => (
                       <label
                         key={op}
                         className={paymentMethod === op ? "active" : ""}

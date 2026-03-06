@@ -163,7 +163,13 @@
   padding: 12px 0;
   text-align: left;
 }
-
+.price-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
 /* Top row */
 .product-top {
   display: flex;

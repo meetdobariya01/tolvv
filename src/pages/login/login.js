@@ -14,7 +14,7 @@ const api_base = process.env.REACT_APP_API_URL;
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
+  const [, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -35,15 +35,9 @@ const mergeGuestCart = async (token) => {
 
   const guestItems = JSON.parse(guestCart);
 
-  await axios.post(
-    `${api_base}/merge`,
-    { guestItems },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+ await axios.post(`${api_base}/cart/merge`, { guestItems },{
+ headers:{ Authorization:`Bearer ${token}` }
+});
 
   Cookies.remove("guestCart");
 };
@@ -60,7 +54,7 @@ const mergeGuestCart = async (token) => {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${api_base}/login`, formData);
+      const res = axios.post(`${api_base}/auth/login`, formData);
       const { token, role, userId } = res.data;
 
       localStorage.setItem("token", token);
@@ -90,9 +84,7 @@ const mergeGuestCart = async (token) => {
     try {
       const { credential } = credentialResponse;
 
-      const res = await axios.post(`${api_base}/googlelogin`, {
-        token: credential,
-      });
+      const res = axios.post(`${api_base}/auth/googlelogin`, { token: credential });
 
       const { token } = res.data;
 

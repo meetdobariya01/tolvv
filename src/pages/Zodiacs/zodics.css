@@ -7,7 +7,18 @@
   background: #ffffff;
   padding: 50px 0;
 }
+.price-with-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
 
+.zodiac-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
 .product-wrapper .product-heading {
   color: #000;
 }

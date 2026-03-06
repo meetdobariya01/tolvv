@@ -79,6 +79,7 @@ import Privacypolicy from './pages/privacypolicy/privacypolicy';
 import ProductPage from './pages/ProductPage.jsx/ProductPage';
 import Productdetails from './pages/productdetails/productdetails';
 import Category from './components/category/category';
+import PaymentFailed from './pages/PaymentFailed/PaymentFailed';
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -105,6 +106,7 @@ root.render(
       <Route path="/shipping-policy" element={<ShippingPolicy />} />
       <Route path="/refund-policy" element={<RefundPolicy/>} />
       <Route path="/ProductPage" element={<ProductPage/>} />
+      <Route path="/payment-failed" element={<PaymentFailed />} />
         <Route path="/productdetails/:id" element={<Productdetails />} />
       <Route path="/category" element={<Category/>} />
         <Route path="*" element={<Error/>} />

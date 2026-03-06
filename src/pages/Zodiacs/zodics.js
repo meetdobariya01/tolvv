@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
-import { Row, Col } from "react-bootstrap";
-import { motion } from "framer-motion";
+// import { Row, Col } from "react-bootstrap";
+// import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 
 const Zodic = () => {
-  const [active, setActive] = useState(null);
+  // const [active, setActive] = useState(null);
   const zodiacData = {
     Aries: {
       name: "Aries",
@@ -346,23 +346,23 @@ const Zodic = () => {
     { name: "Aquarius", color: "#519AA2", image: "./images/zodiac/11.png" },
     { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
   ];
-  const xyz= [
-    {name: "Aries",xyz1:"Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products"},
-    {name: "Taurus", xyz1:"Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products"},
-    {name: "Gemini", xyz1:"Experience the goodness of Lavender, Lemon and Basil in our Gemini products ."},
-    {name: "Cancer", xyz1:"Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products"},
-    {name: "Leo", xyz1:"Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products"},
-    {name: "Virgo", xyz1:"Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products"},
-    {name: "Libra", xyz1:"Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products"},
-    {name: "Scorpio", xyz1:"Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products"},
-    {name: "Sagittarius", xyz1:"Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products"},
-    {name: "Capricorn", xyz1:"Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products"},
-    {name: "Aquarius", xyz1:"Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products"},
-    {name: "Pisces", xyz1:"Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products"},
+  const xyz = [
+    { name: "Aries", xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products" },
+    { name: "Taurus", xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products" },
+    { name: "Gemini", xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products ." },
+    { name: "Cancer", xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products" },
+    { name: "Leo", xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products" },
+    { name: "Virgo", xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products" },
+    { name: "Libra", xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products" },
+    { name: "Scorpio", xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products" },
+    { name: "Sagittarius", xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products" },
+    { name: "Capricorn", xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products" },
+    { name: "Aquarius", xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products" },
+    { name: "Pisces", xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products" },
   ]
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const [activeKey, setActiveKey] = useState(null);
+  // const [activeKey, setActiveKey] = useState(null);
   const [productsByZodiac, setProductsByZodiac] = useState({});
   const navigate = useNavigate();
   const Zodiac = [
@@ -406,46 +406,25 @@ const Zodic = () => {
       }
     };
     fetchProducts();
-  }, []);
-
-  // const handleBuyNow = async (productId) => {
-
-  //   if (!token) {
-  //     alert("Please login first!");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     await axios.post(
-  //       `${API_URL}/add-to-cart`,
-  //       { productId, quantity: 1 },
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-  //     navigate("/cart");
-  //   } catch (err) {
-  //     console.error("Add to cart failed:", err);
-  //     alert("Failed to add product to cart.");
-  //   }
-  // };
+  }, );
   const handleBuyNow = async (product) => {
     if (!product) return;
 
     // ✅ LOGGED-IN USER
     if (token) {
       try {
-        await axios.post(
-          `${API_URL}/api/add-to-cart`,
-          {
-            productId: product._id,
-            quantity: 1,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+       await axios.post(
+  `${API_URL}/cart/add`,
+  {
+    productId: product._id,
+    quantity: 1,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
         navigate("/cart");
       } catch (error) {
@@ -534,7 +513,7 @@ const Zodic = () => {
                   >
                     <div
                       className="zodiac-circle"
-                      // style={{ backgroundColor: sign.color }}
+                    // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
@@ -564,9 +543,9 @@ const Zodic = () => {
         <div className="aries-content inter container sora">
           <h1
             className="aries-title"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
           >
             {selectedZodiac.name}
           </h1>
@@ -581,27 +560,27 @@ const Zodic = () => {
 
           <p
             className="aries-date"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
           >
             Date : {selectedZodiac.date}
           </p>
 
           <p
             className="aries-description"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
           >
             {selectedZodiac.description}
           </p>
 
           <p
             className="aries-details"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
           >
             <span>Corresponding Letters : {selectedZodiac.letters}</span> &nbsp;
             | &nbsp;
@@ -625,7 +604,7 @@ const Zodic = () => {
         {/* PRODUCTS – WHITE BACKGROUND */}
         <div className="product-wrapper py-5">
           <h2 className="product-text mb-4 text-center sora">
-            {xyz.find((item)=>item.name===selectedZodiac.name)?.xyz1}
+            {xyz.find((item) => item.name === selectedZodiac.name)?.xyz1}
           </h2>
 
           <div className="container sora">
@@ -642,7 +621,14 @@ const Zodic = () => {
                     <div className="product-info">
                       <p className="name">{p.ProductName}</p>
                       <p className="size">{p.size}</p>
-                      <p className="zodiac-price">₹{p.ProductPrice}</p>
+                      <div className="price-with-dot">
+                        <span
+                          className="zodiac-dot"
+                          style={{ backgroundColor: selectedZodiac.color }}
+                        ></span>
+
+                        <span className="zodiac-price">₹{p.ProductPrice}</span>
+                      </div>
 
                       <div className="underline" />
                       <button
