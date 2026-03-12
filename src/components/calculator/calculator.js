@@ -50,7 +50,7 @@ const Calculator = () => {
   return (
     <>
       <motion.button
-        className="zod-btn"
+        className="btn btn-outline-light text-uppercase"
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(true)}
@@ -86,32 +86,36 @@ const Calculator = () => {
                 ✕
               </button>
 
-              <h2>Zodiac Calculator</h2>
+              <h2 className="text-uppercase heading-calculator">Know your Sign</h2>
 
-              <label className="label">Name</label>
+              {/* <label className="label">Name</label> */}
+              
               <input
                 type="text"
-                placeholder="Enter your name"
+                placeholder="YOUR NAME"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="text-uppercase underline-input sora"
               />
 
-              <label className="label">Birthdate</label>
+              {/* <label className="label">Birthdate</label> */}
               <input
                 type="date"
                 value={birthdate}
                 onChange={(e) => setBirthdate(e.target.value)}
+                className="text-uppercase underline-input sora"
               />
 
-              <button className="calc-btn" onClick={calculateZodiac}>
+              <button className="calc-btn sora" onClick={calculateZodiac}>
                 Get Zodiac Sign
               </button>
 
               {result && (
-                <p className="result">
-                  Your Zodiac Sign: <strong>{result}</strong>
+                <p className="result text-uppercase sora mt-4">
+                  Your Zodiac Sign <strong className="text-dark">{result}</strong>
                 </p>
               )}
+             
             </motion.div>
           </motion.div>
         )}

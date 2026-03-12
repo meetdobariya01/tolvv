@@ -30,7 +30,7 @@ const products = [
   },
   {
     title: "Soap",
-    size: "100 gsm",
+    size: "100 gms",
     img: "/images/sp.png",
     link: "/product",
   },
@@ -46,14 +46,14 @@ const Homeproduct = () => {
   return (
     <section className="products-section">
       <Container>
-        <h2 className="products-heading allura-regular">Products</h2>
+        <h2 className="products-heading artisan-font">All Sun Signs</h2>
 
         <Row className="gx-4 gy-3">
           {products.map((item, index) => (
             <Col
               key={index}
               xs={6} // ✅ MOBILE → 2 ITEMS
-              sm={6}
+              sm={4}
               md={4}
               lg={2}
             >
@@ -64,8 +64,8 @@ const Homeproduct = () => {
                   </div>
 
                   <div className="product-info-collection sora">
-                    <h5>
-                      {item.title} <span>›</span>
+                    <h5 className="d-flex justify-content-between">
+                      {item.title} <span className="">›</span>
                     </h5>
                     <div className="underline" />
                     <p>{item.size}</p>

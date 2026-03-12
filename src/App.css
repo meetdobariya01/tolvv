@@ -29,7 +29,6 @@
 }
 
 .form-content {
-  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -49,7 +48,7 @@
 }
 
 .connect-desc {
-  font-size: 0.75rem;
+  font-size: 18px;
   color: #000;
   letter-spacing: 0.5px;
 }

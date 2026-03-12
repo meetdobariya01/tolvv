@@ -1,75 +1,104 @@
-/* Fancy Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-/* * { font-family: "Poppins", sans-serif; } */
+/* Navbar Background */
+.custom-navbar {
+  background: #8e8e8e;
+  position: relative;
+}
 
-/* SEARCH OVERLAY */
-.search-overlay {
-  position: fixed;
-  top: 0;
+/* Logo */
+.logo-img {
+  height: 77px;        /* desktop size */
+  width: auto;
+  object-fit: contain;
+  transition: 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.05);
+}
+
+/* Nav Links */
+.nav-links .nav-link {
+  color: white !important;
+  margin: 0 14px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  position: relative;
+  transition: 0.3s;
+  font-weight: 400;
+}
+
+/* Hover underline animation */
+.nav-links .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: white;
   left: 0;
+  bottom: -6px;
+  transition: 0.3s;
+}
+
+.nav-links .nav-link:hover::after {
   width: 100%;
-  height: 100vh;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(8px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 0.3s ease;
-  z-index: 99999;
-}
-.tolvv-header{
-  background-color: #888889;
-}
-.tolvv-logo{
-    width: 75%;
-}
-.logo-link{
-  text-align: center;
-}
-/* SEARCH BOX */
-.search-box {
-  width: 80%;
-  max-width: 550px;
-  background: #fff;
-  padding: 14px 18px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  animation: slideDown 0.35s ease;
 }
 
-.search-box input {
-  flex: 1;
-  border: none;
-  font-size: 18px;
-  padding: 8px;
-  outline: none;
-  background: transparent;
-}
-.menu-text{
-    /* font-weight: 600; */
-    color: #fff;
-    text-decoration: none;
-    font-size: 20px ;
+/* Right icons */
+.icons svg {
+  color: white;
+  font-size: 20px;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-/* CLOSE BUTTON */
-.close-btn-1 {
-  background: transparent;
-  border: none;
+.icons svg:hover {
+  transform: scale(1.2);
+}
+
+/* Mobile icons */
+.mobile-icons svg {
+  color: white;
+  font-size: 22px;
+  margin-left: 15px;
   cursor: pointer;
 }
 
-/* ANIMATIONS */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Search Bar */
+.search-bar {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: transparent;
+  padding: 15px 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  z-index: 999;
 }
 
-@keyframes slideDown {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.search-form {
+  max-width: 500px;
+  margin: auto;
 }
-svg {
-    color: white;
+
+.search-input {
+  border-radius: 50px;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+}
+
+/* Responsive */
+@media(max-width: 991px) {
+  .nav-links {
+    text-align: center;
+    padding-top: 15px;
+  }
+
+  .nav-links .nav-link {
+    padding: 10px 0;
+  }
+}
+@media (max-width: 768px) {
+  .logo-img {
+    height: 75px;
+  }
 }

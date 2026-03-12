@@ -130,7 +130,7 @@
 //               <input
 //                 type="text"
 //                 name="fname"
-//                 className="form-control pro-input"
+//                 className="form-control pro-signup-input"
 //                 value={formData.fname}
 //                 onChange={handleChange}
 //               />
@@ -681,19 +681,19 @@ const Signup = () => {
   return (
     <div>
       <Header />
-      <div className="pro-login-wrapper d-flex align-items-center justify-content-center">
-        <motion.div className="pro-login-card p-5 rounded-4 shadow-sm">
-          <h3 className="text-center mb-4 fw-bold">Create Your Account</h3>
+      <div className="pro-signup-wrapper d-flex align-items-center justify-content-center">
+        <motion.div className="pro-signup-card p-4 rounded-4 shadow-sm">
+          <h3 className="text-center mb-4 fw-bold">Create Your New Account</h3>
 
           <form onSubmit={handleSubmit}>
             {/* First Name */}
-            <div className="mb-3">
+            <div className="">
               <label className="form-label fw-semibold"></label>
               <input
                 type="text"
                 name="fname"
                 placeholder="First Name"
-                className="form-control pro-input"
+                className="form-control pro-signup-input"
                 value={formData.fname}
                 onChange={handleChange}
               />
@@ -701,12 +701,12 @@ const Signup = () => {
             </div>
 
             {/* Last Name */}
-            <div className="mb-3">
+            <div className="">
               <label className="form-label fw-semibold"></label>
               <input
                 type="text"
                 name="lname"
-                className="form-control pro-input"
+                className="form-control pro-signup-input"
                 placeholder="Last Name"
                 value={formData.lname}
                 onChange={handleChange}
@@ -715,13 +715,13 @@ const Signup = () => {
             </div>
 
             {/* Mobile */}
-            <div className="mb-3">
+            <div className="">
               <label className="form-label fw-semibold"></label>
               <input
                 type="text"
                 name="mobile"
                 placeholder="Mobile Number"
-                className="form-control pro-input"
+                className="form-control pro-signup-input"
                 value={formData.mobile}
                 onChange={handleChange}
               />
@@ -729,13 +729,13 @@ const Signup = () => {
             </div>
 
             {/* Email + OTP */}
-            <div className="mb-3">
+            <div className="">
               <label className="form-label fw-semibold"></label>
               <div className="d-flex gap-2">
                 <input
                   type="email"
                   name="email"
-                  className="form-control pro-input"
+                  className="form-control pro-signup-input"
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
@@ -754,7 +754,7 @@ const Signup = () => {
               {otpSent && !otpVerified && (
                 <input
                   type="text"
-                  className="form-control pro-input mt-2"
+                  className="form-control pro-signup-input mt-2"
                   placeholder="Enter OTP"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
@@ -774,7 +774,7 @@ const Signup = () => {
                 type="password"
                 name="password"
                 placeholder="Password"
-                className="form-control pro-input"
+                className="form-control pro-signup-input"
                 value={formData.password}
                 onChange={handleChange}
               />

@@ -1,0 +1,65 @@
+.account-page {
+  background: #f7f7f7;
+  min-height: 100vh;
+}
+
+.sidebar {
+  padding-left: 40px;
+}
+
+.sidebar-menu li {
+  margin-bottom: 18px;
+  cursor: pointer;
+  color: #555;
+}
+
+.sidebar-menu li:hover {
+  color: black;
+}
+
+.profile-form input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+  background: transparent;
+}
+
+.profile-form input:focus {
+  box-shadow: none;
+  border-color: black;
+}
+
+.support-links p {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.support-links p:hover {
+  color: black;
+}
+.support-link {
+  text-decoration: none;
+  color: black;
+  display: block;
+}
+
+.support-link:hover {
+  color: #555;
+}
+.sidebar-menu li{
+cursor:pointer;
+color:#777;
+margin-bottom:18px;
+transition:0.3s;
+}
+
+.sidebar-menu li:hover{
+color:black;
+}
+
+/* active item */
+.sidebar-menu .active-menu{
+color:black;
+font-weight:600;
+}

@@ -99,7 +99,7 @@ const Connect = () => {
               transition={{ duration: 1, delay: 0.3 }}
             >
               <div className="text-center">
-                <h2 className="the-artisan-font">Connect</h2>
+                <h2 className="artisan-font">Connect</h2>
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 

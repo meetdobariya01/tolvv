@@ -16,13 +16,14 @@ code {
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 
-.allura-regular,
+
+/* .allura-regular,
 .the-artisan-font {
   font-family: "Allura", cursive;
   font-weight: 400;
   font-style: normal;
   font-size: 70px;
-}
+} */
 
 .inter {
   font-family: "Inter", sans-serif;
@@ -40,7 +41,7 @@ code {
   font-optical-sizing: auto;
 }
 
-@font-face {
+/* @font-face {
   font-family: "MyFont";
   src: url("../public/assest/fonts/the\ artisan.otf") format("otf");
   font-weight: 400;
@@ -49,4 +50,40 @@ code {
 
 .artisan-font {
   font-family: "MyFont", sans-serif;
+} */
+
+@font-face {
+  font-family: "MyCustomFont";
+  src: url("../public/assest/fonts/the\ artisan.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.artisan-font {
+  font-family: "MyCustomFont", sans-serif;
+  font-size: 82px;
+}
+
+@media (max-width: 768px) {
+  .artisan-font {
+    font-size: 50px;
+  }
+}
+
+@font-face {
+  font-family: "GT-Super";
+  src: url("../public/assest/fonts/GT-Super-Display-Super-Trial.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.gt-super {
+  font-family: "GT-Super", sans-serif;
+  font-size: 82px;
+}
+
+@media (max-width: 768px) {
+  .gt-super {
+    font-size: 50px;
+  }
 }

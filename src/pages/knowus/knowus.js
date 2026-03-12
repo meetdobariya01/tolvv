@@ -25,7 +25,7 @@ const Knowus = () => {
       >
         <div className="container text-center">
           {/* Heading */}
-          <h1 className="the-artisan-font">
+          <h1 className="artisan-font">
             Know Us
           </h1>
 

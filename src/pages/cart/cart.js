@@ -22,9 +22,16 @@ const Cart = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [deliveryMsg, setDeliveryMsg] = useState("");
 
-  const [shipping, ] = useState({ country: "", city: "", zip: "" });
-  const [note, ] = useState("");
+  /* FIXED STATE */
+  const [shipping, setShipping] = useState({
+    country: "",
+    city: "",
+    zip: "",
+  });
+
+  const [note, setNote] = useState("");
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -42,11 +49,11 @@ const Cart = () => {
         const items =
           res.data?.cart?.items?.map((item) => ({
             id: item.productId?._id,
-            name: item.productId?.ProductName,
-            price: item.productId?.ProductPrice,
-            qty: item.quantity,
+            name: item.productId?.ProductName || "Product",
+            price: item.productId?.ProductPrice || 0,
+            qty: item.quantity || 1,
             img: getImageUrl(item.productId?.Photos),
-            category: item.productId?.Category,
+            category: item.productId?.Category, // FIXED
           })) || [];
 
         setCartItems(items);
@@ -57,15 +64,28 @@ const Cart = () => {
 
         const formatted = await Promise.all(
           guestCart.map(async (item) => {
-            const res = await axios.get(`${API_URL}/products/${item.productId}`);
-            return {
-              id: item.productId,
-              name: res.data.ProductName,
-              price: res.data.ProductPrice,
-              qty: item.quantity,
-              img: getImageUrl(res.data.Photos),
-              category: res.data.Category,
-            };
+            try {
+              const res = await axios.get(
+                `${API_URL}/api/products/${item.productId}`
+              );
+
+              return {
+                id: item.productId,
+                name: res.data.ProductName || "Product",
+                price: res.data.ProductPrice || 0,
+                qty: item.quantity || 1,
+                img: getImageUrl(res.data.Photos),
+                category: res.data.Category,
+              };
+            } catch {
+              return {
+                id: item.productId,
+                name: "Product",
+                price: item.price || 0,
+                qty: item.quantity || 1,
+                img: getImageUrl(null),
+              };
+            }
           })
         );
 
@@ -103,109 +123,129 @@ const Cart = () => {
     fetchCart();
   }, [fetchCart]);
 
-  /* ---------------- ADD RELATED PRODUCT TO CART ---------------- */
+  /* ---------------- ADD RELATED PRODUCT ---------------- */
   const addRelatedToCart = async (product) => {
-  if (!product) return;
+    if (!product) return;
 
-  if (token) {
-    await axios.post(
-      `${API_URL}/cart/add`,
-      { productId: product._id, quantity: 1 },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-  } else {
-    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
-
-    const existing = guestCart.find((i) => i.productId === product._id);
-
-    if (existing) {
-      existing.quantity += 1;
+    if (token) {
+      await axios.post(
+        `${API_URL}/api/add-to-cart`,
+        { productId: product._id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
     } else {
+      let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+
       guestCart.push({
         productId: product._id,
         quantity: 1,
         price: product.ProductPrice,
+        img: getImageUrl(product.Photos),
       });
+
+      Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 2 });
     }
 
-    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
-  }
+    fetchCart();
+  };
 
-  fetchCart();
-};
+  /* ---------------- QUANTITY ---------------- */
+  const increaseQty = async (id) => {
+    if (token) {
+      await axios.post(
+        `${API_URL}/api/add-to-cart`,
+        { productId: id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } else {
+      updateGuestCart(
+        cartItems.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i))
+      );
+    }
 
-  /* ---------------- CART ACTIONS ---------------- */
-const increaseQty = async (id) => {
-  if (token) {
-    await axios.post(
-      `${API_URL}/cart/add`,
-      { productId: id, quantity: 1 },
-      { headers: { Authorization: `Bearer ${token}` } }
+    fetchCart();
+  };
+
+  const decreaseQty = async (id) => {
+    if (token) {
+      await axios.post(
+        `${API_URL}/api/add-to-cart`,
+        { productId: id, quantity: -1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      fetchCart();
+    } else {
+      updateGuestCart(
+        cartItems.map((i) =>
+          i.id === id && i.qty > 1 ? { ...i, qty: i.qty - 1 } : i
+        )
+      );
+    }
+  };
+
+  const updateGuestCart = (updatedItems) => {
+    setCartItems(updatedItems);
+
+    Cookies.set(
+      "guestCart",
+      JSON.stringify(
+        updatedItems.map((i) => ({
+          productId: i.id,
+          quantity: i.qty,
+          price: i.price,
+          img: i.img,
+        }))
+      ),
+      { expires: 2 }
     );
-  } else {
-    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
 
-    const item = guestCart.find((i) => i.productId === id);
+    setTotalPrice(updatedItems.reduce((s, i) => s + i.price * i.qty, 0));
+  };
 
-    if (item) {
-      item.quantity += 1;
+  /* ---------------- DELIVERY CHECK ---------------- */
+  const checkDelivery = () => {
+    if (!shipping.zip) {
+      setDeliveryMsg("Please enter ZIP code");
+      return;
     }
 
-    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
-  }
-
-  fetchCart();
-};
- const decreaseQty = async (id) => {
-  if (token) {
-    await axios.post(
-      `${API_URL}/cart/add`,
-      { productId: id, quantity: -1 },
-      { headers: { Authorization: `Bearer ${token}` } }
+    setDeliveryMsg(
+      "Your order is scheduled to arrive in approximately 5 to 7 days"
     );
-  } else {
-    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+  };
 
-    const item = guestCart.find((i) => i.productId === id);
+  /* ---------------- REMOVE ITEM ---------------- */
+  const removeItem = async (id) => {
+    if (token) {
+      await axios.delete(`${API_URL}/cart/remove/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } else {
+      let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
 
-    if (item) {
-      item.quantity -= 1;
+      guestCart = guestCart.filter((i) => i.productId !== id);
 
-      if (item.quantity <= 0) {
-        guestCart = guestCart.filter((i) => i.productId !== id);
-      }
+      Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
     }
 
-    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
-  }
-
-  fetchCart();
-};
-
-const removeItem = async (id) => {
-  if (token) {
-    await axios.delete(`${API_URL}/cart/remove/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-  } else {
-    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
-
-    guestCart = guestCart.filter((i) => i.productId !== id);
-
-    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
-  }
-
-  fetchCart();
-};
+    fetchCart();
+  };
 
   const handleCheckout = () => {
     if (!token) navigate("/login");
     else navigate("/Check-out", { state: { note, shipping } });
   };
 
-  if (loading) {
-    return <div className="text-center mt-5">Loading...</div>;
-  }
+  if (loading)
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "70vh" }}
+      >
+        Loading...
+      </div>
+    );
 
   return (
     <>
@@ -214,14 +254,13 @@ const removeItem = async (id) => {
       <div className="cart-wrapper sora">
         <div className="container">
           <div className="row min-vh-100">
-
+            
             {/* LEFT : RELATED PRODUCTS */}
             <div className="col-lg-6 left-panel">
               <h6 className="mb-4">You may also like</h6>
 
               {relatedProducts.map((product) => (
                 <div key={product._id} className="d-flex gap-3 mb-4 align-items-center">
-
                   <img
                     src={getImageUrl(product.Photos)}
                     alt={product.ProductName}
@@ -259,40 +298,104 @@ const removeItem = async (id) => {
 
             {/* RIGHT : CART */}
             <div className="col-lg-6 right-panel my-5">
-              <h6 className="mb-4">CART</h6>
+              <div className="cart-header">
+                <h6>CART</h6>
+                <span className="close" onClick={() => navigate("/")}>×</span>
+              </div>
 
               {cartItems.map((item) => (
-                <motion.div key={item.id} className="cartpage-item mb-3 p-3 border rounded">
+                <motion.div key={item.id} className="cartpage-item mb-3 p-3 border rounded-3">
                   <div className="row align-items-center">
                     <div className="col-3">
-                      <img src={item.img} className="img-fluid" alt={item.name} />
+                      <img src={item.img} className="img-fluid rounded" alt={item.name} />
                     </div>
+
                     <div className="col-6">
                       <h6>{item.name}</h6>
-                      <p>₹{item.price}</p>
+
                       <div className="qty-box">
                         <button onClick={() => decreaseQty(item.id)}>-</button>
                         <span>{item.qty}</span>
                         <button onClick={() => increaseQty(item.id)}>+</button>
                       </div>
                     </div>
+
                     <div className="col-3 text-end">
-                      <FiTrash2 onClick={() => removeItem(item.id)} />
+                      <p>₹{item.price}</p>
+
+                      <FiTrash2
+                        className="text-dark cursor-pointer"
+                        onClick={() => removeItem(item.id)}
+                      />
                     </div>
                   </div>
                 </motion.div>
               ))}
 
-              <div className="border rounded p-3 mt-4">
+              {/* SHIPPING */}
+              <div className="p-3 mt-4">
+                <h6>Estimate shipping</h6>
+
+                <input
+                  className="form-control mb-2"
+                  placeholder="Country"
+                  onChange={(e) =>
+                    setShipping({ ...shipping, country: e.target.value })
+                  }
+                />
+
+                <input
+                  className="form-control mb-2"
+                  placeholder="City"
+                  onChange={(e) =>
+                    setShipping({ ...shipping, city: e.target.value })
+                  }
+                />
+
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Postal / ZIP Code"
+                  value={shipping.zip}
+                  maxLength={6}
+                  onChange={(e) =>
+                    setShipping({
+                      ...shipping,
+                      zip: e.target.value.replace(/\D/g, ""),
+                    })
+                  }
+                />
+
+                <button
+                  className="btn btn-outline-dark w-50"
+                  onClick={checkDelivery}
+                >
+                  CHECK DELIVERY TIME
+                </button>
+
+                {deliveryMsg && (
+                  <p className="mt-2 text-success">{deliveryMsg}</p>
+                )}
+              </div>
+
+              <hr />
+
+              {/* TOTAL */}
+              <div className="p-3 mt-4">
                 <div className="d-flex justify-content-between">
                   <span>Subtotal</span>
                   <span>₹{totalPrice}</span>
                 </div>
+
                 <div className="d-flex justify-content-between fw-bold mt-2">
                   <span>Total</span>
                   <span>₹{totalPrice}</span>
                 </div>
-                <button className="btn btn-outline-dark w-100 mt-3" onClick={handleCheckout}>
+
+                <button
+                  className="btn btn-outline-dark w-25 mt-3"
+                  onClick={handleCheckout}
+                >
                   CHECKOUT
                 </button>
               </div>

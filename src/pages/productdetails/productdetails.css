@@ -74,3 +74,25 @@
     height: 45vh;
   }
 }
+.feature-icons img {
+  filter: grayscale(100%);
+  opacity: 0.9;
+}
+
+.feature-icons img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+.feature-icon p {
+  letter-spacing: 1px;
+  font-size: 12px;
+  color: #444;
+}
+
+.feature-icon img {
+  transition: all 0.3s ease;
+}
+
+.feature-icon:hover img {
+  transform: translateY(-4px);
+}

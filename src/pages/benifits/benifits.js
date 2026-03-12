@@ -17,7 +17,7 @@ const Benifits = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <img src="./images/bg.png" alt="Hero" className="hero-image" />
+        <img src="./images/bg.png" alt="Hero" className="hero-section-image" />
       </motion.div>
 
       <div
@@ -26,7 +26,7 @@ const Benifits = () => {
       >
         <div className="container text-center benifits-section sora">
           {/* Heading */}
-          <h1 className="the-artisan-font">Benefits</h1>
+          <h1 className="artisan-font">Benefits</h1>
 
           {/* Paragraph 1 */}
           <p
@@ -35,6 +35,7 @@ const Benifits = () => {
               color: "#333",
               lineHeight: "1.8",
               fontSize: "16px",
+              marginTop: "20px",
             }}
           >
             Our Zodiac Collection blends luxurious skincare with the energy of

@@ -43,6 +43,10 @@ const faqData = [
     q: "Are your products safe during pregnancy or breastfeeding?",
     a: "Our products are made with gentle ingredients, but we recommend consulting your doctor—especially when using essential-oil-based products.",
   },
+  {
+    q: "I am liking the fragrances from other sunsigns, other than my own. Is it still okay for me to use those products ?",
+    a: "Yes, absolutely. You can use and enjoy products from other sunsigns. They won’t have any negative effects. Choosing products from your own sunsign may simply enhance the experience.",
+  }
 ];
 
 const Allfaqs = () => {

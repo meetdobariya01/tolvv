@@ -1,5 +1,5 @@
 /* Page Wrapper */
-.pro-login-wrapper {
+.pro-loginpage-wrapper {
   /* height: 100vh; */
   background: #D1D3D4; /* Light corporate grey */
   padding: 20px;
@@ -121,4 +121,12 @@
 
 .pro-link:hover {
   text-decoration: underline;
+}
+.underline-input {
+  border: none !important;
+  border-bottom: 1px solid #ccc !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
 }
