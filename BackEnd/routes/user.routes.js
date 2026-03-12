@@ -63,5 +63,112 @@ router.put("/profile", authenticate, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+router.get("/profile", authenticate, async (req, res) => {
+  try {
 
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+
+  } catch (err) {
+    console.error("Profile fetch error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.put("/profile", authenticate, async (req, res) => {
+  try {
+
+    const { fname, lname, mobile, dob, gender } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { fname, lname, mobile, dob, gender },
+      { new: true }
+    ).select("-password");
+
+    res.json({
+      message: "Profile updated",
+      user: updatedUser
+    });
+
+  } catch (err) {
+    console.error("Profile update error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.post("/address", authenticate, async (req, res) => {
+  try {
+
+    const {
+      flatNumber,
+      apartmentName,
+      street,
+      city,
+      state,
+      pincode,
+      isDefault
+    } = req.body;
+
+    const user = await User.findById(req.user.id);
+
+    if (isDefault) {
+      user.addresses.forEach(addr => addr.isDefault = false);
+    }
+
+    user.addresses.push({
+      flatNumber,
+      apartmentName,
+      street,
+      city,
+      state,
+      pincode,
+      isDefault
+    });
+
+    await user.save();
+
+    res.json({
+      message: "Address added",
+      addresses: user.addresses
+    });
+
+  } catch (err) {
+    console.error("Add address error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.get("/address", authenticate, async (req, res) => {
+  try {
+
+    const user = await User.findById(req.user.id);
+
+    res.json(user.addresses);
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.put("/address/default/:id", authenticate, async (req, res) => {
+  try {
+
+    const user = await User.findById(req.user.id);
+
+    user.addresses.forEach(addr => {
+      addr.isDefault = addr._id.toString() === req.params.id;
+    });
+
+    await user.save();
+
+    res.json({
+      message: "Default address updated"
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 module.exports = router;

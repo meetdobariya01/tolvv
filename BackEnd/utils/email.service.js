@@ -47,40 +47,72 @@ const sendPasswordResetOTP = async (email, otp) => {
 };
 
 const sendOrderConfirmationEmail = async (userEmail, orderDetails) => {
-  const { customOrderId, paymentMethod, totalAmount, itemsHtml } = orderDetails;
-  
+
+  const { customOrderId, paymentMethod, totalAmount, itemsHtml, phone } = orderDetails;
+
   return await transporter.sendMail({
     from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
     to: userEmail,
     subject: "✅ Order Confirmed – Tolvv",
     html: `
       <h2>Thank you for your order 🎉</h2>
+
       <p><strong>Order ID:</strong> ${customOrderId}</p>
+
       <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+
       <p><strong>Total:</strong> ₹${totalAmount}</p>
-      <ul>${itemsHtml}</ul>
+
+      <p><strong>Phone:</strong> ${phone}</p>
+
+      <h3>Items</h3>
+
+      <ul>
+        ${itemsHtml}
+      </ul>
+
       <p>We’ll notify you once your order is shipped.</p>
     `
   });
 };
 
 const sendAdminOrderNotification = async (orderDetails, user, address, note) => {
+
   const { customOrderId, paymentMethod, totalAmount, itemsHtml } = orderDetails;
-  
+
   return await transporter.sendMail({
     from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
     to: process.env.ADMIN_EMAIL,
     subject: "🚨 New Order Received – Tolvv",
     html: `
       <h2>🛒 New Order Placed</h2>
+
       <p><strong>Order ID:</strong> ${customOrderId}</p>
-      <p><strong>Customer:</strong> ${address.buildingName || "N/A"}</p>
+
+      <p><strong>Customer Name:</strong> ${user.name || "Customer"}</p>
+
       <p><strong>Email:</strong> ${user.email}</p>
-      <p><strong>Phone:</strong> ${user.mobile}</p>
-      <p><strong>Payment:</strong> ${paymentMethod}</p>
+
+      <p><strong>Phone:</strong> ${address.mobile}</p>
+
+      <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+
       <p><strong>Total:</strong> ₹${totalAmount}</p>
-      <p><strong>Address:</strong> ${address.houseNumber}, ${address.city} - ${address.pincode}</p>
-      <ul>${itemsHtml}</ul>
+
+      <h3>Delivery Address</h3>
+
+      <p>
+        ${address.houseNumber || ""}, ${address.buildingName || ""}<br/>
+        ${address.road || ""}<br/>
+        ${address.city} - ${address.pincode}
+      </p>
+
+      <h3>Items</h3>
+
+      <ul>
+        ${itemsHtml}
+      </ul>
+
       ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
     `
   });

@@ -4,17 +4,17 @@ import { motion } from "framer-motion";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import Product from "../../components/product-images/product";
-import Category from "../../components/category/category";
+// import Product from "../../components/product-images/product";
+// import Category from "../../components/category/category";
 import "./homepage.css";
 import Homeproduct from "../../components/category/home-product/homeproduct";
-import Leoproduct from "../leo-product/leoproduct";
+// import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 import Zodic from "../Zodiacs/zodics";
 import Moonsection from "../../components/moonsection/moonsection";
 import { useState } from "react";
-import { Alert, Spinner } from "react-bootstrap";
-
+// import { Alert, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 const Homepage = () => {
   const productss = [
     { name: "BATH GEL" },

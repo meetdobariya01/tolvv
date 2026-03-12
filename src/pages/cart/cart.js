@@ -23,8 +23,8 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const [shipping, setShipping] = useState({ country: "", city: "", zip: "" });
-  const [note, setNote] = useState("");
+  const [shipping, ] = useState({ country: "", city: "", zip: "" });
+  const [note, ] = useState("");
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -105,59 +105,98 @@ const Cart = () => {
 
   /* ---------------- ADD RELATED PRODUCT TO CART ---------------- */
   const addRelatedToCart = async (product) => {
-    if (!product) return;
+  if (!product) return;
 
-    if (token) {
-      await axios.post(
-        `${API_URL}/add-to-cart`,
-        { productId: product._id, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  if (token) {
+    await axios.post(
+      `${API_URL}/cart/add`,
+      { productId: product._id, quantity: 1 },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } else {
+    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+
+    const existing = guestCart.find((i) => i.productId === product._id);
+
+    if (existing) {
+      existing.quantity += 1;
     } else {
-      let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
-
-      const existing = guestCart.find((i) => i.productId === product._id);
-
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        guestCart.push({
-          productId: product._id,
-          quantity: 1,
-          price: product.ProductPrice,
-        });
-      }
-
-      Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
+      guestCart.push({
+        productId: product._id,
+        quantity: 1,
+        price: product.ProductPrice,
+      });
     }
 
-    fetchCart();
-  };
+    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
+  }
+
+  fetchCart();
+};
 
   /* ---------------- CART ACTIONS ---------------- */
 const increaseQty = async (id) => {
-  await axios.post(
-    `${API_URL}/cart/add`,
-    { productId: id, quantity: 1 },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+  if (token) {
+    await axios.post(
+      `${API_URL}/cart/add`,
+      { productId: id, quantity: 1 },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } else {
+    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+
+    const item = guestCart.find((i) => i.productId === id);
+
+    if (item) {
+      item.quantity += 1;
+    }
+
+    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
+  }
+
   fetchCart();
 };
-  const decreaseQty = async (id) => {
-  await axios.post(
-    `${API_URL}/cart/add`,
-    { productId: id, quantity: -1 },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+ const decreaseQty = async (id) => {
+  if (token) {
+    await axios.post(
+      `${API_URL}/cart/add`,
+      { productId: id, quantity: -1 },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } else {
+    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+
+    const item = guestCart.find((i) => i.productId === id);
+
+    if (item) {
+      item.quantity -= 1;
+
+      if (item.quantity <= 0) {
+        guestCart = guestCart.filter((i) => i.productId !== id);
+      }
+    }
+
+    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
+  }
+
   fetchCart();
 };
 
-  const removeItem = async (id) => {
+const removeItem = async (id) => {
+  if (token) {
     await axios.delete(`${API_URL}/cart/remove/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    fetchCart();
-  };
+  } else {
+    let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+
+    guestCart = guestCart.filter((i) => i.productId !== id);
+
+    Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 7 });
+  }
+
+  fetchCart();
+};
 
   const handleCheckout = () => {
     if (!token) navigate("/login");

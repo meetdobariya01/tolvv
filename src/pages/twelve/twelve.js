@@ -1,7 +1,7 @@
 
 
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+// import React from "react";
+// import { Container, Row, Col } from "react-bootstrap";
 import { motion } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
