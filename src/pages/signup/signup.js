@@ -576,13 +576,13 @@ const Signup = () => {
       }
     };
     document.body.appendChild(script);
-  }, []);
+  },);
 
   const handleGoogleResponse = async (response) => {
     try {
-      const res = await axios.post(`${api_base}/googlelogin`, {
-        token: response.credential,
-      });
+      const res = await axios.post(`${api_base}/auth/googlelogin`, {
+  token: response.credential,
+});
       localStorage.setItem("token", res.data.token);
       navigate("/"); // redirect after login
     } catch (error) {
@@ -621,7 +621,7 @@ const Signup = () => {
 
     setOtpLoading(true);
     try {
-      const res = await axios.post(`${api_base}/send-otp`, {
+      const res = await axios.post(`${api_base}/auth/send-otp`, {
         email: formData.email,
       });
       if (res.data.success) {
@@ -643,7 +643,7 @@ const Signup = () => {
 
     setOtpLoading(true);
     try {
-      const res = await axios.post(`${api_base}/verify-otp`, {
+      const res = await axios.post(`${api_base}/auth/verify-otp`, {
         email: formData.email,
         otp,
       });
@@ -669,7 +669,7 @@ const Signup = () => {
     setServerError("");
 
     try {
-      await axios.post(`${api_base}/signup`, formData);
+      await axios.post(`${api_base}/auth/signup`, formData);
       navigate("/login");
     } catch (err) {
       setServerError(err.response?.data?.message || "Server error");
@@ -839,6 +839,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-
-

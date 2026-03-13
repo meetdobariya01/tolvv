@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
-import { Row, Col } from "react-bootstrap";
-import { motion } from "framer-motion";
+// import { Row, Col } from "react-bootstrap";
+// import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 
 const Zodic = () => {
-  const [active, setActive] = useState(null);
+  // const [active, setActive] = useState(null);
   const zodiacData = {
     Aries: {
       name: "Aries",
@@ -398,7 +398,7 @@ const Zodic = () => {
   ];
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const [activeKey, setActiveKey] = useState(null);
+  // const [activeKey, setActiveKey] = useState(null);
   const [productsByZodiac, setProductsByZodiac] = useState({});
   const navigate = useNavigate();
   const Zodiac = [
@@ -442,46 +442,25 @@ const Zodic = () => {
       }
     };
     fetchProducts();
-  }, []);
-
-  // const handleBuyNow = async (productId) => {
-
-  //   if (!token) {
-  //     alert("Please login first!");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     await axios.post(
-  //       `${API_URL}/add-to-cart`,
-  //       { productId, quantity: 1 },
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
-  //     navigate("/cart");
-  //   } catch (err) {
-  //     console.error("Add to cart failed:", err);
-  //     alert("Failed to add product to cart.");
-  //   }
-  // };
+  }, );
   const handleBuyNow = async (product) => {
     if (!product) return;
 
     // ✅ LOGGED-IN USER
     if (token) {
       try {
-        await axios.post(
-          `${API_URL}/api/add-to-cart`,
-          {
-            productId: product._id,
-            quantity: 1,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+       await axios.post(
+  `${API_URL}/cart/add`,
+  {
+    productId: product._id,
+    quantity: 1,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
         navigate("/cart");
       } catch (error) {
@@ -566,7 +545,7 @@ const Zodic = () => {
                   >
                     <div
                       className="zodiac-circle"
-                      // style={{ backgroundColor: sign.color }}
+                    // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
@@ -596,7 +575,18 @@ const Zodic = () => {
         style={{ backgroundColor: selectedZodiac.color }}
       >
         <div className="aries-content inter container sora">
+<<<<<<< HEAD
           <p className="aries-date gt-super">{selectedZodiac.date}</p>
+=======
+          <h1
+            className="aries-title"
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
+          >
+            {selectedZodiac.name}
+          </h1>
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
           <div className="d-flex justify-content-center align-items-center gap-3">
             
@@ -619,19 +609,31 @@ const Zodic = () => {
           </div>
 
           <p
+<<<<<<< HEAD
+=======
+            className="aries-date"
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
+          >
+            Date : {selectedZodiac.date}
+          </p>
+
+          <p
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
             className="aries-description"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
           >
             {selectedZodiac.description}
           </p>
 
           <p
             className="aries-details"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
+          // style={{
+          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
+          // }}
           >
             <span>Corresponding Letters : {selectedZodiac.letters}</span> &nbsp;
             | &nbsp;
@@ -672,11 +674,22 @@ const Zodic = () => {
                     />
 
                     <div className="product-info">
+<<<<<<< HEAD
                       <p className="name">
                         {p.ProductName} <span>›</span>
                       </p>
+=======
+                      <p className="name">{p.ProductName}</p>
+                      <p className="size">{p.size}</p>
+                      <div className="price-with-dot">
+                        <span
+                          className="zodiac-dot"
+                          style={{ backgroundColor: selectedZodiac.color }}
+                        ></span>
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
-                      <p className="zodiac-price">₹{p.ProductPrice}</p>
+                        <span className="zodiac-price">₹{p.ProductPrice}</span>
+                      </div>
 
                       <div className="underline" />
                       <p className="size">{p.size}</p>

@@ -7,7 +7,26 @@ import { useNavigate } from "react-router-dom";
 import "./moonsection.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
-
+const zodiacColors = {
+  Aries: "#c10230",
+  Taurus: "#ae1857",
+  Gemini: "#d79a2b",
+  Cancer: "#85422b",
+  Leo: "#4d5a31",
+  Virgo: "#5f504d",
+  Libra: "#7e622d",
+  Scorpio: "#2d2a26",
+  Sagittarius: "#490e67",
+  Capricorn: "#726b54",
+  Aquarius: "#005d63",
+  Pisces: "#006098",
+};
+const getZodiacFromProduct = (name) => {
+  if (!name) return null;
+  return Object.keys(zodiacColors).find((zodiac) =>
+    name.toLowerCase().includes(zodiac.toLowerCase())
+  );
+};
 const planetData = [
   {
     name: "Moon",
@@ -150,7 +169,7 @@ const Moonsection = () => {
       // Logged-in user
       try {
         await axios.post(
-          `${API_URL}/api/add-to-cart`,
+          `${API_URL}/cart/add`,
           { productId: product._id, quantity: 1 },
           { headers: { Authorization: `Bearer ${token}` } },
         );
@@ -296,7 +315,19 @@ const Moonsection = () => {
                     />
                     <div className="product-info">
                       <p className="name">{product.ProductName}</p>
-                      <p className="zodiac-price">₹{product.ProductPrice}</p>
+                      <p className="size">{product.size}</p>
+                      <div className="price-with-dot">
+                        <span
+                          className="planet-dot"
+                          style={{
+                            backgroundColor:
+                              zodiacColors[getZodiacFromProduct(product.ProductName)] || planet.color,
+                          }}
+                          title={getZodiacFromProduct(product.ProductName)}
+                        ></span>
+
+                        <span className="zodiac-price">₹{product.ProductPrice}</span>
+                      </div>
                       <div className="underline" />
                       <p className="size">{product.size}</p>
                       <button

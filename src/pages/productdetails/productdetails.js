@@ -127,52 +127,65 @@ const Productdetails = () => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
+<<<<<<< HEAD
         const response = await axios.get(`${API_URL}/api/products/${id}`);
         const product = response.data;
+=======
+
+        const response = await axios.get(`${API_URL}/products/${id}`);
+
+        const product = response.data?.product || response.data;
+
+        if (!product) {
+          throw new Error("Product not found in response");
+        }
+
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         setDbProduct(product);
 
-        if (product.Category) {
+        if (product?.Category) {
           const dbCat = product.Category.toLowerCase().trim();
           if (categoryMap[dbCat]) setActiveTab(categoryMap[dbCat]);
         }
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching product:", error);
         setLoading(false);
       }
     };
+
     if (id) fetchProductData();
   }, [id]);
+  // const addToGuestCart = () => {
+  //   let cart = [];
 
-  const addToGuestCart = () => {
-    let cart = [];
+  //   try {
+  //     const stored = Cookies.get("guestCart");
+  //     cart = stored ? JSON.parse(stored) : [];
+  //     if (!Array.isArray(cart)) cart = [];
+  //   } catch {
+  //     cart = [];
+  //   }
 
-    try {
-      const stored = Cookies.get("guestCart");
-      cart = stored ? JSON.parse(stored) : [];
-      if (!Array.isArray(cart)) cart = [];
-    } catch {
-      cart = [];
-    }
+  //   const existing = cart.find((item) => item.productId === dbProduct._id);
 
-    const existing = cart.find((item) => item.productId === dbProduct._id);
+  //   if (existing) {
+  //     existing.quantity += 1;
+  //   } else {
+  //     cart.push({
+  //       type: "product",
+  //       productId: dbProduct._id,
+  //       quantity: 1,
+  //       price: dbProduct.ProductPrice,
+  //       name: dbProduct.ProductName,
+  //       img: dbProduct.Photos,
+  //     });
+  //   }
 
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({
-        type: "product",
-        productId: dbProduct._id,
-        quantity: 1,
-        price: dbProduct.ProductPrice,
-        name: dbProduct.ProductName,
-        img: dbProduct.Photos,
-      });
-    }
-
-    Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-    navigate("/cart");
-  };
+  //   Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
+  //   navigate("/cart");
+  // };
 
   const addToCart = async () => {
     if (!dbProduct) return;
@@ -182,6 +195,7 @@ const Productdetails = () => {
     // ✅ USER LOGGED IN
     if (token) {
       try {
+<<<<<<< HEAD
         await axios.post(
           `${API_URL}/api/add-to-cart`,
           {
@@ -194,6 +208,14 @@ const Productdetails = () => {
             },
           },
         );
+=======
+        await axios.post(`${API_URL}/cart/add`, {
+          productId: dbProduct._id,
+          quantity: 1
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
         navigate("/cart");
       } catch (error) {
@@ -367,9 +389,8 @@ const Productdetails = () => {
           ].map((item) => (
             <Col xs={4} md={2} key={item.key}>
               <span
-                className={`product-link ${
-                  active === item.key ? "active" : ""
-                }`}
+                className={`product-link ${active === item.key ? "active" : ""
+                  }`}
                 onClick={() => setActive(item.key)}
               >
                 {item.label}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import "./login.css";
@@ -13,22 +13,25 @@ const api_base = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  // -----------------------------
+  // Input change
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
+<<<<<<< HEAD
   const mergeGuestCart = async (token) => {
     const guestCart = Cookies.get("guestCart");
     if (!guestCart) return;
@@ -46,46 +49,87 @@ const Login = () => {
     );
 
     Cookies.remove("guestCart");
+=======
+  // -----------------------------
+  // Validate form
+  const validate = () => {
+    if (!formData.email || !formData.password) {
+      setServerError("Email and password are required");
+      return false;
+    }
+    return true;
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
   };
 
   // -----------------------------
-  // Email / Password login
+  // Merge guest cart
+  const mergeGuestCart = async (token) => {
+    const guestCart = Cookies.get("guestCart");
+    if (!guestCart) return;
+
+    const guestItems = JSON.parse(guestCart);
+
+    await axios.post(
+      `${api_base}/cart/merge`,
+      { guestItems },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    Cookies.remove("guestCart");
+  };
+
+  // -----------------------------
+  // Email / Password Login
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validate()) return;
 
     setServerError("");
     setLoading(true);
 
     try {
-      const res = await axios.post(`${api_base}/login`, formData);
-      const { token, role, userId } = res.data;
+      const res = await axios.post(`${api_base}/auth/login`, formData);
+
+      const { token, user } = res.data;
 
       localStorage.setItem("token", token);
-      localStorage.setItem("role", role || "user");
-      localStorage.setItem("userId", userId);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("userId", user.id);
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
+<<<<<<< HEAD
       // ✅ CORRECT FUNCTION CALL
+=======
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
       await mergeGuestCart(token);
 
       navigate("/cart");
     } catch (err) {
+<<<<<<< HEAD
       setServerError(err.response?.data?.message || "Invalid credentials");
+=======
+      setServerError(
+        err.response?.data?.message || "Login failed"
+      );
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
     } finally {
       setLoading(false);
     }
   };
 
   // -----------------------------
-  // Google login
+  // Google Login
   const handleGoogleLogin = async (credentialResponse) => {
     setLoading(true);
+
     try {
       const { credential } = credentialResponse;
 
-      const res = await axios.post(`${api_base}/googlelogin`, {
+      const res = await axios.post(`${api_base}/auth/googlelogin`, {
         token: credential,
       });
 
@@ -109,14 +153,19 @@ const Login = () => {
   return (
     <div>
       <Header />
+<<<<<<< HEAD
       <div className="pro-loginpage-wrapper d-flex align-items-center justify-content-center">
+=======
+
+      <div className="pro-login-wrapper d-flex align-items-center justify-content-center">
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="pro-loginpage-card p-5 rounded-4 shadow-sm"
         >
-          <h3 className="text-center mb-4 fw-bold">Hello</h3>
+          <h3 className="text-center mb-4 fw-bold">Welcome</h3>
 
           {serverError && (
             <div className="alert alert-danger text-center small py-2">
@@ -158,12 +207,16 @@ const Login = () => {
             onSuccess={handleGoogleLogin}
             onError={() => setServerError("Google login failed")}
           />
+<<<<<<< HEAD
 
           <p className="text-center mt-3">
             No account? <NavLink className="text-decoration-none text-dark" to="/signup">Sign up</NavLink>
           </p>
+=======
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         </motion.div>
       </div>
+
       <Footer />
     </div>
   );

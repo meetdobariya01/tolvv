@@ -8,7 +8,8 @@ const ProductSchema = new mongoose.Schema({
   Zodiac: { type: String }, // optional if used
   Description: { type: String },
   Image: { type: String },
-  size: {type:String}
+  size: {type:String},
+  color: { type: String } 
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

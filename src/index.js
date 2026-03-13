@@ -57,6 +57,7 @@ import reportWebVitals from "./reportWebVitals";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // Pages
+<<<<<<< HEAD
 import Homepage from "./pages/homepage/homepage";
 import Connect from "./pages/connect/connect";
 import Faqs from "./pages/faqs/faqs";
@@ -80,6 +81,31 @@ import ProductPage from "./pages/ProductPage.jsx/ProductPage";
 import Productdetails from "./pages/productdetails/productdetails";
 import Category from "./components/category/category";
 import AccountPage from "./pages/profile/profile";
+=======
+import Homepage from './pages/homepage/homepage';
+import Connect from './pages/connect/connect';
+import Faqs from './pages/faqs/faqs';
+import Knowus from './pages/knowus/knowus';
+import Benifits from './pages/benifits/benifits';
+import Product from './components/product-images/product';
+import Mainproduct from './pages/product/mainproduct';
+import Login from './pages/login/login';
+import Signup from './pages/signup/signup';
+import Forgotpassword from './pages/forgotpassword/passoword';
+import Cart from './pages/cart/cart';
+import Checkout from './pages/checkout/checkout';
+import Twelve from './pages/twelve/twelve';
+import Payment from './pages/payment/payment';
+import Error from './pages/error/error';
+import RefundPolicy from './pages/refundpolicy/refundpolicy';
+import ShippingPolicy from './pages/shipingpolicy/shipingpolicy';
+import Termsconditions from './pages/termsandcondition/termsandcondition';
+import Privacypolicy from './pages/privacypolicy/privacypolicy';
+import ProductPage from './pages/ProductPage.jsx/ProductPage';
+import Productdetails from './pages/productdetails/productdetails';
+import Category from './components/category/category';
+import PaymentFailed from './pages/PaymentFailed/PaymentFailed';
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
@@ -102,10 +128,18 @@ root.render(
         <Route path="/twelve" element={<Twelve />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/privacy-policy" element={<Privacypolicy />} />
+<<<<<<< HEAD
         <Route path="/terms-and-condition" element={<Termsconditions />} />
         <Route path="/shipping-policy" element={<ShippingPolicy />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/ProductPage" element={<ProductPage />} />
+=======
+      <Route path="/terms-and-condition" element={<Termsconditions />} />
+      <Route path="/shipping-policy" element={<ShippingPolicy />} />
+      <Route path="/refund-policy" element={<RefundPolicy/>} />
+      <Route path="/ProductPage" element={<ProductPage/>} />
+      <Route path="/payment-failed" element={<PaymentFailed />} />
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         <Route path="/productdetails/:id" element={<Productdetails />} />
         <Route path="/category" element={<Category />} />
         <Route path="/profile" element={<AccountPage />} />

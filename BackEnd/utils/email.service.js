@@ -1,0 +1,129 @@
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS
+  }
+});
+
+const sendOTPEmail = async (email, otp) => {
+  return await transporter.sendMail({
+    from: `"Tolvv Support" <no-reply@tolvv.com>`,
+    replyTo: "no-reply@tolvv.com",
+    to: email,
+    subject: "OTP Verification – Secure Login",
+    html: `
+      <div style="font-family: Arial, sans-serif; color:#333;">
+        <p>Dear User,</p>
+        <p>We received a request to log in to your account.</p>
+        <p>Your OTP code is:</p>
+        <div style="font-size: 28px; font-weight: bold; color: #000; text-align: center; letter-spacing: 6px; margin: 20px 0;">
+          ${otp}
+        </div>
+        <p><strong>⏳ Valid for 5 minutes</strong></p>
+        <p style="font-size: 13px; color: #555;">
+          For your security:<br/>• Do not share this OTP with anyone<br/>• Our team will never ask for your OTP
+        </p>
+        <p>Regards,<br/><strong>Tolvv – Nurture your Nature</strong><br/>Support Team</p>
+      </div>
+    `,
+  });
+};
+
+const sendPasswordResetOTP = async (email, otp) => {
+  return await transporter.sendMail({
+    from: `"Tolvv Support" <${process.env.MAIL_USER}>`,
+    to: email,
+    subject: "Password Reset OTP",
+    html: `
+      <h3>Password Reset</h3>
+      <p>Your OTP is:</p>
+      <h2>${otp}</h2>
+      <p>This OTP is valid for 5 minutes.</p>
+    `,
+  });
+};
+
+const sendOrderConfirmationEmail = async (userEmail, orderDetails) => {
+  const { customOrderId, paymentMethod, totalAmount, itemsHtml } = orderDetails;
+  
+  return await transporter.sendMail({
+    from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
+    to: userEmail,
+    subject: "✅ Order Confirmed – Tolvv",
+    html: `
+      <h2>Thank you for your order 🎉</h2>
+      <p><strong>Order ID:</strong> ${customOrderId}</p>
+      <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+      <p><strong>Total:</strong> ₹${totalAmount}</p>
+      <ul>${itemsHtml}</ul>
+      <p>We’ll notify you once your order is shipped.</p>
+    `
+  });
+};
+
+const sendAdminOrderNotification = async (orderDetails, user, address, note) => {
+  const { customOrderId, paymentMethod, totalAmount, itemsHtml } = orderDetails;
+  
+  return await transporter.sendMail({
+    from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
+    to: process.env.ADMIN_EMAIL,
+    subject: "🚨 New Order Received – Tolvv",
+    html: `
+      <h2>🛒 New Order Placed</h2>
+      <p><strong>Order ID:</strong> ${customOrderId}</p>
+      <p><strong>Customer:</strong> ${address.buildingName || "N/A"}</p>
+      <p><strong>Email:</strong> ${user.email}</p>
+      <p><strong>Phone:</strong> ${user.mobile}</p>
+      <p><strong>Payment:</strong> ${paymentMethod}</p>
+      <p><strong>Total:</strong> ₹${totalAmount}</p>
+      <p><strong>Address:</strong> ${address.houseNumber}, ${address.city} - ${address.pincode}</p>
+      <ul>${itemsHtml}</ul>
+      ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
+    `
+  });
+};
+
+const sendContactEmail = async (name, email, phone, subject, message) => {
+  // Admin email
+  await transporter.sendMail({
+    from: `"Tolvv Connect" <${process.env.MAIL_USER}>`,
+    to: process.env.ADMIN_EMAIL,
+    subject: `📩 New Connect Request: ${subject}`,
+    html: `
+      <h2>New Connect Request</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Subject:</strong> ${subject}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message}</p>
+    `
+  });
+
+  // User confirmation email
+  return await transporter.sendMail({
+    from: `"Tolvv" <${process.env.MAIL_USER}>`,
+    to: email,
+    subject: "We received your request – Tolvv",
+    html: `
+      <p>Hi ${name},</p>
+      <p>Thank you for contacting us. We have received your message and will get back to you shortly.</p>
+      <p><strong>Your Message:</strong></p>
+      <p>${message}</p>
+      <br/>
+      <p>— Team Tolvv</p>
+    `
+  });
+};
+
+module.exports = {
+  transporter,
+  sendOTPEmail,
+  sendPasswordResetOTP,
+  sendOrderConfirmationEmail,
+  sendAdminOrderNotification,
+  sendContactEmail
+};

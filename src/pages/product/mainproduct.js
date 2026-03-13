@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
@@ -47,7 +48,20 @@ const Mainproduct = () => {
       category: "Hamper",
     },
   ];
-
+  const zodiacColors = {
+    Aries: "#C0392B",
+    Taurus: "#27AE60",
+    Gemini: "#F1C40F",
+    Cancer: "#5DADE2",
+    Leo: "#E67E22",
+    Virgo: "#16A085",
+    Libra: "#AF7AC5",
+    Scorpio: "#922B21",
+    Sagittarius: "#D35400",
+    Capricorn: "#2C3E50",
+    Aquarius: "#48C9B0",
+    Pisces: "#5B2C6F"
+  };
   const categories = products.map((p) => p.category);
 
   const token = localStorage.getItem("token");
@@ -77,7 +91,72 @@ const Mainproduct = () => {
 
     fetchProducts();
   }, []);
+  const handleBuyNow = async (product) => {
+    if (!product) return;
 
+    const token = localStorage.getItem("token");
+
+    // ✅ LOGGED-IN USER
+    if (token) {
+      try {
+       await axios.post(
+  `${API_URL}/cart/add`,
+  {
+    productId: product._id,
+    quantity: 1,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+        navigate("/cart");
+      } catch (error) {
+        console.error("Add to cart error:", error.response || error);
+
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    }
+
+    // ✅ GUEST USER
+    else {
+      let cart = [];
+
+      try {
+        const stored = Cookies.get("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+        if (!Array.isArray(cart)) cart = [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find(
+        (item) => item.productId === product._id
+      );
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          type: "product",
+          productId: product._id,
+          quantity: 1,
+          price: product.ProductPrice,
+          name: product.ProductName,
+          img: product.Photos,
+        });
+      }
+
+      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
+      navigate("/cart");
+    }
+  };
   // ✅ Category click handler
   const handleCategoryClick = (category) => {
     setActiveKey(category);
@@ -147,31 +226,59 @@ const Mainproduct = () => {
               className="col-6 col-md-3 mb-4 product-card-animate"
               key={item._id}
             >
-              <Card className="product-card p-2">
-                <div className="product-img-wrap">
-                  <Card.Img
-                    src={
-                      item.Photos
-                        ? item.Photos.startsWith("http")
-                          ? item.Photos
-                          : `/images/${item.Photos.replace("images/", "")}`
-                        : "/images/default.jpg"
-                    }
-                  />
-                </div>
+              <Card className="product-card">
+
+                {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
+                <NavLink to={`/productdetails/${item._id}`}>
+                  <div className="product-img-wrap">
+                    <Card.Img
+                      src={
+                        item.Photos
+                          ? item.Photos.startsWith("http")
+                            ? item.Photos
+                            : `/images/${item.Photos.replace("images/", "")}`
+                          : "/images/default.jpg"
+                      }
+                    />
+                  </div>
+                </NavLink>
 
                 <Card.Body className="product-info sora">
                   <div className="product-top">
                     <div className="title-wrap">
+<<<<<<< HEAD
                       <h6 className="product-page-title">
                         <NavLink className="text-decoration-none text-dark" to={`/productdetails/${item._id}`}>
                           {item.ProductName} <span>›</span>
                         </NavLink>
                       </h6>
+=======
+
+                      {/* ✅ PRODUCT NAME CLICK → PRODUCT DETAILS */}
+                      <NavLink
+                        to={`/productdetails/${item._id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <h6 className="product-page-title">
+                          {item.ProductName} <span>›</span>
+                        </h6>
+                      </NavLink>
+
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
                       <p className="product-size">{item.size}</p>
                     </div>
+
                     <div className="price-wrap">
+<<<<<<< HEAD
                       {/* <span className="price-dot"></span> */}
+=======
+                      <span
+                        className="price-dot"
+                        style={{
+                          backgroundColor: zodiacColors[item.Zodiac] || "#ccc",
+                        }}
+                      ></span>
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
                       <span className="product-price">
                         ₹ {item.ProductPrice}
                       </span>
@@ -180,11 +287,22 @@ const Mainproduct = () => {
 
                   <div className="product-divider"></div>
 
+<<<<<<< HEAD
                   <NavLink to={`/productdetails/${item._id}`}>
                     <Button size="sm" className="cart-btn text-uppercase w-md-50">
                       Add to Cart
                     </Button>
                   </NavLink>
+=======
+                  {/* ✅ ONLY BUY NOW BUTTON */}
+                  <Button
+                    size="sm"
+                    className="cart-btn w-100"
+                    onClick={() => handleBuyNow(item)}
+                  >
+                    BUY NOW
+                  </Button>
+>>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
                 </Card.Body>
               </Card>
             </div>
