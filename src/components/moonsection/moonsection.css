@@ -8,9 +8,11 @@
 
 .planet-heading {
   text-align: center;
-  font-family: serif;
-  letter-spacing: 2px;
+  /* font-family: serif; */
+  letter-spacing: 11%;
+  font-size: 36px;
   margin-bottom: 50px;
+  font-weight: 300;
 }
 
 /* PLANET ITEM */

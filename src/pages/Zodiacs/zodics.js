@@ -24,9 +24,9 @@ const Zodic = () => {
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "./images/ingredient/Coconut-Oil.png",
-        "./images/ingredient/Cinnamon-23.png",
         "./images/ingredient/Ginger.png",
+        "./images/ingredient/Cinnamon-23.png",
+        "./images/ingredient/Coconut-Oil.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -547,10 +547,8 @@ const Zodic = () => {
           <div className="row align-items-center text-white">
             {/* LEFT TEXT */}
             <div className="col-12 col-md-4 text-center  left-text">
-              <h2 className="artisan-font">The Twelve</h2>
-              <p className="subtitle">
-                EXPLORE BY YOUR SUN SIGN
-              </p>
+              <h2 className="artisan-font">The Twelves</h2>
+              <p className="subtitle sora">EXPLORE BY YOUR SUN SIGN</p>
               {/* <p className="subtitle">Find your Zodiac</p> */}
               <div className="my-5">
                 <Calculator />
@@ -598,7 +596,10 @@ const Zodic = () => {
         style={{ backgroundColor: selectedZodiac.color }}
       >
         <div className="aries-content inter container sora">
+          <p className="aries-date gt-super">{selectedZodiac.date}</p>
+
           <div className="d-flex justify-content-center align-items-center gap-3">
+            
             <h1
               className="aries-title"
               // style={{
@@ -616,14 +617,6 @@ const Zodic = () => {
               />
             </div>
           </div>
-          <p
-            className="aries-date"
-            // style={{
-            //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-            // }}
-          >
-            Date : {selectedZodiac.date}
-          </p>
 
           <p
             className="aries-description"
@@ -650,6 +643,8 @@ const Zodic = () => {
             <span>Ruling Planet : {selectedZodiac.planet}</span>
           </p>
         </div>
+
+        <p className="gt-super ingredients">INGREDIENTS</p>
 
         {/* Herbs Section */}
         <div className="aries-images container d-flex justify-content-center gap-5 flex-wrap">
@@ -685,12 +680,12 @@ const Zodic = () => {
 
                       <div className="underline" />
                       <p className="size">{p.size}</p>
-                      <button
+                      {/* <button
                         className="btn btn-outline-dark mt-1"
                         onClick={() => handleBuyNow(p)}
                       >
                         Buy Now
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>

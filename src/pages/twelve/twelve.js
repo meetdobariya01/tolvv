@@ -665,7 +665,7 @@ const Twelve = () => {
       {/* ZODIAC COMPONENT */}
       <Zodic />
 
-      <section className="zodiac-quote-section">
+      {/* <section className="zodiac-quote-section">
         <div className="zodiac-quote-text">
           Like us, plants are guided by cosmic energies. Their essential oils
           carry these forces from above to earth, helping you align with
@@ -678,7 +678,7 @@ const Twelve = () => {
           <span className="zodiac-star">✦</span>
           <span className="zodiac-line" />
         </div>
-      </section>
+      </section> */}
 
       <Moonsection />
       {/* FOOTER */}

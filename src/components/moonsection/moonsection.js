@@ -196,7 +196,7 @@ const Moonsection = () => {
       {/* PLANET SELECTOR */}
       <section className="planet-section">
         <Container>
-          <h2 className="planet-heading">EXPLORE BY YOUR RULING PLANET</h2>
+          <h2 className="planet-heading sora">EXPLORE BY YOUR RULING PLANET</h2>
           <Row className="justify-content-center moon-planet">
             {planetData.map((p, i) => (
               <Col

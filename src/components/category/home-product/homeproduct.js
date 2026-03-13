@@ -30,7 +30,7 @@ const products = [
   },
   {
     title: "Soap",
-    size: "100 gsm",
+    size: "100 gms",
     img: "/images/sp.png",
     link: "/product",
   },
@@ -64,8 +64,8 @@ const Homeproduct = () => {
                   </div>
 
                   <div className="product-info-collection sora">
-                    <h5>
-                      {item.title} <span>›</span>
+                    <h5 className="d-flex justify-content-between">
+                      {item.title} <span className="">›</span>
                     </h5>
                     <div className="underline" />
                     <p>{item.size}</p>

@@ -13,6 +13,8 @@ import Zodic from "../Zodiacs/zodics";
 import Moonsection from "../../components/moonsection/moonsection";
 import { useState } from "react";
 import { Alert, Spinner } from "react-bootstrap";
+import Tolvvsection from "../../components/tolvv-section/tolvvsection";
+import Reviews from "../../components/reviews/reviews";
 
 const Homepage = () => {
   const productss = [
@@ -190,202 +192,173 @@ const Homepage = () => {
         </Carousel>
       </div>
 
+      {/* what is tolvv Section */}
+      <Tolvvsection />
+
       {/* Zodics section */}
       <Zodic />
 
       {/* moon section */}
       <Moonsection />
 
+      {/* Banner Section */}
+      <div className="hero-banner">
+        <Container className="hero-content-1 text-dark text-start sora py-5">
+          <h2>Crafted for your skin's glow.</h2>
+          <p>EXPLORE PRODUCTS FROM BATH GELS TO ESSENTIAL OILS & PERFUMES.</p>
+        </Container>
+      </div>
+
       {/* Products Section */}
       <Homeproduct />
 
       {/* benifits */}
 
-      <div
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#D1D3D4" }}
-      >
-        <div className="container text-center benifits-section">
-          {/* Heading */}
-          <h1 className="fw-light mb-5 artisan-font">Benefits</h1>
-
-          {/* Paragraph 1 */}
-          <p className="mx-auto">
-            Our Zodiac Collection blends luxurious skincare with the energy of
-            your sign, creating a ritual that feels personally designed for you.
-            Each soap, body lotion, bath gel, and perfume is infused with
-            mood-enhancing aromas, skin-loving botanicals, and intention-driven
-            formulations that resonate with your zodiac’s natural traits.
-            Whether you’re a fiery Aries seeking invigorating freshness or a
-            calm Pisces craving soothing hydration, every product aligns with
-            the essence of your cosmic personality.
-          </p>
-
-          {/* Paragraph 2 */}
-          <p className="mx-auto mt-4">
-            These products don’t just nourish your skin; they elevate your
-            spirit. Feel the difference as signature fragrances boost your mood,
-            celestial ingredients restore balance, and your daily routine
-            transforms into a grounding, empowering ritual. With every use,
-            you’re not just caring for your body—you’re connecting with your
-            inner energy, enhancing your aura, and celebrating the unique magic
-            of your zodiac sign.
-          </p>
-        </div>
-      </div>
-      <div
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#D1D3D4" }}
-      >
-        <div className="container text-center">
-          {/* Heading */}
-          <h1 className="fw-light mb-5 artisan-font">Know Us</h1>
-
-          {/* Row */}
-          <div className="row align-items-center justify-content-center gap-5">
+      <section className="benefits-wrapper">
+        <Container fluid>
+          <Row className="g-0 align-items-center">
             {/* Left Image */}
-            <div className="col-lg-5 col-md-6 col-sm-12 mb-4 mb-lg-0">
-              <img
-                src="./images/know-us.jpeg"
-                alt="Founders"
-                className="img-fluid "
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
+            <Col lg={4} md={12}>
+              <div className="benefits-image">
+                <img
+                  src="./images/benifits.png"
+                  alt="benefits"
+                  className="img-fluid"
+                />
+              </div>
+            </Col>
 
-            {/* Right Text */}
-            <div className="col-lg-6 col-md-10 col-sm-12 text-center">
-              <h2
-                className="fw-bold mb-4"
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: "28px",
-                }}
-              >
-                NEHA & ADITI
-              </h2>
+            {/* Right Content */}
+            <Col lg={8} md={12}>
+              <div className="benefits-content sora text-center">
+                <h2 className="benefits-title artisan-font text-center">
+                  The Benefits
+                </h2>
 
-              <p style={{ color: "#333", lineHeight: "1.8" }}>
-                We’re Neha and Aditi, kindred souls on a shared path.
-              </p>
-              <p style={{ color: "#333", lineHeight: "1.8" }}>
-                United by more than friendship, a spiritual journey that has
-                guided every step of our lives. A bond beyond emotions, founded
-                on connection, spirituality, and the subtle guidance of the
-                universe.
-              </p>
-              <p style={{ color: "#333", lineHeight: "1.8" }}>
-                Together, we discovered a shared passion for zodiac, the energy
-                of the signs, and the spiritual rhythm that flows through
-                everything around us.
-              </p>
-              <p style={{ color: "#333", lineHeight: "1.8" }}>
-                This passion inspired us to start our personalised bath and body
-                brand, a space where signs meet science, where every product
-                resonates with the unique energy of the 12 sun signs.
-              </p>
-              <p style={{ color: "#333", lineHeight: "1.8" }}>
-                Each item is crafted with intention, care, and love, so you can
-                experience self-care that’s deeply personal, and aligned with
-                your cosmic energy.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+                <p>
+                  Our Zodiac Collection blends luxurious skincare with the
+                  energy of your sign, creating a ritual that feels personally
+                  designed for you. Each soap, body lotion, bath gel, and
+                  perfume is infused with mood-enhancing aromas, skin-loving
+                  botanicals, and intention-driven formulations that resonate
+                  with your zodiac’s natural traits. Whether you’re a fiery
+                  Aries seeking invigorating freshness or a calm Pisces craving
+                  soothing hydration, every product aligns with the essence of
+                  your cosmic personality.{" "}
+                </p>
+
+                <p>
+                  These products don’t just nourish your skin; they elevate your
+                  spirit. Feel the difference as signature fragrances boost your
+                  mood, celestial ingredients restore balance, and your daily
+                  routine transforms into a grounding, empowering ritual. With
+                  every use, you’re not just caring for your body—you’re
+                  connecting with your inner energy, enhancing your aura, and
+                  celebrating the unique magic of your zodiac sign.
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Know us Section */}
+      <section className="know-wrapper">
+        <Container>
+          <Row className="align-items-center">
+            {/* LEFT CONTENT */}
+            <Col lg={6} md={12}>
+              <div className="know-content sora ">
+                <h2 className="know-title artisan-font">Know Us Better</h2>
+                <h6 className="know-subtitle text-end">
+                  Neha, Shreeya & Aditi
+                </h6>
+
+                <p className="bold">
+                  We’re Neha and Aditi, kindred souls on a shared path.
+                </p>
+
+                <p>
+                  United by more than friendship, a spiritual journey that has
+                  guided every step of our lives. A bond beyond emotions,
+                  founded on connection, spirituality, and the subtle guidance
+                  of the universe.
+                </p>
+
+                <p>
+                  Together, we discovered a shared passion for zodiac, the
+                  energy of the signs, and he spiritual rhythm that flows
+                  through everything around us. This passion inspired us to
+                  start our personalised bath and body brand, a space where
+                  signs meets science, where every product resonates with the
+                  unique energy of the 12 sun signs. Each product is crafted
+                  with intention, care, and love, so you can experience
+                  self-care that’s deeply personal, and aligned with your cosmic
+                  energy.
+                </p>
+
+                <p className="bold">Hi, I am Shreeya,</p>
+
+                <p>
+                  As the next generation in this journey, I grew up immersed in
+                  spirituality, zodiac wisdom, and the belief that energy shapes
+                  everything. As a Capricorn, I am grounded yet deeply intuitive
+                  - drawn to the structure of science as much as the mystery of
+                  the cosmos. I help bridge tradition with a modern lens,
+                  blending branding, creativity, and intention into every detail
+                  of our products. For me, this brand is about creating rituals
+                  that feel intimate, empowering & aligned — where self-care
+                  becomes a reflection of who you truly are.
+                </p>
+              </div>
+            </Col>
+
+            {/* RIGHT IMAGE */}
+            <Col lg={6} md={12}>
+              <div className="know-image">
+                <img
+                  src="./images/knowus.png"
+                  alt="team"
+                  className="img-fluid"
+                />
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* FAQ Section */}
       <div
         className="container-fluid py-5"
         style={{ backgroundColor: "#D1D3D4" }}
       >
-        <div className="container">
-          <div className="row align-items-center justify-content-center text-center gap-5">
-            {/* Left Text Section */}
-            <div className="col-lg-6 col-md-10 col-sm-12 mb-4 mb-lg-0">
-              <h2
-                className="fw-bold mb-4 text-center "
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: "28px",
-                  color: "#000",
-                }}
-              >
-                WHAT IS TOLVV?
-              </h2>
+        <section className="faq-header sora pt-5">
+          <Container>
+            <Row className="align-items-center">
+              {/* Left Side */}
+              <Col lg={6} md={12}>
+                <div className="faq-left">
+                  <h1 className="faq-title artisan-font">Faqs</h1>
+                  <p className="faq-subtitle">
+                    Questions you may have
+                  </p>
+                </div>
+              </Col>
 
-              <p style={{ color: "#333", lineHeight: "1.8", fontSize: "15px" }}>
-                Tolvv is inspired by the twelve sun signs — the cosmic forces
-                that shape our emotions, energy, and essence. Since ancient
-                times, the alignment of the sun, moon, and planets has guided
-                us, revealing how the universe influences our lives and
-                well-being.
-              </p>
-
-              <p style={{ color: "#333", lineHeight: "1.8", fontSize: "15px" }}>
-                At Tolvv, we’ve reimagined this ancient wisdom into a modern
-                skincare experience, where the mind, body, and soul come into
-                alignment. Each product is thoughtfully crafted to reflect the
-                unique energy of the zodiac, helping you nurture your emotional,
-                physical, and spiritual balance through everyday rituals.
-              </p>
-
-              <p style={{ color: "#333", lineHeight: "1.8", fontSize: "15px" }}>
-                These are more than skincare essentials — they are reflections
-                of you, designed to help you glow from within, in harmony with
-                the cosmos.
-              </p>
-            </div>
-
-            {/* Right Image Section */}
-            <div className="col-lg-5 col-md-8 col-sm-10 text-center">
-              <img
-                src="./images/hamper-tolvv.png"
-                alt="Tolvv Product"
-                className="img-fluid"
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#D1D3D4" }}
-      >
+              {/* Right Side */}
+              <Col lg={6} md={12}>
+                <div className="faq-right">
+                  <p>
+                    We have picked our most frequently asked questions to help
+                    with your queries. Explore them here
+                  </p>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </section>
         <div className="container text-center">
           {/* Header */}
-          <h1 className="artisan-font">Faqs</h1>
-          <h5
-            className="my-4"
-            style={{
-              fontSize: "16px",
-              letterSpacing: "1px",
-              color: "#000",
-              textTransform: "uppercase",
-            }}
-          >
-            QUESTIONS YOU MAY HAVE
-          </h5>
-
-          {/* Description */}
-          <p
-            className="sora text-start"
-            style={{
-              color: "#000",
-              fontSize: "15px",
-              lineHeight: "1.8",
-            }}
-          >
-            We've picked our most frequently asked questions. Here you can find
-            out the information you are interested in
-          </p>
 
           {/* FAQ List */}
           <div
@@ -397,7 +370,8 @@ const Homepage = () => {
           </div>
         </div>
       </div>
-      <div className="" style={{ backgroundColor: "" }}>
+
+      <div className="" style={{ backgroundColor: "#f2f3f3" }}>
         {/* Contact Form Section */}
         {/* Contact Form Section */}
         <section className="form-section sora">
@@ -413,7 +387,7 @@ const Homepage = () => {
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 
-              <p className="text-center mt-4 text-uppercase connect-desc">
+              <p className="text-start mt-4 text-uppercase connect-desc">
                 CONTACT US TO DISCUSS YOUR QUESTIONS OR CONNECT FOR
                 COLLABORATION
               </p>
@@ -500,6 +474,9 @@ const Homepage = () => {
           </Container>
         </section>
       </div>
+
+      {/* Reviews Section */}
+      <Reviews />
 
       {/* Footer Component */}
       <Footer />
