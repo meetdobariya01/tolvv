@@ -195,8 +195,10 @@ const Homepage = () => {
       {/* what is tolvv Section */}
       <Tolvvsection />
 
-      {/* Zodics section */}
-      <Zodic />
+      <section id="zodiac">
+        {/* Zodics section */}
+        <Zodic />
+      </section>
 
       {/* moon section */}
       <Moonsection />
@@ -214,7 +216,7 @@ const Homepage = () => {
 
       {/* benifits */}
 
-      <section className="benefits-wrapper">
+      <section className="benefits-wrapper" id="benefits">
         <Container fluid>
           <Row className="g-0 align-items-center">
             {/* Left Image */}
@@ -263,7 +265,7 @@ const Homepage = () => {
       </section>
 
       {/* Know us Section */}
-      <section className="know-wrapper">
+      <section className="know-wrapper" id="knowus">
         <Container>
           <Row className="align-items-center">
             {/* LEFT CONTENT */}
@@ -332,16 +334,14 @@ const Homepage = () => {
         className="container-fluid py-5"
         style={{ backgroundColor: "#D1D3D4" }}
       >
-        <section className="faq-header sora pt-5">
+        <section className="faq-header sora pt-5" id="faqs">
           <Container>
             <Row className="align-items-center">
               {/* Left Side */}
               <Col lg={6} md={12}>
                 <div className="faq-left">
                   <h1 className="faq-title artisan-font">Faqs</h1>
-                  <p className="faq-subtitle">
-                    Questions you may have
-                  </p>
+                  <p className="faq-subtitle">Questions you may have</p>
                 </div>
               </Col>
 
@@ -371,10 +371,9 @@ const Homepage = () => {
         </div>
       </div>
 
-      <div className="" style={{ backgroundColor: "#f2f3f3" }}>
+      <div className="p-5" style={{ backgroundColor: "#f2f3f3" }}>
         {/* Contact Form Section */}
-        {/* Contact Form Section */}
-        <section className="form-section sora">
+        <section className="form-section sora" id="contact">
           <Container>
             <motion.div
               className="form-content"
@@ -392,9 +391,10 @@ const Homepage = () => {
                 COLLABORATION
               </p>
 
-              <Form className="connect-form mt-4" onSubmit={handleSubmit}>
-                <Form.Group className="mb-4">
+              <Form className="connect-form mt-4 " onSubmit={handleSubmit}>
+                <Form.Group className="mb-4 ">
                   <Form.Control
+                    className="underline-input"
                     type="text"
                     placeholder="YOUR NAME"
                     name="name"
@@ -408,6 +408,7 @@ const Homepage = () => {
                   <Col md={6}>
                     <Form.Group className="mb-4">
                       <Form.Control
+                        className="underline-input"
                         type="email"
                         placeholder="YOUR EMAIL"
                         name="email"
@@ -421,6 +422,7 @@ const Homepage = () => {
                   <Col md={6}>
                     <Form.Group className="mb-4">
                       <Form.Control
+                        className="underline-input"
                         type="text"
                         placeholder="YOUR PHONE NUMBER"
                         name="phone"
@@ -434,6 +436,7 @@ const Homepage = () => {
 
                 <Form.Group className="mb-4">
                   <Form.Control
+                    className="underline-input"
                     type="text"
                     placeholder="SUBJECT OF YOUR CONCERNS"
                     name="subject"
@@ -445,8 +448,9 @@ const Homepage = () => {
 
                 <Form.Group className="mb-5">
                   <Form.Control
+                    className="underline-input"
                     as="textarea"
-                    rows={4}
+                    rows={2}
                     placeholder="YOUR MESSAGE"
                     name="message"
                     value={form.message}

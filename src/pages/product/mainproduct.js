@@ -10,7 +10,7 @@ import "./mainproduct.css";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Mainproduct = () => {
-  const [activeKey, setActiveKey] = useState("Bath Gel");
+  const [activeKey, setActiveKey] = useState("");
   const [productsByCategory, setProductsByCategory] = useState({});
   const navigate = useNavigate();
 
@@ -170,7 +170,7 @@ const Mainproduct = () => {
       <Header />
 
       {/* HERO SECTION */}
-      <section className="hero-section">
+      {/* <section className="hero-section">
         <div className="hero-overlay"></div>
         <div className="hero-content text-dark  ">
           <h1 className="gt-super">
@@ -183,7 +183,7 @@ const Mainproduct = () => {
             Explore products from bath gels to essential oils
           </p>
         </div>
-      </section>
+      </section> */}
 
       <div className="container py-5">
         {/* CATEGORY GRID */}
@@ -192,7 +192,7 @@ const Mainproduct = () => {
             <Row className="gx-3 gy-3 mb-5">
               <h2 className="products-heading artisan-font mt-5">All Sun Signs</h2>
               {products.map((item, index) => (
-                <Col key={index} xs={4} sm={6} md={4} lg={2}>
+                <Col key={index} xs={6} sm={6} md={4} lg={2}>
                   <div
                     className="product-card p-2"
                     onClick={() => handleCategoryClick(item.category)}
@@ -226,7 +226,7 @@ const Mainproduct = () => {
               className="col-6 col-md-3 mb-4 product-card-animate"
               key={item._id}
             >
-              <Card className="product-card">
+              <Card className="product-card p-1">
 
                 {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
                 <NavLink to={`/productdetails/${item._id}`}>

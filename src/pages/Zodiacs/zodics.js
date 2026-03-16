@@ -416,7 +416,7 @@ const Zodic = () => {
     "Pisces",
   ];
   const token = localStorage.getItem("token");
-  const [selectedZodiac, setSelectedZodiac] = useState(zodiacData["Aries"]);
+  const [selectedZodiac, setSelectedZodiac] = useState(null);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -442,25 +442,25 @@ const Zodic = () => {
       }
     };
     fetchProducts();
-  }, );
+  });
   const handleBuyNow = async (product) => {
     if (!product) return;
 
     // ✅ LOGGED-IN USER
     if (token) {
       try {
-       await axios.post(
-  `${API_URL}/cart/add`,
-  {
-    productId: product._id,
-    quantity: 1,
-  },
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+        await axios.post(
+          `${API_URL}/cart/add`,
+          {
+            productId: product._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
         navigate("/cart");
       } catch (error) {
@@ -545,7 +545,7 @@ const Zodic = () => {
                   >
                     <div
                       className="zodiac-circle"
-                    // style={{ backgroundColor: sign.color }}
+                      // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
@@ -570,134 +570,109 @@ const Zodic = () => {
       </div>
 
       {/* RED SECTION (Dynamic Content) */}
-      <section
-        className="aries-section text-center"
-        style={{ backgroundColor: selectedZodiac.color }}
-      >
-        <div className="aries-content inter container sora">
-          <p className="aries-date gt-super">{selectedZodiac.date}</p>
-          <h1
-            className="aries-title"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            {selectedZodiac.name}
-          </h1>
+      {selectedZodiac && (
+        <section
+          className="aries-section text-center"
+          style={{ backgroundColor: selectedZodiac.color }}
+        >
+          <div className="aries-content inter container sora">
+            <div className="zodiac-header text-white text-center">
+              <p className="aries-date mb-3">{selectedZodiac.date}</p>
 
-          <div className="d-flex justify-content-center align-items-center gap-3">
-            
-            <h1
-              className="aries-title"
-              // style={{
-              //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-              // }}
-            >
-              {selectedZodiac.name}
-            </h1>
+              <div className="d-flex justify-content-center align-items-center gap-4">
+                <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
 
-            <div className="aries-icon-circle">
-              <img
-                src={selectedZodiac.icon}
-                alt="icon"
-                className="aries-icon-img"
-              />
+                <div
+                  className="aries-icon-circle d-flex justify-content-center align-items-center"
+                  style={{ backgroundColor: selectedZodiac.color }}
+                >
+                  <img
+                    src={selectedZodiac.icon}
+                    alt="icon"
+                    className="aries-icon-img"
+                  />
+                </div>
+              </div>
             </div>
+
+            <p className="aries-description mt-3">
+              {selectedZodiac.description}
+            </p>
+
+            <p className="aries-details">
+              <span>Corresponding Letters : {selectedZodiac.letters}</span>{" "}
+              &nbsp; | &nbsp;
+              <span>Astral Energy : {selectedZodiac.energy}</span> &nbsp; |
+              &nbsp;
+              <span>Stamina : {selectedZodiac.stamina}</span>
+              <br />
+              <span>Colour : {selectedZodiac.colorText}</span> &nbsp; | &nbsp;
+              <span>Element : {selectedZodiac.element}</span> &nbsp; | &nbsp;
+              <span>Ruling Planet : {selectedZodiac.planet}</span>
+            </p>
           </div>
 
-          <p
-            className="aries-date"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            Date : {selectedZodiac.date}
-          </p>
+          <p className="gt-super ingredients">INGREDIENTS</p>
 
-          <p
-            className="aries-description"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            {selectedZodiac.description}
-          </p>
+          {/* Herbs Section */}
+          <div className="aries-images container d-flex justify-content-center gap-5 flex-wrap">
+            {selectedZodiac.herbs.map((img, i) => (
+              <img key={i} src={img} alt="herb" className="half-out-image" />
+            ))}
+          </div>
 
-          <p
-            className="aries-details"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            <span>Corresponding Letters : {selectedZodiac.letters}</span> &nbsp;
-            | &nbsp;
-            <span>Astral Energy : {selectedZodiac.energy}</span> &nbsp; | &nbsp;
-            <span>Stamina : {selectedZodiac.stamina}</span>
-            <br />
-            <span>Colour : {selectedZodiac.colorText}</span> &nbsp; | &nbsp;
-            <span>Element : {selectedZodiac.element}</span> &nbsp; | &nbsp;
-            <span>Ruling Planet : {selectedZodiac.planet}</span>
-          </p>
-        </div>
-
-        <p className="gt-super ingredients">INGREDIENTS</p>
-
-        {/* Herbs Section */}
-        <div className="aries-images container d-flex justify-content-center gap-5 flex-wrap">
-          {selectedZodiac.herbs.map((img, i) => (
-            <img key={i} src={img} alt="herb" className="half-out-image" />
-          ))}
-        </div>
-
-        {/* PRODUCTS */}
-        {/* PRODUCTS – WHITE BACKGROUND */}
-        <div className="product-wrapper py-5">
-          <h2 className="product-text mb-4 text-center sora">
+          {/* PRODUCTS */}
+          {/* PRODUCTS – WHITE BACKGROUND */}
+          <div className="product-wrapper py-5">
+            {/* <h2 className="product-text mb-4 text-center sora">
             {xyz.find((item) => item.name === selectedZodiac.name)?.xyz1}
-          </h2>
+          </h2> */}
 
-          <div className="container sora">
-            <div className="product-grid">
-              {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-                <div className="product-card" key={index}>
-                  <div className="product-box-zodiac p-1">
-                    <img
-                      src={p.Photos}
-                      alt={p.ProductName}
-                      className="zodiac-product-img"
-                    />
+            <div className="container sora">
+              <div className="product-grid">
+                {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
+                  <div className="product-card" key={index}>
+                    <div className="product-box-zodiac p-1">
+                      <img
+                        src={p.Photos}
+                        alt={p.ProductName}
+                        className="zodiac-product-img"
+                      />
 
-                    <div className="product-info">
-                      <p className="name">
-                        {p.ProductName} <span>›</span>
-                      </p>
-                      <p className="name">{p.ProductName}</p>
-                      <p className="size">{p.size}</p>
-                      <div className="price-with-dot">
-                        <span
-                          className="zodiac-dot"
-                          style={{ backgroundColor: selectedZodiac.color }}
-                        ></span>
+                      <div className="product-info">
+                        <p className="name">
+                          {p.ProductName} <span>›</span>
+                        </p>
+                        {/* <p className="name">{p.ProductName}</p> */}
+                        {/* <p className="size">{p.size}</p> */}
+                        <div className="price-with-dot-1">
+                          <span
+                            className="zodiac-dot"
+                            style={{ backgroundColor: selectedZodiac.color }}
+                          ></span>
 
-                        <span className="zodiac-price">₹{p.ProductPrice}</span>
-                      </div>
+                          <span className="zodiac-price">
+                            ₹ {p.ProductPrice}
+                          </span>
+                        </div>
 
-                      <div className="underline" />
-                      <p className="size">{p.size}</p>
-                      {/* <button
+                        <div className="underline" />
+                        <p className="size">{p.size}</p>
+                        {/* <button
                         className="btn btn-outline-dark mt-1"
                         onClick={() => handleBuyNow(p)}
                       >
                         Buy Now
                       </button> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 };

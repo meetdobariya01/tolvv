@@ -7,16 +7,17 @@
   background: #ffffff;
   padding: 50px 0;
 }
-.price-with-dot {
+.price-with-dot-1 {
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   gap: 6px;
+  text-align: start;
 }
 
 .zodiac-dot {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
 }
 .product-wrapper .product-heading {
@@ -93,7 +94,7 @@
 .product-info .name {
   font-size: 14px;
   font-weight: 600;
-  height: 40px;
+  /* height: 40px; */
   overflow: hidden;
   color: #000;
   display: -webkit-box;
@@ -204,7 +205,7 @@
 /* ZODIAC NAME */
 .zodiac-name {
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 14px;
   letter-spacing: 1px;
   color: #fff;
 }

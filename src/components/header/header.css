@@ -6,7 +6,7 @@
 
 /* Logo */
 .logo-img {
-  height: 77px;        /* desktop size */
+  height: 96px;        /* desktop size */
   width: auto;
   object-fit: contain;
   transition: 0.3s ease;
