@@ -575,9 +575,7 @@ const Zodic = () => {
         style={{ backgroundColor: selectedZodiac.color }}
       >
         <div className="aries-content inter container sora">
-<<<<<<< HEAD
           <p className="aries-date gt-super">{selectedZodiac.date}</p>
-=======
           <h1
             className="aries-title"
           // style={{
@@ -586,7 +584,6 @@ const Zodic = () => {
           >
             {selectedZodiac.name}
           </h1>
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
           <div className="d-flex justify-content-center align-items-center gap-3">
             
@@ -609,8 +606,6 @@ const Zodic = () => {
           </div>
 
           <p
-<<<<<<< HEAD
-=======
             className="aries-date"
           // style={{
           //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
@@ -620,7 +615,6 @@ const Zodic = () => {
           </p>
 
           <p
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
             className="aries-description"
           // style={{
           //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
@@ -674,11 +668,9 @@ const Zodic = () => {
                     />
 
                     <div className="product-info">
-<<<<<<< HEAD
                       <p className="name">
                         {p.ProductName} <span>›</span>
                       </p>
-=======
                       <p className="name">{p.ProductName}</p>
                       <p className="size">{p.size}</p>
                       <div className="price-with-dot">
@@ -686,7 +678,6 @@ const Zodic = () => {
                           className="zodiac-dot"
                           style={{ backgroundColor: selectedZodiac.color }}
                         ></span>
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
                         <span className="zodiac-price">₹{p.ProductPrice}</span>
                       </div>

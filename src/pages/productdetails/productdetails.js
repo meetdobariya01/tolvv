@@ -127,20 +127,8 @@ const Productdetails = () => {
     const fetchProductData = async () => {
       try {
         setLoading(true);
-<<<<<<< HEAD
         const response = await axios.get(`${API_URL}/api/products/${id}`);
         const product = response.data;
-=======
-
-        const response = await axios.get(`${API_URL}/products/${id}`);
-
-        const product = response.data?.product || response.data;
-
-        if (!product) {
-          throw new Error("Product not found in response");
-        }
-
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         setDbProduct(product);
 
         if (product?.Category) {
@@ -195,7 +183,6 @@ const Productdetails = () => {
     // ✅ USER LOGGED IN
     if (token) {
       try {
-<<<<<<< HEAD
         await axios.post(
           `${API_URL}/api/add-to-cart`,
           {
@@ -208,14 +195,6 @@ const Productdetails = () => {
             },
           },
         );
-=======
-        await axios.post(`${API_URL}/cart/add`, {
-          productId: dbProduct._id,
-          quantity: 1
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
 
         navigate("/cart");
       } catch (error) {

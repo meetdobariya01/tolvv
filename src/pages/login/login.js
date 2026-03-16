@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import "./login.css";
@@ -21,6 +21,19 @@ const Login = () => {
 
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
+  const validate = () => {
+    if (!formData.email.trim()) {
+      setServerError("Email is required");
+      return false;
+    }
+
+    if (!formData.password.trim()) {
+      setServerError("Password is required");
+      return false;
+    }
+
+    return true;
+  };
 
   // -----------------------------
   // Input change
@@ -31,35 +44,24 @@ const Login = () => {
     });
   };
 
-<<<<<<< HEAD
-  const mergeGuestCart = async (token) => {
-    const guestCart = Cookies.get("guestCart");
-    if (!guestCart) return;
+  // const mergeGuestCart = async (token) => {
+  //   const guestCart = Cookies.get("guestCart");
+  //   if (!guestCart) return;
 
-    const guestItems = JSON.parse(guestCart);
+  //   const guestItems = JSON.parse(guestCart);
 
-    await axios.post(
-      `${api_base}/merge`,
-      { guestItems },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+  //   await axios.post(
+  //     `${api_base}/merge`,
+  //     { guestItems },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     },
+  //   );
 
-    Cookies.remove("guestCart");
-=======
-  // -----------------------------
-  // Validate form
-  const validate = () => {
-    if (!formData.email || !formData.password) {
-      setServerError("Email and password are required");
-      return false;
-    }
-    return true;
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
-  };
+  //   Cookies.remove("guestCart");
+  // };
 
   // -----------------------------
   // Merge guest cart
@@ -74,7 +76,7 @@ const Login = () => {
       { guestItems },
       {
         headers: { Authorization: `Bearer ${token}` },
-      }
+      },
     );
 
     Cookies.remove("guestCart");
@@ -101,21 +103,12 @@ const Login = () => {
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-<<<<<<< HEAD
       // ✅ CORRECT FUNCTION CALL
-=======
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
       await mergeGuestCart(token);
 
       navigate("/cart");
     } catch (err) {
-<<<<<<< HEAD
       setServerError(err.response?.data?.message || "Invalid credentials");
-=======
-      setServerError(
-        err.response?.data?.message || "Login failed"
-      );
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
     } finally {
       setLoading(false);
     }
@@ -153,12 +146,7 @@ const Login = () => {
   return (
     <div>
       <Header />
-<<<<<<< HEAD
       <div className="pro-loginpage-wrapper d-flex align-items-center justify-content-center">
-=======
-
-      <div className="pro-login-wrapper d-flex align-items-center justify-content-center">
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -207,13 +195,13 @@ const Login = () => {
             onSuccess={handleGoogleLogin}
             onError={() => setServerError("Google login failed")}
           />
-<<<<<<< HEAD
 
           <p className="text-center mt-3">
-            No account? <NavLink className="text-decoration-none text-dark" to="/signup">Sign up</NavLink>
+            No account?{" "}
+            <NavLink className="text-decoration-none text-dark" to="/signup">
+              Sign up
+            </NavLink>
           </p>
-=======
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
         </motion.div>
       </div>
 

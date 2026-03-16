@@ -246,39 +246,16 @@ const Mainproduct = () => {
                 <Card.Body className="product-info sora">
                   <div className="product-top">
                     <div className="title-wrap">
-<<<<<<< HEAD
                       <h6 className="product-page-title">
                         <NavLink className="text-decoration-none text-dark" to={`/productdetails/${item._id}`}>
                           {item.ProductName} <span>›</span>
                         </NavLink>
                       </h6>
-=======
-
-                      {/* ✅ PRODUCT NAME CLICK → PRODUCT DETAILS */}
-                      <NavLink
-                        to={`/productdetails/${item._id}`}
-                        style={{ textDecoration: "none", color: "inherit" }}
-                      >
-                        <h6 className="product-page-title">
-                          {item.ProductName} <span>›</span>
-                        </h6>
-                      </NavLink>
-
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
                       <p className="product-size">{item.size}</p>
                     </div>
 
                     <div className="price-wrap">
-<<<<<<< HEAD
                       {/* <span className="price-dot"></span> */}
-=======
-                      <span
-                        className="price-dot"
-                        style={{
-                          backgroundColor: zodiacColors[item.Zodiac] || "#ccc",
-                        }}
-                      ></span>
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
                       <span className="product-price">
                         ₹ {item.ProductPrice}
                       </span>
@@ -287,22 +264,11 @@ const Mainproduct = () => {
 
                   <div className="product-divider"></div>
 
-<<<<<<< HEAD
                   <NavLink to={`/productdetails/${item._id}`}>
                     <Button size="sm" className="cart-btn text-uppercase w-md-50">
                       Add to Cart
                     </Button>
                   </NavLink>
-=======
-                  {/* ✅ ONLY BUY NOW BUTTON */}
-                  <Button
-                    size="sm"
-                    className="cart-btn w-100"
-                    onClick={() => handleBuyNow(item)}
-                  >
-                    BUY NOW
-                  </Button>
->>>>>>> 7510bfc643ec65ddd512432f10dc2e7f14a55457
                 </Card.Body>
               </Card>
             </div>
