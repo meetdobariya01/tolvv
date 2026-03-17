@@ -8,65 +8,36 @@ import axios from "axios";
 import "./mainproduct.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
-
-const Mainproduct = () => {
-  const [activeKey, setActiveKey] = useState("Bath Gel");
+const zodiacColors = {
+  Aries: "#c10230",
+  Taurus: "#ae1857",
+  Gemini: "#d79a2b",
+  Cancer: "#85422b",
+  Leo: "#4d5a31",
+  Virgo: "#5f504d",
+  Libra: "#7e622d",
+  Scorpio: "#2d2a26",
+  Sagittarius: "#490e67",
+  Capricorn: "#726b54",
+  Aquarius: "#005d63",
+  Pisces: "#006098",
+};
+const Mainproduct = ({ handleCartOpen }) => {
+  const [activeKey, setActiveKey] = useState("");
   const [productsByCategory, setProductsByCategory] = useState({});
   const navigate = useNavigate();
 
-  // ✅ Category cards (clickable)
   const products = [
-    {
-      title: "Bath Gel",
-      size: "200 ml",
-      img: "/images/bl.png",
-      category: "Bath Gel",
-    },
-    {
-      title: "Body Lotion",
-      size: "200 ml",
-      img: "/images/bb.png",
-      category: "Body Lotion",
-    },
-    {
-      title: "Perfume",
-      size: "50 ml",
-      img: "/images/pr.png",
-      category: "Perfume",
-    },
-    {
-      title: "Essential Oil",
-      size: "30 ml",
-      img: "/images/eo.png",
-      category: "Essential Oil",
-    },
+    { title: "Bath Gel", size: "200 ml", img: "/images/bl.png", category: "Bath Gel" },
+    { title: "Body Lotion", size: "200 ml", img: "/images/bb.png", category: "Body Lotion" },
+    { title: "Perfume", size: "50 ml", img: "/images/pr.png", category: "Perfume" },
+    { title: "Essential Oil", size: "30 ml", img: "/images/eo.png", category: "Essential Oil" },
     { title: "Soap", size: "100 gsm", img: "/images/sp.png", category: "Soap" },
-    {
-      title: "Hamper",
-      size: "",
-      img: "/images/hamper.jpg",
-      category: "Hamper",
-    },
+    { title: "Hamper", size: "", img: "/images/hamper.jpg", category: "Hamper" },
   ];
-  const zodiacColors = {
-    Aries: "#C0392B",
-    Taurus: "#27AE60",
-    Gemini: "#F1C40F",
-    Cancer: "#5DADE2",
-    Leo: "#E67E22",
-    Virgo: "#16A085",
-    Libra: "#AF7AC5",
-    Scorpio: "#922B21",
-    Sagittarius: "#D35400",
-    Capricorn: "#2C3E50",
-    Aquarius: "#48C9B0",
-    Pisces: "#5B2C6F"
-  };
+
   const categories = products.map((p) => p.category);
 
-  const token = localStorage.getItem("token");
-
-  // ✅ Fetch products from API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -90,29 +61,35 @@ const Mainproduct = () => {
     };
 
     fetchProducts();
-  }, []);
+  },);
+
   const handleBuyNow = async (product) => {
     if (!product) return;
 
     const token = localStorage.getItem("token");
 
-    // ✅ LOGGED-IN USER
+    // ✅ Logged-in user
     if (token) {
       try {
-       await axios.post(
-  `${API_URL}/cart/add`,
-  {
-    productId: product._id,
-    quantity: 1,
-  },
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+        await axios.post(
+          `${API_URL}/cart/add`,
+          {
+            productId: product._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        navigate("/cart");
+        // ✅ SAFE CALL
+        if (handleCartOpen) {
+          handleCartOpen();
+        } else {
+          navigate("/cart"); // fallback (no sidebar case)
+        }
       } catch (error) {
         console.error("Add to cart error:", error.response || error);
 
@@ -124,7 +101,7 @@ const Mainproduct = () => {
       }
     }
 
-    // ✅ GUEST USER
+    // ✅ Guest user
     else {
       let cart = [];
 
@@ -154,10 +131,16 @@ const Mainproduct = () => {
       }
 
       Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-      navigate("/cart");
+
+      // ✅ SAFE CALL
+      if (handleCartOpen) {
+        handleCartOpen();
+      } else {
+        navigate("/cart");
+      }
     }
   };
-  // ✅ Category click handler
+
   const handleCategoryClick = (category) => {
     setActiveKey(category);
     document
@@ -169,30 +152,13 @@ const Mainproduct = () => {
     <div>
       <Header />
 
-      {/* HERO SECTION */}
-      <section className="hero-section">
-        <div className="hero-overlay"></div>
-        <div className="hero-content text-dark  ">
-          <h1 className="gt-super">
-            CELESTIAL CARE
-          </h1>
-          <p className="hero-subtitle sora">
-            Crafted for your skin’s glow.
-          </p>
-          <p className="hero-desc sora">
-            Explore products from bath gels to essential oils
-          </p>
-        </div>
-      </section>
-
       <div className="container py-5">
-        {/* CATEGORY GRID */}
         <section className="products-section-grid">
           <Container>
             <Row className="gx-3 gy-3 mb-5">
               <h2 className="products-heading artisan-font mt-5">All Sun Signs</h2>
               {products.map((item, index) => (
-                <Col key={index} xs={4} sm={6} md={4} lg={2}>
+                <Col key={index} xs={6} sm={6} md={4} lg={2}>
                   <div
                     className="product-card p-2"
                     onClick={() => handleCategoryClick(item.category)}
@@ -205,7 +171,7 @@ const Mainproduct = () => {
                       <h5>
                         {item.title} <span>›</span>
                       </h5>
-                      <div className="underline" /> 
+                      <div className="underline" />
                       <p>{item.size}</p>
                     </div>
                   </div>
@@ -217,7 +183,6 @@ const Mainproduct = () => {
 
         <hr />
 
-        {/* PRODUCT GRID */}
         <div id="product-grid" className="row product-fade mt-4">
           <h2 className="products-heading artisan-font">{activeKey}</h2>
 
@@ -226,9 +191,9 @@ const Mainproduct = () => {
               className="col-6 col-md-3 mb-4 product-card-animate"
               key={item._id}
             >
-              <Card className="product-card">
+              <Card className="product-card p-1">
 
-                {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
+                {/* IMAGE → DETAILS */}
                 <NavLink to={`/productdetails/${item._id}`}>
                   <div className="product-img-wrap">
                     <Card.Img
@@ -247,28 +212,48 @@ const Mainproduct = () => {
                   <div className="product-top">
                     <div className="title-wrap">
                       <h6 className="product-page-title">
-                        <NavLink className="text-decoration-none text-dark" to={`/productdetails/${item._id}`}>
+                        <NavLink
+                          className="text-decoration-none text-dark"
+                          to={`/productdetails/${item._id}`}
+                        >
                           {item.ProductName} <span>›</span>
                         </NavLink>
                       </h6>
                       <p className="product-size">{item.size}</p>
                     </div>
 
+                    {/* ✅ YOUR ZODIAC DOT / PRICE UI — UNTOUCHED */}
                     <div className="price-wrap">
-                      {/* <span className="price-dot"></span> */}
-                      <span className="product-price">
-                        ₹ {item.ProductPrice}
-                      </span>
+                      <div className="price-wrap d-flex align-items-center gap-2">
+                        <span
+                          className="zodiac-dot"
+                          style={{
+                            backgroundColor: zodiacColors[item.Zodiac] || "#000",
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "50%",
+                            display: "inline-block",
+                          }}
+                        ></span>
+
+                        <span className="product-price">
+                          ₹ {item.ProductPrice}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   <div className="product-divider"></div>
 
-                  <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn text-uppercase w-md-50">
-                      Add to Cart
-                    </Button>
-                  </NavLink>
+                  {/* ✅ FIXED BUTTON */}
+                  <Button
+                    size="sm"
+                    className="cart-btn btn btn-outline-dark w-50 mt-3"
+                    onClick={() => handleBuyNow(item)}
+                  >
+                    Add to Cart
+                  </Button>
+
                 </Card.Body>
               </Card>
             </div>

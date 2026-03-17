@@ -5,29 +5,21 @@
   background: #D1D3D4;
   padding: 80px 0;
 }
+
 .price-with-dot {
   display: flex;
   align-items: center;
   /* justify-content: center; */
   gap: 6px;
-}
-.price-with-dot {
-  display: flex;
-  align-items: center;
-  /* justify-content: center; */
-  gap: 6px;
+  text-align: start;
 }
 
 .planet-dot {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
 }
-.planet-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
+
 .planet-heading {
   text-align: center;
   /* font-family: serif; */

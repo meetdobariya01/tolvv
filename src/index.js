@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import reportWebVitals from "./reportWebVitals";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
+// ✅ IMPORT SIDEBAR
+import CartSidebar from "./components/cartsidebar/cartsidebar";
 
 // Pages
 import Homepage from "./pages/homepage/homepage";
@@ -33,18 +36,28 @@ import PaymentFailed from "./pages/PaymentFailed/PaymentFailed";
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+function AppWrapper() {
+  // ✅ GLOBAL CART STATE
+  const [showCart, setShowCart] = useState(false);
 
-root.render(
-  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-    <Router basename="/">
+  const handleCartOpen = () => setShowCart(true);
+  const handleCartClose = () => setShowCart(false);
+
+  return (
+    <>
+      {/* ✅ GLOBAL SIDEBAR */}
+      <CartSidebar show={showCart} handleClose={handleCartClose} />
+
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/connect" element={<Connect />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/know-us" element={<Knowus />} />
         <Route path="/benefits" element={<Benifits />} />
-        <Route path="/product" element={<Mainproduct />} />
+        <Route
+          path="/product"
+          element={<Mainproduct handleCartOpen={handleCartOpen} />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<Forgotpassword />} />
@@ -58,13 +71,29 @@ root.render(
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/ProductPage" element={<ProductPage />} />
         <Route path="/payment-failed" element={<PaymentFailed />} />
-        <Route path="/productdetails/:id" element={<Productdetails />} />
+
+        {/* ✅ PASS handleCartOpen HERE */}
+        <Route
+          path="/productdetails/:id"
+          element={<Productdetails handleCartOpen={handleCartOpen} />}
+        />
+
         <Route path="/category" element={<Category />} />
         <Route path="/profile" element={<AccountPage />} />
         <Route path="*" element={<Error />} />
       </Routes>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <Router basename="/">
+      <AppWrapper />
     </Router>
-  </GoogleOAuthProvider>,
+  </GoogleOAuthProvider>
 );
 
 reportWebVitals();

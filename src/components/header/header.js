@@ -4,11 +4,14 @@ import { NavLink } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dropdown } from "react-bootstrap";
+import { Link } from "react-scroll";
+import CartSidebar from "../cartsidebar/cartsidebar";
 import "./header.css";
 
 const Header = () => {
   const [expanded, setExpanded] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   return (
     <>
@@ -32,9 +35,7 @@ const Header = () => {
               <FiSearch onClick={() => setSearchOpen(true)} />
             )}
 
-            <NavLink to="/cart" className="text-dark">
-              <FiShoppingCart size={22} />
-            </NavLink>
+            <FiShoppingCart size={22} onClick={() => setShowCart(true)} />
             <Dropdown align="end" className="sora">
               <Dropdown.Toggle
                 variant="link"
@@ -51,7 +52,7 @@ const Header = () => {
                 <Dropdown.Item as={NavLink} to="/profile">
                   Profile
                 </Dropdown.Item>
-         
+
                 <Dropdown.Divider />
                 <Dropdown.Item as={NavLink} to="/logout">
                   Logout
@@ -67,37 +68,53 @@ const Header = () => {
           </div>
 
           <Navbar.Collapse>
-            <Nav className="mx-auto nav-links gap-0 gap-lg-4">
+            <Nav className=" nav-links gap-0 ">
               <Nav.Link as={NavLink} to="/product">
-                PRODUCTS
+                ALL SUN SIGNS
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/twelve">
+
+              <Link
+                to="zodiac"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+              >
                 THE TWELVEs
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/benefits">
+              </Link>
+
+              <Link
+                to="benefits"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+              >
                 BENEFITS
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/know-us">
+              </Link>
+
+              <Link
+                to="knowus"
+                smooth={true}
+                duration={500}
+                className="nav-link"
+              >
                 KNOW US
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/faqs">
+              </Link>
+              <Link to="faqs" smooth={true} duration={500} className="nav-link">
                 FAQs
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/connect">
+              </Link>
+              <Link to="contact" smooth={true} duration={500} className="nav-link">
                 CONNECT
-              </Nav.Link>
+              </Link>
             </Nav>
 
             {/* Right Icons */}
-            <div className="icons d-none d-lg-flex gap-4">
+            <div className="icons mx-auto d-none d-lg-flex gap-4">
               {searchOpen ? (
                 <FiX onClick={() => setSearchOpen(false)} />
               ) : (
                 <FiSearch onClick={() => setSearchOpen(true)} />
               )}
-              <NavLink to="/cart" className="text-dark">
-                <FiShoppingCart size={22} />
-              </NavLink>
+              <FiShoppingCart size={22} onClick={() => setShowCart(true)} />
               <Dropdown align="end" className="sora">
                 <Dropdown.Toggle
                   variant="link"
@@ -114,7 +131,7 @@ const Header = () => {
                   <Dropdown.Item as={NavLink} to="/profile">
                     Profile
                   </Dropdown.Item>
-                 
+
                   <Dropdown.Divider />
                   <Dropdown.Item as={NavLink} to="/logout">
                     Logout
@@ -146,6 +163,7 @@ const Header = () => {
           )}
         </AnimatePresence>
       </Navbar>
+      <CartSidebar show={showCart} handleClose={() => setShowCart(false)} />
     </>
   );
 };

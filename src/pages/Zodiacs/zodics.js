@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
 // import { Row, Col } from "react-bootstrap";
 // import { motion } from "framer-motion";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 const Zodic = () => {
   // const [active, setActive] = useState(null);
 
-  const zodiacColors = {
-    Aries: "#c10230",
-    Taurus: "#ae1857",
-    Gemini: "#d79a2b",
-    Cancer: "#85422b",
-    Leo: "#4d5a31",
-    Virgo: "#5f504d",
-    Libra: "#7e622d",
-    Scorpio: "#2d2a26",
-    Sagittarius: "#490e67",
-    Capricorn: "#726b54",
-    Aquarius: "#005d63",
-    Pisces: "#006098",
-  };
+  // const zodiacColors = {
+  //   Aries: "#c10230",
+  //   Taurus: "#ae1857",
+  //   Gemini: "#d79a2b",
+  //   Cancer: "#85422b",
+  //   Leo: "#4d5a31",
+  //   Virgo: "#5f504d",
+  //   Libra: "#7e622d",
+  //   Scorpio: "#2d2a26",
+  //   Sagittarius: "#490e67",
+  //   Capricorn: "#726b54",
+  //   Aquarius: "#005d63",
+  //   Pisces: "#006098",
+  // };
 
   const zodiacData = {
     Aries: {
@@ -362,61 +362,61 @@ const Zodic = () => {
     { name: "Aquarius", color: "#519AA2", image: "./images/zodiac/11.png" },
     { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
   ];
-  const xyz = [
-    {
-      name: "Aries",
-      xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products",
-    },
-    {
-      name: "Taurus",
-      xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products",
-    },
-    {
-      name: "Gemini",
-      xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products .",
-    },
-    {
-      name: "Cancer",
-      xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products",
-    },
-    {
-      name: "Leo",
-      xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products",
-    },
-    {
-      name: "Virgo",
-      xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products",
-    },
-    {
-      name: "Libra",
-      xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products",
-    },
-    {
-      name: "Scorpio",
-      xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products",
-    },
-    {
-      name: "Sagittarius",
-      xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products",
-    },
-    {
-      name: "Capricorn",
-      xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products",
-    },
-    {
-      name: "Aquarius",
-      xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products",
-    },
-    {
-      name: "Pisces",
-      xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products",
-    },
-  ];
+  // const xyz = [
+  //   {
+  //     name: "Aries",
+  //     xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products",
+  //   },
+  //   {
+  //     name: "Taurus",
+  //     xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products",
+  //   },
+  //   {
+  //     name: "Gemini",
+  //     xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products .",
+  //   },
+  //   {
+  //     name: "Cancer",
+  //     xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products",
+  //   },
+  //   {
+  //     name: "Leo",
+  //     xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products",
+  //   },
+  //   {
+  //     name: "Virgo",
+  //     xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products",
+  //   },
+  //   {
+  //     name: "Libra",
+  //     xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products",
+  //   },
+  //   {
+  //     name: "Scorpio",
+  //     xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products",
+  //   },
+  //   {
+  //     name: "Sagittarius",
+  //     xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products",
+  //   },
+  //   {
+  //     name: "Capricorn",
+  //     xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products",
+  //   },
+  //   {
+  //     name: "Aquarius",
+  //     xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products",
+  //   },
+  //   {
+  //     name: "Pisces",
+  //     xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products",
+  //   },
+  // ];
   const API_URL = process.env.REACT_APP_API_URL;
 
   // const [activeKey, setActiveKey] = useState(null);
   const [productsByZodiac, setProductsByZodiac] = useState({});
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const Zodiac = [
     "Aries",
     "Taurus",
@@ -431,8 +431,8 @@ const Zodic = () => {
     "Aquarius",
     "Pisces",
   ];
-  const token = localStorage.getItem("token");
-  const [selectedZodiac, setSelectedZodiac] = useState(zodiacData["Aries"]);
+  // const token = localStorage.getItem("token");
+  const [selectedZodiac, setSelectedZodiac] = useState(null);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -457,102 +457,81 @@ const Zodic = () => {
       }
     };
     fetchProducts();
-  },);
+  });
+  // const handleBuyNow = async (product) => {
+  //   if (!product) return;
 
-  // const handleBuyNow = async (productId) => {
+  //   // ✅ LOGGED-IN USER
+  //   if (token) {
+  //     try {
+  //       await axios.post(
+  //         `${API_URL}/cart/add`,
+  //         {
+  //           productId: product._id,
+  //           quantity: 1,
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         },
+  //       );
 
-  //   if (!token) {
-  //     alert("Please login first!");
-  //     navigate("/login");
-  //     return;
+  //       navigate("/cart");
+  //     } catch (error) {
+  //       console.error("Add to cart error:", error.response || error);
+
+  //       if (error.response?.status === 401) {
+  //         alert("Session expired. Please login again.");
+  //         localStorage.removeItem("token");
+  //         navigate("/login");
+  //       }
+  //     }
   //   }
 
-  //   try {
-  //     await axios.post(
-  //       `${API_URL}/add-to-cart`,
-  //       { productId, quantity: 1 },
-  //       { headers: { Authorization: `Bearer ${token}` } }
-  //     );
+  //   // ✅ GUEST USER
+  //   else {
+  //     let cart = [];
+
+  //     try {
+  //       const stored = Cookies.get("guestCart");
+  //       cart = stored ? JSON.parse(stored) : [];
+  //       if (!Array.isArray(cart)) cart = [];
+  //     } catch {
+  //       cart = [];
+  //     }
+
+  //     // const existing = cart.find(
+  //     //   (item) => item.productId === product._id
+  //     // );
+
+  //     // try {
+  //     //   const stored = Cookies.get("guestCart");
+  //     //   cart = stored ? JSON.parse(stored) : [];
+  //     //   if (!Array.isArray(cart)) cart = [];
+  //     // } catch {
+  //     //   cart = [];
+  //     // }
+
+  //     const existing = cart.find((item) => item.productId === product._id);
+
+  //     if (existing) {
+  //       existing.quantity += 1;
+  //     } else {
+  //       cart.push({
+  //         type: "product",
+  //         productId: product._id,
+  //         quantity: 1,
+  //         price: product.ProductPrice,
+  //         name: product.ProductName,
+  //         img: product.Photos,
+  //       });
+  //     }
+
+  //     Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
   //     navigate("/cart");
-  //   } catch (err) {
-  //     console.error("Add to cart failed:", err);
-  //     alert("Failed to add product to cart.");
   //   }
   // };
-  const handleBuyNow = async (product) => {
-    if (!product) return;
-
-    // ✅ LOGGED-IN USER
-    if (token) {
-      try {
-        await axios.post(
-          `${API_URL}/cart/add`,
-          {
-            productId: product._id,
-            quantity: 1,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        navigate("/cart");
-      } catch (error) {
-        console.error("Add to cart error:", error.response || error);
-
-        if (error.response?.status === 401) {
-          alert("Session expired. Please login again.");
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      }
-    }
-
-    // ✅ GUEST USER
-    else {
-      let cart = [];
-
-      try {
-        const stored = Cookies.get("guestCart");
-        cart = stored ? JSON.parse(stored) : [];
-        if (!Array.isArray(cart)) cart = [];
-      } catch {
-        cart = [];
-      }
-
-      // const existing = cart.find(
-      //   (item) => item.productId === product._id
-      // );
-
-      // try {
-      //   const stored = Cookies.get("guestCart");
-      //   cart = stored ? JSON.parse(stored) : [];
-      //   if (!Array.isArray(cart)) cart = [];
-      // } catch {
-      //   cart = [];
-      // }
-
-      const existing = cart.find((item) => item.productId === product._id);
-
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          type: "product",
-          productId: product._id,
-          quantity: 1,
-          price: product.ProductPrice,
-          name: product.ProductName,
-          img: product.Photos,
-        });
-      }
-
-      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-      navigate("/cart");
-    }
-  };
 
   return (
     <div>
@@ -606,135 +585,117 @@ const Zodic = () => {
       </div>
 
       {/* RED SECTION (Dynamic Content) */}
-      <section
-        className="aries-section text-center"
-        style={{ backgroundColor: selectedZodiac.color }}
-      >
-        <div className="aries-content inter container sora">
-          <p className="aries-date gt-super">{selectedZodiac.date}</p>
-          <h1
-            className="aries-title"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            {selectedZodiac.name}
-          </h1>
+      {selectedZodiac && (
+        <section
+          className="aries-section text-center"
+          style={{ backgroundColor: selectedZodiac.color }}
+        >
+          <div className="aries-content inter container sora">
+            <div className="zodiac-header text-white text-center">
+              <p className="aries-date mb-3">{selectedZodiac.date}</p>
 
-          <div className="d-flex justify-content-center align-items-center gap-3">
-            
-            <h1
-              className="aries-title"
-              // style={{
-              //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-              // }}
-            >
-              {selectedZodiac.name}
-            </h1>
+              <div className="d-flex justify-content-center align-items-center gap-4">
+                <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
 
-            <div className="aries-icon-circle">
-              <img
-                src={selectedZodiac.icon}
-                alt="icon"
-                className="aries-icon-img"
-              />
+                <div
+                  className="aries-icon-circle d-flex justify-content-center align-items-center"
+                  style={{ backgroundColor: selectedZodiac.color }}
+                >
+                  <img
+                    src={selectedZodiac.icon}
+                    alt="icon"
+                    className="aries-icon-img"
+                  />
+                </div>
+              </div>
             </div>
+
+            <p className="aries-description mt-3">
+              {selectedZodiac.description}
+            </p>
+
+            <p className="aries-details">
+              <span>Corresponding Letters : {selectedZodiac.letters}</span>{" "}
+              &nbsp; | &nbsp;
+              <span>Astral Energy : {selectedZodiac.energy}</span> &nbsp; |
+              &nbsp;
+              <span>Stamina : {selectedZodiac.stamina}</span>
+              <br />
+              <span>Colour : {selectedZodiac.colorText}</span> &nbsp; | &nbsp;
+              <span>Element : {selectedZodiac.element}</span> &nbsp; | &nbsp;
+              <span>Ruling Planet : {selectedZodiac.planet}</span>
+            </p>
           </div>
-          <p
-            className="aries-date"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            Date : {selectedZodiac.date}
-          </p>
 
-          <p
-            className="aries-description"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            {selectedZodiac.description}
-          </p>
+          <p className="gt-super ingredients">INGREDIENTS</p>
 
-          <p
-            className="aries-details"
-          // style={{
-          //   color: selectedZodiac.name === "Capricorn" ? "black" : "",
-          // }}
-          >
-            <span>Corresponding Letters : {selectedZodiac.letters}</span> &nbsp;
-            | &nbsp;
-            <span>Astral Energy : {selectedZodiac.energy}</span> &nbsp; | &nbsp;
-            <span>Stamina : {selectedZodiac.stamina}</span>
-            <br />
-            <span>Colour : {selectedZodiac.colorText}</span> &nbsp; | &nbsp;
-            <span>Element : {selectedZodiac.element}</span> &nbsp; | &nbsp;
-            <span>Ruling Planet : {selectedZodiac.planet}</span>
-          </p>
-        </div>
+          {/* Herbs Section */}
+          <div className="aries-images container d-flex justify-content-center gap-5 flex-wrap">
+            {selectedZodiac.herbs.map((img, i) => (
+              <img key={i} src={img} alt="herb" className="half-out-image" />
+            ))}
+          </div>
 
-        <p className="gt-super ingredients">INGREDIENTS</p>
-
-        {/* Herbs Section */}
-        <div className="aries-images container d-flex justify-content-center gap-5 flex-wrap">
-          {selectedZodiac.herbs.map((img, i) => (
-            <img key={i} src={img} alt="herb" className="half-out-image" />
-          ))}
-        </div>
-
-        {/* PRODUCTS */}
-        {/* PRODUCTS – WHITE BACKGROUND */}
-        <div className="product-wrapper py-5">
-          <h2 className="product-text mb-4 text-center sora">
+          {/* PRODUCTS */}
+          {/* PRODUCTS – WHITE BACKGROUND */}
+          <div className="product-wrapper py-5">
+            {/* <h2 className="product-text mb-4 text-center sora">
             {xyz.find((item) => item.name === selectedZodiac.name)?.xyz1}
-          </h2>
+          </h2> */}
 
-          <div className="container sora">
-            <div className="product-grid">
-              {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-                <div className="product-card" key={index}>
-                  <div className="product-box-zodiac p-1">
-                    <img
-                      src={p.Photos}
-                      alt={p.ProductName}
-                      className="zodiac-product-img"
-                    />
+            <div className="container sora">
+              <div className="product-grid">
+                {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
+                  <NavLink
+                    to={`/productdetails/${p._id}`}
+                    className="text-decoration-none"
+                  >
+                    <div className="product-card" key={index}>
+                      <div className="product-box-zodiac p-1">
+                        <img
+                          src={p.Photos}
+                          alt={p.ProductName}
+                          className="zodiac-product-img"
+                        />
 
-                    <div className="product-info">
-                      <p className="name">
-                        {p.ProductName} <span>›</span>
-                      </p>
-                      <p className="name">{p.ProductName}</p>
-                      <p className="size">{p.size}</p>
-                      <div className="price-with-dot">
-                        <span
-                          className="zodiac-dot"
-                          style={{
-                            backgroundColor: zodiacColors[p.Zodiac] || "#000",
-                          }}
-                        ></span>
+                        <div className="product-info">
+                          <p className="name">
+                            {p.ProductName} <span>›</span>
+                          </p>
+                          {/* <p className="name">{p.ProductName}</p> */}
+                          {/* <p className="size">{p.size}</p> */}
+                          <div className="price-with-dot-1">
+                            <span
+                              className="zodiac-dot"
+                              style={{ backgroundColor: selectedZodiac.color }}
+                            ></span>
 
-                       <span className="zodiac-price">₹{p.ProductPrice}</span>
-                      </div>
+                            <span className="zodiac-price">
+                              ₹ {p.ProductPrice}
+                            </span>
+                          </div>
 
-                      <div className="underline" />
-                      <p className="size">{p.size}</p>
-                      {/* <button
+                          <div className="underline" />
+                          <p className="size">{p.size}</p>
+                          {/* <button
                         className="btn btn-outline-dark mt-1"
                         onClick={() => handleBuyNow(p)}
                       >
                         Buy Now
                       </button> */}
+                        </div>
+                      </div>
                     </div>
+                  </NavLink>
+                ))}
                   </div>
-                </div>
-              ))}
+
             </div>
-          </div>
-        </div>
-      </section>
+
+            </div>
+
+        </section>
+      )}
     </div>
   );
 };

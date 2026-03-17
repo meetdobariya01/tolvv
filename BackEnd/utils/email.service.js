@@ -119,36 +119,51 @@ const sendAdminOrderNotification = async (orderDetails, user, address, note) => 
 };
 
 const sendContactEmail = async (name, email, phone, subject, message) => {
-  // Admin email
-  await transporter.sendMail({
-    from: `"Tolvv Connect" <${process.env.MAIL_USER}>`,
-    to: process.env.ADMIN_EMAIL,
-    subject: `📩 New Connect Request: ${subject}`,
-    html: `
-      <h2>New Connect Request</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Subject:</strong> ${subject}</p>
-      <p><strong>Message:</strong></p>
-      <p>${message}</p>
-    `
-  });
+  try {
+    // ✅ Admin email
+    const adminMail = transporter.sendMail({
+      from: `"Tolvv Connect" <${process.env.MAIL_USER}>`,
+      to: process.env.ADMIN_EMAIL,
+      subject: `📩 New Connect Request: ${subject}`,
+      html: `
+        <h2>New Connect Request</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `
+    });
 
-  // User confirmation email
-  return await transporter.sendMail({
-    from: `"Tolvv" <${process.env.MAIL_USER}>`,
-    to: email,
-    subject: "We received your request – Tolvv",
-    html: `
-      <p>Hi ${name},</p>
-      <p>Thank you for contacting us. We have received your message and will get back to you shortly.</p>
-      <p><strong>Your Message:</strong></p>
-      <p>${message}</p>
-      <br/>
-      <p>— Team Tolvv</p>
-    `
-  });
+    // ✅ User email
+    const userMail = transporter.sendMail({
+      from: `"Tolvv" <${process.env.MAIL_USER}>`,
+      to: email,
+      subject: "We received your request – Tolvv",
+      html: `
+        <p>Hi ${name},</p>
+        <p>Thank you for contacting us. We have received your message and will get back to you shortly.</p>
+
+        <hr/>
+
+        <p><strong>Your Message:</strong></p>
+        <p>${message}</p>
+
+        <br/>
+        <p>— Team Tolvv</p>
+      `
+    });
+
+    // ✅ Run both together
+    await Promise.all([adminMail, userMail]);
+
+    return true;
+
+  } catch (error) {
+    console.error("Contact Email Error:", error);
+    throw error;
+  }
 };
 
 module.exports = {
