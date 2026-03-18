@@ -1,23 +1,107 @@
 import React, { useState } from "react";
-import { Card, Button } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./hamper.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Card } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
+const zodiacData = [
+  { name: "Aries", img: "/images/zodiac/1-2.png" },
+  { name: "Taurus", img: "/images/zodiac/2-2.png" },
+  { name: "Gemini", img: "/images/zodiac/3-2.png" },
+  { name: "Cancer", img: "/images/zodiac/4-2.png" },
+  { name: "Leo", img: "/images/zodiac/5-2.png" },
+  { name: "Virgo", img: "/images/zodiac/6-2.png" },
+  { name: "Libra", img: "/images/zodiac/7-2.png" },
+  { name: "Scorpio", img: "/images/zodiac/8-2.png" },
+  { name: "Sagittarius", img: "/images/zodiac/9-2.png" },
+  { name: "Capricorn", img: "/images/zodiac/10-2.png" },
+  { name: "Aquarius", img: "/images/zodiac/11-2.png" },
+  { name: "Pisces", img: "/images/zodiac/12-2.png" },
+];
+const productData = [
+  {
+    id: 1,
+    name: "Bath Gel",
+    size: "200 ml",
+    img: "/images//bl.png",
+  },
+  {
+    id: 2,
+    name: "Body Lotion",
+    size: "200 ml",
+    img: "/images//bl.png",
+  },
+  {
+    id: 3,
+    name: "Perfume",
+    size: "50 ml",
+    img: "/images/pr.png",
+  },
+  {
+    id: 4,
+    name: "Essential Oil",
+    size: "30 ml",
+    img: "/images/eo.png",
+  },
+  {
+    id: 5,
+    name: "Soap",
+    size: "100 gms",
+    img: "/images/sp.png",
+  },
+];
+const HamperproductData = [
+  {
+    id: 1,
+    name: "Virgo Bath Gel",
+    price: 750,
+    size: "200 ml",
+    img: "/images/bl.png",
+  },
+  {
+    id: 2,
+    name: "Virgo Body Lotion",
+    price: 750,
+    size: "200 ml",
+    img: "/images/products/lotion.png",
+  },
+  {
+    id: 3,
+    name: "Virgo Perfume",
+    price: 750,
+    size: "200 ml",
+    img: "/images/products/perfume.png",
+  },
+  {
+    id: 4,
+    name: "Virgo Essential Oil",
+    price: 750,
+    size: "200 ml",
+    img: "/images/products/oil.png",
+  },
+];
 function HamperPage() {
   const [activeSection, setActiveSection] = useState(null);
-    const [activeKey, setActiveKey] = useState("all");
 
-  const productsByCategory = {
-    all: [
-      { id: 1, name: "Aries Bath Gel", price: 750 },
-    ],
+  const zodiacColors = {
+    Aries: "#7b0f14",
+    Taurus: "#2e7d32",
+    Gemini: "#1565c0",
+    Cancer: "#6a1b9a",
+    Leo: "#f57c00",
+    Virgo: "#00897b",
+    Libra: "#c2185b",
+    Scorpio: "#4a148c",
+    Sagittarius: "#d84315",
+    Capricorn: "#37474f",
+    Aquarius: "#0277bd",
+    Pisces: "#00695c",
   };
-
   const zodiacProducts = [
     "Aries",
     "Taurus",
@@ -41,6 +125,32 @@ function HamperPage() {
     { name: "Soap" },
   ];
 
+  const [selected, setSelected] = useState([]);
+
+  const handleSelect = (name) => {
+    if (selected.includes(name)) {
+      setSelected(selected.filter((item) => item !== name));
+    } else {
+      setSelected([...selected, name]);
+    }
+  };
+  // const [selected, setSelected] = useState([]);
+  const [qty, setQty] = useState({});
+
+  const toggleSelect = (id) => {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
+  };
+
+  const updateQty = (id, type) => {
+    setQty((prev) => {
+      const current = prev[id] || 0;
+      if (type === "inc") return { ...prev, [id]: current + 1 };
+      if (type === "dec") return { ...prev, [id]: Math.max(0, current - 1) };
+      return prev;
+    });
+  };
   return (
     <div>
       {/* Header */}
@@ -103,66 +213,67 @@ function HamperPage() {
 
         {/* ZODIAC PRODUCTS */}
         {activeSection === "zodiac" && (
-          <div id="product-grid" className="row product-fade mt-4">
-            <h2 className="products-heading artisan-font">{activeKey}</h2>
+          <div className="mt-5">
+            <h2 className="text-center artisan-font mb-5">Zodiac Hamper</h2>
 
-            {productsByCategory[activeKey]?.map((item) => (
-              <div
-                className="col-6 col-md-3 mb-4 product-card-animate"
-                key={item._id}
-              >
-                <Card className="product-card p-1">
-                  {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
-                  <NavLink to={`/productdetails/${item._id}`}>
-                    <div className="product-img-wrap">
-                      <Card.Img
-                        src={
-                          item.Photos
-                            ? item.Photos.startsWith("http")
-                              ? item.Photos
-                              : `/images/${item.Photos.replace("images/", "")}`
-                            : "/images/default.jpg"
-                        }
-                      />
-                    </div>
-                  </NavLink>
+            <div className="row">
+              {zodiacProducts.map((item, index) => (
+                <div className="col-lg-3 col-md-4 col-6 mb-4" key={index}>
+                  <div className="product-card text-center">
+                    <img
+                      src="./images/hamper.jpg"
+                      className="img-fluid"
+                      alt=""
+                    />
 
-                  <Card.Body className="product-info sora">
-                    <div className="product-top">
-                      <div className="title-wrap">
-                        <h6 className="product-page-title">
-                          <NavLink
-                            className="text-decoration-none text-dark"
-                            to={`/productdetails/${item._id}`}
-                          >
-                            {item.ProductName} <span>›</span>
-                          </NavLink>
-                        </h6>
-                        <p className="product-size">{item.size}</p>
+                    <Card.Body className="product-info sora">
+                      <div className="product-top">
+                        <div className="title-wrap d-flex align-items-center justify-content-between w-100">
+                          <h6 className="product-page-title">
+                            <NavLink
+                              className="text-decoration-none text-dark"
+                              to={`/productdetails/${item._id}`}
+                            >
+                              Aries Bath gel <span>›</span>
+                            </NavLink>
+                          </h6>
+
+                          <div className="price-wrap">
+                            <div className="price-wrap d-flex align-items-center gap-2">
+                              <span
+                                className="zodiac-dot"
+                                style={{
+                                  backgroundColor:
+                                    zodiacColors[item.Zodiac] || "#000",
+                                  width: "15px",
+                                  height: "15px",
+                                  borderRadius: "50%",
+                                  display: "inline-block",
+                                }}
+                              ></span>
+
+                              <span className="product-price">₹ 750</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="price-wrap">
-                        {/* <span className="price-dot"></span> */}
-                        <span className="product-price">
-                          ₹ {item.ProductPrice}
-                        </span>
-                      </div>
-                    </div>
+                      <div className="product-divider"></div>
 
-                    <div className="product-divider"></div>
+                      <p className="product-size-hamper">200 ml</p>
 
-                    <NavLink to={`/productdetails/${item._id}`}>
-                      <Button
-                        size="sm"
-                        className="cart-btn text-uppercase w-md-50"
-                      >
-                        Add to Cart
-                      </Button>
-                    </NavLink>
-                  </Card.Body>
-                </Card>
-              </div>
-            ))}
+                      {/* ✅ YOUR ZODIAC DOT / PRICE UI — UNTOUCHED */}
+
+                      {/* <NavLink to={`/productdetails/${item._id}`}>
+                    <Button size="sm" className="cart-btn text-uppercase w-md-50">
+                      Add to Cart
+                    </Button>
+                  </NavLink> */}
+                    </Card.Body>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -176,32 +287,144 @@ function HamperPage() {
             </p>
 
             {/* Zodiac Selection */}
+            <p className="hamper-zodiac-title-1">Pick a Zodiac</p>
 
-            <div className="d-flex flex-wrap justify-content-center gap-3 my-4">
-              {zodiacProducts.map((zodiac, index) => (
-                <button key={index} className="btn btn-light">
-                  {zodiac}
-                </button>
+            <div className="d-flex flex-wrap justify-content-between gap-4 my-4">
+              {zodiacData.map((zodiac, index) => (
+                <div key={index} className="zodiac-item-1 text-center">
+                  {/* Checkbox */}
+                  <input
+                    type="checkbox"
+                    checked={selected.includes(zodiac.name)}
+                    onChange={() => handleSelect(zodiac.name)}
+                    className="mb-2 ms-5"
+                  />
+
+                  {/* Image */}
+                  <div
+                    className={`zodiac-img ${
+                      selected.includes(zodiac.name) ? "active" : ""
+                    }`}
+                    onClick={() => handleSelect(zodiac.name)}
+                  >
+                    <img src={zodiac.img} alt={zodiac.name} />
+                  </div>
+
+                  {/* Name */}
+                  <p className="mt-2 mb-0">{zodiac.name}</p>
+                </div>
               ))}
             </div>
 
             {/* Product Selection */}
 
-            <div className="row">
-              {craftProducts.map((product, index) => (
-                <div className="col-lg-3 col-md-4 col-6 mb-4" key={index}>
-                  <div className="product-card text-center">
-                    <img
-                      src="https://dummyimage.com/300x300/e5e5e5/000"
-                      className="img-fluid"
-                      alt=""
-                    />
+            <div className="container my-5">
+              <h5 className="mb-4 fw-semibold">Pick your preferred products</h5>
 
-                    <p className="mt-2">{product.name}</p>
+              <div className="row">
+                {productData.map((item) => (
+                  <div
+                    key={item.id}
+                    className="col-lg-custom col-md-4 col-6 mb-4 "
+                  >
+                    {/* Card */}
+                    <div className="hamper-product-card">
+                      {/* Checkbox */}
+                      <input
+                        type="checkbox"
+                        className="product-checkbox"
+                        checked={selected.includes(item.id)}
+                        onChange={() => toggleSelect(item.id)}
+                      />
+
+                      {/* Image */}
+                      <div className="hamper-product-img">
+                        <img src={item.img} alt={item.name} />
+                      </div>
+
+                      {/* Info */}
+                      <div className="hamper-product-info">
+                        <h6>{item.name}</h6>
+                        <div className="divider"></div>
+
+                        <div className="d-flex justify-content-between align-items-center">
+                          <small className="text-muted">{item.size}</small>
+
+                          {/* Quantity */}
+                          <div className="hamper-qty-box">
+                            <button onClick={() => updateQty(item.id, "dec")}>
+                              -
+                            </button>
+                            <span>{qty[item.id] || 0}</span>
+                            <button onClick={() => updateQty(item.id, "inc")}>
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
+
+            <div className="container my-4">
+              <h6 className="fw-semibold mb-3 fs-5">Your Hamper</h6>
+
+              <div className="row g-3">
+                {HamperproductData.map((item) => (
+                  <div key={item.id} className="col-lg-3 col-md-4 col-6">
+                    <div className="hamper-card">
+                      {/* Checkbox */}
+                      <input
+                        type="checkbox"
+                        className="hamper-checkbox"
+                        checked={selected.includes(item.id)}
+                        onChange={() => toggleSelect(item.id)}
+                      />
+
+                      {/* Image */}
+                      <div className="hamper-img">
+                        <img src={item.img} alt={item.name} />
+                      </div>
+
+                      {/* Info */}
+                      <div className="hamper-info">
+                        {/* Title + Price */}
+                        <div className="d-flex justify-content-between align-items-center">
+                          <h6 className="mb-0">{item.name}</h6>
+
+                          <div className="d-flex align-items-center gap-1">
+                            <span className="color-dot"></span>
+                            <small>₹ {item.price}</small>
+                          </div>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="divider"></div>
+
+                        {/* Bottom Row */}
+                        <div className="d-flex justify-content-between align-items-center">
+                          <small className="text-muted">{item.size}</small>
+
+                          <div className="qty-box">
+                            <button onClick={() => updateQty(item.id, "dec")}>
+                              -
+                            </button>
+                            <span>{qty[item.id] || 0}</span>
+                            <button onClick={() => updateQty(item.id, "inc")}>
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-dark">ADD TO CART <FontAwesomeIcon icon={faCartShopping} flip="horizontal" size="xl" /></button>
           </div>
         )}
       </div>

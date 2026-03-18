@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+// import Cookies from "js-cookie";
+import {  NavLink } from "react-router-dom";
 import "./moonsection.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -134,8 +134,8 @@ const Moonsection = () => {
   const [activePlanet, setActivePlanet] = useState("null");
   const [planetProducts, setPlanetProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  // const navigate = useNavigate();
+  // const token = localStorage.getItem("token");
 
   const planet = planetData.find((p) => p.name === activePlanet);
 
@@ -162,53 +162,53 @@ const Moonsection = () => {
   }, [planet]);
 
   // Buy Now logic (same as Zodiac section)
-  const handleBuyNow = async (product) => {
-    if (!product) return;
+  // const handleBuyNow = async (product) => {
+  //   if (!product) return;
 
-    if (token) {
-      // Logged-in user
-      try {
-        await axios.post(
-          `${API_URL}/cart/add`,
-          { productId: product._id, quantity: 1 },
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-        navigate("/cart");
-      } catch (error) {
-        console.error("Add to cart error:", error.response || error);
-        if (error.response?.status === 401) {
-          alert("Session expired. Please login again.");
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      }
-    } else {
-      // Guest user
-      let cart = [];
-      try {
-        const stored = Cookies.get("guestCart");
-        cart = stored ? JSON.parse(stored) : [];
-        if (!Array.isArray(cart)) cart = [];
-      } catch {
-        cart = [];
-      }
+  //   if (token) {
+  //     // Logged-in user
+  //     try {
+  //       await axios.post(
+  //         `${API_URL}/cart/add`,
+  //         { productId: product._id, quantity: 1 },
+  //         { headers: { Authorization: `Bearer ${token}` } },
+  //       );
+  //       navigate("/cart");
+  //     } catch (error) {
+  //       console.error("Add to cart error:", error.response || error);
+  //       if (error.response?.status === 401) {
+  //         alert("Session expired. Please login again.");
+  //         localStorage.removeItem("token");
+  //         navigate("/login");
+  //       }
+  //     }
+  //   } else {
+  //     // Guest user
+  //     let cart = [];
+  //     try {
+  //       const stored = Cookies.get("guestCart");
+  //       cart = stored ? JSON.parse(stored) : [];
+  //       if (!Array.isArray(cart)) cart = [];
+  //     } catch {
+  //       cart = [];
+  //     }
 
-      const existing = cart.find((item) => item.productId === product._id);
-      if (existing) existing.quantity += 1;
-      else
-        cart.push({
-          type: "product",
-          productId: product._id,
-          quantity: 1,
-          price: product.ProductPrice,
-          name: product.ProductName,
-          img: product.Photos,
-        });
+  //     const existing = cart.find((item) => item.productId === product._id);
+  //     if (existing) existing.quantity += 1;
+  //     else
+  //       cart.push({
+  //         type: "product",
+  //         productId: product._id,
+  //         quantity: 1,
+  //         price: product.ProductPrice,
+  //         name: product.ProductName,
+  //         img: product.Photos,
+  //       });
 
-      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-      navigate("/cart");
-    }
-  };
+  //     Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
+  //     navigate("/cart");
+  //   }
+  // };
 
   return (
     <>
@@ -273,8 +273,8 @@ const Moonsection = () => {
                     </div>
 
                     {/* <p className="moon-big-title gt-super text-uppercase">
-                    {planet.name}
-                  </p> */}
+                      {planet.name}
+                    </p> */}
                   </div>
                 </Col>
                 <Col
@@ -303,6 +303,7 @@ const Moonsection = () => {
       {/* PRODUCTS */}
       {planet && (
         <section className="moon-products sora">
+
           <Container>
             {loading ? (
               <p>Loading products...</p>
@@ -311,50 +312,56 @@ const Moonsection = () => {
             ) : (
               <div className="product-grid">
                 {planetProducts.map((product) => (
-                  <div className="product-card p-1" key={product._id}>
-                    <div className="product-box-zodiac">
-                      <img
-                        src={`${product.Photos}`}
-                        alt={product.ProductName}
-                        className="zodiac-product-img"
-                      />
-                      <div className="product-info">
-                        <p className="name">
-                          {product.ProductName} <span>›</span>
-                        </p>
-                        {/* <p className="size">{product.size}</p> */}
-                        <div className="price-with-dot">
-                          <span
-                            className="planet-dot"
-                            style={{
-                              backgroundColor:
-                                zodiacColors[
+                  <NavLink
+                    to={`/productdetails/${product._id}`}
+                    className="text-decoration-none text-dark"
+                    key={product._id}
+                  >
+                    <div className="product-card p-1">
+                      <div className="product-box-zodiac">
+                        <img
+                          src={`${product.Photos}`}
+                          alt={product.ProductName}
+                          className="zodiac-product-img"
+                        />
+                        <div className="product-info">
+                          <p className="name">
+                            {product.ProductName} <span>›</span>
+                          </p>
+                          {/* <p className="size">{product.size}</p> */}
+                          <div className="price-with-dot">
+                            <span
+                              className="planet-dot"
+                              style={{
+                                backgroundColor:
+                                  zodiacColors[
                                   getZodiacFromProduct(product.ProductName)
-                                ] || planet.color,
-                            }}
-                            title={getZodiacFromProduct(product.ProductName)}
-                          ></span>
+                                  ] || planet.color,
+                              }}
+                              title={getZodiacFromProduct(product.ProductName)}
+                            ></span>
 
-                          <span className="zodiac-price">
-                            ₹{product.ProductPrice}
-                          </span>
+                            <span className="zodiac-price">
+                              ₹{product.ProductPrice}
+                            </span>
+                          </div>
+                          <div className="underline" />
+                          <p className="size">{product.size}</p>
+                          {/* <button
+                          className="btn btn-outline-dark mt-1"
+                          onClick={() => handleBuyNow(product)}
+                        >
+                          Buy Now
+                        </button> */}
                         </div>
-                        <div className="underline" />
-                        <p className="size">{product.size}</p>
-                        {/* <button
-                        className="btn btn-outline-dark mt-1"
-                        onClick={() => handleBuyNow(product)}
-                      >
-                        Buy Now
-                      </button> */}
                       </div>
                     </div>
+                    </NavLink>
+                  ))}
                   </div>
-                ))}
-              </div>
-            )}
-          </Container>
-        </section>
+                )}
+              </Container>
+          </section>
       )}
     </>
   );

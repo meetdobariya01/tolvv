@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+const addressSchema = new mongoose.Schema({
+  houseNumber: String,
+  buildingName: String,
+  societyName: String,
+  road: String,
+  landmark: String,
+  city: String,
+  pincode: String,
+  State: String,
+  mobile: String,
+  isDefault: {
+    type: Boolean,
+    default: false
+  }
+});
+
 const userSchema = new mongoose.Schema({
 
   fname: {
@@ -23,6 +39,12 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+
+  // ✅ Address array
+  addresses: {
+    type: [addressSchema],
+    default: []
   }
 
 });

@@ -56,9 +56,20 @@ const orderSchema = new mongoose.Schema({
 
   items: [
     {
-      productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-      productName: { type: String, required: true }, // store product name at purchase
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+      },
+
+      hamperId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Hamper"
+      },
+
+      productName: { type: String, required: true },
+
       quantity: { type: Number, required: true },
+
       priceAtBuy: { type: Number, required: true }
     }
   ],

@@ -7,7 +7,7 @@ import Footer from "../../components/footer/footer";
 import Category from "../../components/category/category";
 import "./homepage.css";
 import Homeproduct from "../../components/category/home-product/homeproduct";
-import Leoproduct from "../leo-product/leoproduct";
+// import Leoproduct from "../leo-product/leoproduct";
 import Allfaqs from "../../components/faqs-Q&A/allfaqs";
 import Zodic from "../Zodiacs/zodics";
 import Moonsection from "../../components/moonsection/moonsection";

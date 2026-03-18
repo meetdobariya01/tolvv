@@ -30,8 +30,10 @@ const cartRoutes = require("./routes/cart.routes");
 const orderRoutes = require("./routes/order.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const userRoutes = require("./routes/user.routes");
-const contactRoutes = require("./routes/contact.routes");
 
+const hamperRoutes = require("./routes/hamper.routers");
+const invoiceRoutes = require("./routes/invoice.routes");
+const connectRoute = require("./routes/connect");
 // Use Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -39,8 +41,9 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/contact", contactRoutes);
-
+app.use("/api/hamper", hamperRoutes);
+app.use("/api/connect", connectRoute);
+app.use("/api", invoiceRoutes);
 // Start server
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);

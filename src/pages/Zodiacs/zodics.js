@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
 import Calculator from "../../components/calculator/calculator";
 // import { Row, Col } from "react-bootstrap";
 // import { motion } from "framer-motion";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 const Zodic = () => {
   // const [active, setActive] = useState(null);
+
+  // const zodiacColors = {
+  //   Aries: "#c10230",
+  //   Taurus: "#ae1857",
+  //   Gemini: "#d79a2b",
+  //   Cancer: "#85422b",
+  //   Leo: "#4d5a31",
+  //   Virgo: "#5f504d",
+  //   Libra: "#7e622d",
+  //   Scorpio: "#2d2a26",
+  //   Sagittarius: "#490e67",
+  //   Capricorn: "#726b54",
+  //   Aquarius: "#005d63",
+  //   Pisces: "#006098",
+  // };
+
   const zodiacData = {
     Aries: {
       name: "Aries",
@@ -346,61 +362,61 @@ const Zodic = () => {
     { name: "Aquarius", color: "#519AA2", image: "./images/zodiac/11.png" },
     { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
   ];
-  const xyz = [
-    {
-      name: "Aries",
-      xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products",
-    },
-    {
-      name: "Taurus",
-      xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products",
-    },
-    {
-      name: "Gemini",
-      xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products .",
-    },
-    {
-      name: "Cancer",
-      xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products",
-    },
-    {
-      name: "Leo",
-      xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products",
-    },
-    {
-      name: "Virgo",
-      xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products",
-    },
-    {
-      name: "Libra",
-      xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products",
-    },
-    {
-      name: "Scorpio",
-      xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products",
-    },
-    {
-      name: "Sagittarius",
-      xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products",
-    },
-    {
-      name: "Capricorn",
-      xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products",
-    },
-    {
-      name: "Aquarius",
-      xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products",
-    },
-    {
-      name: "Pisces",
-      xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products",
-    },
-  ];
+  // const xyz = [
+  //   {
+  //     name: "Aries",
+  //     xyz1: "Experience the goodness of Coconut, Cinnamon and Ginger in our Aries products",
+  //   },
+  //   {
+  //     name: "Taurus",
+  //     xyz1: "Experience the goodness of Vanilla, Rose and Sandalwood in our Taurus products",
+  //   },
+  //   {
+  //     name: "Gemini",
+  //     xyz1: "Experience the goodness of Lavender, Lemon and Basil in our Gemini products .",
+  //   },
+  //   {
+  //     name: "Cancer",
+  //     xyz1: "Experience the goodness of Coconut Oil, Rosemary and Sandalwood in our Cancer products",
+  //   },
+  //   {
+  //     name: "Leo",
+  //     xyz1: "Experience the goodness of Alovera extract, Cinnamon, Orange and Honey in our Leo products",
+  //   },
+  //   {
+  //     name: "Virgo",
+  //     xyz1: "Experience the goodness of Lavender, Fennel, and Lemongrass in our Virgo products",
+  //   },
+  //   {
+  //     name: "Libra",
+  //     xyz1: "Experience the goodness of Lavender, Shea Butter, and Rose in our Libra products",
+  //   },
+  //   {
+  //     name: "Scorpio",
+  //     xyz1: "Experience the goodness of Jojaba Seed, Jasmine, and Black Pepper in our Scorpio products",
+  //   },
+  //   {
+  //     name: "Sagittarius",
+  //     xyz1: "Experience the goodness of Clove, Ginger, and Black Pepper in our Sagittarius products",
+  //   },
+  //   {
+  //     name: "Capricorn",
+  //     xyz1: "Experience the goodness of Lavender, Rosemary, Lemongrass, and Carnation Flower in our Capricorn products",
+  //   },
+  //   {
+  //     name: "Aquarius",
+  //     xyz1: "Experience the goodness of Lemon, Jasmine, and Sandalwood in our Aquarius products",
+  //   },
+  //   {
+  //     name: "Pisces",
+  //     xyz1: "Experience the goodness of Lavender, Clove, Rose, and Sandalwood in our Pisces products",
+  //   },
+  // ];
   const API_URL = process.env.REACT_APP_API_URL;
 
   // const [activeKey, setActiveKey] = useState(null);
   const [productsByZodiac, setProductsByZodiac] = useState({});
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const Zodiac = [
     "Aries",
     "Taurus",
@@ -415,7 +431,7 @@ const Zodic = () => {
     "Aquarius",
     "Pisces",
   ];
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -427,11 +443,10 @@ const Zodic = () => {
         Zodiac.forEach((cat) => (grouped[cat] = []));
 
         data.forEach((prod) => {
-          const Zodiac = prod.Zodiac?.trim();
-          if (grouped[Zodiac]) {
-            // 🚫 Prevent duplicates
-            if (!grouped[Zodiac].find((p) => p._id === prod._id)) {
-              grouped[Zodiac].push(prod);
+          const zodiac = prod.Zodiac?.trim();
+          if (grouped[zodiac]) {
+            if (!grouped[zodiac].find((p) => p._id === prod._id)) {
+              grouped[zodiac].push(prod);
             }
           }
         });
@@ -443,80 +458,80 @@ const Zodic = () => {
     };
     fetchProducts();
   });
-  const handleBuyNow = async (product) => {
-    if (!product) return;
+  // const handleBuyNow = async (product) => {
+  //   if (!product) return;
 
-    // ✅ LOGGED-IN USER
-    if (token) {
-      try {
-        await axios.post(
-          `${API_URL}/cart/add`,
-          {
-            productId: product._id,
-            quantity: 1,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+  //   // ✅ LOGGED-IN USER
+  //   if (token) {
+  //     try {
+  //       await axios.post(
+  //         `${API_URL}/cart/add`,
+  //         {
+  //           productId: product._id,
+  //           quantity: 1,
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         },
+  //       );
 
-        navigate("/cart");
-      } catch (error) {
-        console.error("Add to cart error:", error.response || error);
+  //       navigate("/cart");
+  //     } catch (error) {
+  //       console.error("Add to cart error:", error.response || error);
 
-        if (error.response?.status === 401) {
-          alert("Session expired. Please login again.");
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      }
-    }
+  //       if (error.response?.status === 401) {
+  //         alert("Session expired. Please login again.");
+  //         localStorage.removeItem("token");
+  //         navigate("/login");
+  //       }
+  //     }
+  //   }
 
-    // ✅ GUEST USER
-    else {
-      let cart = [];
+  //   // ✅ GUEST USER
+  //   else {
+  //     let cart = [];
 
-      try {
-        const stored = Cookies.get("guestCart");
-        cart = stored ? JSON.parse(stored) : [];
-        if (!Array.isArray(cart)) cart = [];
-      } catch {
-        cart = [];
-      }
+  //     try {
+  //       const stored = Cookies.get("guestCart");
+  //       cart = stored ? JSON.parse(stored) : [];
+  //       if (!Array.isArray(cart)) cart = [];
+  //     } catch {
+  //       cart = [];
+  //     }
 
-      // const existing = cart.find(
-      //   (item) => item.productId === product._id
-      // );
+  //     // const existing = cart.find(
+  //     //   (item) => item.productId === product._id
+  //     // );
 
-      // try {
-      //   const stored = Cookies.get("guestCart");
-      //   cart = stored ? JSON.parse(stored) : [];
-      //   if (!Array.isArray(cart)) cart = [];
-      // } catch {
-      //   cart = [];
-      // }
+  //     // try {
+  //     //   const stored = Cookies.get("guestCart");
+  //     //   cart = stored ? JSON.parse(stored) : [];
+  //     //   if (!Array.isArray(cart)) cart = [];
+  //     // } catch {
+  //     //   cart = [];
+  //     // }
 
-      const existing = cart.find((item) => item.productId === product._id);
+  //     const existing = cart.find((item) => item.productId === product._id);
 
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          type: "product",
-          productId: product._id,
-          quantity: 1,
-          price: product.ProductPrice,
-          name: product.ProductName,
-          img: product.Photos,
-        });
-      }
+  //     if (existing) {
+  //       existing.quantity += 1;
+  //     } else {
+  //       cart.push({
+  //         type: "product",
+  //         productId: product._id,
+  //         quantity: 1,
+  //         price: product.ProductPrice,
+  //         name: product.ProductName,
+  //         img: product.Photos,
+  //       });
+  //     }
 
-      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-      navigate("/cart");
-    }
-  };
+  //     Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
+  //     navigate("/cart");
+  //   }
+  // };
 
   return (
     <div>
@@ -545,7 +560,7 @@ const Zodic = () => {
                   >
                     <div
                       className="zodiac-circle"
-                      // style={{ backgroundColor: sign.color }}
+                    // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
@@ -631,46 +646,54 @@ const Zodic = () => {
             <div className="container sora">
               <div className="product-grid mt-5">
                 {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-                  <div className="product-card" key={index}>
-                    <div className="product-box-zodiac p-1">
-                      <img
-                        src={p.Photos}
-                        alt={p.ProductName}
-                        className="zodiac-product-img"
-                      />
+                  <NavLink
+                    to={`/productdetails/${p._id}`}
+                    className="text-decoration-none"
+                  >
+                    <div className="product-card" key={index}>
+                      <div className="product-box-zodiac p-1">
+                        <img
+                          src={p.Photos}
+                          alt={p.ProductName}
+                          className="zodiac-product-img"
+                        />
 
-                      <div className="product-info">
-                        <p className="name">
-                          {p.ProductName} <span>›</span>
-                        </p>
-                        {/* <p className="name">{p.ProductName}</p> */}
-                        {/* <p className="size">{p.size}</p> */}
-                        <div className="price-with-dot-1">
-                          <span
-                            className="zodiac-dot"
-                            style={{ backgroundColor: selectedZodiac.color }}
-                          ></span>
+                        <div className="product-info">
+                          <p className="name">
+                            {p.ProductName} <span>›</span>
+                          </p>
+                          {/* <p className="name">{p.ProductName}</p> */}
+                          {/* <p className="size">{p.size}</p> */}
+                          <div className="price-with-dot-1">
+                            <span
+                              className="zodiac-dot"
+                              style={{ backgroundColor: selectedZodiac.color }}
+                            ></span>
 
-                          <span className="zodiac-price">
-                            ₹ {p.ProductPrice}
-                          </span>
-                        </div>
+                            <span className="zodiac-price">
+                              ₹ {p.ProductPrice}
+                            </span>
+                          </div>
 
-                        <div className="underline" />
-                        <p className="size">{p.size}</p>
-                        {/* <button
+                          <div className="underline" />
+                          <p className="size">{p.size}</p>
+                          {/* <button
                         className="btn btn-outline-dark mt-1"
                         onClick={() => handleBuyNow(p)}
                       >
                         Buy Now
                       </button> */}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </NavLink>
                 ))}
-              </div>
+                  </div>
+
             </div>
-          </div>
+
+            </div>
+
         </section>
       )}
     </div>

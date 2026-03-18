@@ -106,7 +106,7 @@ const Login = () => {
       // ✅ CORRECT FUNCTION CALL
       await mergeGuestCart(token);
 
-      navigate("/cart");
+      navigate("/Check-out");
     } catch (err) {
       setServerError(err.response?.data?.message || "Invalid credentials");
     } finally {
@@ -135,7 +135,7 @@ const Login = () => {
 
       await mergeGuestCart(token);
 
-      navigate("/cart");
+      navigate("/Check-out");
     } catch (err) {
       setServerError("Google login failed");
     } finally {

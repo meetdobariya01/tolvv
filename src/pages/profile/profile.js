@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 import "./profile.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -10,22 +11,177 @@ const AccountPage = () => {
   const [active, setActive] = useState("profile");
   const [orderTab, setOrderTab] = useState("current");
 
+  const token = localStorage.getItem("token");
+
+  const [profile, setProfile] = useState({
+    fname: "",
+    lname: "",
+    mobile: "",
+    dob: "",
+    gender: "",
+    email: ""
+  });
+
+  const [orders, setOrders] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+
+  const [newAddress, setNewAddress] = useState({
+    houseNumber: "",
+    buildingName: "",
+    societyName: "",
+    road: "",
+    landmark: "",
+    city: "",
+    pincode: "",
+    mobile: "",
+    isDefault: false
+  });
+
   const fade = {
     hidden: { opacity: 0, x: 40 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   };
 
+  const API = "http://localhost:4000/api";
+
+  // Fetch Profile
+  const fetchProfile = async () => {
+    if (!token) return;
+
+    try {
+      const res = await axios.get(`${API}/user/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setProfile(res.data);
+
+    } catch (err) {
+      console.error("Profile Fetch Error:", err);
+    }
+  };
+
+  // Update Profile
+  const updateProfile = async () => {
+    if (!token) return;
+
+    try {
+      await axios.put(`${API}/user/profile`, profile, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      alert("Profile Updated");
+      fetchProfile();
+
+    } catch (err) {
+      console.error("Profile Update Error:", err);
+    }
+  };
+  const downloadInvoice = async (orderId) => {
+    try {
+
+      const response = await axios.get(
+        `${API}/invoice/${orderId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob"
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `invoice-${orderId}.pdf`);
+      document.body.appendChild(link);
+
+      link.click();
+
+    } catch (error) {
+      console.error("Invoice Download Error:", error);
+    }
+  };
+  // Fetch Orders
+  const fetchOrders = async (type) => {
+    if (!token) return;
+
+    try {
+      const res = await axios.get(`${API}/orders/${type}-orders`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setOrders(res.data);
+
+    } catch (err) {
+      console.error("Orders Fetch Error:", err);
+    }
+  };
+
+  // Fetch Addresses
+  const fetchAddresses = async () => {
+    if (!token) return;
+
+    try {
+      const res = await axios.get(`${API}/user/address`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setAddresses(res.data);
+
+    } catch (err) {
+      console.error("Address Fetch Error:", err);
+    }
+  };
+
+  // Add Address
+  const addAddress = async () => {
+    if (!token) return;
+
+    try {
+      await axios.post(`${API}/user/address`, newAddress, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      fetchAddresses();
+
+      setNewAddress({
+        flatNumber: "",
+        apartmentName: "",
+        street: "",
+        city: "",
+        state: "",
+        pincode: "",
+        isDefault: false
+      });
+
+      alert("Address Added");
+
+    } catch (err) {
+      console.error("Add Address Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+    fetchAddresses();
+    fetchOrders("current");
+  }, []);
+
+  useEffect(() => {
+    if (orderTab === "current") fetchOrders("current");
+    else fetchOrders("previous");
+  }, [orderTab]);
+
   return (
     <div>
-      {/* Header Section */}
       <Header />
 
       <Container fluid className="py-5 account-page container sora">
         <Row>
+
           {/* SIDEBAR */}
           <Col lg={3} md={4} className="border-end sidebar">
             <h6 className="fw-bold">YOUR ACCOUNT</h6>
-            <small>xyz@gmail.com</small>
+            <small>{profile.email}</small>
 
             <ul className="list-unstyled mt-4 sidebar-menu">
               <ul className="list-unstyled mt-4 sidebar-menu">
@@ -50,38 +206,80 @@ const AccountPage = () => {
                   Customer Support
                 </li>
 
-                <li>Log Out</li>
+                <li
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login";
+                  }}
+                >
+                  Log Out
+                </li>
               </ul>
             </ul>
           </Col>
 
           {/* CONTENT */}
           <Col lg={9} md={8} className="ps-lg-5 mt-4 mt-md-0">
+
             {/* PROFILE */}
             {active === "profile" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>
                 <Form className="profile-form">
+
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="NAME" />
+                    <Form.Control
+                      placeholder="NAME"
+                      value={profile.fname}
+                      onChange={(e) =>
+                        setProfile({ ...profile, fname: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="Phone No." />
+                    <Form.Control
+                      placeholder="Phone No."
+                      value={profile.mobile}
+                      onChange={(e) =>
+                        setProfile({ ...profile, mobile: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="XYZ@gmail.com" />
+                    <Form.Control
+                      placeholder="XYZ@gmail.com"
+                      value={profile.email}
+                      disabled
+                    />
                   </Form.Group>
 
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="DD/MM/YYYY" />
+                    <Form.Control
+                      placeholder="DD/MM/YYYY"
+                      value={profile.dob || ""}
+                      onChange={(e) =>
+                        setProfile({ ...profile, dob: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="Gender" />
+                    <Form.Control
+                      placeholder="Gender"
+                      value={profile.gender || ""}
+                      onChange={(e) =>
+                        setProfile({ ...profile, gender: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
-                  <button className="btn btn-outline-dark" size="sm">
+                  <button
+                    className="btn btn-outline-dark"
+                    size="sm"
+                    onClick={updateProfile}
+                    type="button"
+                  >
                     SAVE
                   </button>
 
@@ -91,43 +289,100 @@ const AccountPage = () => {
                     <Button size="sm" variant="outline-dark" className="me-2">
                       Use Default Address
                     </Button>
+
                     <Button size="sm" variant="outline-dark">
                       Add New
                     </Button>
                   </div>
 
+                  {/* Flat / Apartment */}
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="Flat/Apartment No." />
+                    <Form.Control
+                      placeholder="Flat/Apartment No."
+                      value={newAddress.houseNumber}
+                      onChange={(e) =>
+                        setNewAddress({ ...newAddress, houseNumber: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
+                  {/* Building */}
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="Apartment Name" />
+                    <Form.Control
+                      placeholder="Apartment Name"
+                      value={newAddress.buildingName}
+                      onChange={(e) =>
+                        setNewAddress({ ...newAddress, buildingName: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
+                  {/* Road / Landmark */}
                   <Form.Group className="mb-3">
-                    <Form.Control placeholder="Street Name/Landmark" />
+                    <Form.Control
+                      placeholder="Street Name / Landmark"
+                      value={newAddress.road}
+                      onChange={(e) =>
+                        setNewAddress({ ...newAddress, road: e.target.value })
+                      }
+                    />
                   </Form.Group>
 
-                  <Row>
+                  {/* Pin / City / State */}
+                  <Row className="mb-3">
                     <Col>
-                      <Form.Control placeholder="Pin Code" />
+                      <Form.Control
+                        placeholder="Pin Code"
+                        value={newAddress.pincode}
+                        onChange={(e) =>
+                          setNewAddress({ ...newAddress, pincode: e.target.value })
+                        }
+                      />
                     </Col>
+
                     <Col>
-                      <Form.Control placeholder="City" />
+                      <Form.Control
+                        placeholder="City"
+                        value={newAddress.city}
+                        onChange={(e) =>
+                          setNewAddress({ ...newAddress, city: e.target.value })
+                        }
+                      />
                     </Col>
+
                     <Col>
-                      <Form.Control placeholder="State" />
+                      <Form.Control
+                        placeholder="State"
+                        value={newAddress.landmark}
+                        onChange={(e) =>
+                          setNewAddress({ ...newAddress, landmark: e.target.value })
+                        }
+                      />
                     </Col>
                   </Row>
 
+                  {/* Default Address */}
                   <Form.Check
-                    className="mt-3"
+                    className="mb-3"
                     label="Keep it as a default Address"
+                    checked={newAddress.isDefault}
+                    onChange={(e) =>
+                      setNewAddress({
+                        ...newAddress,
+                        isDefault: e.target.checked
+                      })
+                    }
                   />
 
-                  <Button className="mt-3" variant="outline-dark" size="sm">
+                  <Button
+                    variant="outline-dark"
+                    size="sm"
+                    onClick={addAddress}
+                  >
                     SAVE
                   </Button>
+
+
                 </Form>
               </motion.div>
             )}
@@ -135,13 +390,12 @@ const AccountPage = () => {
             {/* ORDERS */}
             {active === "orders" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>
+
                 <div className="mb-4">
                   <Button
                     size="sm"
                     variant={orderTab === "current" ? "dark" : "light"}
-                    className={
-                      orderTab === "current" ? "me-2" : "me-2 btn-light"
-                    }
+                    className="me-2"
                     onClick={() => setOrderTab("current")}
                   >
                     Current Orders
@@ -157,33 +411,41 @@ const AccountPage = () => {
                 </div>
 
                 <Row>
-                  {[1, 2, 3].map((item) => (
-                    <Col lg={4} key={item}>
+                  {orders.map((order) => (
+                    <Col lg={4} key={order._id}>
                       <Card className="border-0 shadow-sm mb-4">
                         <Card.Body>
-                          <small>ORDER PLACED ON</small>
-                          <p>17 January, 2026</p>
 
-                          <div className="d-flex align-items-center gap-3">
-                            <img src="https://via.placeholder.com/50" alt="" />
-                            <div>
-                              <h6>Aries Bath Gel</h6>
-                              <small>Quantity: 1</small>
+                          <small>ORDER PLACED ON</small>
+                          <p>{new Date(order.createdAt).toDateString()}</p>
+
+                          {order.items.map((item, i) => (
+                            <div key={i} className="d-flex align-items-center gap-3">
+                              <img src="https://via.placeholder.com/50" alt="" />
+                              <div>
+                                <h6>
+                                  {item.productId?.ProductName || item.productName}
+                                </h6>
+                                <small>Quantity: {item.quantity}</small>
+                              </div>
                             </div>
-                          </div>
+                          ))}
 
                           <Button
                             size="sm"
                             className="mt-3"
                             variant="outline-dark"
+                            onClick={() => downloadInvoice(order._id)}
                           >
                             Download Invoice
                           </Button>
+
                         </Card.Body>
                       </Card>
                     </Col>
                   ))}
                 </Row>
+
               </motion.div>
             )}
 
@@ -195,42 +457,39 @@ const AccountPage = () => {
                 <h6 className="fw-bold">care@tolvvsigns.com</h6>
 
                 <div className="mt-4 support-links">
-                  <div className="support-links">
-                    <p>
-                      <NavLink to="/privacy-policy" className="support-link">
-                        Privacy Policy ›
-                      </NavLink>
-                    </p>
 
-                    <p>
-                      <NavLink
-                        to="/terms-and-condition"
-                        className="support-link"
-                      >
-                        Terms & Conditions ›
-                      </NavLink>
-                    </p>
+                  <p>
+                    <NavLink to="/privacy-policy" className="support-link">
+                      Privacy Policy ›
+                    </NavLink>
+                  </p>
 
-                    <p>
-                      <NavLink to="/shipping-policy" className="support-link">
-                        Shipping Policy ›
-                      </NavLink>
-                    </p>
+                  <p>
+                    <NavLink to="/terms-and-condition" className="support-link">
+                      Terms & Conditions ›
+                    </NavLink>
+                  </p>
 
-                    <p>
-                      <NavLink to="/refund-policy" className="support-link">
-                        Refund Policy ›
-                      </NavLink>
-                    </p>
-                  </div>
+                  <p>
+                    <NavLink to="/shipping-policy" className="support-link">
+                      Shipping Policy ›
+                    </NavLink>
+                  </p>
+
+                  <p>
+                    <NavLink to="/refund-policy" className="support-link">
+                      Refund Policy ›
+                    </NavLink>
+                  </p>
+
                 </div>
               </motion.div>
             )}
+
           </Col>
         </Row>
       </Container>
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );

@@ -178,7 +178,7 @@
 }
 
 /* Title */
-.product-page-title {
+.title-wrap h6 {
   font-size: 15px;
   font-weight: 500;
   margin: 0;
@@ -201,7 +201,7 @@
 .price-wrap {
   display: flex;
   align-items: center;
-  gap: 6px;
+  /* gap: 6px; */
 }
 
 .price-dot {

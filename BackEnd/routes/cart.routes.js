@@ -3,25 +3,58 @@ const router = express.Router();
 const Cart = require("../Model/Cart");
 const Product = require("../Model/Product.add.admin");
 const { authenticate } = require("../middleware/auth.middleware");
+const Hamper = require("../Model/Hamper");
 
 // Get cart
 router.get("/", authenticate, async (req, res) => {
+
   try {
-    const cart = await Cart.findOne({ userId: req.user.id }).populate('items.productId');
-    if (!cart) return res.status(200).json({ message: 'Cart is empty', cart: [] });
-    
+
+    const cart = await Cart.findOne({ userId: req.user.id })
+      .populate("items.productId")
+      .populate({
+        path: "items.hamperId",
+        populate: {
+          path: "products.productId"
+        }
+      });
+
+    if (!cart) {
+      return res.status(200).json({
+        cart: [],
+        totalPrice: 0
+      });
+    }
+
     let totalPrice = 0;
+
     cart.items.forEach(item => {
-      if (item.productId && item.productId.ProductPrice) {
+
+      if (item.productId) {
         totalPrice += item.quantity * item.productId.ProductPrice;
       }
+
+      if (item.hamperId) {
+        totalPrice += item.quantity * item.hamperId.totalPrice;
+      }
+
     });
-    
-    res.status(200).json({ cart, totalPrice });
+
+    res.status(200).json({
+      cart,
+      totalPrice
+    });
+
   } catch (error) {
-    console.error("Get cart error:", error);
-    res.status(500).json({ message: 'Server error' });
+
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
   }
+
 });
 
 // Add to cart
@@ -145,4 +178,32 @@ router.post("/merge", authenticate, async (req, res) => {
   }
 });
 
+router.post("/add-hamper", async (req, res) => {
+
+  try {
+
+    const { hamperId, quantity } = req.body;
+
+    const hamper = await Hamper.findById(hamperId);
+
+    if (!hamper) {
+      return res.status(404).json({
+        message: "Hamper not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Hamper added to cart",
+      hamper
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Server error"
+    });
+
+  }
+
+});
 module.exports = router;

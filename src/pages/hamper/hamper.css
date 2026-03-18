@@ -67,9 +67,9 @@
   display:inline-block;
 }
 
-.product-size{
-  font-size:10px;
-  color:#777;
+.product-size-hamper{
+  font-size:12px;
+  color: #000;
   margin-top:4px;
 }
 
@@ -82,4 +82,204 @@
 .product-card:hover .product-title svg{
   transform: translateX(4px);
   transition:.3s;
+}
+.zodiac-item-1 {
+  width: 70px;
+}
+
+.zodiac-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: auto;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.zodiac-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Active (selected) effect */
+.zodiac-img.active {
+  border: 2px solid #000;
+  transform: scale(1.1);
+}
+
+/* Hover effect */
+.zodiac-img:hover {
+  transform: scale(1.1);
+}
+.hamper-zodiac-title-1 {
+  font-size: 18px;
+  font-weight: 500;
+  text-align: start;
+  margin-top: 20px;
+}
+
+.hamper-product-card {
+  position: relative;
+  /* padding: 12px; */
+  border-radius: 6px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.hamper-product-card:hover {
+  /* transform: translateY(-5px); */
+  /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); */
+}
+
+/* Checkbox */
+.product-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  transform: scale(1.2);
+}
+
+/* Image */
+.hamper-product-img {
+  /* height: 220px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamper-product-img img {
+  max-height: 100%;
+  object-fit: contain;
+  transition: 0.3s;
+}
+
+.hamper-product-card:hover img {
+  /* transform: scale(1.05); */
+}
+
+/* Info */
+.hamper-product-info h6 {
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.divider {
+  height: 1px;
+  background: #000;
+  margin: 6px 0;
+  width: 100%;
+}
+
+/* Quantity Box */
+.hamper-qty-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.hamper-qty-box button {
+  border: none;
+  background: transparent;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.hamper-qty-box span {
+  padding: 0 8px;
+}
+.col-lg-custom {
+  width: 20%;
+}
+
+@media (max-width: 991px) {
+  .col-lg-custom {
+    width: 33.33%; /* tablet → 3 per row */
+  }
+}
+
+@media (max-width: 576px) {
+  .col-lg-custom {
+    width: 50%; /* mobile → 2 per row */
+  }
+}
+.hamper-card {
+  position: relative;
+  /* background: #f4f4f4; */
+  border-radius: 6px;
+  padding: 10px;
+  transition: 0.3s ease;
+}
+
+.hamper-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox */
+.hamper-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transform: scale(1.2);
+}
+
+/* Image */
+.hamper-img {
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamper-img img {
+  max-height: 100%;
+  object-fit: contain;
+  transition: 0.3s;
+}
+
+.hamper-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Info */
+.hamper-info {
+  margin-top: 10px;
+}
+
+.divider {
+  height: 1px;
+  background: #000;
+  margin: 6px 0;
+}
+
+/* Color dot */
+.color-dot {
+  width: 10px;
+  height: 10px;
+  background: #d84315;
+  border-radius: 50%;
+}
+
+/* Quantity */
+.qty-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.qty-box button {
+  border: none;
+  background: transparent;
+  padding: 2px 8px;
+}
+
+.qty-box span {
+  padding: 0 8px;
 }
