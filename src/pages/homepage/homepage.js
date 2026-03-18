@@ -152,24 +152,10 @@ const Homepage = () => {
           interval={2000}
           pause={false}
         >
-          {/* REMOVE THIS FIRST IMAGE — replaced with VIDEO */}
-          {/* <Carousel.Item>
-            <video
-              className="d-block w-100 h-auto carousel-img"
-              autoPlay
-              loop
-              muted
-              playsInline
-            >
-              <source src="./images/video.mp4" type="video/mp4" />
-            </video>
-          </Carousel.Item> */}
-
-          {/* KEEP SECOND IMAGE */}
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/baner-1.jpg"
+              src="./images/banner-1.jpeg"
               alt="Second slide"
             />
           </Carousel.Item>
@@ -177,7 +163,7 @@ const Homepage = () => {
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/baner-2.jpg"
+              src="./images/banner-2.jpeg"
               alt="Second slide"
             />
           </Carousel.Item>
@@ -185,7 +171,7 @@ const Homepage = () => {
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/baner-3.jpg"
+              src="./images/banner-3.jpeg"
               alt="third slide"
             />
           </Carousel.Item>

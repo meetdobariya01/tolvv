@@ -615,7 +615,7 @@ const Zodic = () => {
           <p className="gt-super ingredients">INGREDIENTS</p>
 
           {/* Herbs Section */}
-          <div className="aries-images container d-flex justify-content-center gap-5 flex-wrap">
+          <div className="aries-images container d-flex justify-content-center  flex-wrap">
             {selectedZodiac.herbs.map((img, i) => (
               <img key={i} src={img} alt="herb" className="half-out-image" />
             ))}
@@ -629,7 +629,7 @@ const Zodic = () => {
           </h2> */}
 
             <div className="container sora">
-              <div className="product-grid">
+              <div className="product-grid mt-5">
                 {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
                   <div className="product-card" key={index}>
                     <div className="product-box-zodiac p-1">

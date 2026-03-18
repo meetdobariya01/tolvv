@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -46,6 +46,7 @@ const Mainproduct = () => {
       size: "",
       img: "/images/hamper.jpg",
       category: "Hamper",
+      link: "/productdetails/hamper",
     },
   ];
   const zodiacColors = {
@@ -60,7 +61,7 @@ const Mainproduct = () => {
     Sagittarius: "#D35400",
     Capricorn: "#2C3E50",
     Aquarius: "#48C9B0",
-    Pisces: "#5B2C6F"
+    Pisces: "#5B2C6F",
   };
   const categories = products.map((p) => p.category);
 
@@ -99,18 +100,18 @@ const Mainproduct = () => {
     // ✅ LOGGED-IN USER
     if (token) {
       try {
-       await axios.post(
-  `${API_URL}/cart/add`,
-  {
-    productId: product._id,
-    quantity: 1,
-  },
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
+        await axios.post(
+          `${API_URL}/cart/add`,
+          {
+            productId: product._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
         navigate("/cart");
       } catch (error) {
@@ -136,9 +137,7 @@ const Mainproduct = () => {
         cart = [];
       }
 
-      const existing = cart.find(
-        (item) => item.productId === product._id
-      );
+      const existing = cart.find((item) => item.productId === product._id);
 
       if (existing) {
         existing.quantity += 1;
@@ -190,7 +189,9 @@ const Mainproduct = () => {
         <section className="products-section-grid">
           <Container>
             <Row className="gx-3 gy-3 mb-5">
-              <h2 className="products-heading artisan-font mt-5">All Sun Signs</h2>
+              <h2 className="products-heading artisan-font mt-5">
+                All Sun Signs
+              </h2>
               {products.map((item, index) => (
                 <Col key={index} xs={6} sm={6} md={4} lg={2}>
                   <div
@@ -205,7 +206,7 @@ const Mainproduct = () => {
                       <h5>
                         {item.title} <span>›</span>
                       </h5>
-                      <div className="underline" /> 
+                      <div className="underline" />
                       <p>{item.size}</p>
                     </div>
                   </div>
@@ -227,7 +228,6 @@ const Mainproduct = () => {
               key={item._id}
             >
               <Card className="product-card p-1">
-
                 {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
                 <NavLink to={`/productdetails/${item._id}`}>
                   <div className="product-img-wrap">
@@ -247,7 +247,10 @@ const Mainproduct = () => {
                   <div className="product-top">
                     <div className="title-wrap">
                       <h6 className="product-page-title">
-                        <NavLink className="text-decoration-none text-dark" to={`/productdetails/${item._id}`}>
+                        <NavLink
+                          className="text-decoration-none text-dark"
+                          to={`/productdetails/${item._id}`}
+                        >
                           {item.ProductName} <span>›</span>
                         </NavLink>
                       </h6>
@@ -264,11 +267,14 @@ const Mainproduct = () => {
 
                   <div className="product-divider"></div>
 
-                  <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn text-uppercase w-md-50">
+                  {/* <NavLink to={`/productdetails/${item._id}`}>
+                    <Button
+                      size="sm"
+                      className="cart-btn text-uppercase w-md-50"
+                    >
                       Add to Cart
                     </Button>
-                  </NavLink>
+                  </NavLink> */}
                 </Card.Body>
               </Card>
             </div>

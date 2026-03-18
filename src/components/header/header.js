@@ -108,7 +108,7 @@ const Header = () => {
             </Nav>
 
             {/* Right Icons */}
-            <div className="icons mx-auto d-none d-lg-flex gap-4">
+            <div className="icons ms-auto d-none d-lg-flex gap-4">
               {searchOpen ? (
                 <FiX onClick={() => setSearchOpen(false)} />
               ) : (

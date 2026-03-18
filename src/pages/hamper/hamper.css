@@ -1,0 +1,85 @@
+.hamper-card {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hamper-card:hover {
+  transform: translateY(-8px);
+}
+
+.product-card {
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+.hamper-title {
+  font-size: 18px;
+  font-weight: 400;
+  text-align: start;
+}
+.hamper-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  text-align: start;
+}
+.craft-hamper-description {
+  font-size: 24px;
+  font-weight: 400;
+}
+@media (max-width: 768px) {
+  .craft-hamper-description {
+    font-size: 14px;
+  }
+}
+.product-card{
+  transition: all .3s ease;
+}
+
+.product-img{
+  background:#f0f0f0;
+  padding:20px;
+}
+
+.product-img img{
+  width:100%;
+}
+
+.product-info{
+  margin-top:10px;
+}
+
+.product-title{
+  font-size:14px;
+  font-weight:500;
+}
+
+.price-row{
+  font-size:13px;
+  margin-top:4px;
+}
+
+.color-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.product-size{
+  font-size:10px;
+  color:#777;
+  margin-top:4px;
+}
+
+/* hover animation */
+
+.product-card:hover{
+  transform: translateY(-5px);
+}
+
+.product-card:hover .product-title svg{
+  transform: translateX(4px);
+  transition:.3s;
+}
