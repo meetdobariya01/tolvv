@@ -8,25 +8,32 @@ const orderSchema = new mongoose.Schema({
   customerName: { type: String, required: true },  // ✅ Store name
   customerEmail: { type: String, required: true }, // ✅ Store email
 
-  items: [
-    {
-      productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
-      },
+ items: [
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product"
+    },
 
-      hamperId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Hamper"
-      },
+    hamperId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Hamper"
+    },
 
-      productName: { type: String, required: true },
+    productName: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    priceAtBuy: { type: Number, required: true },
 
-      quantity: { type: Number, required: true },
-
-      priceAtBuy: { type: Number, required: true }
-    }
-  ],
+    // ✅ ADD THIS
+    hamperItems: [
+      {
+        productId: mongoose.Schema.Types.ObjectId,
+        name: String,
+        quantity: Number
+      }
+    ]
+  }
+],
 
   subtotal: { type: Number },
   cgst: { type: Number },

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Product = require("../Model/Product.add.admin");
 const { authenticate } = require("../middleware/auth.middleware");
 const Order = require("../Model/order"); 
@@ -108,16 +109,34 @@ router.get("/best-sellers", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+router.get("/zodiac-hampers", async (req, res) => {
+  try {
+    const hampers = await Product.find({ Category: "Hamper" });
+    res.json(hampers);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
+
+    // ✅ VERY IMPORTANT FIX
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
+
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.status(200).json(product);
+
+    res.json(product);
   } catch (error) {
     console.error("Fetch single product error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 module.exports = router;

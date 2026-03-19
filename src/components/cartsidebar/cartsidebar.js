@@ -42,15 +42,30 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const items =
-          res.data?.cart?.items?.map((item) => ({
-            id: item.productId?._id,
-            name: item.productId?.ProductName || "Product",
-            price: item.productId?.ProductPrice || 0,
-            qty: item.quantity || 1,
-            img: getImageUrl(item.productId?.Photos),
-            category: item.productId?.Category,
-          })) || [];
+       const items =
+  res.data?.cart?.items?.map((item) => {
+    if (item.productId) {
+      return {
+        id: item.productId._id,
+        name: item.productId.ProductName,
+        price: item.productId.ProductPrice,
+        qty: item.quantity,
+        img: getImageUrl(item.productId.Photos),
+        category: item.productId.Category,
+      };
+    }
+
+    if (item.hamperId) {
+      return {
+        id: item.hamperId._id,
+        name: "Custom Hamper",
+        price: item.hamperId.totalPrice,
+        qty: item.quantity,
+        img: "/images/hamper.jpg",
+        category: "Hamper",
+      };
+    }
+  }) || [];
 
         setCartItems(items);
         setTotalPrice(items.reduce((s, i) => s + i.price * i.qty, 0));

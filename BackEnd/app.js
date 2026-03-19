@@ -27,7 +27,7 @@ app.use("/images", express.static("D:\\Job\\Telve\\tolvv\\public\\images"));
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
 const cartRoutes = require("./routes/cart.routes");
-const orderRoutes = require("./routes/order.routes");
+const orderRoutes = require("./routes/order.routes.js");
 const paymentRoutes = require("./routes/payment.routes");
 const userRoutes = require("./routes/user.routes");
 

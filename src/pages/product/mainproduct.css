@@ -178,7 +178,7 @@
 }
 
 /* Title */
-.product-page-title {
+.title-wrap h6 {
   font-size: 15px;
   font-weight: 500;
   margin: 0;
@@ -277,3 +277,8 @@
 .products-section-grid{
   /* background-color: #fff; */
 }
+
+
+
+
+

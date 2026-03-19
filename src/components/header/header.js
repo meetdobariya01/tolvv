@@ -77,9 +77,8 @@ const Header = () => {
               <Link to="contact" smooth duration={500} className="nav-link">CONNECT</Link>
             </Nav>
 
-            {/* DESKTOP ICONS */}
-            <div className="icons mx-auto d-none d-lg-flex gap-4">
-              
+            {/* Right Icons */}
+            <div className="icons ms-auto d-none d-lg-flex gap-4">
               {searchOpen ? (
                 <FiX onClick={() => setSearchOpen(false)} />
               ) : (

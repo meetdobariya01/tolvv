@@ -62,15 +62,33 @@ const Checkout = () => {
         const data = await res.json();
 
         if (data.cart?.items?.length > 0) {
-          const products = data.cart.items.map((item) => ({
-            id: item.productId._id,
-            name: item.productId.ProductName,
-            price: item.productId.ProductPrice,
-            qty: item.quantity,
-            img: item.productId.Photos?.startsWith("http")
-              ? item.productId.Photos
-              : `/images/${item.productId.Photos?.replace("images/", "")}`,
-          }));
+          const products = data.cart.items.map((item) => {
+            // 🟢 Normal product
+            if (item.productId) {
+              return {
+                id: item.productId._id,
+                type: "product",
+                name: item.productId.ProductName,
+                price: item.productId.ProductPrice,
+                qty: item.quantity,
+                img: item.productId.Photos?.startsWith("http")
+                  ? item.productId.Photos
+                  : `/images/${item.productId.Photos?.replace("images/", "")}`,
+              };
+            }
+
+            // 🟣 Hamper
+            if (item.hamperId) {
+              return {
+                id: item.hamperId._id,
+                type: "hamper",
+                name: "Custom Hamper",
+                price: item.hamperId.totalPrice,
+                qty: item.quantity,
+                img: "/images/hamper.jpg",
+              };
+            }
+          });
           setCart(products);
         }
       } catch (err) {
@@ -115,10 +133,21 @@ const Checkout = () => {
     setPlacing(true);
 
     try {
-      const orderItems = cart.map((item) => ({
-        productId: item.id,
-        quantity: item.qty,
-      }));
+      const orderItems = cart.map((item) => {
+        if (item.type === "product") {
+          return {
+            productId: item.id,
+            quantity: item.qty,
+          };
+        }
+
+        if (item.type === "hamper") {
+          return {
+            hamperId: item.id,
+            quantity: item.qty,
+          };
+        }
+      });
 
       const res = await fetch(`${API_URL}/orders/place`, {
         method: "POST",
@@ -134,12 +163,11 @@ const Checkout = () => {
             buildingName: billing.name,
             city: billing.city,
             pincode: billing.pincode,
-            mobile: billing.phone   // ✅ SEND PHONE
+            mobile: billing.phone,
           },
           customerName: billing.name,
-          customerEmail: billing.email
+          customerEmail: billing.email,
         }),
-
       });
 
       const data = await res.json();
@@ -150,10 +178,8 @@ const Checkout = () => {
         return;
       }
 
-      // 🔁 ONLINE PAYMENT
-      // 🔁 ONLINE PAYMENT
+      // ✅ ONLINE PAYMENT
       if (paymentMethod === "upi" || paymentMethod === "card") {
-
         const paymentRes = await fetch(
           `${API_URL}/payment/initiate/${data.orderId}`,
           {
@@ -176,8 +202,10 @@ const Checkout = () => {
         return;
       }
 
-      // 💵 COD
-      window.location.href = `/payment`;
+      // ✅ COD SUCCESS
+      alert("Order placed successfully!");
+      window.location.href = "/payment";
+
     } catch (error) {
       console.error(error);
       alert("Something went wrong.");
@@ -310,17 +338,20 @@ const Checkout = () => {
 
               <div className="items-list">
                 {cart.map((it) => (
-                  <div className="cart-item" key={it.id}>
-                    <img src={it.img} alt={it.name} className="cart-thumb" />
-                    <div className="cart-meta">
-                      <div className="name">{it.name}</div>
-                      <div className="meta-row">
-                        <span>x{it.qty}</span>
-                        <div className="price">
-                          {currencyFormat(it.price * it.qty)}
-                        </div>
-                      </div>
-                    </div>
+                  <div key={it.id}>
+                    <div className="name">{it.name}</div>
+                    <div>x{it.qty}</div>
+
+                    {/* ✅ SHOW HAMPPER PRODUCTS */}
+                    {it.hamperItems && (
+                      <ul style={{ fontSize: "12px", marginTop: "5px" }}>
+                        {it.hamperItems.map((h, i) => (
+                          <li key={i}>
+                            {h.name} × {h.quantity}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 ))}
               </div>

@@ -183,19 +183,26 @@ router.post("/place", authenticate, async (req, res) => {
 
       // HAMPER
       if (item.hamperId) {
-
-        const hamper = await Hamper.findById(item.hamperId);
+        const hamper = await Hamper.findById(item.hamperId).populate("products.productId");
 
         if (!hamper)
           return res.status(404).json({ message: "Hamper not found" });
 
         subtotal += hamper.totalPrice * item.quantity;
 
+        // ✅ Extract product details
+        const hamperItems = hamper.products.map((p) => ({
+          productId: p.productId._id,
+          name: p.productId.ProductName,
+          quantity: p.quantity
+        }));
+
         orderItems.push({
           hamperId: hamper._id,
           productName: "Zodiac Hamper",
           quantity: item.quantity,
-          priceAtBuy: hamper.totalPrice
+          priceAtBuy: hamper.totalPrice,
+          hamperItems  // ✅ SAVE THIS
         });
       }
     }

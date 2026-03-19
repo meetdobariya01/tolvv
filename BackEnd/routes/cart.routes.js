@@ -178,32 +178,44 @@ router.post("/merge", authenticate, async (req, res) => {
   }
 });
 
-router.post("/add-hamper", async (req, res) => {
-
+router.post("/add-hamper", authenticate, async (req, res) => {
   try {
-
-    const { hamperId, quantity } = req.body;
+    const { hamperId, quantity = 1 } = req.body;
 
     const hamper = await Hamper.findById(hamperId);
-
     if (!hamper) {
-      return res.status(404).json({
-        message: "Hamper not found"
-      });
+      return res.status(404).json({ message: "Hamper not found" });
     }
 
+    let cart = await Cart.findOne({ userId: req.user.id });
+
+    if (!cart) {
+      cart = new Cart({
+        userId: req.user.id,
+        items: [{ hamperId, quantity }]
+      });
+    } else {
+      const index = cart.items.findIndex(
+        item => item.hamperId?.toString() === hamperId
+      );
+
+      if (index > -1) {
+        cart.items[index].quantity += quantity;
+      } else {
+        cart.items.push({ hamperId, quantity });
+      }
+    }
+
+    await cart.save();
+
     res.status(200).json({
-      message: "Hamper added to cart",
-      hamper
+      message: "Hamper added to cart successfully",
+      cart
     });
 
   } catch (error) {
-
-    res.status(500).json({
-      message: "Server error"
-    });
-
+    console.error("Add hamper error:", error);
+    res.status(500).json({ message: "Server error" });
   }
-
 });
 module.exports = router;
