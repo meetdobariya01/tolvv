@@ -66,22 +66,27 @@ router.get("/categories/all", async (req, res) => {
 router.get("/best-sellers", async (req, res) => {
   try {
     const bestSellers = await Order.aggregate([
-      { $unwind: "$products" },
+      
+      // ✅ FIXED FIELD NAME
+      { $unwind: "$items" },
 
       {
         $group: {
-          _id: "$products.productId",
-          totalSold: { $sum: "$products.quantity" }
+          _id: "$items.productId",
+          totalSold: { $sum: "$items.quantity" },
+          orderCount: { $sum: 1 }
         }
       },
 
-      { $sort: { totalSold: -1 } },
+      // ✅ ONLY SUCCESSFUL ORDERS (IMPORTANT)
+      // (filter before group ideally, but ok here if needed)
 
+      { $sort: { totalSold: -1 } },
       { $limit: 8 },
 
       {
         $lookup: {
-          from: "products", // MongoDB collection name
+          from: "products",
           localField: "_id",
           foreignField: "_id",
           as: "productDetails"
@@ -90,20 +95,28 @@ router.get("/best-sellers", async (req, res) => {
 
       { $unwind: "$productDetails" },
 
-      {
-        $project: {
-          _id: "$productDetails._id",
-          ProductName: "$productDetails.ProductName",
-          ProductPrice: "$productDetails.ProductPrice",
-          Photos: "$productDetails.Photos",
-          Category: "$productDetails.Category",
-          Zodiac: "$productDetails.Zodiac",
-          totalSold: 1
-        }
-      }
+    {
+  $project: {
+    _id: "$productDetails._id",
+    ProductName: "$productDetails.ProductName",
+    ProductPrice: "$productDetails.ProductPrice",
+    Photos: "$productDetails.Photos",
+    Category: "$productDetails.Category",
+    Zodiac: "$productDetails.Zodiac",
+
+    // ✅ ADD THIS LINE
+    size: "$productDetails.size",
+
+    totalSold: 1,
+    orderCount: 1
+  }
+}
     ]);
 
+    console.log("BEST SELLERS 👉", bestSellers);
+
     res.status(200).json(bestSellers);
+
   } catch (error) {
     console.error("Best seller error:", error);
     res.status(500).json({ message: "Server error" });

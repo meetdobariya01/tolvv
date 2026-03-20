@@ -747,3 +747,20 @@
     margin: auto;
   }
 }
+
+
+
+.carousel-indicators [data-bs-target] {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: white;
+  opacity: 0.5;
+  margin: 0 5px;
+  border: none;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+  background-color: white;
+}

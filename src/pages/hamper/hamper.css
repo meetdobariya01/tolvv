@@ -152,6 +152,7 @@
 
 .hamper-product-img img {
   max-height: 100%;
+  width: 100%;
   object-fit: contain;
   transition: 0.3s;
 }
@@ -275,11 +276,19 @@
 }
 
 .qty-box button {
-  border: none;
-  background: transparent;
+ 
   padding: 2px 8px;
+  line-height: 1;
 }
 
 .qty-box span {
-  padding: 0 8px;
+  min-width: 2px;
+  text-align: center;
+}
+
+.zodiac-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
 }

@@ -58,49 +58,90 @@ router.get("/", authenticate, async (req, res) => {
 });
 
 // Add to cart
+// router.post("/add", authenticate, async (req, res) => {
+//   const { productId, quantity } = req.body;
+//   if (!productId) return res.status(400).json({ message: 'Product ID is required' });
+
+//   try {
+//     let cart = await Cart.findOne({ userId: req.user.id });
+
+//     if (!cart) {
+//       cart = new Cart({
+//         userId: req.user.id,
+//         items: [{ productId, quantity: quantity || 1 }]
+//       });
+//     } else {
+//       const itemIndex = cart.items.findIndex(
+//         item => item.productId && item.productId.toString() === productId
+//       );
+//       if (itemIndex > -1) {
+//         cart.items[itemIndex].quantity += quantity || 1;
+//       } else {
+//         cart.items.push({ productId, quantity: quantity || 1 });
+//       }
+//     }
+
+//     await cart.save();
+//     res.status(200).json({ message: 'Product added to cart successfully', cart });
+//   } catch (error) {
+//     console.error("Add to cart error:", error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 router.post("/add", authenticate, async (req, res) => {
   const { productId, quantity } = req.body;
-  if (!productId) return res.status(400).json({ message: 'Product ID is required' });
+
+  if (!productId) {
+    return res.status(400).json({ message: "Product ID is required" });
+  }
 
   try {
     let cart = await Cart.findOne({ userId: req.user.id });
-    
+
     if (!cart) {
-      cart = new Cart({ 
-        userId: req.user.id, 
-        items: [{ productId, quantity: quantity || 1 }] 
+      cart = new Cart({
+        userId: req.user.id,
+        items: [{ productId, quantity: quantity || 1 }],
       });
     } else {
-      const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+      const itemIndex = cart.items.findIndex(
+        (item) =>
+          item.productId &&
+          String(item.productId) === String(productId)
+      );
+
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity += quantity || 1;
       } else {
         cart.items.push({ productId, quantity: quantity || 1 });
       }
     }
-    
+
     await cart.save();
-    res.status(200).json({ message: 'Product added to cart successfully', cart });
+
+    res.status(200).json({
+      message: "Product added to cart successfully",
+      cart,
+    });
   } catch (error) {
     console.error("Add to cart error:", error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
-
 // Update cart item quantity
 router.put("/update/:productId", authenticate, async (req, res) => {
   const { quantity } = req.body;
-  
+
   try {
     const cart = await Cart.findOne({ userId: req.user.id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
-    const itemIndex = cart.items.findIndex(item => item.productId.toString() === req.params.productId);
+    const itemIndex = cart.items.findIndex(item => item.productId && item.productId.toString() === req.params.productId);
     if (itemIndex === -1) return res.status(404).json({ message: 'Item not found in cart' });
 
     cart.items[itemIndex].quantity = quantity;
     await cart.save();
-    
+
     res.status(200).json({ message: 'Cart updated successfully', cart });
   } catch (error) {
     console.error("Update cart error:", error);
@@ -113,10 +154,14 @@ router.delete("/remove/:productId", authenticate, async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.user.id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
-    
-    cart.items = cart.items.filter(item => item.productId.toString() !== req.params.productId);
+
+    cart.items = cart.items.filter(
+  item =>
+    (item.productId && item.productId.toString() !== req.params.productId) ||
+    (item.hamperId && item.hamperId.toString() !== req.params.productId)
+);
     await cart.save();
-    
+
     res.status(200).json({ message: 'Item removed from cart', cart });
   } catch (error) {
     console.error("Remove item error:", error);
@@ -157,7 +202,9 @@ router.post("/merge", authenticate, async (req, res) => {
       if (!item.productId || !item.quantity) return;
 
       const existingItem = cart.items.find(
-        (ci) => ci.productId.toString() === item.productId.toString()
+        (ci) => ci.productId &&
+          item.productId &&
+          ci.productId.toString() === item.productId.toString()
       );
 
       if (existingItem) {
