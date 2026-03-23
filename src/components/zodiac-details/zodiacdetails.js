@@ -1,30 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import "./zodics.css";
 import axios from "axios";
-import Calculator from "../../components/calculator/calculator";
-// import { Row, Col } from "react-bootstrap";
-// import { motion } from "framer-motion";
-// import Cookies from "js-cookie";
+import "./zodiacdetails.css";
 
-const Zodic = () => {
-  // const [active, setActive] = useState(null);
-
-  // const zodiacColors = {
-  //   Aries: "#c10230",
-  //   Taurus: "#ae1857",
-  //   Gemini: "#d79a2b",
-  //   Cancer: "#85422b",
-  //   Leo: "#4d5a31",
-  //   Virgo: "#5f504d",
-  //   Libra: "#7e622d",
-  //   Scorpio: "#2d2a26",
-  //   Sagittarius: "#490e67",
-  //   Capricorn: "#726b54",
-  //   Aquarius: "#005d63",
-  //   Pisces: "#006098",
-  // };
-
+const Zodiacdetails = () => {
   const zodiacData = {
     Aries: {
       name: "Aries",
@@ -41,8 +20,9 @@ const Zodic = () => {
       planet: "Mars",
       herbs: [
         "./images/ingredient/Ginger.png",
+        "./images/ingredient/Ginger.png",
         "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/coconut.png",
+        "./images/ingredient/Coconut-Oil.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -270,7 +250,7 @@ const Zodic = () => {
       name: "Capricorn",
       date: "December 22 - January 19",
       color: "#726B54",
-      icon: "./images/zodiac/10.png",
+      icon: "/images/zodiac/10.png",
       description:
         "Ruled by Saturn, Capricorn excels at constructing both tangible and mental frameworks. Practical, disciplined, and results-driven, they often shine in business and endeavours requiring focus and mastery. True Capricorn maturity arises when they move beyond merely preserving tradition, channelling their drive to create innovative structures that serve, uplift, and honour the evolving world around them.",
       letters: "Kh, J",
@@ -280,10 +260,10 @@ const Zodic = () => {
       element: "Earth",
       planet: "Saturn",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Rosemary.png",
-        "./images/ingredient/Lemongrass.png",
-        "./images/ingredient/CARNATION FLOWER-15.png",
+        "/images/ingredient/Lavender.png",
+        "/images/ingredient/Rosemary.png",
+        "/images/ingredient/Lemongrass.png",
+        "/images/ingredient/CARNATION FLOWER-15.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -297,7 +277,7 @@ const Zodic = () => {
       name: "Aquarius",
       date: "January 20 - February 18",
       color: "#005D63",
-      icon: "./images/zodiac/11.png",
+      icon: "/images/zodiac/11.png",
       description:
         "Co-ruled by Saturn and Uranus, Aquarius embodies the spirit of creative individuality. Independent yet deeply connected, they navigate life with intellect, originality, and a forward-thinking edge. Often altruistic and socially aware, Aquarians thrive on innovation and postconventional insight. Their true evolution emerges when they recognize that personal growth and the advancement of humanity are intertwined — that the highest expression of their power lies in serving the greater whole.",
       letters: "G, S, Sh",
@@ -307,9 +287,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Uranus / Saturn",
       herbs: [
-        "./images/ingredient/Lemon.png",
-        "./images/ingredient/Jasmine.png",
-        "./images/ingredient/Sandalwood.png",
+        "/images/ingredient/Lemon.png",
+        "/images/ingredient/Jasmine.png",
+        "/images/ingredient/Sandalwood.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -323,7 +303,7 @@ const Zodic = () => {
       name: "Pisces",
       date: "February 19 - March 20",
       color: "#006098",
-      icon: "./images/zodiac/12.png",
+      icon: "/images/zodiac/12.png",
       description:
         "Pisces is sensitive, intuitive, and artistic—compassionate and spiritual. They inspire creativity, empathy, healing, and kindness, seeing the world through soulful perception.",
       letters: "D, Ch, Z, Th",
@@ -333,10 +313,10 @@ const Zodic = () => {
       element: "Water",
       planet: "Neptune / Jupiter",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Clove.png",
-        "./images/ingredient/Rose.png",
-        "./images/ingredient/Sandalwood.png",
+        "/images/ingredient/Lavender.png",
+        "/images/ingredient/Clove.png",
+        "/images/ingredient/Rose.png",
+        "/images/ingredient/Sandalwood.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -349,18 +329,18 @@ const Zodic = () => {
   };
 
   const zodiacSigns = [
-    { name: "Aries", color: "#7A1318", image: "./images/zodiac/1.png" },
-    { name: "Taurus", color: "#7A8B3D", image: "./images/zodiac/2.png" },
-    { name: "Gemini", color: "#BB892C", image: "./images/zodiac/3.png" },
-    { name: "Cancer", color: "#8A8C8E", image: "./images/zodiac/4.png" },
-    { name: "Leo", color: "#E8C43A", image: "./images/zodiac/5.png" },
-    { name: "Virgo", color: "#DC4D2D", image: "./images/zodiac/6.png" },
-    { name: "Libra", color: "#FF4E4C", image: "./images/zodiac/7.png" },
-    { name: "Scorpio", color: "#000000", image: "./images/zodiac/8.png" },
-    { name: "Sagittarius", color: "#74489D", image: "./images/zodiac/9.png" },
-    { name: "Capricorn", color: "#F1E1CF", image: "./images/zodiac/10.png" },
-    { name: "Aquarius", color: "#519AA2", image: "./images/zodiac/11.png" },
-    { name: "Pisces", color: "#043D5D", image: "./images/zodiac/12.png" },
+    { name: "Aries", color: "#7A1318", image: "/images/zodiac/1-2.png" },
+    { name: "Taurus", color: "#7A8B3D", image: "/images/zodiac/2.png" },
+    { name: "Gemini", color: "#BB892C", image: "/images/zodiac/3.png" },
+    { name: "Cancer", color: "#8A8C8E", image: "/images/zodiac/4.png" },
+    { name: "Leo", color: "#E8C43A", image: "/images/zodiac/5.png" },
+    { name: "Virgo", color: "#DC4D2D", image: "/images/zodiac/6.png" },
+    { name: "Libra", color: "#FF4E4C", image: "/images/zodiac/7.png" },
+    { name: "Scorpio", color: "#000000", image: "/images/zodiac/8.png" },
+    { name: "Sagittarius", color: "#74489D", image: "/images/zodiac/9.png" },
+    { name: "Capricorn", color: "#F1E1CF", image: "/images/zodiac/10.png" },
+    { name: "Aquarius", color: "#519AA2", image: "/images/zodiac/11.png" },
+    { name: "Pisces", color: "#043D5D", image: "/images/zodiac/12.png" },
   ];
 
   const API_URL = process.env.REACT_APP_API_URL;
@@ -412,169 +392,168 @@ const Zodic = () => {
 
   return (
     <div>
-      {/* TOP SECTION */}
-      <div className="twelve-section py-5">
-        <div className="container">
-          <div className="row align-items-center text-white">
-            {/* LEFT TEXT */}
-            <div className="col-12 col-md-4 text-center  left-text">
-              <h2 className="artisan-font">The Twelves</h2>
-              <p className="subtitle sora">EXPLORE BY YOUR SUN SIGN</p>
-              {/* <p className="subtitle">Find your Zodiac</p> */}
-              <div className="my-5">
-                <Calculator />
-              </div>
-            </div>
+      <div>
+        {/* TOP SECTION */}
+        <div className="twelve-section-details py-5">
+          <div className="container">
+            <div className="row align-items-center text-white">
+              {/* LEFT TEXT */}
+              {/* <div className="col-12 col-md-4 text-center  left-text">
+                <h2 className="artisan-font">The Twelves</h2>
+                <p className="subtitle sora">EXPLORE BY YOUR SUN SIGN</p>
+                <div className="my-5">
+                  <Calculator />
+                </div>
+              </div> */}
 
-            {/* ZODIAC GRID */}
-            <div className="col-12 col-md-7 zodiac-grid-wrapper">
-              <div className="row zodiac-row justify-content-center">
-                {zodiacSigns.map((sign, index) => (
-                  <div
-                    key={index}
-                    className="col-3 zodiac-item text-center"
-                    onClick={() => setSelectedZodiac(zodiacData[sign.name])}
-                  >
+              {/* ZODIAC GRID */}
+              <div className="container details-zodiac-section text-center sora">
+                <h5 className="mb-4 text-dark fw-semibold text-start">Explore Other Sun Sign</h5>
+
+                <div className="row justify-content-center details-zodiac-row">
+                  {zodiacSigns.map((sign, index) => (
                     <div
-                      className="zodiac-circle"
-                    // style={{ backgroundColor: sign.color }}
+                      key={index}
+                      className="col-3 col-sm-3 col-md-2 col-lg-1 details-zodiac-item"
+                      onClick={() => setSelectedZodiac(zodiacData[sign.name])}
                     >
-                      <img
-                        src={sign.image}
-                        alt={sign.name}
-                        className="zodiac-image"
-                      />
+                      <div className="details-zodiac-circle">
+                        <img
+                          src={sign.image}
+                          alt={sign.name}
+                          className="details-zodiac-image"
+                        />
+                      </div>
+                      <p className="details-zodiac-name mt-2 text-dark">{sign.name}</p>
                     </div>
-                    <p className="zodiac-name sora">{sign.name}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* RIGHT VERTICAL TEXT */}
-            <div className="col-md-1 d-none d-md-flex ">
-              <div className="vertical-text">
-                NURTURE <span className="fw-light">YOUR</span> NATURE
-              </div>
+              {/* RIGHT VERTICAL TEXT */}
+              {/* <div className="col-md-1 d-none d-md-flex ">
+                <div className="vertical-text">
+                  NURTURE <span className="fw-light">YOUR</span> NATURE
+                </div>
+              </div> */}
             </div>
           </div>
         </div>
-      </div>
 
-      {/* RED SECTION (Dynamic Content) */}
-      {selectedZodiac && (
-        <section
-          className="aries-section text-center"
-          style={{ backgroundColor: selectedZodiac.color }}
-        >
-          <div className="aries-content inter container sora">
-            <div className="zodiac-header text-white text-center">
-              <p className="aries-date mb-3">{selectedZodiac.date}</p>
+        {/* RED SECTION (Dynamic Content) */}
+        {selectedZodiac && (
+          <section
+            className="aries-section text-center"
+            style={{ backgroundColor: selectedZodiac.color }}
+          >
+            <div className="aries-content inter container sora">
+              <div className="zodiac-header text-white text-center">
+                <p className="aries-date mb-3">{selectedZodiac.date}</p>
 
-              <div className="d-flex justify-content-center align-items-center gap-4">
-                <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
+                <div className="d-flex justify-content-center align-items-center gap-4">
+                  <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
 
-                <div
-                  className="aries-icon-circle d-flex justify-content-center align-items-center"
-                  style={{ backgroundColor: selectedZodiac.color }}
-                >
-                  <img
-                    src={selectedZodiac.icon}
-                    alt="icon"
-                    className="aries-icon-img"
-                  />
+                  <div
+                    className="aries-icon-circle d-flex justify-content-center align-items-center"
+                    style={{ backgroundColor: selectedZodiac.color }}
+                  >
+                    <img
+                      src={selectedZodiac.icon}
+                      alt="icon"
+                      className="aries-icon-img"
+                    />
+                  </div>
                 </div>
               </div>
+
+              <p className="aries-description mt-3">
+                {selectedZodiac.description}
+              </p>
+
+              <p className="aries-details">
+                <span>Corresponding Letters : {selectedZodiac.letters}</span>{" "}
+                &nbsp; | &nbsp;
+                <span>Astral Energy : {selectedZodiac.energy}</span> &nbsp; |
+                &nbsp;
+                <span>Stamina : {selectedZodiac.stamina}</span>
+                <br />
+                <span>Colour : {selectedZodiac.colorText}</span> &nbsp; | &nbsp;
+                <span>Element : {selectedZodiac.element}</span> &nbsp; | &nbsp;
+                <span>Ruling Planet : {selectedZodiac.planet}</span>
+              </p>
             </div>
 
-            <p className="aries-description mt-3">
-              {selectedZodiac.description}
-            </p>
+            <p className="gt-super ingredients">INGREDIENTS</p>
 
-            <p className="aries-details">
-              <span>Corresponding Letters : {selectedZodiac.letters}</span>{" "}
-              &nbsp; | &nbsp;
-              <span>Astral Energy : {selectedZodiac.energy}</span> &nbsp; |
-              &nbsp;
-              <span>Stamina : {selectedZodiac.stamina}</span>
-              <br />
-              <span>Colour : {selectedZodiac.colorText}</span> &nbsp; | &nbsp;
-              <span>Element : {selectedZodiac.element}</span> &nbsp; | &nbsp;
-              <span>Ruling Planet : {selectedZodiac.planet}</span>
-            </p>
-          </div>
+            {/* Herbs Section */}
+            <div className="aries-images container d-flex justify-content-center  flex-wrap">
+              {selectedZodiac.herbs.map((img, i) => (
+                <img key={i} src={img} alt="herb" className="half-out-image" />
+              ))}
+            </div>
 
-          <p className="gt-super ingredients">INGREDIENTS</p>
-
-          {/* Herbs Section */}
-          <div className="aries-images container d-flex justify-content-center  flex-wrap">
-            {selectedZodiac.herbs.map((img, i) => (
-              <img key={i} src={img} alt="herb" className="half-out-image" />
-            ))}
-          </div>
-
-          {/* PRODUCTS */}
-          {/* PRODUCTS – WHITE BACKGROUND */}
-          <div className="product-wrapper py-5">
-            {/* <h2 className="product-text mb-4 text-center sora">
+            {/* PRODUCTS */}
+            {/* PRODUCTS – WHITE BACKGROUND */}
+            <div className="product-wrapper py-5">
+              {/* <h2 className="product-text mb-4 text-center sora">
             {xyz.find((item) => item.name === selectedZodiac.name)?.xyz1}
           </h2> */}
 
-            <div className="container sora">
-              <div className="product-grid mt-5">
-                {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-                  <NavLink
-                    to={`/productdetails/${p._id}`}
-                    className="text-decoration-none"
-                  >
-                    <div className="product-card" key={index}>
-                      <div className="product-box-zodiac p-1">
-                        <img
-                          src={p.Photos}
-                          alt={p.ProductName}
-                          className="zodiac-product-img"
-                        />
+              <div className="container sora">
+                <div className="product-grid mt-5">
+                  {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
+                    <NavLink
+                      to={`/productdetails/${p._id}`}
+                      className="text-decoration-none"
+                    >
+                      <div className="product-card" key={index}>
+                        <div className="product-box-zodiac p-1">
+                          <img
+                            src={p.Photos}
+                            alt={p.ProductName}
+                            className="zodiac-product-img"
+                          />
 
-                        <div className="product-info">
-                          <p className="name">
-                            {p.ProductName} <span>›</span>
-                          </p>
-                          {/* <p className="name">{p.ProductName}</p> */}
-                          {/* <p className="size">{p.size}</p> */}
-                          <div className="price-with-dot-1">
-                            <span
-                              className="zodiac-dot"
-                              style={{ backgroundColor: selectedZodiac.color }}
-                            ></span>
+                          <div className="product-info">
+                            <p className="name">
+                              {p.ProductName} <span>›</span>
+                            </p>
+                            {/* <p className="name">{p.ProductName}</p> */}
+                            {/* <p className="size">{p.size}</p> */}
+                            <div className="price-with-dot-1">
+                              <span
+                                className="zodiac-dot"
+                                style={{
+                                  backgroundColor: selectedZodiac.color,
+                                }}
+                              ></span>
 
-                            <span className="zodiac-price">
-                              ₹ {p.ProductPrice}
-                            </span>
-                          </div>
+                              <span className="zodiac-price">
+                                ₹ {p.ProductPrice}
+                              </span>
+                            </div>
 
-                          <div className="underline" />
-                          <p className="size">{p.size}</p>
-                          {/* <button
+                            <div className="underline" />
+                            <p className="size">{p.size}</p>
+                            {/* <button
                         className="btn btn-outline-dark mt-1"
                         onClick={() => handleBuyNow(p)}
                       >
                         Buy Now
                       </button> */}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </NavLink>
-                ))}
-                  </div>
-
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
             </div>
-
-            </div>
-
-        </section>
-      )}
+          </section>
+        )}
+      </div>
     </div>
   );
 };
 
-export default Zodic;
+export default Zodiacdetails;

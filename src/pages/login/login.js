@@ -146,63 +146,67 @@ const Login = () => {
   return (
     <div>
       <Header />
-      <div className="pro-loginpage-wrapper d-flex align-items-center justify-content-center">
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="pro-loginpage-card p-5 rounded-4 shadow-sm"
-        >
-          <h3 className="text-center mb-4 fw-bold">Welcome</h3>
 
-          {serverError && (
-            <div className="alert alert-danger text-center small py-2">
-              {serverError}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="form-control mb-3 underline-input"
-              value={formData.email}
-              onChange={handleChange}
-            />
-
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="form-control mb-3 underline-input"
-              value={formData.password}
-              onChange={handleChange}
-            />
-
-            <button className="btn btn-outline-dark w-100" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
-          </form>
-
-          <div className="d-flex align-items-center my-4">
-            <hr className="flex-grow-1" />
-            <span className="mx-2 text-muted small">OR</span>
-            <hr className="flex-grow-1" />
-          </div>
-
-          <GoogleLogin
-            onSuccess={handleGoogleLogin}
-            onError={() => setServerError("Google login failed")}
+      <div className="login-3-container sora">
+        {/* SECTION 1 - IMAGE */}
+        <div className="login-section image-section">
+          <img
+            src="./images/login-page.png"
+            alt="login"
           />
+        </div>
 
-          <p className="text-center mt-3">
-            No account?{" "}
-            <NavLink className="text-decoration-none text-dark" to="/signup">
-              Sign up
-            </NavLink>
-          </p>
-        </motion.div>
+        {/* SECTION 2 - HELLO TEXT */}
+        <div className="login-section-1 hello-section artisan-font">
+          <h1>Hello</h1>
+        </div>
+
+        {/* SECTION 3 - FORM */}
+        <div className="login-section form-section-1  ">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="form-box"
+          >
+            {serverError && <div className="error-box">{serverError}</div>}
+
+            <form onSubmit={handleSubmit}>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email ID"
+                value={formData.email}
+                onChange={handleChange}
+                className="input-line"
+              />
+
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="input-line"
+              />
+
+              <p className="forgot">Forgot Password</p>
+
+              <button className="login-btn" disabled={loading}>
+                {loading ? "Signing in..." : "Login"}
+              </button>
+            </form>
+
+            <div className="divider">or</div>
+
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => setServerError("Google login failed")}
+            />
+
+            {/* <button className="apple-btn">Sign in with Apple</button> */}
+          </motion.div>
+        </div>
       </div>
 
       <Footer />

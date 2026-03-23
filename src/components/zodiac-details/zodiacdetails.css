@@ -1,0 +1,77 @@
+.twelve-section-details {
+    background-color: #fff;
+    height: auto;
+    position: relative;
+}
+.details-zodiac-section {
+  padding: 30px 0;
+}
+
+/* Grid spacing */
+.details-zodiac-row {
+  /* gap: 15px; */
+}
+
+/* Each item */
+.details-zodiac-item {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Circle background */
+.details-zodiac-circle {
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Image inside circle */
+.details-zodiac-image {
+  width: 58px;
+  height: 58px ;
+  object-fit: contain;
+}
+
+/* Text */
+.details-zodiac-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 🔥 Hover Effects */
+.details-zodiac-item:hover {
+  transform: translateY(-5px);
+}
+
+.details-zodiac-item:hover .details-zodiac-circle {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.details-zodiac-item:hover .details-zodiac-name {
+  color: #ff7e5f;
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 768px) {
+  .details-zodiac-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .details-zodiac-image {
+    width: 48px;
+    height: 48px;
+  }
+
+  .details-zodiac-name {
+    font-size: 12px;
+  }
+}
