@@ -125,7 +125,7 @@ router.post("/callback", async (req, res) => {
 
     // Redirect based on status
     if (orderStatusResp.status === "CHARGED") {
-      return res.redirect(`${frontendUrl}/payment-success/${order_id}`);
+      return res.redirect(`${frontendUrl}/payment`);
     }
 
     return res.redirect(`${frontendUrl}/payment-failed/${order_id}`);

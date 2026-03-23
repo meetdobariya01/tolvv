@@ -9,18 +9,18 @@ import "./mainproduct.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const zodiacColors = {
- Aries: "#7A1318",
-    Taurus: "#7A8B3D",
-    Gemini: "#BB892C",
-    Cancer: "#8A8C8E",
-    Leo: "#E8C43A",
-    Virgo: "#DC4D2D",
-    Libra: "#F04E4C",
-    Scorpio: "#000000",
-    Sagittarius: "#74489D",
-    Capricorn: "#CCC29F",
-    Aquarius: "#519AA2",
-    Pisces: "#043D5D",
+  Aries: "#7A1318",
+  Taurus: "#7A8B3D",
+  Gemini: "#BB892C",
+  Cancer: "#8A8C8E",
+  Leo: "#E8C43A",
+  Virgo: "#DC4D2D",
+  Libra: "#F04E4C",
+  Scorpio: "#000000",
+  Sagittarius: "#74489D",
+  Capricorn: "#CCC29F",
+  Aquarius: "#519AA2",
+  Pisces: "#043D5D",
 };
 const Mainproduct = ({ handleCartOpen }) => {
   const [activeKey, setActiveKey] = useState("");
@@ -61,7 +61,7 @@ const Mainproduct = ({ handleCartOpen }) => {
     },
   ];
   const zodiacColors = {
-   Aries: "#7A1318",
+    Aries: "#7A1318",
     Taurus: "#7A8B3D",
     Gemini: "#BB892C",
     Cancer: "#8A8C8E",
@@ -183,7 +183,12 @@ const Mainproduct = ({ handleCartOpen }) => {
       .getElementById("product-grid")
       ?.scrollIntoView({ behavior: "smooth" });
   };
-
+  const getZodiacFromProduct = (name) => {
+    if (!name) return null;
+    return Object.keys(zodiacColors).find((zodiac) =>
+      name.toLowerCase().includes(zodiac.toLowerCase())
+    );
+  };
   return (
     <div>
       <Header />
@@ -199,7 +204,13 @@ const Mainproduct = ({ handleCartOpen }) => {
                 <Col key={index} xs={6} sm={6} md={4} lg={2}>
                   <div
                     className="product-card p-2"
-                    onClick={() => handleCategoryClick(item.category)}
+                    onClick={() => {
+                      if (item.category === "Hamper") {
+                        navigate("/hamper"); // ✅ go to hamper page
+                      } else {
+                        handleCategoryClick(item.category);
+                      }
+                    }}
                     style={{ cursor: "pointer" }}
                   >
                     <div className="product-img-card">
@@ -245,52 +256,39 @@ const Mainproduct = ({ handleCartOpen }) => {
                   </div>
                 </NavLink>
 
-                <Card.Body className="product-info sora">
-                  <div className="product-top">
-                    <div className="title-wrap d-flex align-items-center justify-content-between w-100">
-                      <h6 className="product-page-title">
-                        <NavLink
-                          className="text-decoration-none text-dark"
-                          to={`/productdetails/${item._id}`}
-                        >
-                          {item.ProductName} <span>›</span>
-                        </NavLink>
-                      </h6>
+                <div className="product-info sora">
 
-                      <div className="price-wrap">
-                        <div className="price-wrap d-flex align-items-center gap-2">
-                          <span
-                            className="zodiac-dot"
-                            style={{
-                              backgroundColor:
-                                zodiacColors[item.Zodiac] || "#000",
-                              width: "15px",
-                              height: "15px",
-                              borderRadius: "50%",
-                              display: "inline-block",
-                            }}
-                          ></span>
+                  {/* ✅ NAME + DOT */}
+                  <div className="price-with-dot-1">
+                    <span
+                      className="zodiac-dot"
+                      style={{
+                        backgroundColor:
+                          zodiacColors[
+                          getZodiacFromProduct(item.ProductName)
+                          ] || "#000",
+                      }}
+                    ></span>
 
-                          <span className="product-price">
-                            ₹ {item.ProductPrice}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                    <h6 className="product-page-title m-0">
+                      <NavLink
+                        className="text-decoration-none text-dark"
+                        to={`/productdetails/${item._id}`}
+                      >
+                        {item.ProductName} <span>›</span>
+                      </NavLink>
+                    </h6>
                   </div>
 
                   <div className="product-divider"></div>
 
-                  <p className="product-size">{item.size}</p>
+                  {/* ✅ SIZE + PRICE */}
+                  <div className="size-price-row">
+                    <span className="product-size">{item.size}</span>
+                    <span className="product-price">₹ {item.ProductPrice}</span>
+                  </div>
 
-                  {/* ✅ YOUR ZODIAC DOT / PRICE UI — UNTOUCHED */}
-
-                  {/* <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn text-uppercase w-md-50">
-                      Add to Cart
-                    </Button>
-                  </NavLink> */}
-                </Card.Body>
+                </div>
               </Card>
             </div>
           ))}

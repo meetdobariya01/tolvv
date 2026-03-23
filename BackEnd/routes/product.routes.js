@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Product = require("../Model/Product.add.admin");
 const { authenticate } = require("../middleware/auth.middleware");
-
+const Order = require("../Model/order"); 
 // Get all products
 router.get("/", async (req, res) => {
   try {
@@ -15,18 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get single product
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.status(200).json(product);
-  } catch (error) {
-    console.error("Fetch single product error:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+
 
 // Get products by category
 router.get("/category/:category", async (req, res) => {
@@ -70,6 +60,94 @@ router.get("/categories/all", async (req, res) => {
     res.status(200).json(categories);
   } catch (error) {
     console.error("Categories error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.get("/best-sellers", async (req, res) => {
+  try {
+    const bestSellers = await Order.aggregate([
+      
+      // ✅ FIXED FIELD NAME
+      { $unwind: "$items" },
+
+      {
+        $group: {
+          _id: "$items.productId",
+          totalSold: { $sum: "$items.quantity" },
+          orderCount: { $sum: 1 }
+        }
+      },
+
+      // ✅ ONLY SUCCESSFUL ORDERS (IMPORTANT)
+      // (filter before group ideally, but ok here if needed)
+
+      { $sort: { totalSold: -1 } },
+      { $limit: 8 },
+
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "productDetails"
+        }
+      },
+
+      { $unwind: "$productDetails" },
+
+    {
+  $project: {
+    _id: "$productDetails._id",
+    ProductName: "$productDetails.ProductName",
+    ProductPrice: "$productDetails.ProductPrice",
+    Photos: "$productDetails.Photos",
+    Category: "$productDetails.Category",
+    Zodiac: "$productDetails.Zodiac",
+
+    // ✅ ADD THIS LINE
+    size: "$productDetails.size",
+
+    totalSold: 1,
+    orderCount: 1
+  }
+}
+    ]);
+
+    console.log("BEST SELLERS 👉", bestSellers);
+
+    res.status(200).json(bestSellers);
+
+  } catch (error) {
+    console.error("Best seller error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.get("/zodiac-hampers", async (req, res) => {
+  try {
+    const hampers = await Product.find({ Category: "Hamper" });
+    res.json(hampers);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // ✅ VERY IMPORTANT FIX
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json(product);
+  } catch (error) {
+    console.error("Fetch single product error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });

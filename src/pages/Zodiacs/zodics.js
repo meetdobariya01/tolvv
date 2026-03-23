@@ -536,24 +536,35 @@ const Zodic = () => {
                         />
 
                         <div className="product-info">
-                          <p className="name">
-                            {p.ProductName} <span>›</span>
-                          </p>
-                          {/* <p className="name">{p.ProductName}</p> */}
-                          {/* <p className="size">{p.size}</p> */}
                           <div className="price-with-dot-1">
                             <span
                               className="zodiac-dot"
                               style={{ backgroundColor: selectedZodiac.color }}
                             ></span>
 
-                            <span className="zodiac-price">
-                              ₹ {p.ProductPrice}
+                            <span className="zodiac-price fw-bolder">
+                              {p.ProductName} <span>›</span>
                             </span>
+                          </div>
+                          {/* <p className="name">
+                            {p.ProductName} <span>›</span>
+                          </p> */}
+                          {/* <p className="name">{p.ProductName}</p> */}
+                          {/* <p className="size">{p.size}</p> */}
+                          <div className="price-with-dot-1">
+                            {/* <span
+                              className="zodiac-dot"
+                              style={{ backgroundColor: selectedZodiac.color }}
+                            ></span> */}
+
+
                           </div>
 
                           <div className="underline" />
-                          <p className="size">{p.size}</p>
+                          <div className="size-price-row">
+                            <span className="size">{p.size}</span>
+                            <span className="zodiac-price">₹ {p.ProductPrice}</span>
+                          </div>
                           {/* <button
                         className="btn btn-outline-dark mt-1"
                         onClick={() => handleBuyNow(p)}
@@ -565,11 +576,11 @@ const Zodic = () => {
                     </div>
                   </NavLink>
                 ))}
-                  </div>
+              </div>
 
             </div>
 
-            </div>
+          </div>
 
         </section>
       )}

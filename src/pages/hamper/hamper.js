@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./hamper.css";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { Card } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
+const API_URL = process.env.REACT_APP_API_URL;
 const zodiacData = [
   { name: "Aries", img: "/images/zodiac/1-2.png" },
   { name: "Taurus", img: "/images/zodiac/2-2.png" },
@@ -24,251 +25,269 @@ const zodiacData = [
   { name: "Pisces", img: "/images/zodiac/12-2.png" },
 ];
 const productData = [
-  {
-    id: 1,
-    name: "Bath Gel",
-    size: "200 ml",
-    img: "/images//bl.png",
-  },
-  {
-    id: 2,
-    name: "Body Lotion",
-    size: "200 ml",
-    img: "/images//bl.png",
-  },
-  {
-    id: 3,
-    name: "Perfume",
-    size: "50 ml",
-    img: "/images/pr.png",
-  },
-  {
-    id: 4,
-    name: "Essential Oil",
-    size: "30 ml",
-    img: "/images/eo.png",
-  },
-  {
-    id: 5,
-    name: "Soap",
-    size: "100 gms",
-    img: "/images/sp.png",
-  },
+  { id: 1, name: "Bath Gel", size: "200 ml", img: "/images/bl.png" },
+  { id: 2, name: "Body Lotion", size: "200 ml", img: "/images/bl.png" },
+  { id: 3, name: "Perfume", size: "50 ml", img: "/images/pr.png" },
+  { id: 4, name: "Essential Oil", size: "30 ml", img: "/images/eo.png" },
+  { id: 5, name: "Soap", size: "100 gms", img: "/images/sp.png" },
 ];
-const HamperproductData = [
-  {
-    id: 1,
-    name: "Virgo Bath Gel",
-    price: 750,
-    size: "200 ml",
-    img: "/images/bl.png",
-  },
-  {
-    id: 2,
-    name: "Virgo Body Lotion",
-    price: 750,
-    size: "200 ml",
-    img: "/images/products/lotion.png",
-  },
-  {
-    id: 3,
-    name: "Virgo Perfume",
-    price: 750,
-    size: "200 ml",
-    img: "/images/products/perfume.png",
-  },
-  {
-    id: 4,
-    name: "Virgo Essential Oil",
-    price: 750,
-    size: "200 ml",
-    img: "/images/products/oil.png",
-  },
-];
+
 function HamperPage() {
   const [activeSection, setActiveSection] = useState(null);
-
+  const [selectedZodiacs, setSelectedZodiacs] = useState([]);
+  // CHANGED: Initialize as an array for multiple selection
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [fetchedProducts, setFetchedProducts] = useState([]);
+  const [qty, setQty] = useState({});
+  const [zodiacHampers, setZodiacHampers] = useState([]);
   const zodiacColors = {
-    Aries: "#7b0f14",
-    Taurus: "#2e7d32",
-    Gemini: "#1565c0",
-    Cancer: "#6a1b9a",
-    Leo: "#f57c00",
-    Virgo: "#00897b",
-    Libra: "#c2185b",
-    Scorpio: "#4a148c",
-    Sagittarius: "#d84315",
-    Capricorn: "#37474f",
-    Aquarius: "#0277bd",
-    Pisces: "#00695c",
+    Aries: "#7A1318",
+    Taurus: "#7A8B3D",
+    Gemini: "#BB892C",
+    Cancer: "#8A8C8E",
+    Leo: "#E8C43A",
+    Virgo: "#DC4D2D",
+    Libra: "#F04E4C",
+    Scorpio: "#000000",
+    Sagittarius: "#74489D",
+    Capricorn: "#CCC29F",
+    Aquarius: "#519AA2",
+    Pisces: "#043D5D",
   };
-  const zodiacProducts = [
-    "Aries",
-    "Taurus",
-    "Gemini",
-    "Cancer",
-    "Leo",
-    "Virgo",
-    "Libra",
-    "Scorpio",
-    "Sagittarius",
-    "Capricorn",
-    "Aquarius",
-    "Pisces",
-  ];
+  const normalize = (str) => str?.toLowerCase().replace(/\s/g, "");
 
-  const craftProducts = [
-    { name: "Bath Gel" },
-    { name: "Body Lotion" },
-    { name: "Perfume" },
-    { name: "Essential Oil" },
-    { name: "Soap" },
-  ];
+  const getCategoryCount = (category) => {
+    return fetchedProducts
+      .filter(p => normalize(p.Category) === normalize(category))
+      .reduce((sum, p) => sum + (qty[p._id] || 0), 0);
+  };
+  useEffect(() => {
+    const fetchHampers = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/products/zodiac-hampers`);
+        setZodiacHampers(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-  const [selected, setSelected] = useState([]);
+    fetchHampers();
+  }, []);
+  const handleBuyNow = async (product) => {
+    if (!product) return;
 
-  const handleSelect = (name) => {
-    if (selected.includes(name)) {
-      setSelected(selected.filter((item) => item !== name));
-    } else {
-      setSelected([...selected, name]);
+    const token = localStorage.getItem("token");
+
+    // ✅ Logged-in user
+    if (token) {
+      try {
+        await axios.post(
+          `${API_URL}/cart/add`,
+          {
+            productId: product._id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        alert("Added to cart!");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // ✅ Guest user
+    else {
+      let cart = [];
+
+      try {
+        const stored = localStorage.getItem("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find((item) => item.productId === product._id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: product._id,
+          quantity: 1,
+          price: product.ProductPrice,
+          name: product.ProductName,
+          img: product.Photos,
+        });
+      }
+
+      localStorage.setItem("guestCart", JSON.stringify(cart));
+
+      alert("Added to cart!");
     }
   };
-  // const [selected, setSelected] = useState([]);
-  const [qty, setQty] = useState({});
+  useEffect(() => {
+    // UPDATED: Check for length of categories array
+    if (selectedZodiacs.length > 0 && selectedCategories.length > 0) {
+      const getProducts = async () => {
+        try {
+          const res = await axios.post(`${API_URL}/hamper/zodiac-products`, {
+            zodiacs: selectedZodiacs,
+            // Send the array to your backend (ensure backend handles { Category: { $in: categories } })
+            category: selectedCategories
+          });
+          setFetchedProducts(res.data);
+        } catch (err) {
+          console.error("Fetch Error:", err);
+        }
+      };
+      getProducts();
+    } else {
+      setFetchedProducts([]); // Clear products if selection is empty
+    }
+  }, [selectedZodiacs, selectedCategories]);
 
-  const toggleSelect = (id) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+  const handleZodiacToggle = (name) => {
+    setSelectedZodiacs(prev =>
+      prev.includes(name) ? prev.filter(i => i !== name) : [...prev, name]
+    );
+  };
+
+  // NEW: Handle Category Multiple Selection (Checkbox style)
+  const handleCategoryToggle = (name) => {
+    setSelectedCategories(prev =>
+      prev.includes(name) ? prev.filter(i => i !== name) : [...prev, name]
     );
   };
 
   const updateQty = (id, type) => {
-    setQty((prev) => {
+    setQty(prev => {
       const current = prev[id] || 0;
-      if (type === "inc") return { ...prev, [id]: current + 1 };
-      if (type === "dec") return { ...prev, [id]: Math.max(0, current - 1) };
-      return prev;
+      return { ...prev, [id]: type === "inc" ? current + 1 : Math.max(0, current - 1) };
     });
   };
+
+  const handleAddToCart = async () => {
+    const selectedItems = fetchedProducts.filter(p => qty[p._id] > 0);
+    const total = selectedItems.reduce((sum, p) => sum + (p.ProductPrice * qty[p._id]), 0);
+
+    if (total < 2500) {
+      alert(`Minimum hamper value must be ₹2500. Current total: ₹${total}`);
+      return;
+    }
+
+    const payload = {
+      zodiacs: selectedZodiacs,
+      products: selectedItems.map(p => ({
+        productId: p._id,
+        quantity: qty[p._id]
+      })),
+      totalPrice: total
+    };
+    try {
+      // Step 1: Create hamper
+      const res = await axios.post(
+        "http://localhost:4000/api/hamper/create",
+        payload
+      );
+
+      const hamperId = res.data.hamper._id; // make sure backend returns hamper
+
+      // Step 2: Add to cart
+      await axios.post(
+        `${API_URL}/cart/add-hamper`,
+        { hamperId, quantity: 1 },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+
+      alert("Hamper added to cart successfully!");
+
+    } catch (err) {
+      alert(err.response?.data?.message || "Error adding hamper");
+    }
+  };
+
+  const navigate = useNavigate();
   return (
     <div>
-      {/* Header */}
       <Header />
-
       <div className="container py-5">
-        {/* Hampers Title */}
         <h2 className="text-center mb-5 artisan-font">Hampers</h2>
 
-        {/* Two Sections */}
         <div className="row justify-content-center text-center sora gap-5">
-          {/* Zodiac Hampers */}
           <div className="col-md-2 mb-4">
-            <div
-              className="hamper-card p-3"
-              onClick={() => setActiveSection("zodiac")}
-            >
-              <img src="./images/hamper.jpg" className="w-100" alt="" />
-
+            <div className="hamper-card p-3" onClick={() => setActiveSection("zodiac")}>
+              <img src="./images/hamper.jpg" className="w-100" alt="Zodiac" />
               <div className="d-flex align-items-center justify-content-between w-100">
                 <h5 className="mt-3 hamper-title">Zodiac Hamper</h5>
-
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  size="xl"
-                  style={{ color: "#000" }}
-                />
+                <FontAwesomeIcon icon={faAngleRight} size="xl" style={{ color: "#000" }} />
               </div>
-              <div className="m-0">
-                <hr />
-              </div>
-              <p className="hamper-subtitle">Sun Sign Hamper</p>
+              <hr /><p className="hamper-subtitle">Sun Sign Hamper</p>
             </div>
           </div>
 
-          {/* Craft Hampers */}
           <div className="col-md-2 mb-4">
-            <div
-              className="hamper-card p-3"
-              onClick={() => setActiveSection("craft")}
-            >
-              <img src="./images/hamper.jpg" className="w-100" alt="" />
-
+            <div className="hamper-card p-3" onClick={() => setActiveSection("craft")}>
+              <img src="./images/hamper.jpg" className="w-100" alt="Craft" />
               <div className="d-flex align-items-center justify-content-between w-100">
                 <h5 className="mt-3 hamper-title">Craft Your Hamper</h5>
-
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  size="xl"
-                  style={{ color: "#000" }}
-                />
+                <FontAwesomeIcon icon={faAngleRight} size="xl" style={{ color: "#000" }} />
               </div>
-              <hr />
-              <p className="hamper-subtitle">
-                Pick any sun sign and get a complimentary towel
-              </p>
+              <hr /><p className="hamper-subtitle">Pick any sun sign and get a complimentary towel</p>
             </div>
           </div>
         </div>
 
-        {/* ZODIAC PRODUCTS */}
         {activeSection === "zodiac" && (
           <div className="mt-5">
             <h2 className="text-center artisan-font mb-5">Zodiac Hamper</h2>
-
             <div className="row">
-              {zodiacProducts.map((item, index) => (
-                <div className="col-lg-3 col-md-4 col-6 mb-4" key={index}>
-                  <div className="product-card text-center">
-                    <img
-                      src="./images/hamper.jpg"
-                      className="img-fluid"
-                      alt=""
-                    />
-
+              {zodiacHampers.map((item) => (
+                <div className="col-lg-3 col-md-4 col-6 mb-4" key={item._id}>
+                  <div
+                    className="product-card text-center"
+                    onClick={() => navigate(`/productdetails/${item._id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img src={item.Photos} className="img-fluid" alt={item.ProductName} />
                     <Card.Body className="product-info sora">
                       <div className="product-top">
                         <div className="title-wrap d-flex align-items-center justify-content-between w-100">
-                          <h6 className="product-page-title">
-                            <NavLink
-                              className="text-decoration-none text-dark"
-                              to={`/productdetails/${item._id}`}
-                            >
-                              Aries Bath gel <span>›</span>
-                            </NavLink>
-                          </h6>
+                          <div className="price-with-dot-1 d-flex align-items-center gap-2">
+                            <span
+                              className="zodiac-dot"
+                              style={{ backgroundColor: zodiacColors[item.Zodiac] || "#000" }}
+                            ></span>
 
-                          <div className="price-wrap">
-                            <div className="price-wrap d-flex align-items-center gap-2">
-                              <span
-                                className="zodiac-dot"
-                                style={{
-                                  backgroundColor:
-                                    zodiacColors[item.Zodiac] || "#000",
-                                  width: "15px",
-                                  height: "15px",
-                                  borderRadius: "50%",
-                                  display: "inline-block",
-                                }}
-                              ></span>
+                            <h6 className="product-page-title">{item.ProductName} <span>›</span></h6>
+                          </div>
 
-                              <span className="product-price">₹ 750</span>
-                            </div>
+                          <div className="price-with-dot-1 d-flex align-items-center gap-2">
+
+                            <span className="product-price">
+                              ₹ {item.ProductPrice}
+                            </span>
                           </div>
                         </div>
                       </div>
-
                       <div className="product-divider"></div>
-
-                      <p className="product-size-hamper">200 ml</p>
-
-                      {/* ✅ YOUR ZODIAC DOT / PRICE UI — UNTOUCHED */}
-
-                      {/* <NavLink to={`/productdetails/${item._id}`}>
-                    <Button size="sm" className="cart-btn text-uppercase w-md-50">
-                      Add to Cart
-                    </Button>
-                  </NavLink> */}
+                      <button
+                        className="btn btn-outline-dark btn-sm mt-2 w-50 fw-semibold"
+                        onClick={(e) => {
+                          e.stopPropagation(); // ❗ prevent card click
+                          handleBuyNow(item);
+                        }}
+                      >
+                        ADD TO CART <FontAwesomeIcon icon={faCartShopping} flip="horizontal" className="ms-2" />
+                      </button>
                     </Card.Body>
                   </div>
                 </div>
@@ -277,88 +296,96 @@ function HamperPage() {
           </div>
         )}
 
-        {/* CRAFT YOUR HAMPER */}
         {activeSection === "craft" && (
           <div className="mt-5 sora">
             <h2 className="text-center artisan-font">Craft Your Hamper</h2>
+            <p className="text-center mt-4 craft-hamper-description">Hamper needs to be above <b>2500/-</b></p>
 
-            <p className="text-center mt-4 craft-hamper-description">
-              Hamper needs to be above <b>2500/-</b>
-            </p>
-
-            {/* Zodiac Selection */}
             <p className="hamper-zodiac-title-1">Pick a Zodiac</p>
-
             <div className="d-flex flex-wrap justify-content-between gap-4 my-4">
               {zodiacData.map((zodiac, index) => (
                 <div key={index} className="zodiac-item-1 text-center">
-                  {/* Checkbox */}
                   <input
                     type="checkbox"
-                    checked={selected.includes(zodiac.name)}
-                    onChange={() => handleSelect(zodiac.name)}
+                    checked={selectedZodiacs.includes(zodiac.name)}
+                    onChange={() => handleZodiacToggle(zodiac.name)}
                     className="mb-2 ms-5"
                   />
-
-                  {/* Image */}
-                  <div
-                    className={`zodiac-img ${
-                      selected.includes(zodiac.name) ? "active" : ""
-                    }`}
-                    onClick={() => handleSelect(zodiac.name)}
-                  >
+                  <div className={`zodiac-img ${selectedZodiacs.includes(zodiac.name)}`} onClick={() => handleZodiacToggle(zodiac.name)}>
                     <img src={zodiac.img} alt={zodiac.name} />
                   </div>
-
-                  {/* Name */}
                   <p className="mt-2 mb-0">{zodiac.name}</p>
                 </div>
               ))}
             </div>
 
-            {/* Product Selection */}
-
             <div className="container my-5">
               <h5 className="mb-4 fw-semibold">Pick your preferred products</h5>
-
               <div className="row">
                 {productData.map((item) => (
-                  <div
-                    key={item.id}
-                    className="col-lg-custom col-md-4 col-6 mb-4 "
-                  >
-                    {/* Card */}
-                    <div className="hamper-product-card">
-                      {/* Checkbox */}
+                  <div key={item.id} className="col-lg-custom col-md-4 col-6 mb-4">
+                    <div
+                      className="hamper-product-card"
+                      onClick={() => handleCategoryToggle(item.name)}
+                      style={{
+                        border: selectedCategories.includes(item.name),
+                        cursor: "pointer",
+                        padding: "10px",
+                        position: "relative"
+                      }}
+                    >
+                      {/* CHANGED: type="checkbox" and checked logic */}
                       <input
                         type="checkbox"
+                        name="cat"
+                        checked={selectedCategories.includes(item.name)}
+                        readOnly
                         className="product-checkbox"
-                        checked={selected.includes(item.id)}
-                        onChange={() => toggleSelect(item.id)}
+                        style={{ position: "absolute", top: "10px", right: "10px" }}
                       />
-
-                      {/* Image */}
-                      <div className="hamper-product-img">
-                        <img src={item.img} alt={item.name} />
-                      </div>
-
-                      {/* Info */}
+                      <div className="hamper-product-img"><img src={item.img} alt={item.name} /></div>
                       <div className="hamper-product-info">
                         <h6>{item.name}</h6>
                         <div className="divider"></div>
 
-                        <div className="d-flex justify-content-between align-items-center">
+
+                        {/* ✅ CATEGORY QTY CONTROL */}
+                        <div className="d-flex justify-content-between align-items-center mt-2">
+
                           <small className="text-muted">{item.size}</small>
 
-                          {/* Quantity */}
-                          <div className="hamper-qty-box">
-                            <button onClick={() => updateQty(item.id, "dec")}>
+                          <div className="qty-box d-flex align-items-center gap-2">
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                const product = fetchedProducts.find(
+                                  p => normalize(p.Category) === normalize(item.name) && (qty[p._id] || 0) > 0
+                                );
+
+                                if (product) updateQty(product._id, "dec");
+                              }}
+                            >
                               -
                             </button>
-                            <span>{qty[item.id] || 0}</span>
-                            <button onClick={() => updateQty(item.id, "inc")}>
+
+                            <span>{getCategoryCount(item.name)}</span>
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                const product = fetchedProducts.find(
+                                  p => normalize(p.Category) === normalize(item.name)
+                                );
+
+                                if (product) updateQty(product._id, "inc");
+                              }}
+                            >
                               +
                             </button>
+
                           </div>
                         </div>
                       </div>
@@ -370,66 +397,62 @@ function HamperPage() {
 
             <div className="container my-4">
               <h6 className="fw-semibold mb-3 fs-5">Your Hamper</h6>
-
               <div className="row g-3">
-                {HamperproductData.map((item) => (
-                  <div key={item.id} className="col-lg-3 col-md-4 col-6">
-                    <div className="hamper-card">
-                      {/* Checkbox */}
-                      <input
-                        type="checkbox"
-                        className="hamper-checkbox"
-                        checked={selected.includes(item.id)}
-                        onChange={() => toggleSelect(item.id)}
-                      />
+                {fetchedProducts.length > 0 ? (
+                  fetchedProducts.map((item) => (
+                    <div key={item._id} className="col-lg-3 col-md-4 col-6">
+                      <div className="hamper-card p-2">
+                        <input type="checkbox" className="hamper-checkbox" checked={(qty[item._id] || 0) > 0} onChange={() => updateQty(item._id, (qty[item._id] || 0) > 0 ? "dec" : "inc")} />
+                        <div className="hamper-img"><img src={item.Photos} alt={item.ProductName} style={{ width: '100%' }} /></div>
+                        <div className="hamper-info">
+                          <div className="d-flex justify-content-between align-items-center">
+                            
+                                <div className="d-flex align-items-center gap-1">
+                              <span
+                                className="zodiac-dot"
+                                style={{
+                                  backgroundColor: zodiacColors[item.Zodiac] || "#000",
+                                  width: "14px",
+                                  height: "14px",
+                                  borderRadius: "50%",
+                                  display: "inline-block",
 
-                      {/* Image */}
-                      <div className="hamper-img">
-                        <img src={item.img} alt={item.name} />
-                      </div>
+                                }}
+                              ></span>
 
-                      {/* Info */}
-                      <div className="hamper-info">
-                        {/* Title + Price */}
-                        <div className="d-flex justify-content-between align-items-center">
-                          <h6 className="mb-0">{item.name}</h6>
-
-                          <div className="d-flex align-items-center gap-1">
-                            <span className="color-dot"></span>
-                            <small>₹ {item.price}</small>
+                                <h6 className="mb-0" style={{ fontSize: "14px" }}>
+                              {item.ProductName}
+                            </h6>
+                            </div>
+                            <div className="d-flex align-items-center gap-1">
+                              <small>₹ {item.ProductPrice}</small>
+                            </div>
                           </div>
-                        </div>
-
-                        {/* Divider */}
-                        <div className="divider"></div>
-
-                        {/* Bottom Row */}
-                        <div className="d-flex justify-content-between align-items-center">
-                          <small className="text-muted">{item.size}</small>
-
-                          <div className="qty-box">
-                            <button onClick={() => updateQty(item.id, "dec")}>
-                              -
-                            </button>
-                            <span>{qty[item.id] || 0}</span>
-                            <button onClick={() => updateQty(item.id, "inc")}>
-                              +
-                            </button>
+                          <div className="divider"></div>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <small className="text-muted">{item.size}</small>
+                            <div className="qty-box">
+                              <button onClick={() => updateQty(item._id, "dec")}>-</button>
+                              <span>{qty[item._id] || 0}</span>
+                              <button onClick={() => updateQty(item._id, "inc")}>+</button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-muted">Select at least one Zodiac and one Category to load products.</p>
+                )}
               </div>
             </div>
 
-            <button type="button" class="btn btn-outline-dark">ADD TO CART <FontAwesomeIcon icon={faCartShopping} flip="horizontal" size="xl" /></button>
+            <button type="button" className="btn btn-outline-dark" onClick={handleAddToCart}>
+              ADD TO CART <FontAwesomeIcon icon={faCartShopping} flip="horizontal" size="xl" className="ms-2" />
+            </button>
           </div>
         )}
       </div>
-
-      {/* Footer */}
       <Footer />
     </div>
   );
