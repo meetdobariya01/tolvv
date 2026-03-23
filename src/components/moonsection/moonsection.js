@@ -3,23 +3,23 @@ import { Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 // import Cookies from "js-cookie";
-import {  NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./moonsection.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const zodiacColors = {
- Aries: "#7A1318",
-    Taurus: "#7A8B3D",
-    Gemini: "#BB892C",
-    Cancer: "#8A8C8E",
-    Leo: "#E8C43A",
-    Virgo: "#DC4D2D",
-    Libra: "#F04E4C",
-    Scorpio: "#000000",
-    Sagittarius: "#74489D",
-    Capricorn: "#CCC29F",
-    Aquarius: "#519AA2",
-    Pisces: "#043D5D",
+  Aries: "#7A1318",
+  Taurus: "#7A8B3D",
+  Gemini: "#BB892C",
+  Cancer: "#8A8C8E",
+  Leo: "#E8C43A",
+  Virgo: "#DC4D2D",
+  Libra: "#F04E4C",
+  Scorpio: "#000000",
+  Sagittarius: "#74489D",
+  Capricorn: "#CCC29F",
+  Aquarius: "#519AA2",
+  Pisces: "#043D5D",
 };
 const getZodiacFromProduct = (name) => {
   if (!name) return null;
@@ -325,43 +325,39 @@ const Moonsection = () => {
                           className="zodiac-product-img"
                         />
                         <div className="product-info">
-                          <p className="name">
-                            {product.ProductName} <span>›</span>
-                          </p>
-                          {/* <p className="size">{product.size}</p> */}
-                          <div className="price-with-dot">
+                          {/* NAME + DOT */}
+                          <div className="price-with-dot-1">
                             <span
-                              className="planet-dot"
+                              className="zodiac-dot"
                               style={{
                                 backgroundColor:
                                   zodiacColors[
                                   getZodiacFromProduct(product.ProductName)
-                                  ] || planet.color,
+                                  ] || "#000",
                               }}
-                              title={getZodiacFromProduct(product.ProductName)}
                             ></span>
 
-                            <span className="zodiac-price">
-                              ₹{product.ProductPrice}
+                            <span className="name fw-bolder">
+                              {product.ProductName} <span>›</span>
                             </span>
                           </div>
+
                           <div className="underline" />
-                          <p className="size">{product.size}</p>
-                          {/* <button
-                          className="btn btn-outline-dark mt-1"
-                          onClick={() => handleBuyNow(product)}
-                        >
-                          Buy Now
-                        </button> */}
+
+                          {/* SIZE + PRICE */}
+                          <div className="size-price-row">
+                            <span className="size">{product.size}</span>
+                            <span className="zodiac-price">₹ {product.ProductPrice}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    </NavLink>
-                  ))}
-                  </div>
-                )}
-              </Container>
-          </section>
+                  </NavLink>
+                ))}
+              </div>
+            )}
+          </Container>
+        </section>
       )}
     </>
   );

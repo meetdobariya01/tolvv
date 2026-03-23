@@ -18,19 +18,39 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
   const [totalPrice, setTotalPrice] = useState(0);
   const [deliveryMsg, setDeliveryMsg] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
-
+  const [bestSellers, setBestSellers] = useState([]);
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
 
+  const zodiacColors = {
+    Aries: "#c10230",
+    Taurus: "#ae1857",
+    Gemini: "#d79a2b",
+    Cancer: "#85422b",
+    Leo: "#4d5a31",
+    Virgo: "#5f504d",
+    Libra: "#7e622d",
+    Scorpio: "#2d2a26",
+    Sagittarius: "#490e67",
+    Capricorn: "#726b54",
+    Aquarius: "#005d63",
+    Pisces: "#006098",
+  };
   const token = localStorage.getItem("token");
-
+  const getZodiacFromProduct = (name) => {
+    if (!name) return null;
+    return Object.keys(zodiacColors).find((zodiac) =>
+      name.toLowerCase().includes(zodiac.toLowerCase())
+    );
+  };
   /* ---------------- IMAGE HELPER ---------------- */
   const getImageUrl = (photo) => {
     if (!photo) return "/images/product-grid.png";
     if (photo.startsWith("http")) return photo;
     return `/${photo.replace(/^\/+/, "")}`;
   };
+
 
   /* ---------------- FETCH CART ---------------- */
   const fetchCart = useCallback(async () => {
@@ -163,7 +183,8 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
         updateGuestCart(updatedItems);
       }
 
-      await fetchCart(); // ✅ IMPORTANT
+      await fetchCart();
+      window.dispatchEvent(new Event("cartUpdated"));// ✅ trigger अपडेट // ✅ IMPORTANT
     } catch (error) {
       console.error(error);
     } finally {
@@ -193,7 +214,8 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
         updateGuestCart(updatedItems);
       }
 
-      await fetchCart(); // ✅ IMPORTANT
+      await fetchCart();
+      window.dispatchEvent(new Event("cartUpdated")); // ✅ ADD THIS // ✅ IMPORTANT
     } catch (error) {
       console.error(error);
     } finally {
@@ -264,42 +286,42 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
   };
 
   /* ---------------- ADD RELATED PRODUCT ---------------- */
-  const addRelatedToCart = async (product) => {
-    if (!product) return;
+  // const addRelatedToCart = async (product) => {
+  //   if (!product) return;
 
-    setUpdatingId(product._id);
-    try {
-      if (token) {
-        await axios.post(
-          `${API_URL}/cart/add`,
-          { productId: product._id, quantity: 1 },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      } else {
-        let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+  //   setUpdatingId(product._id);
+  //   try {
+  //     if (token) {
+  //       await axios.post(
+  //         `${API_URL}/cart/add`,
+  //         { productId: product._id, quantity: 1 },
+  //         { headers: { Authorization: `Bearer ${token}` } }
+  //       );
+  //     } else {
+  //       let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
 
-        // Check if product already exists in cart
-        const existingItem = guestCart.find(i => i.productId === product._id);
-        if (existingItem) {
-          existingItem.quantity += 1;
-        } else {
-          guestCart.push({
-            productId: product._id,
-            quantity: 1,
-            price: product.ProductPrice,
-          });
-        }
+  //       // Check if product already exists in cart
+  //       const existingItem = guestCart.find(i => i.productId === product._id);
+  //       if (existingItem) {
+  //         existingItem.quantity += 1;
+  //       } else {
+  //         guestCart.push({
+  //           productId: product._id,
+  //           quantity: 1,
+  //           price: product.ProductPrice,
+  //         });
+  //       }
 
-        Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 2 });
-      }
-      // Refresh cart after adding
-      await fetchCart();
-    } catch (error) {
-      console.error("Error adding related product:", error);
-    } finally {
-      setUpdatingId(null);
-    }
-  };
+  //       Cookies.set("guestCart", JSON.stringify(guestCart), { expires: 2 });
+  //     }
+  //     // Refresh cart after adding
+  //     await fetchCart();
+  //   } catch (error) {
+  //     console.error("Error adding related product:", error);
+  //   } finally {
+  //     setUpdatingId(null);
+  //   }
+  // };
 
   /* ---------------- HANDLE CHECKOUT CLICK ---------------- */
   const handleCheckoutClick = () => {
@@ -316,8 +338,71 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
     handleClose();
     navigate("/product");
   };
+  const addToCart = async (product) => {
+    if (!product) return;
 
+    const token = localStorage.getItem("token");
+
+    try {
+      if (token) {
+        await axios.post(
+          `${API_URL}/cart/add`,
+          { productId: product._id, quantity: 1 },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        let guestCart = JSON.parse(Cookies.get("guestCart") || "[]");
+
+        const existingItem = guestCart.find(
+          (i) => i.productId === product._id
+        );
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          guestCart.push({
+            productId: product._id,
+            quantity: 1,
+            price: product.ProductPrice,
+          });
+        }
+
+        Cookies.set("guestCart", JSON.stringify(guestCart), {
+          expires: 2,
+        });
+      }
+
+      // ✅ 🔥 THIS IS THE MAIN FIX
+      await fetchCart();   // <-- refresh cart instantly
+
+    } catch (error) {
+      console.error("Add to cart error:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchBestSellers = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/products/best-sellers`);
+
+        console.log("BEST SELLERS DATA 👉", res.data);
+
+        if (res.data.length > 0) {
+          setBestSellers(res.data);
+        } else {
+          // ✅ FALLBACK (IMPORTANT)
+          const allProducts = await axios.get(`${API_URL}/products`);
+          setBestSellers(allProducts.data.slice(0, 4));
+        }
+
+      } catch (err) {
+        console.error("Best seller error:", err);
+      }
+    };
+
+    fetchBestSellers();
+  }, []);
   if (loading)
+
     return (
       <Offcanvas show={show} onHide={handleClose} placement="end" className="cart-sidebar sora">
         <Offcanvas.Header>
@@ -401,7 +486,7 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
 
             {/* Estimate Shipping */}
             <div className="shipping-box mt-5">
-              <p className="shipping-title">Estimate shipping</p>
+              <p className="shipping-title ">Estimate shipping</p>
               <div className="shipping-inputs d-flex flex-row gap-2">
                 <input
                   placeholder="Country"
@@ -417,7 +502,7 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
                 />
                 <input
                   placeholder="Postal/ZIP Code"
-                  className="w-50"
+                  className="w-25"
                   value={zip}
                   onChange={(e) => setZip(e.target.value)}
                 />
@@ -458,11 +543,13 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
         )}
 
         {/* Related Products */}
+
         {relatedProducts.length > 0 && (
-          <section className="product-section-1">
+          <section className="product-section-1 mt-5">
             <Container>
               <Row className="g-1">
                 <h5>You may also like</h5>
+
                 {relatedProducts.map((product, index) => (
                   <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
                     <motion.div
@@ -473,23 +560,108 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
                       transition={{ duration: 0.4, delay: index * 0.1 }}
                     >
                       <div className="product-img-box">
-                        <img src={getImageUrl(product.Photos)} alt={product.ProductName} />
+                        <img
+                          src={getImageUrl(product.Photos)}
+                          alt={product.ProductName}
+                        />
                       </div>
+
                       <div className="product-info">
-                        <h6>{product.ProductName}</h6>
+                        <h6 className="d-flex align-items-center gap-2">
+                          <span
+                            className="planet-dot"
+                            style={{
+                              backgroundColor:
+                                zodiacColors[
+                                getZodiacFromProduct(product.ProductName)
+                                ] || "#000",
+                            }}
+                          ></span>
+
+                          {product.ProductName}
+                        </h6>
+                        <div className="divider"></div>
                         <div className="product-meta">
-                          <span className="size">{product.Size || ""}</span>
+                          <span className="size">{product.size || ""}</span>
                           <span className="price">
-                            <span className="dot"></span> ₹ {product.ProductPrice}
+                           ₹ {product.ProductPrice}
                           </span>
                         </div>
-                        <div className="divider"></div>
+                        {/* 
+                        <div className="divider"></div> */}
+
                         <button
                           className="add-btn"
-                          onClick={() => addRelatedToCart(product)}
-                          disabled={updatingId === product._id}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 🚨 VERY IMPORTANT (prevents navigation)
+                            addToCart(product);
+                          }}
                         >
-                          {updatingId === product._id ? 'ADDING...' : 'ADD TO CART'}
+                          ADD TO CART
+                        </button>
+                      </div>
+                    </motion.div>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          </section>
+        )}
+        {bestSellers.length > 0 && (
+          <section className="product-section-1 mt-5">
+            <Container>
+              <Row className="g-1">
+                <h5>Best Sellers</h5>
+
+                {bestSellers.map((product, index) => (
+                  <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
+                    <motion.div
+                      className="product-card p-1"
+                      whileHover={{ y: -10 }}
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                    >
+                      <div className="product-img-box">
+                        <img
+                          src={getImageUrl(product.Photos)}
+                          alt={product.ProductName}
+                        />
+                      </div>
+
+                      <div className="product-info">
+                        <h6 className="d-flex align-items-center gap-2">
+                          <span
+                            className="planet-dot"
+                            style={{
+                              backgroundColor:
+                                zodiacColors[
+                                getZodiacFromProduct(product.ProductName)
+                                ] || "#000",
+                            }}
+                          ></span>
+
+                          {product.ProductName}
+                        </h6>
+
+                        <div className="product-meta">
+                          <span>{product.size || ""}</span>
+
+                          <span className="price">
+                            ₹ {product.ProductPrice}
+                          </span>
+                        </div>
+
+                        <div className="divider"></div>
+
+                        <button
+                          className="add-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addToCart(product);
+                          }}
+                        >
+                          ADD TO CART
                         </button>
                       </div>
                     </motion.div>

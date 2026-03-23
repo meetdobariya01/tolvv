@@ -41,9 +41,18 @@ function HamperPage() {
   const [qty, setQty] = useState({});
   const [zodiacHampers, setZodiacHampers] = useState([]);
   const zodiacColors = {
-    Aries: "#7b0f14", Taurus: "#2e7d32", Gemini: "#1565c0", Cancer: "#6a1b9a",
-    Leo: "#f57c00", Virgo: "#00897b", Libra: "#c2185b", Scorpio: "#4a148c",
-    Sagittarius: "#d84315", Capricorn: "#37474f", Aquarius: "#0277bd", Pisces: "#00695c",
+    Aries: "#7A1318",
+    Taurus: "#7A8B3D",
+    Gemini: "#BB892C",
+    Cancer: "#8A8C8E",
+    Leo: "#E8C43A",
+    Virgo: "#DC4D2D",
+    Libra: "#F04E4C",
+    Scorpio: "#000000",
+    Sagittarius: "#74489D",
+    Capricorn: "#CCC29F",
+    Aquarius: "#519AA2",
+    Pisces: "#043D5D",
   };
   const normalize = (str) => str?.toLowerCase().replace(/\s/g, "");
 
@@ -252,12 +261,16 @@ function HamperPage() {
                     <Card.Body className="product-info sora">
                       <div className="product-top">
                         <div className="title-wrap d-flex align-items-center justify-content-between w-100">
-                          <h6 className="product-page-title">{item.ProductName} <span>›</span></h6>
                           <div className="price-with-dot-1 d-flex align-items-center gap-2">
                             <span
                               className="zodiac-dot"
                               style={{ backgroundColor: zodiacColors[item.Zodiac] || "#000" }}
                             ></span>
+
+                            <h6 className="product-page-title">{item.ProductName} <span>›</span></h6>
+                          </div>
+
+                          <div className="price-with-dot-1 d-flex align-items-center gap-2">
 
                             <span className="product-price">
                               ₹ {item.ProductPrice}
@@ -393,11 +406,8 @@ function HamperPage() {
                         <div className="hamper-img"><img src={item.Photos} alt={item.ProductName} style={{ width: '100%' }} /></div>
                         <div className="hamper-info">
                           <div className="d-flex justify-content-between align-items-center">
-                            <h6 className="mb-0" style={{ fontSize: "14px" }}>
-                              {item.ProductName}
-                            </h6>
-
-                            <div className="d-flex align-items-center gap-1">
+                            
+                                <div className="d-flex align-items-center gap-1">
                               <span
                                 className="zodiac-dot"
                                 style={{
@@ -410,6 +420,11 @@ function HamperPage() {
                                 }}
                               ></span>
 
+                                <h6 className="mb-0" style={{ fontSize: "14px" }}>
+                              {item.ProductName}
+                            </h6>
+                            </div>
+                            <div className="d-flex align-items-center gap-1">
                               <small>₹ {item.ProductPrice}</small>
                             </div>
                           </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./checkout.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
+import { useCallback } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const currencyFormat = (n) => `₹${Math.round(n)}`;
@@ -31,74 +32,82 @@ const Checkout = () => {
   const clearGuestCart = () => localStorage.removeItem("guestCart");
 
   // ================= FETCH & MERGE CART =================
-  useEffect(() => {
-    const mergeCart = async () => {
-      if (!token) {
-        // No user logged in: load guest cart
-        setCart(saveGuestCart());
-        return;
-      }
 
-      try {
-        const guestCart = saveGuestCart();
+  const mergeCart = useCallback(async () => {
+    if (!token) {
+      setCart(saveGuestCart());
+      return;
+    }
 
-        // Merge guest cart with user cart
-        if (guestCart.length > 0) {
-          await fetch(`${API_URL}/merge`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ guestItems: guestCart }),
-          });
-          clearGuestCart();
-        }
+    try {
+      const guestCart = saveGuestCart();
 
-        // Fetch user cart
-        const res = await fetch(`${API_URL}/cart`, {
-          headers: { Authorization: `Bearer ${token}` },
+      if (guestCart.length > 0) {
+        await fetch(`${API_URL}/merge`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ guestItems: guestCart }),
         });
-        const data = await res.json();
-
-        if (data.cart?.items?.length > 0) {
-          const products = data.cart.items.map((item) => {
-            // 🟢 Normal product
-            if (item.productId) {
-              return {
-                id: item.productId._id,
-                type: "product",
-                name: item.productId.ProductName,
-                price: item.productId.ProductPrice,
-                qty: item.quantity,
-                img: item.productId.Photos?.startsWith("http")
-                  ? item.productId.Photos
-                  : `/images/${item.productId.Photos?.replace("images/", "")}`,
-              };
-            }
-
-            // 🟣 Hamper
-            if (item.hamperId) {
-              return {
-                id: item.hamperId._id,
-                type: "hamper",
-                name: "Custom Hamper",
-                price: item.hamperId.totalPrice,
-                qty: item.quantity,
-                img: "/images/hamper.jpg",
-              };
-            }
-          });
-          setCart(products);
-        }
-      } catch (err) {
-        console.error("Failed to fetch or merge cart:", err);
+        clearGuestCart();
       }
-    };
 
-    mergeCart();
+      const res = await fetch(`${API_URL}/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+
+      const products =
+        data.cart?.items?.map((item) => {
+          if (item.productId) {
+            return {
+              id: item.productId._id,
+              type: "product",
+              name: item.productId.ProductName,
+              price: item.productId.ProductPrice,
+              qty: item.quantity,
+              img: item.productId.Photos?.startsWith("http")
+                ? item.productId.Photos
+                : `/images/${item.productId.Photos?.replace("images/", "")}`,
+            };
+          }
+
+          if (item.hamperId) {
+            return {
+              id: item.hamperId._id,
+              type: "hamper",
+              name: "Custom Hamper",
+              price: item.hamperId.totalPrice,
+              qty: item.quantity,
+              img: "/images/hamper.jpg",
+            };
+          }
+
+          return null;
+        }) || [];
+
+      setCart(products.filter(Boolean));
+    } catch (err) {
+      console.error("Failed to fetch or merge cart:", err);
+    }
   }, [token]);
+  useEffect(() => {
+  const handleCartUpdate = () => {
+    mergeCart(); // ✅ refresh cart when event fires
+  };
 
+  window.addEventListener("cartUpdated", handleCartUpdate);
+
+  return () => {
+    window.removeEventListener("cartUpdated", handleCartUpdate);
+  };
+}, [mergeCart]);
+  useEffect(() => {
+  mergeCart(); // ✅ load cart on page open
+}, [mergeCart]);
   // ================= TOTAL =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const total = subtotal;
@@ -133,21 +142,25 @@ const Checkout = () => {
     setPlacing(true);
 
     try {
-      const orderItems = cart.map((item) => {
-        if (item.type === "product") {
-          return {
-            productId: item.id,
-            quantity: item.qty,
-          };
-        }
+      const orderItems = cart
+        .map((item) => {
+          if (item.type === "product") {
+            return {
+              productId: item.id,
+              quantity: item.qty,
+            };
+          }
 
-        if (item.type === "hamper") {
-          return {
-            hamperId: item.id,
-            quantity: item.qty,
-          };
-        }
-      });
+          if (item.type === "hamper") {
+            return {
+              hamperId: item.id,
+              quantity: item.qty,
+            };
+          }
+
+          return null; // ✅ FIX
+        })
+        .filter(Boolean); // ✅ removes null
 
       const res = await fetch(`${API_URL}/orders/place`, {
         method: "POST",

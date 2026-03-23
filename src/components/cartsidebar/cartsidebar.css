@@ -69,6 +69,8 @@
   margin-bottom: 8px;
   border: 1px solid #000;
   background: transparent;
+  border-radius: 
+  5px;
 }
 
 .check-btn {
@@ -76,6 +78,8 @@
   background: none;
   padding: 6px 10px;
   font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .subtotal-box {
@@ -91,7 +95,7 @@
 .checkout-btn {
   width: 100%;
   border: 1px solid black;
-  background: white;
+      background: transparent;
   padding: 10px;
 }
 
@@ -128,7 +132,7 @@
   padding: 6px;
 }
 .product-section-1 {
-  padding: 40px 0;
+  padding: 25px 0;
 }
 
 /* CARD */
@@ -197,17 +201,23 @@
 /* BUTTON */
 
 .add-btn {
-  background: black;
-  color: white;
-  border: none;
+  /* background: black; */
+  color:#000;
+  /* border: none; */
   padding: 6px 12px;
   font-size: 10px;
   letter-spacing: 0.5px;
-  width: 75%;
+  width: 60%;
+  height: 31px;
+  background: transparent;
+  border-radius: 5px;
+  border-color: black ;
+  border: 1px solid black;
 }
 
 .add-btn:hover {
-  background: #222;
+  background: black;
+  color: white;
 }
 
 /* RESPONSIVE */
@@ -216,4 +226,10 @@
   .product-img-box img {
     max-height: 180px;
   }
+}
+
+.product-title {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 🔥 controls spacing */
 }
