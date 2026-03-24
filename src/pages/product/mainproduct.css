@@ -133,7 +133,9 @@
   border: none;
   border-radius: 0;
   overflow: hidden;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
 .product-card:hover {
@@ -176,7 +178,15 @@
   justify-content: space-between;
   align-items: flex-start;
 }
-
+.product-page-title {
+  font-size: 18px;
+}
+.zodiac-dot-product {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
 /* Title */
 .title-wrap h6 {
   font-size: 15px;
@@ -273,12 +283,10 @@
   .product-img-wrap img {
     height: 180px;
   }
+  .product-page-title {
+    font-size: 12px;
+  }
 }
-.products-section-grid{
+.products-section-grid {
   /* background-color: #fff; */
 }
-
-
-
-
-

@@ -246,6 +246,8 @@ const getImageUrl = (photo) => {
 
       <div className="checkout sora">
         <div className="checkout-grid checkout-root">
+
+          
           <div className="panel billing-panel">
             <div className="panel-inner">
               <h2>Shipping Details</h2>

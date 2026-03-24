@@ -1,189 +1,160 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { NavLink } from "react-router-dom";
-import { FaInstagram, FaEnvelope } from "react-icons/fa";
-import WhatsappButton from "../whatsapp/whatsapp";
 import "./footer.css";
+import { NavLink } from "react-router-dom";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { Link } from "react-scroll";
 
-export const Footer = () => {
+const Footer = () => {
   return (
-    <div>
-      <footer
-        className="text-white py-5"
-        style={{
-          backgroundColor: "#4A4646",
-          fontFamily: "'Poppins', sans-serif",
-        }}
-      >
-        <div className="container">
-          <div className="row gy-4 footer sora">
-            {/* Column 1 */}
-            <div className="col-md-3 col-6">
-              <h6 className="fw-bold text-uppercase mb-3">Discover</h6>
-              <ul className="list-unstyled small">
-                <li className="mb-2">
-                  <NavLink to="/product" className="footer-link">
-                    Bath Gel
-                  </NavLink>
-                </li>
+    <footer className="footer-section sora">
+      <div className="container">
+        <div className="row">
+          {/* Useful Links */}
+          <div className="col-lg-3 col-md-6 mb-4 footer-col">
+            <h6 className="footer-title">USEFUL LINKS</h6>
+            <ul className="footer-links">
+              <li>
+                <NavLink
+                  to="zodiac"
+                  smooth
+                  duration={500}
+                  className="nav-link"
+                ></NavLink>
+              </li>
+              <li>
+                {" "}
+                <Link to="zodiac" smooth duration={500} className="nav-link">
+                  Zodiac Calculator
+                </Link>
+              </li>
+              <li>
+                {" "}
+                <Link to="benefits" smooth duration={500} className="nav-link">
+                  Benefits
+                </Link>
+              </li>
+              <li>
+                {" "}
+                <Link to="knowus" smooth duration={500} className="nav-link">
+                  Know Us Better
+                </Link>
+              </li>
+              <li>
+                {" "}
+                <Link to="faqs" smooth duration={500} className="nav-link">
+                  FAQs
+                </Link>
+              </li>
+              <li>
+                <NavLink to="/privacy-policy" className="nav-link">
+                  Policies
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/terms-and-condition" className="nav-link">
+                  Terms Of Use
+                </NavLink>
+              </li>
+            </ul>
 
-                <li className="mb-2">
-                  <NavLink to="/product" className="footer-link">
-                    Body Lotion
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/product" className="footer-link">
-                    Soap
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/product" className="footer-link">
-                    Eau de Parfum
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/product" className="footer-link">
-                    Essential Oil
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/product" className="footer-link">
-                    Gift Box
-                  </NavLink>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 2 */}
-            <div className="col-md-3 col-6">
-              <h6 className="fw-bold text-uppercase mb-3">Know Us</h6>
-              <ul className="list-unstyled small">
-                <li className="mb-2">
-                  <a href="/connect" className="footer-link">
-                    Connect
-                  </a>
-                </li>
-
-                <li className="mb-2">
-                  <a
-                    href="https://www.instagram.com/tolvvsigns"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="footer-link"
-                  >
-                    Instagram
-                  </a>
-                </li>
-
-                <li className="mb-2">
-                  <a
-                    href="https://wa.me/919824257356"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="footer-link"
-                  >
-                    WhatsApp
-                  </a>
-                </li>
-              </ul>
-
-              {/* Social Icons */}
-              <div className="d-flex align-items-center gap-3 mt-3">
+            <div className="mt-5">
+              <h6 className="footer-subtitle">BULK / CORPORATE ORDERS</h6>
+              <p className="footer-text">
                 <a
-                  href="https://www.instagram.com/tolvvsigns?igsh=cmhmN244cnVjbnM%3D&utm_source=qr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white"
-                  style={{
-                    fontSize: "20px",
-                    border: "1px solid white",
-                    borderRadius: "50%",
-                    width: "35px",
-                    height: "35px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                  className="text-light text-decoration-none"
+                  href="mailto:corporategifting@tolvsigns.in"
                 >
-                  <FaInstagram />
+                  corporategifting@tolvsigns.in
                 </a>
-                <a
-                  href="mailto:care@tolvvsigns.com"
-                  className="text-white"
-                  style={{
-                    fontSize: "20px",
-                    border: "1px solid white",
-                    borderRadius: "50%",
-                    width: "35px",
-                    height: "35px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <FaEnvelope />
-                </a>
-              </div>
-            </div>
-
-            {/* Column 3 */}
-            <div className="col-md-3 col-6">
-              <h6 className="fw-bold text-uppercase mb-3">Policy</h6>
-              <ul className="list-unstyled small">
-                <li className="mb-2">
-                  <NavLink to="/privacy-policy" className="footer-link">
-                    Privacy policy
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/terms-and-condition" className="footer-link">
-                    Terms & Conditions
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/shipping-policy" className="footer-link">
-                    Shipping policy
-                  </NavLink>
-                </li>
-
-                <li className="mb-2">
-                  <NavLink to="/refund-policy" className="footer-link">
-                    Refund policy
-                  </NavLink>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 4 (Logo + Copyright) */}
-            <div className="col-md-3 text-center text-md-end">
-              <div>
-                <img
-                  src="/images/logo-footer.png"
-                  alt="Twelve Logo"
-                  style={{ maxHeight: "120px", marginBottom: "10px" }}
-                />
-              </div>
-              <p
-                className="small text-uppercase mb-0"
-                style={{ letterSpacing: "0.5px", color: "#D6D6D6" }}
-              >
-                Copyright 2025. Tolvv <br />
-                All Rights Reserved
               </p>
             </div>
           </div>
-        </div>
-      </footer>
 
-      <WhatsappButton />
-    </div>
+          {/* My Account */}
+          <div className="col-lg-3 col-md-6 mb-4 footer-col">
+            <h6 className="footer-title">MY ACCOUNT</h6>
+            <ul className="footer-links">
+              <li>
+                <NavLink className="nav-link" to="/profile">
+                  Account
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className="nav-link" to="/orders">
+                  Orders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className="nav-link" to="/profile">
+                  Addresses
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+
+          {/* Connect */}
+          <div className="col-lg-3 col-md-6 mb-4 footer-col">
+            <h6 className="footer-title">CONNECT WITH US</h6>
+            <p className="footer-text-1 ">
+              <a
+                className="text-light text-decoration-none"
+                href="mailto:care@tolvsigns.com"
+              >
+                care@tolvsigns.com
+              </a>
+            </p>
+            <p className="footer-text-1">
+              <a
+                className="text-light text-decoration-none"
+                href="tel:+919111744744"
+              >
+                +91 91117 44744
+              </a>
+            </p>
+
+            <div className="social-icons">
+              <a
+                href="https://www.instagram.com/tolvvsigns?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-light"
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://wa.me/919913644455?text=Hello%20Tolvv%20Signs%2C%20I%20would%20like%20to%20inquire%20about%20your%20products."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-light"
+              >
+                <FaWhatsapp />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Vertical Branding */}
+          <div className="col-lg-3 d-none d-lg-flex align-items-end mb-3 justify-content-end">
+            <div className="footer-right d-flex align-items-end gap-3">
+              {/* Text */}
+              <div className="footer-copy">
+                <p>2026 . tolvsigns.com</p>
+                <p>All rights reserved.</p>
+              </div>
+
+              {/* Logo */}
+              <img
+                src="/images/logo-footer.png"
+                alt="logo"
+                className="footer-logo"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+      </div>
+    </footer>
   );
 };
+
 export default Footer;
