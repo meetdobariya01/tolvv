@@ -5,7 +5,7 @@ import { Container, Row, Col, Nav } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import Zodiacdetails from "../../components/zodiac-details/zodiacdetails";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -150,58 +150,57 @@ const Productdetails = ({ handleCartOpen }) => {
   }, [id]);
 
   // Add to cart (guest or logged-in)
-  const addToCart = async () => {
-    if (!dbProduct) return;
-    const token = localStorage.getItem("token");
+ const addToCart = async () => {
+  if (!dbProduct) return;
+  const token = localStorage.getItem("token");
 
-    if (token) {
-      try {
-        await axios.post(
-          `${API_URL}/cart/add`,
-          { productId: dbProduct._id, quantity: 1 },
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
+  if (token) {
+    try {
+      await axios.post(
+        `${API_URL}/cart/add`,
+        { productId: dbProduct._id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        // ✅ OPEN SIDEBAR
-        if (handleCartOpen) handleCartOpen();
-      } catch (error) {
-        console.error("Add to cart error:", error.response?.data || error);
-
-        if (error.response?.status === 401) {
-          alert("Session expired. Please login again.");
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
-      }
-    } else {
-      let cart = [];
-
-      try {
-        const stored = Cookies.get("guestCart");
-        cart = stored ? JSON.parse(stored) : [];
-      } catch {
-        cart = [];
-      }
-
-      const existing = cart.find((i) => i.productId === dbProduct._id);
-
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          productId: dbProduct._id,
-          quantity: 1,
-          price: dbProduct.ProductPrice,
-        });
-      }
-
-      Cookies.set("guestCart", JSON.stringify(cart), { expires: 7 });
-
-      // ✅ OPEN SIDEBAR
       if (handleCartOpen) handleCartOpen();
-    }
-  };
+    } catch (error) {
+      console.error("Add to cart error:", error.response?.data || error);
 
+      if (error.response?.status === 401) {
+        alert("Session expired. Please login again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    }
+  } else {
+    let cart = [];
+
+    try {
+      const stored = localStorage.getItem("guestCart");
+      cart = stored ? JSON.parse(stored) : [];
+    } catch {
+      cart = [];
+    }
+
+    const existing = cart.find((i) => i.productId === dbProduct._id);
+
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        productId: dbProduct._id,
+        quantity: 1,
+        price: dbProduct.ProductPrice,
+      });
+    }
+
+    localStorage.setItem("guestCart", JSON.stringify(cart));
+
+    window.dispatchEvent(new Event("cartUpdated"));
+
+    if (handleCartOpen) handleCartOpen();
+  }
+};
   // UI rendering (unchanged)
   if (loading)
     return (
@@ -232,34 +231,39 @@ const Productdetails = ({ handleCartOpen }) => {
       <Container fluid className="py-5 container sora">
         <Row className="align-items-start">
           <Col md={4}>
-            <motion.img
-              key={dbProduct.Photos}
-              src={
-                dbProduct.Photos.startsWith("http")
-                  ? dbProduct.Photos
-                  : `${dbProduct.Photos}`
-              }
-              alt={dbProduct.ProductName}
-              className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
-              style={{ objectFit: "cover", maxHeight: "600px" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            />
+            {dbProduct.Photos && Array.isArray(dbProduct.Photos) && dbProduct.Photos.length > 0 && (
+              <motion.img
+                key={dbProduct.Photos[0]}
+                src={
+                  dbProduct.Photos[0].startsWith("http")
+                    ? dbProduct.Photos[0]
+                    : `/images/${dbProduct.Photos[0].replace("images/", "")}`
+                }
+                alt={dbProduct.ProductName}
+                className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
+                style={{ objectFit: "cover", maxHeight: "600px" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              />
+            )}
           </Col>
+
           <Col md={4}>
-            <motion.img
-              key={dbProduct.Photos}
-              src={
-                dbProduct.Photos.startsWith("http")
-                  ? dbProduct.Photos
-                  : `${dbProduct.Photos}`
-              }
-              alt={dbProduct.ProductName}
-              className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
-              style={{ objectFit: "cover", maxHeight: "600px" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            />
+            {dbProduct.Photos && Array.isArray(dbProduct.Photos) && dbProduct.Photos.length > 1 && (
+              <motion.img
+                key={dbProduct.Photos[1]}
+                src={
+                  dbProduct.Photos[1].startsWith("http")
+                    ? dbProduct.Photos[1]
+                    : `/images/${dbProduct.Photos[1].replace("images/", "")}`
+                }
+                alt={dbProduct.ProductName}
+                className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
+                style={{ objectFit: "cover", maxHeight: "600px" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              />
+            )}
           </Col>
           <Col md={4}>
             <AnimatePresence mode="wait">
@@ -338,7 +342,7 @@ const Productdetails = ({ handleCartOpen }) => {
 
       {/* ZODIAC DETAILS */}
       <Zodiacdetails />
-      
+
       <Footer />
     </div>
   );

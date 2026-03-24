@@ -320,7 +320,11 @@ const Moonsection = () => {
                     <div className="product-card p-1">
                       <div className="product-box-zodiac">
                         <img
-                          src={`${product.Photos}`}
+                          src={
+                            product.Photos?.[0]?.startsWith("http")
+                              ? product.Photos[0]
+                              : `/images/${product.Photos?.[0]?.replace("images/", "")}`
+                          }
                           alt={product.ProductName}
                           className="zodiac-product-img"
                         />

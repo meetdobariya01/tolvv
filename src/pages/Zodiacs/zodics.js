@@ -530,7 +530,11 @@ const Zodic = () => {
                     <div className="product-card" key={index}>
                       <div className="product-box-zodiac p-1">
                         <img
-                          src={p.Photos}
+                          src={
+                            p.Photos?.[0]?.startsWith("http")
+                              ? p.Photos[0]
+                              : `/images/${p.Photos?.[0]?.replace("images/", "")}`
+                          }
                           alt={p.ProductName}
                           className="zodiac-product-img"
                         />

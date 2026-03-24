@@ -156,10 +156,10 @@ router.delete("/remove/:productId", authenticate, async (req, res) => {
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
     cart.items = cart.items.filter(
-  item =>
-    (item.productId && item.productId.toString() !== req.params.productId) ||
-    (item.hamperId && item.hamperId.toString() !== req.params.productId)
-);
+      item =>
+        (item.productId && item.productId.toString() !== req.params.productId) ||
+        (item.hamperId && item.hamperId.toString() !== req.params.productId)
+    );
     await cart.save();
 
     res.status(200).json({ message: 'Item removed from cart', cart });
@@ -198,27 +198,45 @@ router.post("/merge", authenticate, async (req, res) => {
       cart = new Cart({ userId: req.user._id, items: [] });
     }
 
-    guestItems.forEach((item) => {
-      if (!item.productId || !item.quantity) return;
+    // ✅ USE for...of (NOT forEach)
+    for (const item of guestItems) {
 
-      const existingItem = cart.items.find(
-        (ci) => ci.productId &&
-          item.productId &&
-          ci.productId.toString() === item.productId.toString()
-      );
+      // ================= PRODUCT =================
+      if (item.productId) {
+        const existingItem = cart.items.find(
+          (ci) =>
+            ci.productId &&
+            ci.productId.toString() === item.productId.toString()
+        );
 
-      if (existingItem) {
-        existingItem.quantity += Number(item.quantity);
-      } else {
+        if (existingItem) {
+          existingItem.quantity += Number(item.quantity || 1);
+        } else {
+          cart.items.push({
+            productId: item.productId,
+            quantity: Number(item.quantity || 1),
+          });
+        }
+      }
+
+      // ================= HAMPER =================
+      if (item.type === "hamper" && item.hamperData) {
+        const hamper = await Hamper.create(item.hamperData);
+
         cart.items.push({
-          productId: item.productId,
-          quantity: Number(item.quantity),
+          hamperId: hamper._id,
+          quantity: item.quantity || 1,
         });
       }
-    });
+    }
 
     await cart.save();
-    res.status(200).json({ message: "Cart merged successfully", cart });
+
+    res.status(200).json({
+      message: "Cart merged successfully",
+      cart,
+    });
+
   } catch (error) {
     console.error("MERGE ERROR:", error);
     res.status(500).json({ message: "Merge failed" });

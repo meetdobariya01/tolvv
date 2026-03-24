@@ -246,13 +246,14 @@ const Mainproduct = ({ handleCartOpen }) => {
                   <div className="product-img-wrap">
                     <Card.Img
                       src={
-                        item.Photos
-                          ? item.Photos.startsWith("http")
-                            ? item.Photos
-                            : `/images/${item.Photos.replace("images/", "")}`
+                        item.Photos && Array.isArray(item.Photos) && item.Photos.length > 0
+                          ? item.Photos[0].startsWith("http")
+                            ? item.Photos[0]
+                            : `/images/${item.Photos[0].replace("images/", "")}`
                           : "/images/default.jpg"
                       }
                     />
+                    
                   </div>
                 </NavLink>
 

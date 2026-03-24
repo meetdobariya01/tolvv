@@ -32,7 +32,23 @@ const Checkout = () => {
   const clearGuestCart = () => localStorage.removeItem("guestCart");
 
   // ================= FETCH & MERGE CART =================
+const getImageUrl = (photo) => {
+  if (!photo) return "/images/default.jpg";
 
+  // अगर array है तो first image लो
+  if (Array.isArray(photo)) {
+    photo = photo[0];
+  }
+
+  // अभी भी string नहीं है → fallback
+  if (typeof photo !== "string") {
+    return "/images/default.jpg";
+  }
+
+  return photo.startsWith("http")
+    ? photo
+    : `/images/${photo.replace("images/", "")}`;
+};
   const mergeCart = useCallback(async () => {
     if (!token) {
       setCart(saveGuestCart());
@@ -69,9 +85,7 @@ const Checkout = () => {
               name: item.productId.ProductName,
               price: item.productId.ProductPrice,
               qty: item.quantity,
-              img: item.productId.Photos?.startsWith("http")
-                ? item.productId.Photos
-                : `/images/${item.productId.Photos?.replace("images/", "")}`,
+              img: getImageUrl(item.productId.Photos),
             };
           }
 

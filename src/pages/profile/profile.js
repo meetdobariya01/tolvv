@@ -388,67 +388,89 @@ const AccountPage = () => {
             )}
 
             {/* ORDERS */}
-            {active === "orders" && (
-              <motion.div initial="hidden" animate="visible" variants={fade}>
+{active === "orders" && (
+  <motion.div initial="hidden" animate="visible" variants={fade}>
 
-                <div className="mb-4">
-                  <Button
-                    size="sm"
-                    variant={orderTab === "current" ? "dark" : "light"}
-                    className="me-2"
-                    onClick={() => setOrderTab("current")}
-                  >
-                    Current Orders
-                  </Button>
+    {/* Tabs */}
+    <div className="order-tabs mb-4">
+      <button
+        className={orderTab === "current" ? "active-tab" : ""}
+        onClick={() => setOrderTab("current")}
+      >
+        Current Orders
+      </button>
 
-                  <Button
-                    size="sm"
-                    variant={orderTab === "previous" ? "dark" : "light"}
-                    onClick={() => setOrderTab("previous")}
-                  >
-                    Previous Orders
-                  </Button>
-                </div>
+      <button
+        className={orderTab === "previous" ? "active-tab" : ""}
+        onClick={() => setOrderTab("previous")}
+      >
+        Previous Orders
+      </button>
+    </div>
 
-                <Row>
-                  {orders.map((order) => (
-                    <Col lg={4} key={order._id}>
-                      <Card className="border-0 shadow-sm mb-4">
-                        <Card.Body>
+    {/* GRID */}
+    <div className="orders-grid">
+      {orders.map((order) => {
+        const item = order.items[0];
 
-                          <small>ORDER PLACED ON</small>
-                          <p>{new Date(order.createdAt).toDateString()}</p>
+        return (
+          <div key={order._id} className="order-card">
 
-                          {order.items.map((item, i) => (
-                            <div key={i} className="d-flex align-items-center gap-3">
-                              <img src="https://via.placeholder.com/50" alt="" />
-                              <div>
-                                <h6>
-                                  {item.productId?.ProductName || item.productName}
-                                </h6>
-                                <small>Quantity: {item.quantity}</small>
-                              </div>
-                            </div>
-                          ))}
+            {/* Date */}
+            <p className="order-date-title">
+              {order.type === "exchange"
+                ? "EXCHANGE PLACED ON"
+                : "ORDER PLACED ON"}
+              <br />
+              <span>{new Date(order.createdAt).toDateString()}</span>
+            </p>
 
-                          <Button
-                            size="sm"
-                            className="mt-3"
-                            variant="outline-dark"
-                            onClick={() => downloadInvoice(order._id)}
-                          >
-                            Download Invoice
-                          </Button>
+            {/* Product Row */}
+            <div className="order-row">
 
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
+              <img
+                src={
+                  item?.productId?.Photos?.[0]
+                    ? `/images/${item.productId.Photos[0].replace("images/", "")}`
+                    : "https://via.placeholder.com/60"
+                }
+                alt=""
+                className="order-img"
+              />
 
-              </motion.div>
-            )}
+              <div className="order-info">
+                <small>ORDER ID {order._id.slice(-10)}</small>
 
+                <h6>
+                  {item?.productId?.ProductName || item?.productName}
+                </h6>
+
+                <p>
+                  {order.type === "exchange"
+                    ? `Will pick up on ${new Date(order.pickupDate || order.createdAt).toDateString()}`
+                    : `Arriving on ${new Date(order.deliveryDate || order.createdAt).toDateString()}`
+                  }
+                </p>
+
+                <small>Quantity: {item?.quantity}</small>
+              </div>
+            </div>
+
+            {/* Button */}
+            <button
+              className="invoice-btn mt-2"
+              onClick={() => downloadInvoice(order._id)}
+            >
+              Download Invoice ⬇
+            </button>
+
+          </div>
+        );
+      })}
+    </div>
+
+  </motion.div>
+)}
             {/* SUPPORT */}
             {active === "support" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>
