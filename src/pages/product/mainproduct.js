@@ -6,6 +6,8 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import axios from "axios";
 import "./mainproduct.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const zodiacColors = {
@@ -186,14 +188,14 @@ const Mainproduct = ({ handleCartOpen }) => {
   const getZodiacFromProduct = (name) => {
     if (!name) return null;
     return Object.keys(zodiacColors).find((zodiac) =>
-      name.toLowerCase().includes(zodiac.toLowerCase())
+      name.toLowerCase().includes(zodiac.toLowerCase()),
     );
   };
   return (
     <div>
       <Header />
 
-      <div className="container py-5">
+      <div className="container py-5 sora">
         <section className="products-section-grid">
           <Container>
             <Row className="gx-3 gy-3 mb-5">
@@ -217,9 +219,10 @@ const Mainproduct = ({ handleCartOpen }) => {
                       <img src={item.img} alt={item.title} />
                     </div>
                     <div className="product-info-collection">
-                      <h5>
-                        {item.title} <span>›</span>
-                      </h5>
+                      <div className="d-flex justify-content-between">
+                        <h5>{item.title}</h5>
+                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                      </div>
                       <div className="underline" />
                       <p>{item.size}</p>
                     </div>
@@ -257,25 +260,24 @@ const Mainproduct = ({ handleCartOpen }) => {
                 </NavLink>
 
                 <div className="product-info sora">
-
                   {/* ✅ NAME + DOT */}
                   <div className="price-with-dot-1">
                     <span
-                      className="zodiac-dot"
+                      className="zodiac-dot-product"
                       style={{
                         backgroundColor:
                           zodiacColors[
-                          getZodiacFromProduct(item.ProductName)
+                            getZodiacFromProduct(item.ProductName)
                           ] || "#000",
                       }}
                     ></span>
 
                     <h6 className="product-page-title m-0">
                       <NavLink
-                        className="text-decoration-none text-dark"
+                        className="text-decoration-none text-dark product-page-title"
                         to={`/productdetails/${item._id}`}
                       >
-                        {item.ProductName} <span>›</span>
+                        {item.ProductName} <FontAwesomeIcon icon={faAngleRight} size="lg" />
                       </NavLink>
                     </h6>
                   </div>
@@ -287,7 +289,6 @@ const Mainproduct = ({ handleCartOpen }) => {
                     <span className="product-size">{item.size}</span>
                     <span className="product-price">₹ {item.ProductPrice}</span>
                   </div>
-
                 </div>
               </Card>
             </div>

@@ -293,3 +293,92 @@
   border-radius: 50%;
   box-shadow: 0 0 6px rgba(0,0,0,0.2);
 }
+.hamper-main {
+  position: relative;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CENTER IMAGE */
+.center-image img {
+  width: 420px;
+  border-radius: 30px;
+  z-index: 2;
+}
+
+/* SIDE CARDS COMMON */
+.side-card {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 1;
+}
+
+/* LEFT CARD POSITION */
+.left-card {
+  left: 8%;
+}
+
+/* RIGHT CARD POSITION */
+.right-card {
+  right: 8%;
+}
+
+/* CARD DESIGN */
+.card-box {
+  width: 220px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* IMAGE INSIDE CARD */
+.card-box img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+/* TEXT */
+.card-content h5 {
+  font-size: 14px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.card-content p {
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* ARROWS */
+.arrow {
+  font-size: 18px;
+  cursor: pointer;
+  color: #000;
+}
+
+/* ================= MOBILE (EXACT STACK LIKE DESIGN INTENT) ================= */
+
+@media (max-width: 768px) {
+  .hamper-main {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .side-card {
+    position: static;
+    transform: none;
+    margin: 15px 0;
+  }
+
+  .center-image img {
+    width: 90%;
+  }
+}
