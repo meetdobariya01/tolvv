@@ -42,7 +42,7 @@ const AccountPage = () => {
     visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   };
 
-  const API = "http://localhost:4000/api";
+  const API = process.env.REACT_APP_API_URL;
 
   // Fetch Profile
   const fetchProfile = async () => {
@@ -100,21 +100,20 @@ const AccountPage = () => {
       console.error("Invoice Download Error:", error);
     }
   };
-  // Fetch Orders
-  const fetchOrders = async (type) => {
-    if (!token) return;
+const fetchOrders = async (type) => {
+  if (!token) return;
 
-    try {
-      const res = await axios.get(`${API}/orders/${type}-orders`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+  try {
+    const res = await axios.get(`${API}/orders/${type}-orders`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-      setOrders(res.data);
-
-    } catch (err) {
-      console.error("Orders Fetch Error:", err);
-    }
-  };
+    console.log("ORDERS RESPONSE", res.data);
+    setOrders(Array.isArray(res.data) ? res.data : []); // ✅ ensures .map() doesn't crash
+  } catch (err) {
+    console.error("Orders Fetch Error:", err);
+  }
+};
 
   // Fetch Addresses
   const fetchAddresses = async () => {
@@ -388,89 +387,82 @@ const AccountPage = () => {
             )}
 
             {/* ORDERS */}
-{active === "orders" && (
-  <motion.div initial="hidden" animate="visible" variants={fade}>
+            {active === "orders" && (
+              <motion.div initial="hidden" animate="visible" variants={fade}>
 
-    {/* Tabs */}
-    <div className="order-tabs mb-4">
-      <button
-        className={orderTab === "current" ? "active-tab" : ""}
-        onClick={() => setOrderTab("current")}
-      >
-        Current Orders
-      </button>
+                {/* Tabs */}
+                <div className="order-tabs mb-4">
+                  <button
+                    className={orderTab === "current" ? "active-tab" : ""}
+                    onClick={() => setOrderTab("current")}
+                  >
+                    Current Orders
+                  </button>
 
-      <button
-        className={orderTab === "previous" ? "active-tab" : ""}
-        onClick={() => setOrderTab("previous")}
-      >
-        Previous Orders
-      </button>
-    </div>
+                  <button
+                    className={orderTab === "previous" ? "active-tab" : ""}
+                    onClick={() => setOrderTab("previous")}
+                  >
+                    Previous Orders
+                  </button>
+                </div>
 
-    {/* GRID */}
-    <div className="orders-grid">
-      {orders.map((order) => {
-        const item = order.items[0];
+                {/* GRID */}
+                <div className="orders-grid">
+                  {(Array.isArray(orders) ? orders : []).map((order) => {
+                    const items = Array.isArray(order.items) ? order.items : [];
+                    const item = items[0];// use safe array
 
-        return (
-          <div key={order._id} className="order-card">
+                    return (
+                      <div key={order._id} className="order-card">
+                        {/* Date */}
+                        <p className="order-date-title">
+                          {order.type === "exchange" ? "EXCHANGE PLACED ON" : "ORDER PLACED ON"}
+                          <br />
+                          <span>{new Date(order.createdAt).toDateString()}</span>
+                        </p>
 
-            {/* Date */}
-            <p className="order-date-title">
-              {order.type === "exchange"
-                ? "EXCHANGE PLACED ON"
-                : "ORDER PLACED ON"}
-              <br />
-              <span>{new Date(order.createdAt).toDateString()}</span>
-            </p>
+                        {/* Product Row */}
+                        <div className="order-row">
+                          <img
+                            src={
+                              Array.isArray(item?.productId?.Photos) && item.productId.Photos[0]
+                                ? `/images/${item.productId.Photos[0].replace("images/", "")}`
+                                : "https://via.placeholder.com/60"
+                            }
+                            alt=""
+                            className="order-img"
+                          />
 
-            {/* Product Row */}
-            <div className="order-row">
+                          <div className="order-info">
+                            <small>ORDER ID {order._id.slice(-10)}</small>
 
-              <img
-                src={
-                  item?.productId?.Photos?.[0]
-                    ? `/images/${item.productId.Photos[0].replace("images/", "")}`
-                    : "https://via.placeholder.com/60"
-                }
-                alt=""
-                className="order-img"
-              />
+                            <h6>{item?.productId?.ProductName || item?.productName}</h6>
 
-              <div className="order-info">
-                <small>ORDER ID {order._id.slice(-10)}</small>
+                            <p>
+                              {order.type === "exchange"
+                                ? `Will pick up on ${new Date(order.pickupDate || order.createdAt).toDateString()}`
+                                : `Arriving on ${new Date(order.deliveryDate || order.createdAt).toDateString()}`}
+                            </p>
 
-                <h6>
-                  {item?.productId?.ProductName || item?.productName}
-                </h6>
+                            <small>Quantity: {item?.quantity || 0}</small>
+                          </div>
+                        </div>
 
-                <p>
-                  {order.type === "exchange"
-                    ? `Will pick up on ${new Date(order.pickupDate || order.createdAt).toDateString()}`
-                    : `Arriving on ${new Date(order.deliveryDate || order.createdAt).toDateString()}`
-                  }
-                </p>
+                        {/* Button */}
+                        <button
+                          className="invoice-btn mt-2"
+                          onClick={() => downloadInvoice(order._id)}
+                        >
+                          Download Invoice ⬇
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
 
-                <small>Quantity: {item?.quantity}</small>
-              </div>
-            </div>
-
-            {/* Button */}
-            <button
-              className="invoice-btn mt-2"
-              onClick={() => downloadInvoice(order._id)}
-            >
-              Download Invoice ⬇
-            </button>
-
-          </div>
-        );
-      })}
-    </div>
-
-  </motion.div>
-)}
+              </motion.div>
+            )}
             {/* SUPPORT */}
             {active === "support" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>

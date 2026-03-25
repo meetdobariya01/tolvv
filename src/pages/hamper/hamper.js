@@ -82,7 +82,7 @@ const getImage = (photos) => {
   if (img.startsWith("http")) return img;
 
   // 👉 Otherwise attach API URL
-  return `${API_URL}${img}`;
+  return `${img}`;
 };
   const handleBuyNow = async (product) => {
     if (!product) return;

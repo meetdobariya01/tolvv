@@ -8,7 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./cartsidebar.css";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API_URL = process.env.REACT_APP_API_URL ;
 
 const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
   const navigate = useNavigate(); // Get navigate function from hook

@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+  const API_URL = process.env.REACT_APP_API_URL ;
   const navigate = useNavigate();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,7 +126,7 @@ const Payment = () => {
           <div className="row g-0 h-100">
             <div className="col-md-7 left-panel d-flex flex-column justify-content-center align-items-center">
               <h1 className="thank-text artisan-font">Thank You</h1>
-              <NavLink to="/" className="back-link mt-5 d-flex align-items-end">
+              <NavLink to="/" className="back-link mt-5 d-flex align-items-end text-light text-decoration-none">
                 Go back to shopping <span>›</span>
               </NavLink>
             </div>
@@ -146,7 +146,7 @@ const Payment = () => {
                 <p className="desc mt-4">
                   Get ready to unwrap self-care, <br /> crafted just for you.
                 </p>
-                <NavLink to="/profile" className="view-order mt-5">
+                <NavLink to="/profile" className="view-order mt-5 text-decoration-none">
                   Order received. View your order <span>›</span>
                 </NavLink>
               </div>
@@ -156,7 +156,7 @@ const Payment = () => {
       </div>
       
       {relatedProducts.length > 0 && (
-        <section className="product-section-1 mt-5">
+        <section className="product-section-1 mt-5 sora">
           <Container>
             <Row className="g-1">
               <h5>You may also like</h5>
@@ -209,7 +209,7 @@ const Payment = () => {
       )}
       
       {bestSellers.length > 0 && (
-        <section className="product-section-1 mt-5">
+        <section className="product-section-1 mt-5 sora">
           <Container>
             <Row className="g-1">
               <h5>Best Sellers</h5>

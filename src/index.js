@@ -34,6 +34,7 @@ import Category from "./components/category/category";
 import AccountPage from "./pages/profile/profile";
 import PaymentFailed from "./pages/PaymentFailed/PaymentFailed";
 import HamperPage from "./pages/hamper/hamper";
+///images/product/virgo-perfume.webp
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
