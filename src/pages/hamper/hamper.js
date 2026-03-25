@@ -73,6 +73,17 @@ function HamperPage() {
 
     fetchHampers();
   }, []);
+const getImage = (photos) => {
+  if (!photos) return "";
+
+  const img = Array.isArray(photos) ? photos[0] : photos;
+
+  // 👉 If already full URL, return as is
+  if (img.startsWith("http")) return img;
+
+  // 👉 Otherwise attach API URL
+  return `${img}`;
+};
   const handleBuyNow = async (product) => {
     if (!product) return;
 
@@ -121,7 +132,7 @@ function HamperPage() {
           quantity: 1,
           price: product.ProductPrice,
           name: product.ProductName,
-          img: product.Photos,
+          img: getImage(product.Photos),
         });
       }
 
@@ -171,49 +182,80 @@ function HamperPage() {
     });
   };
 
-  const handleAddToCart = async () => {
-    const selectedItems = fetchedProducts.filter(p => qty[p._id] > 0);
-    const total = selectedItems.reduce((sum, p) => sum + (p.ProductPrice * qty[p._id]), 0);
+ const handleAddToCart = async () => {
+  const selectedItems = fetchedProducts.filter(p => qty[p._id] > 0);
 
-    if (total < 2500) {
-      alert(`Minimum hamper value must be ₹2500. Current total: ₹${total}`);
-      return;
-    }
+  const total = selectedItems.reduce(
+    (sum, p) => sum + (p.ProductPrice * qty[p._id]),
+    0
+  );
 
-    const payload = {
-      zodiacs: selectedZodiacs,
-      products: selectedItems.map(p => ({
-        productId: p._id,
-        quantity: qty[p._id]
-      })),
-      totalPrice: total
-    };
-    try {
-      // Step 1: Create hamper
-      const res = await axios.post(
-        "http://localhost:4000/api/hamper/create",
-        payload
-      );
+  if (total < 2500) {
+    alert(`Minimum hamper value must be ₹2500. Current total: ₹${total}`);
+    return;
+  }
 
-      const hamperId = res.data.hamper._id; // make sure backend returns hamper
+  const payload = {
+    zodiacs: selectedZodiacs,
+    products: selectedItems.map(p => ({
+      productId: p._id,
+      quantity: qty[p._id]
+    })),
+    totalPrice: total
+  };
 
-      // Step 2: Add to cart
+  const token = localStorage.getItem("token");
+
+  try {
+    // ================= LOGGED-IN =================
+    if (token) {
+      const res = await axios.post(`${API_URL}/hamper/create`, payload);
+
+      const hamperId = res.data.hamper._id;
+
       await axios.post(
         `${API_URL}/cart/add-hamper`,
         { hamperId, quantity: 1 },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${token}`
           }
         }
       );
 
-      alert("Hamper added to cart successfully!");
-
-    } catch (err) {
-      alert(err.response?.data?.message || "Error adding hamper");
+      alert("Hamper added to cart!");
     }
-  };
+
+    // ================= GUEST USER =================
+    else {
+      let cart = [];
+
+      try {
+        const stored = localStorage.getItem("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch {
+        cart = [];
+      }
+
+      // 🔥 Store FULL hamper object locally
+      cart.push({
+        type: "hamper",
+        hamperData: payload,   // full hamper config
+        quantity: 1,
+        price: total,
+        name: "Custom Hamper",
+        img: "/images/hamper.jpg"
+      });
+
+      localStorage.setItem("guestCart", JSON.stringify(cart));
+
+      alert("Hamper added to cart!");
+    }
+
+  } catch (err) {
+    alert(err.response?.data?.message || "Error adding hamper");
+  }
+};
 
   const navigate = useNavigate();
   return (
@@ -257,7 +299,11 @@ function HamperPage() {
                     onClick={() => navigate(`/productdetails/${item._id}`)}
                     style={{ cursor: "pointer" }}
                   >
-                    <img src={item.Photos} className="img-fluid" alt={item.ProductName} />
+                    <img
+                      src={getImage(item.Photos)}
+                      className="img-fluid"
+                      alt={item.ProductName}
+                    />
                     <Card.Body className="product-info sora">
                       <div className="product-top">
                         <div className="title-wrap d-flex align-items-center justify-content-between w-100">
@@ -403,11 +449,15 @@ function HamperPage() {
                     <div key={item._id} className="col-lg-3 col-md-4 col-6">
                       <div className="hamper-card p-2">
                         <input type="checkbox" className="hamper-checkbox" checked={(qty[item._id] || 0) > 0} onChange={() => updateQty(item._id, (qty[item._id] || 0) > 0 ? "dec" : "inc")} />
-                        <div className="hamper-img"><img src={item.Photos} alt={item.ProductName} style={{ width: '100%' }} /></div>
+                        <div className="hamper-img"><img
+                          src={getImage(item.Photos)}
+                          alt={item.ProductName}
+                          style={{ width: '100%' }}
+                        /></div>
                         <div className="hamper-info">
                           <div className="d-flex justify-content-between align-items-center">
-                            
-                                <div className="d-flex align-items-center gap-1">
+
+                            <div className="d-flex align-items-center gap-1">
                               <span
                                 className="zodiac-dot"
                                 style={{
@@ -420,9 +470,9 @@ function HamperPage() {
                                 }}
                               ></span>
 
-                                <h6 className="mb-0" style={{ fontSize: "14px" }}>
-                              {item.ProductName}
-                            </h6>
+                              <h6 className="mb-0" style={{ fontSize: "14px" }}>
+                                {item.ProductName}
+                              </h6>
                             </div>
                             <div className="d-flex align-items-center gap-1">
                               <small>₹ {item.ProductPrice}</small>

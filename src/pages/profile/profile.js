@@ -42,7 +42,7 @@ const AccountPage = () => {
     visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
   };
 
-  const API = "http://localhost:4000/api";
+  const API = process.env.REACT_APP_API_URL;
 
   // Fetch Profile
   const fetchProfile = async () => {
@@ -100,21 +100,20 @@ const AccountPage = () => {
       console.error("Invoice Download Error:", error);
     }
   };
-  // Fetch Orders
-  const fetchOrders = async (type) => {
-    if (!token) return;
+const fetchOrders = async (type) => {
+  if (!token) return;
 
-    try {
-      const res = await axios.get(`${API}/orders/${type}-orders`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+  try {
+    const res = await axios.get(`${API}/orders/${type}-orders`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-      setOrders(res.data);
-
-    } catch (err) {
-      console.error("Orders Fetch Error:", err);
-    }
-  };
+    console.log("ORDERS RESPONSE", res.data);
+    setOrders(Array.isArray(res.data) ? res.data : []); // ✅ ensures .map() doesn't crash
+  } catch (err) {
+    console.error("Orders Fetch Error:", err);
+  }
+};
 
   // Fetch Addresses
   const fetchAddresses = async () => {
@@ -391,64 +390,79 @@ const AccountPage = () => {
             {active === "orders" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>
 
-                <div className="mb-4">
-                  <Button
-                    size="sm"
-                    variant={orderTab === "current" ? "dark" : "light"}
-                    className="me-2"
+                {/* Tabs */}
+                <div className="order-tabs mb-4">
+                  <button
+                    className={orderTab === "current" ? "active-tab" : ""}
                     onClick={() => setOrderTab("current")}
                   >
                     Current Orders
-                  </Button>
+                  </button>
 
-                  <Button
-                    size="sm"
-                    variant={orderTab === "previous" ? "dark" : "light"}
+                  <button
+                    className={orderTab === "previous" ? "active-tab" : ""}
                     onClick={() => setOrderTab("previous")}
                   >
                     Previous Orders
-                  </Button>
+                  </button>
                 </div>
 
-                <Row>
-                  {orders.map((order) => (
-                    <Col lg={4} key={order._id}>
-                      <Card className="border-0 shadow-sm mb-4">
-                        <Card.Body>
+                {/* GRID */}
+                <div className="orders-grid">
+                  {(Array.isArray(orders) ? orders : []).map((order) => {
+                    const items = Array.isArray(order.items) ? order.items : [];
+                    const item = items[0];// use safe array
 
-                          <small>ORDER PLACED ON</small>
-                          <p>{new Date(order.createdAt).toDateString()}</p>
+                    return (
+                      <div key={order._id} className="order-card">
+                        {/* Date */}
+                        <p className="order-date-title">
+                          {order.type === "exchange" ? "EXCHANGE PLACED ON" : "ORDER PLACED ON"}
+                          <br />
+                          <span>{new Date(order.createdAt).toDateString()}</span>
+                        </p>
 
-                          {order.items.map((item, i) => (
-                            <div key={i} className="d-flex align-items-center gap-3">
-                              <img src="https://via.placeholder.com/50" alt="" />
-                              <div>
-                                <h6>
-                                  {item.productId?.ProductName || item.productName}
-                                </h6>
-                                <small>Quantity: {item.quantity}</small>
-                              </div>
-                            </div>
-                          ))}
+                        {/* Product Row */}
+                        <div className="order-row">
+                          <img
+                            src={
+                              Array.isArray(item?.productId?.Photos) && item.productId.Photos[0]
+                                ? `/images/${item.productId.Photos[0].replace("images/", "")}`
+                                : "https://via.placeholder.com/60"
+                            }
+                            alt=""
+                            className="order-img"
+                          />
 
-                          <Button
-                            size="sm"
-                            className="mt-3"
-                            variant="outline-dark"
-                            onClick={() => downloadInvoice(order._id)}
-                          >
-                            Download Invoice
-                          </Button>
+                          <div className="order-info">
+                            <small>ORDER ID {order._id.slice(-10)}</small>
 
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
+                            <h6>{item?.productId?.ProductName || item?.productName}</h6>
+
+                            <p>
+                              {order.type === "exchange"
+                                ? `Will pick up on ${new Date(order.pickupDate || order.createdAt).toDateString()}`
+                                : `Arriving on ${new Date(order.deliveryDate || order.createdAt).toDateString()}`}
+                            </p>
+
+                            <small>Quantity: {item?.quantity || 0}</small>
+                          </div>
+                        </div>
+
+                        {/* Button */}
+                        <button
+                          className="invoice-btn mt-2"
+                          onClick={() => downloadInvoice(order._id)}
+                        >
+                          Download Invoice ⬇
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
 
               </motion.div>
             )}
-
             {/* SUPPORT */}
             {active === "support" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>

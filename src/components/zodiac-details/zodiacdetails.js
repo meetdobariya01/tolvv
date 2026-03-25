@@ -19,10 +19,10 @@ const Zodiacdetails = () => {
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/Coconut-Oil.png",
+        "/images/ingredient/Ginger.png",
+        "/images/ingredient/Ginger.png",
+        "/images/ingredient/Cinnamon-23.png",
+        "/images/ingredient/Coconut-Oil.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -47,9 +47,9 @@ const Zodiacdetails = () => {
       element: "Earth",
       planet: "Venus",
       herbs: [
-        "./images/ingredient/Vanilla.png",
-        "./images/ingredient/Rose.png",
-        "./images/ingredient/Sandalwood.png",
+        "/images/ingredient/Vanilla.png",
+        "/images/ingredient/Rose.png",
+        "/images/ingredient/Sandalwood.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -74,9 +74,9 @@ const Zodiacdetails = () => {
       element: "Air",
       planet: "Mercury",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Lemon.png",
-        "./images/ingredient/Basil.png",
+        "/images/ingredient/Lavender.png",
+        "/images/ingredient/Lemon.png",
+        "/images/ingredient/Basil.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -101,9 +101,9 @@ const Zodiacdetails = () => {
       element: "Water",
       planet: "The Moon",
       herbs: [
-        "./images/ingredient/Coconut-Oil.png",
-        "./images/ingredient/Rosemary.png",
-        "./images/ingredient/Sandalwood.png",
+        "/images/ingredient/Coconut-Oil.png",
+        "/images/ingredient/Rosemary.png",
+        "/images/ingredient/Sandalwood.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -128,10 +128,10 @@ const Zodiacdetails = () => {
       element: "Fire",
       planet: "The Sun",
       herbs: [
-        "./images/ingredient/AloVera-Extract.png",
-        "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/Orange.png",
-        "./images/ingredient/Honey.png",
+        "/images/ingredient/AloVera-Extract.png",
+        "/images/ingredient/Cinnamon-23.png",
+        "/images/ingredient/Orange.png",
+        "/images/ingredient/Honey.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -156,9 +156,9 @@ const Zodiacdetails = () => {
       element: "Earth",
       planet: "Mercury",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Fennel-33.png",
-        "./images/ingredient/Lemongrass.png",
+        "/images/ingredient/Lavender.png",
+        "/images/ingredient/Fennel-33.png",
+        "/images/ingredient/Lemongrass.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -182,9 +182,9 @@ const Zodiacdetails = () => {
       element: "Air",
       planet: "Venus",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Shea-Butter.png",
-        "./images/ingredient/Rose.png",
+        "/images/ingredient/Lavender.png",
+        "/images/ingredient/Shea-Butter.png",
+        "/images/ingredient/Rose.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -208,9 +208,9 @@ const Zodiacdetails = () => {
       element: "Water",
       planet: "Pluto / Mars",
       herbs: [
-        "./images/ingredient/Jojaba-Seed.png",
-        "./images/ingredient/Jasmine.png",
-        "./images/ingredient/Black-Pepper.png",
+        "/images/ingredient/Jojaba-Seed.png",
+        "/images/ingredient/Jasmine.png",
+        "/images/ingredient/Black-Pepper.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -234,9 +234,9 @@ const Zodiacdetails = () => {
       element: "Fire",
       planet: "Jupiter",
       herbs: [
-        "./images/ingredient/Clove.png",
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Black-Pepper.png",
+        "/images/ingredient/Clove.png",
+        "/images/ingredient/Ginger.png",
+        "/images/ingredient/Black-Pepper.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -330,17 +330,17 @@ const Zodiacdetails = () => {
 
   const zodiacSigns = [
     { name: "Aries", color: "#7A1318", image: "/images/zodiac/1-2.png" },
-    { name: "Taurus", color: "#7A8B3D", image: "/images/zodiac/2.png" },
-    { name: "Gemini", color: "#BB892C", image: "/images/zodiac/3.png" },
-    { name: "Cancer", color: "#8A8C8E", image: "/images/zodiac/4.png" },
-    { name: "Leo", color: "#E8C43A", image: "/images/zodiac/5.png" },
-    { name: "Virgo", color: "#DC4D2D", image: "/images/zodiac/6.png" },
-    { name: "Libra", color: "#FF4E4C", image: "/images/zodiac/7.png" },
-    { name: "Scorpio", color: "#000000", image: "/images/zodiac/8.png" },
-    { name: "Sagittarius", color: "#74489D", image: "/images/zodiac/9.png" },
-    { name: "Capricorn", color: "#F1E1CF", image: "/images/zodiac/10.png" },
-    { name: "Aquarius", color: "#519AA2", image: "/images/zodiac/11.png" },
-    { name: "Pisces", color: "#043D5D", image: "/images/zodiac/12.png" },
+    { name: "Taurus", color: "#7A8B3D", image: "/images/zodiac/2-2.png" },
+    { name: "Gemini", color: "#BB892C", image: "/images/zodiac/3-2.png" },
+    { name: "Cancer", color: "#8A8C8E", image: "/images/zodiac/4-2.png" },
+    { name: "Leo", color: "#E8C43A", image: "/images/zodiac/5-2.png" },
+    { name: "Virgo", color: "#DC4D2D", image: "/images/zodiac/6-2.png" },
+    { name: "Libra", color: "#FF4E4C", image: "/images/zodiac/7-2.png" },
+    { name: "Scorpio", color: "#000000", image: "/images/zodiac/8-2.png" },
+    { name: "Sagittarius", color: "#74489D", image: "/images/zodiac/9-2.png" },
+    { name: "Capricorn", color: "#F1E1CF", image: "/images/zodiac/10-2.png" },
+    { name: "Aquarius", color: "#519AA2", image: "/images/zodiac/11-2.png" },
+    { name: "Pisces", color: "#043D5D", image: "/images/zodiac/12-2.png" },
   ];
 
   const API_URL = process.env.REACT_APP_API_URL;
@@ -509,7 +509,11 @@ const Zodiacdetails = () => {
                       <div className="product-card" key={index}>
                         <div className="product-box-zodiac p-1">
                           <img
-                            src={p.Photos}
+                            src={
+                              p.Photos?.[0]?.startsWith("http")
+                                ? p.Photos[0]
+                                : `/images/${p.Photos?.[0]?.replace("images/", "")}`
+                            }
                             alt={p.ProductName}
                             className="zodiac-product-img"
                           />
