@@ -437,7 +437,7 @@ const Zodic = () => {
                   >
                     <div
                       className="zodiac-circle"
-                    // style={{ backgroundColor: sign.color }}
+                      // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
@@ -469,11 +469,13 @@ const Zodic = () => {
         >
           <div className="aries-content inter container sora">
             <div className="zodiac-header text-white text-center">
-              <p className="aries-date mb-3">{selectedZodiac.date}</p>
+              {/* <p className="aries-date mb-3">{selectedZodiac.date}</p> */}
 
-              <div className="d-flex justify-content-center align-items-center gap-4">
-                <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
-
+              <div className="d-flex justify-content-center align-items-center gap-5  ">
+                <div className="d-block">
+                  <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
+                  <p className="aries-date mb-3 ">{selectedZodiac.date}</p>
+                </div>
                 <div
                   className="aries-icon-circle d-flex justify-content-center align-items-center"
                   style={{ backgroundColor: selectedZodiac.color }}
@@ -560,14 +562,14 @@ const Zodic = () => {
                               className="zodiac-dot"
                               style={{ backgroundColor: selectedZodiac.color }}
                             ></span> */}
-
-
                           </div>
 
                           <div className="underline" />
                           <div className="size-price-row">
                             <span className="size">{p.size}</span>
-                            <span className="zodiac-price">₹ {p.ProductPrice}</span>
+                            <span className="zodiac-price">
+                              ₹ {p.ProductPrice}
+                            </span>
                           </div>
                           {/* <button
                         className="btn btn-outline-dark mt-1"
@@ -581,11 +583,8 @@ const Zodic = () => {
                   </NavLink>
                 ))}
               </div>
-
             </div>
-
           </div>
-
         </section>
       )}
     </div>

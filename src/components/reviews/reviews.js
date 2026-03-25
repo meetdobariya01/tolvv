@@ -36,7 +36,12 @@ const Reviews = () => {
           Customer Reviews
         </h2>
 
-        <Carousel indicators={false} controls interval={5000} pause={false}>
+        <Carousel
+          indicators={true}
+          controls={false}
+          interval={5000}
+          pause={false}
+        >
           {reviews.map((review, index) => (
             <Carousel.Item key={index}>
               <div className="review-wrapper">

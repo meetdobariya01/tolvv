@@ -68,7 +68,7 @@ const Header = () => {
 
           <Navbar.Collapse>
             <Nav className="nav-links gap-0">
-              <Nav.Link as={NavLink} to="/product">ALL SUN SIGNS</Nav.Link>
+              <Nav.Link as={NavLink} to="/product">PRODUCTS</Nav.Link>
 
               <Link to="zodiac" smooth duration={500} className="nav-link">THE TWELVEs</Link>
               <Link to="benefits" smooth duration={500} className="nav-link">BENEFITS</Link>

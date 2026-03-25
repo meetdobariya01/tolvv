@@ -62,7 +62,26 @@
   top: 50%;
   transform: translateY(-50%);
 }
+/* POSITION DOTS */
+.carousel-indicators {
+  bottom: -20px;
+}
 
+/* DOT STYLE */
+.carousel-indicators [data-bs-target] {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #bbb;
+  border: none;
+  margin: 0 6px;
+  opacity: 1;
+}
+
+/* ACTIVE DOT */
+.carousel-indicators .active {
+  background-color: #555;
+}
 /* 🔥 Responsive */
 @media (max-width: 768px) {
   .review-img {

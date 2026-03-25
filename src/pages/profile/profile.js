@@ -3,6 +3,8 @@ import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import "./profile.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -19,7 +21,7 @@ const AccountPage = () => {
     mobile: "",
     dob: "",
     gender: "",
-    email: ""
+    email: "",
   });
 
   const [orders, setOrders] = useState([]);
@@ -34,7 +36,7 @@ const AccountPage = () => {
     city: "",
     pincode: "",
     mobile: "",
-    isDefault: false
+    isDefault: false,
   });
 
   const fade = {
@@ -50,11 +52,10 @@ const AccountPage = () => {
 
     try {
       const res = await axios.get(`${API}/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       setProfile(res.data);
-
     } catch (err) {
       console.error("Profile Fetch Error:", err);
     }
@@ -66,26 +67,21 @@ const AccountPage = () => {
 
     try {
       await axios.put(`${API}/user/profile`, profile, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       alert("Profile Updated");
       fetchProfile();
-
     } catch (err) {
       console.error("Profile Update Error:", err);
     }
   };
   const downloadInvoice = async (orderId) => {
     try {
-
-      const response = await axios.get(
-        `${API}/invoice/${orderId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          responseType: "blob"
-        }
-      );
+      const response = await axios.get(`${API}/invoice/${orderId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob",
+      });
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -95,25 +91,24 @@ const AccountPage = () => {
       document.body.appendChild(link);
 
       link.click();
-
     } catch (error) {
       console.error("Invoice Download Error:", error);
     }
   };
-const fetchOrders = async (type) => {
-  if (!token) return;
+  const fetchOrders = async (type) => {
+    if (!token) return;
 
-  try {
-    const res = await axios.get(`${API}/orders/${type}-orders`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    try {
+      const res = await axios.get(`${API}/orders/${type}-orders`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    console.log("ORDERS RESPONSE", res.data);
-    setOrders(Array.isArray(res.data) ? res.data : []); // ✅ ensures .map() doesn't crash
-  } catch (err) {
-    console.error("Orders Fetch Error:", err);
-  }
-};
+      console.log("ORDERS RESPONSE", res.data);
+      setOrders(Array.isArray(res.data) ? res.data : []); // ✅ ensures .map() doesn't crash
+    } catch (err) {
+      console.error("Orders Fetch Error:", err);
+    }
+  };
 
   // Fetch Addresses
   const fetchAddresses = async () => {
@@ -121,11 +116,10 @@ const fetchOrders = async (type) => {
 
     try {
       const res = await axios.get(`${API}/user/address`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       setAddresses(res.data);
-
     } catch (err) {
       console.error("Address Fetch Error:", err);
     }
@@ -137,7 +131,7 @@ const fetchOrders = async (type) => {
 
     try {
       await axios.post(`${API}/user/address`, newAddress, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       fetchAddresses();
@@ -149,11 +143,10 @@ const fetchOrders = async (type) => {
         city: "",
         state: "",
         pincode: "",
-        isDefault: false
+        isDefault: false,
       });
 
       alert("Address Added");
-
     } catch (err) {
       console.error("Add Address Error:", err);
     }
@@ -176,7 +169,6 @@ const fetchOrders = async (type) => {
 
       <Container fluid className="py-5 account-page container sora">
         <Row>
-
           {/* SIDEBAR */}
           <Col lg={3} md={4} className="border-end sidebar">
             <h6 className="fw-bold">YOUR ACCOUNT</h6>
@@ -219,12 +211,10 @@ const fetchOrders = async (type) => {
 
           {/* CONTENT */}
           <Col lg={9} md={8} className="ps-lg-5 mt-4 mt-md-0">
-
             {/* PROFILE */}
             {active === "profile" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>
                 <Form className="profile-form">
-
                   <Form.Group className="mb-3">
                     <Form.Control
                       placeholder="NAME"
@@ -300,7 +290,10 @@ const fetchOrders = async (type) => {
                       placeholder="Flat/Apartment No."
                       value={newAddress.houseNumber}
                       onChange={(e) =>
-                        setNewAddress({ ...newAddress, houseNumber: e.target.value })
+                        setNewAddress({
+                          ...newAddress,
+                          houseNumber: e.target.value,
+                        })
                       }
                     />
                   </Form.Group>
@@ -311,7 +304,10 @@ const fetchOrders = async (type) => {
                       placeholder="Apartment Name"
                       value={newAddress.buildingName}
                       onChange={(e) =>
-                        setNewAddress({ ...newAddress, buildingName: e.target.value })
+                        setNewAddress({
+                          ...newAddress,
+                          buildingName: e.target.value,
+                        })
                       }
                     />
                   </Form.Group>
@@ -334,7 +330,10 @@ const fetchOrders = async (type) => {
                         placeholder="Pin Code"
                         value={newAddress.pincode}
                         onChange={(e) =>
-                          setNewAddress({ ...newAddress, pincode: e.target.value })
+                          setNewAddress({
+                            ...newAddress,
+                            pincode: e.target.value,
+                          })
                         }
                       />
                     </Col>
@@ -354,7 +353,10 @@ const fetchOrders = async (type) => {
                         placeholder="State"
                         value={newAddress.landmark}
                         onChange={(e) =>
-                          setNewAddress({ ...newAddress, landmark: e.target.value })
+                          setNewAddress({
+                            ...newAddress,
+                            landmark: e.target.value,
+                          })
                         }
                       />
                     </Col>
@@ -368,20 +370,14 @@ const fetchOrders = async (type) => {
                     onChange={(e) =>
                       setNewAddress({
                         ...newAddress,
-                        isDefault: e.target.checked
+                        isDefault: e.target.checked,
                       })
                     }
                   />
 
-                  <Button
-                    variant="outline-dark"
-                    size="sm"
-                    onClick={addAddress}
-                  >
+                  <Button variant="outline-dark" size="sm" onClick={addAddress}>
                     SAVE
                   </Button>
-
-
                 </Form>
               </motion.div>
             )}
@@ -389,18 +385,17 @@ const fetchOrders = async (type) => {
             {/* ORDERS */}
             {active === "orders" && (
               <motion.div initial="hidden" animate="visible" variants={fade}>
-
                 {/* Tabs */}
                 <div className="order-tabs mb-4">
                   <button
-                    className={orderTab === "current" ? "active-tab" : ""}
+                    className={orderTab === "current" ? "active-tab" : "btn-outline-dark btn me-2"}
                     onClick={() => setOrderTab("current")}
                   >
                     Current Orders
                   </button>
 
                   <button
-                    className={orderTab === "previous" ? "active-tab" : ""}
+                    className={orderTab === "previous" ? "active-tab" : "btn-outline-dark btn ms-2 "}
                     onClick={() => setOrderTab("previous")}
                   >
                     Previous Orders
@@ -411,22 +406,27 @@ const fetchOrders = async (type) => {
                 <div className="orders-grid">
                   {(Array.isArray(orders) ? orders : []).map((order) => {
                     const items = Array.isArray(order.items) ? order.items : [];
-                    const item = items[0];// use safe array
+                    const item = items[0]; // use safe array
 
                     return (
                       <div key={order._id} className="order-card">
                         {/* Date */}
                         <p className="order-date-title">
-                          {order.type === "exchange" ? "EXCHANGE PLACED ON" : "ORDER PLACED ON"}
+                          {order.type === "exchange"
+                            ? "EXCHANGE PLACED ON"
+                            : "ORDER PLACED ON"}
                           <br />
-                          <span>{new Date(order.createdAt).toDateString()}</span>
+                          <span>
+                            {new Date(order.createdAt).toDateString()}
+                          </span>
                         </p>
 
                         {/* Product Row */}
                         <div className="order-row">
                           <img
                             src={
-                              Array.isArray(item?.productId?.Photos) && item.productId.Photos[0]
+                              Array.isArray(item?.productId?.Photos) &&
+                              item.productId.Photos[0]
                                 ? `/images/${item.productId.Photos[0].replace("images/", "")}`
                                 : "https://via.placeholder.com/60"
                             }
@@ -437,7 +437,10 @@ const fetchOrders = async (type) => {
                           <div className="order-info">
                             <small>ORDER ID {order._id.slice(-10)}</small>
 
-                            <h6>{item?.productId?.ProductName || item?.productName}</h6>
+                            <h6>
+                              {item?.productId?.ProductName ||
+                                item?.productName}
+                            </h6>
 
                             <p>
                               {order.type === "exchange"
@@ -451,16 +454,15 @@ const fetchOrders = async (type) => {
 
                         {/* Button */}
                         <button
-                          className="invoice-btn mt-2"
+                          className=" btn-outline-dark btn invoice-btn mt-2"
                           onClick={() => downloadInvoice(order._id)}
                         >
-                          Download Invoice ⬇
+                          Download Invoice <FontAwesomeIcon icon={faDownload} />
                         </button>
                       </div>
                     );
                   })}
                 </div>
-
               </motion.div>
             )}
             {/* SUPPORT */}
@@ -471,7 +473,6 @@ const fetchOrders = async (type) => {
                 <h6 className="fw-bold">care@tolvvsigns.com</h6>
 
                 <div className="mt-4 support-links">
-
                   <p>
                     <NavLink to="/privacy-policy" className="support-link">
                       Privacy Policy ›
@@ -495,11 +496,9 @@ const fetchOrders = async (type) => {
                       Refund Policy ›
                     </NavLink>
                   </p>
-
                 </div>
               </motion.div>
             )}
-
           </Col>
         </Row>
       </Container>

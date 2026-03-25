@@ -5,7 +5,10 @@ import "./calculator.css";
 const Calculator = () => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
-  const [birthdate, setBirthdate] = useState("");
+
+  // ✅ Updated state (day + month only)
+  const [birthdate, setBirthdate] = useState({ day: "", month: "" });
+
   const [result, setResult] = useState("");
 
   // DATE-WISE ZODIAC MAP
@@ -25,11 +28,10 @@ const Calculator = () => {
   };
 
   const calculateZodiac = () => {
-    if (!birthdate) return;
+    const day = birthdate.day;
+    const month = birthdate.month;
 
-    const date = new Date(birthdate);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
+    if (!day || !month) return;
 
     for (const sign in zodiacByDate) {
       const { start, end } = zodiacByDate[sign];
@@ -66,7 +68,6 @@ const Calculator = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* MODAL AT TOP */}
             <motion.div
               className="modal-content top-modal"
               initial={{ y: -80, opacity: 0 }}
@@ -79,17 +80,18 @@ const Calculator = () => {
                 onClick={() => {
                   setOpen(false);
                   setName("");
-                  setBirthdate("");
+                  setBirthdate({ day: "", month: "" });
                   setResult("");
                 }}
               >
                 ✕
               </button>
 
-              <h2 className="text-uppercase heading-calculator">Know your Sign</h2>
+              <h2 className="text-uppercase heading-calculator">
+                Know your Sign
+              </h2>
 
-              {/* <label className="label">Name</label> */}
-              
+              {/* NAME */}
               <input
                 type="text"
                 placeholder="YOUR NAME"
@@ -98,24 +100,72 @@ const Calculator = () => {
                 className="text-uppercase underline-input sora"
               />
 
-              {/* <label className="label">Birthdate</label> */}
-              <input
-                type="date"
-                value={birthdate}
-                onChange={(e) => setBirthdate(e.target.value)}
-                className="text-uppercase underline-input sora"
-              />
+              {/* ✅ DAY + MONTH SELECT */}
+              <div className="d-flex gap-2 mt-3">
+                {/* DAY */}
+                <select
+                  value={birthdate.day}
+                  onChange={(e) =>
+                    setBirthdate({
+                      ...birthdate,
+                      day: parseInt(e.target.value),
+                    })
+                  }
+                  className="underline-input sora"
+                >
+                  <option value="">DAY</option>
+                  {[...Array(31)].map((_, i) => (
+                    <option key={i} value={i + 1}>
+                      {i + 1}
+                    </option>
+                  ))}
+                </select>
 
-              <button className="calc-btn sora" onClick={calculateZodiac}>
+                {/* MONTH */}
+                <select
+                  value={birthdate.month}
+                  onChange={(e) =>
+                    setBirthdate({
+                      ...birthdate,
+                      month: parseInt(e.target.value),
+                    })
+                  }
+                  className="underline-input sora"
+                >
+                  <option value="">MONTH</option>
+                  {[
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                  ].map((m, i) => (
+                    <option key={i} value={i + 1}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* BUTTON */}
+              <button className="btn btn-outline-dark w-50 sora mt-3" onClick={calculateZodiac}>
                 Get Zodiac Sign
               </button>
 
+              {/* RESULT */}
               {result && (
                 <p className="result text-uppercase sora mt-4">
-                  Your Zodiac Sign <strong className="text-dark">{result}</strong>
+                  Your Zodiac Sign{" "}
+                  <strong className="text-dark">{result}</strong>
                 </p>
               )}
-             
             </motion.div>
           </motion.div>
         )}

@@ -49,7 +49,7 @@
 
 .product-img-card img {
   width: 100%;
-  height: 271px;
+  /* height: 271px; */
   display: block;
   transition: transform 0.5s ease;
 }
@@ -110,5 +110,8 @@
   .products-heading {
     font-size: 35px;
     margin-bottom: 30px;
+  }
+  .product-card-collection{
+    padding: 15px;
   }
 }

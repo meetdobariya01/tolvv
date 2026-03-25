@@ -32,7 +32,15 @@ const Tolvvsection = () => {
               className="about-left"
             >
               <h2>
-                What <br /> is <br /> TOLVV?
+                What{" "}
+                <span className="d-none d-lg-inline">
+                  <br />
+                </span>
+                is{" "}
+                <span className="d-none d-lg-inline">
+                  <br />
+                </span>
+                TOLVV?
               </h2>
             </motion.div>
           </Col>
