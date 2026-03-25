@@ -1,0 +1,999 @@
+[{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795780"
+  },
+  "ProductName": "Aries Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Aries",
+  "Photos": [
+    "/images/product/aries-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795781"
+  },
+  "ProductName": "Taurus Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Taurus",
+  "Photos": [
+    "/images/product/taurus-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795782"
+  },
+  "ProductName": "Gemini Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Gemini",
+  "Photos": [
+    "/images/product/gemini-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795783"
+  },
+  "ProductName": "Cancer Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Cancer",
+  "Photos": [
+    "/images/product/cancer-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795784"
+  },
+  "ProductName": "Leo Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Leo",
+  "Photos": [
+    "/images/product/leo-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795785"
+  },
+  "ProductName": "Virgo Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Virgo",
+  "Photos": [
+    "/images/product/virgo-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795786"
+  },
+  "ProductName": "Libra Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Libra",
+  "Photos": [
+    "/images/product/libra-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795787"
+  },
+  "ProductName": "Scorpio Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Scorpio",
+  "Photos": [
+    "/images/product/scorpio-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795788"
+  },
+  "ProductName": "Sagittarius Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Sagittarius",
+  "Photos": [
+    "/images/product/sagittarius-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795789"
+  },
+  "ProductName": "Capricorn Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Capricorn",
+  "Photos": [
+    "/images/product/capricorn-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79578a"
+  },
+  "ProductName": "Aquarius Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Aquarius",
+  "Photos": [
+    "/images/product/aquarius-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79578b"
+  },
+  "ProductName": "Pisces Bath Gel",
+  "ProductPrice": 750,
+  "Category": "Bath Gel",
+  "Zodiac": "Pisces",
+  "Photos": [
+    "/images/product/pisces-bath-gel.webp",
+    "/images/product/bath-gel-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79578c"
+  },
+  "ProductName": "Aries soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Aries",
+  "Photos": [
+    "/images/product/aries-soap.webp",
+    "/images/product/aries-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79578d"
+  },
+  "ProductName": "Taurus Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Taurus",
+  "Photos": [
+    "/images/product/taurus-soap.webp",
+    "/images/product/taurus-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79578e"
+  },
+  "ProductName": "Gemini Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Gemini",
+  "Photos": [
+    "/images/product/gemini-soap.webp",
+    "/images/product/gemini-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79578f"
+  },
+  "ProductName": "Cancer Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Cancer",
+  "Photos": "/images/product/cancer-soap.webp",
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795790"
+  },
+  "ProductName": "Leo Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Leo",
+  "Photos": [
+    "/images/product/leo-soap.webp",
+    "/images/product/leo-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795791"
+  },
+  "ProductName": "Virgo Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Virgo",
+  "Photos": [
+    "/images/product/virgo-soap.webp",
+    "/images/product/virgo-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795792"
+  },
+  "ProductName": "Libra Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Libra",
+  "Photos": [
+    "/images/product/libra-soap.webp",
+    "/images/product/libra-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795793"
+  },
+  "ProductName": "Scorpio Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Scorpio",
+  "Photos": [
+    "/images/product/scorpio-soap.webp",
+    "/images/product/scorpio-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795794"
+  },
+  "ProductName": "Sagittarius Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Sagittarius",
+  "Photos": [
+    "/images/product/sagittarius-soap.webp",
+    "/images/product/sagittarius-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795795"
+  },
+  "ProductName": "Capricorn Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Capricorn",
+  "Photos": [
+    "/images/product/capricorn-soap.webp",
+    "/images/product/capricorn-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795796"
+  },
+  "ProductName": "Aquarius Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Aquarius",
+  "Photos": [
+    "/images/product/aquarius-soap.webp",
+    "/images/product/aquarius-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795797"
+  },
+  "ProductName": "Pisces Soap",
+  "ProductPrice": 200,
+  "Category": "Soap",
+  "Zodiac": "Pisces",
+  "Photos": [
+    "/images/product/pisces-soap.webp",
+    "/images/product/pisces-soap-2.webp"
+  ],
+  "size": "100 GM"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795798"
+  },
+  "ProductName": "Aries Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Aries",
+  "Photos": [
+    "/images/product/aries-perfume.webp",
+    "/images/product/aries-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea795799"
+  },
+  "ProductName": "Taurus Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Taurus",
+  "Photos": [
+    "/images/product/taurus-perfume.webp",
+    "/images/product/taurus-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79579a"
+  },
+  "ProductName": "Gemini Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Gemini",
+  "Photos": [
+    "/images/product/gemini-perfume.webp",
+    "/images/product/gemini-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79579b"
+  },
+  "ProductName": "Cancer Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Cancer",
+  "Photos": [
+    "/images/product/cancer-perfume.webp",
+    "/images/product/cancer-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79579c"
+  },
+  "ProductName": "Leo Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Leo",
+  "Photos": [
+    "/images/product/leo-perfume.webp",
+    "/images/product/leo-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79579d"
+  },
+  "ProductName": "Virgo Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Virgo",
+  "Photos": "/images/product/virgo-perfume.webp",
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79579e"
+  },
+  "ProductName": "Libra Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Libra",
+  "Photos": [
+    "/images/product/libra-perfume.webp",
+    "/images/product/libra-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea79579f"
+  },
+  "ProductName": "Scorpio Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Scorpio",
+  "Photos": [
+    "/images/product/scorpio-perfume.webp",
+    "/images/product/scorpio-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a0"
+  },
+  "ProductName": "Sagittarius Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Sagittarius",
+  "Photos": [
+    "/images/product/sagittarius-perfume.webp",
+    "/images/product/sagittarius-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a1"
+  },
+  "ProductName": "Capricorn Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Capricorn",
+  "Photos": [
+    "/images/product/capricorn-perfume.webp",
+    "/images/product/capricorn-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a2"
+  },
+  "ProductName": "Aquarius Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Aquarius",
+  "Photos": [
+    "/images/product/aquarius-perfume.webp",
+    "/images/product/aquarius-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a3"
+  },
+  "ProductName": "Pisces Perfume",
+  "ProductPrice": 1800,
+  "Category": "Perfume",
+  "Zodiac": "Pisces",
+  "Photos": [
+    "/images/product/pisces-perfume.webp",
+    "/images/product/pisces-perfume-2.webp"
+  ],
+  "size": "50 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a4"
+  },
+  "ProductName": "Aries Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Aries",
+  "Photos": [
+    "/images/product/aries-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a5"
+  },
+  "ProductName": "Taurus  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Taurus",
+  "Photos": [
+    "/images/product/taurus-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a6"
+  },
+  "ProductName": "Gemini  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Gemini",
+  "Photos": [
+    "/images/product/gemini-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a7"
+  },
+  "ProductName": "Cancer  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Cancer",
+  "Photos": [
+    "/images/product/cancer-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a8"
+  },
+  "ProductName": "Leo  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Leo",
+  "Photos": [
+    "/images/product/leo-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957a9"
+  },
+  "ProductName": "Virgo  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Virgo",
+  "Photos": [
+    "/images/product/virgo-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957aa"
+  },
+  "ProductName": "Libra  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Libra",
+  "Photos": [
+    "/images/product/libra-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957ab"
+  },
+  "ProductName": "Scorpio  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Scorpio",
+  "Photos": [
+    "/images/product/scorpio-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957ac"
+  },
+  "ProductName": "Sagittarius  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Sagittarius",
+  "Photos": [
+    "/images/product/sagittarius-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957ad"
+  },
+  "ProductName": "Capricorn  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Capricorn",
+  "Photos": [
+    "/images/product/capricorn-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957ae"
+  },
+  "ProductName": "Aquarius  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Aquarius",
+  "Photos": [
+    "/images/product/aquarius-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957af"
+  },
+  "ProductName": "Pisces  Essential Oil",
+  "ProductPrice": 750,
+  "Category": "Essential Oil",
+  "Zodiac": "Pisces",
+  "Photos": [
+    "/images/product/pisces-essential-oil.webp",
+    "/images/product/EO-Back.webp"
+  ],
+  "size": "30 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b0"
+  },
+  "ProductName": "Aries Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Aries",
+  "Photos": [
+    "/images/product/aries-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b1"
+  },
+  "ProductName": "Taurus  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Taurus",
+  "Photos": [
+    "/images/product/taurus-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b2"
+  },
+  "ProductName": "Gemini  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Gemini",
+  "Photos": [
+    "/images/product/gemini-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b3"
+  },
+  "ProductName": "Cancer  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Cancer",
+  "Photos": [
+    "/images/product/cancer-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b4"
+  },
+  "ProductName": "Leo Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Leo",
+  "Photos": [
+    "/images/product/leo-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b5"
+  },
+  "ProductName": "Virgo  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Virgo",
+  "Photos": [
+    "/images/product/virgo-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b6"
+  },
+  "ProductName": "Libra  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Libra",
+  "Photos": [
+    "/images/product/libra-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b7"
+  },
+  "ProductName": "Scorpio  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Scorpio",
+  "Photos": [
+    "/images/product/scorpio-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b8"
+  },
+  "ProductName": "Sagittarius  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Sagittarius",
+  "Photos": [
+    "/images/product/sagittarius-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957b9"
+  },
+  "ProductName": "Capricorn Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Capricorn",
+  "Photos": [
+    "/images/product/capricorn-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957ba"
+  },
+  "ProductName": "Aquarius  Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Aquarius",
+  "Photos": [
+    "/images/product/aquarius-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "692ed828b9100f9cea7957bb"
+  },
+  "ProductName": "Pisces Body Lotion",
+  "ProductPrice": 750,
+  "Category": "Body Lotion",
+  "Zodiac": "Pisces",
+  "Photos": [
+    "/images/product/pisces-body-lotion.webp",
+    "/images/product/body-lotion-back.webp"
+  ],
+  "size": "200 ML"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf53789698"
+  },
+  "ProductName": "Aries Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Aries",
+  "Photos": [
+    "/images/product/aries-hamper.webp",
+    "/images/product/aries-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf53789699"
+  },
+  "ProductName": "Taurus Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Taurus",
+  "Photos": [
+    "/images/product/taurus-hamper.webp",
+    "/images/product/taurus-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf5378969a"
+  },
+  "ProductName": "Gemini Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Gemini",
+  "Photos": [
+    "/images/product/gemini-hamper.webp",
+    "/images/product/gemini-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf5378969b"
+  },
+  "ProductName": "Cancer Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Cancer",
+  "Photos": [
+    "/images/product/cancer-hamper.webp",
+    "/images/product/cancer-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf5378969c"
+  },
+  "ProductName": "Leo Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Leo",
+  "Photos": "/images/product/leo-hamper.webp",
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf5378969d"
+  },
+  "ProductName": "Virgo Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Virgo",
+  "Photos": [
+    "/images/product/virgo-hamper.webp",
+    "/images/product/virgo-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf5378969e"
+  },
+  "ProductName": "Libra Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Libra",
+  "Photos": [
+    "/images/product/libra-hamper.webp",
+    "/images/product/libra-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf5378969f"
+  },
+  "ProductName": "Scorpio Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Scorpio",
+  "Photos": [
+    "/images/product/scorpio-hamper.webp",
+    "/images/product/scorpio-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf537896a0"
+  },
+  "ProductName": "Sagittarius Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Sagittarius",
+  "Photos": [
+    "/images/product/sagittarius-hamper.webp",
+    "/images/product/sagittarius-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf537896a1"
+  },
+  "ProductName": "Capricon Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Capricorn",
+  "Photos": [
+    "/images/product/capricorn-hamper.webp",
+    "/images/product/capricorn-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf537896a2"
+  },
+  "ProductName": "Aquarius Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Aquarius",
+  "Photos": [
+    "/images/product/aquarius-hamper.webp",
+    "/images/product/aquarius-hamper-2.webp"
+  ],
+  "size": "5 Product"
+},
+{
+  "_id": {
+    "$oid": "695b9c6bf4eb1bbf537896a3"
+  },
+  "ProductName": "Pisces Hamper",
+  "ProductPrice": 4250,
+  "Category": "Hamper",
+  "Zodiac": "Pisces",
+  "Photos": [
+    "/images/product/pisces-hamper.webp",
+    "/images/product/pisces-hamper-2.webp"
+  ],
+  "size": "5 Product"
+}]

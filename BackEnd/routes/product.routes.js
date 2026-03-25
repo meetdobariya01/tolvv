@@ -82,7 +82,8 @@ router.get("/best-sellers", async (req, res) => {
       // (filter before group ideally, but ok here if needed)
 
       { $sort: { totalSold: -1 } },
-      { $limit: 8 },
+      { $limit: 4
+       },
 
       {
         $lookup: {

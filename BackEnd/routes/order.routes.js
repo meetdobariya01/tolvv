@@ -7,9 +7,15 @@ const User = require("../Model/UserSchema");
 const { authenticate } = require("../middleware/auth.middleware");
 const {
   sendOrderConfirmationEmail,
-  sendAdminOrderNotification
+  sendAdminOrderNotification,
+  sendAdminSubscriptionNotification
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
+const COUPONS = {
+  FIRSTORDER: 5,
+  WELCOME10: 10,
+  IVY755WA: 15
+};
 // Place order
 // router.post("/place", authenticate, async (req, res) => {
 //   try {
@@ -143,11 +149,209 @@ const Hamper = require("../Model/Hamper");
 //   }
 // });
 
+// router.post("/place", authenticate, async (req, res) => {
+//   try {
+
+//     const { items, paymentMethod, address, note, customerName, customerEmail, couponCode } = req.body;
+
+//     if (!items || items.length === 0)
+//       return res.status(400).json({ message: "Cart is empty" });
+
+//     if (!address || !address.city || !address.pincode)
+//       return res.status(400).json({ message: "Address incomplete" });
+
+//     if (!address?.mobile)
+//       return res.status(400).json({ message: "Phone number required" });
+
+//     let subtotal = 0;
+//     const orderItems = [];
+
+//     // ✅ LOOP ONLY FOR SUBTOTAL
+//     for (const item of items) {
+
+//       if (item.productId) {
+//         const product = await Product.findById(item.productId);
+
+//         if (!product)
+//           return res.status(404).json({ message: "Product not found" });
+
+//         subtotal += product.ProductPrice * item.quantity;
+
+//         orderItems.push({
+//           productId: product._id,
+//           productName: product.ProductName,
+//           quantity: item.quantity,
+//           priceAtBuy: product.ProductPrice
+//         });
+//       }
+
+//       if (item.hamperId) {
+//         const hamper = await Hamper.findById(item.hamperId).populate("products.productId");
+
+//         if (!hamper)
+//           return res.status(404).json({ message: "Hamper not found" });
+
+//         subtotal += hamper.totalPrice * item.quantity;
+
+//         const hamperItems = hamper.products.map((p) => ({
+//           productId: p.productId._id,
+//           name: p.productId.ProductName,
+//           quantity: p.quantity
+//         }));
+
+//         orderItems.push({
+//           hamperId: hamper._id,
+//           productName: "Zodiac Hamper",
+//           quantity: item.quantity,
+//           priceAtBuy: hamper.totalPrice,
+//           hamperItems
+//         });
+//       }
+//     }
+//     // ✅ CHECK FIRST ORDER
+//     const existingOrders = await Order.find({
+//       userId: req.user.id,
+//       status: { $in: ["PAID", "COD_CONFIRMED"] }
+//     });
+
+//     const isFirstOrder = existingOrders.length === 0;
+
+//     // ✅ APPLY COUPON
+//     let discount = 0;
+
+//     if (couponCode) {
+
+//       const code = couponCode.toUpperCase();
+
+//       // ❌ invalid coupon
+//       if (!COUPONS[code]) {
+//         return res.status(400).json({ message: "Invalid coupon code" });
+//       }
+
+//       // 🚫 FIRST ORDER ONLY COUPONS
+//       if ((code === "FIRSTORDER" || code === "WELCOME10") && !isFirstOrder) {
+//         return res.status(400).json({
+//           message: "This coupon is valid only for first order"
+//         });
+//       }
+
+//       const discountPercent = COUPONS[code];
+//       discount = (subtotal * discountPercent) / 100;
+//     }
+
+//     // Create Order
+//     const newOrder = new Order({
+//       userId: req.user.id,
+//       customOrderId,
+
+//       customerName,
+//       customerEmail,
+
+//       items: orderItems,
+//       subtotal: totalAmount,
+//       totalAmount,
+//       couponCode,
+//       paymentMethod,
+//       status: paymentMethod === "cod" ? "COD_CONFIRMED" : "PAYMENT_PENDING",
+
+//       address: {
+//         houseNumber: address.houseNumber,
+//         buildingName: address.buildingName,
+//         societyName: address.societyName,
+//         road: address.road,
+//         landmark: address.landmark,
+//         city: address.city,
+//         pincode: address.pincode,
+//         mobile: address.mobile
+//       },
+
+//       note: note || ""
+//     });
+
+//     await newOrder.save();
+
+//     // Clear Cart
+//     await Cart.findOneAndUpdate(
+//       { userId: req.user.id },
+//       { $set: { items: [] } }
+//     );
+
+//     // Get user for email
+//     const user = await User.findById(req.user.id);
+
+//     const products = await Product.find({
+//       _id: { $in: orderItems.map(i => i.productId).filter(Boolean) }
+//     });
+
+//     // Build email items list
+//     const itemsHtml = orderItems.map(i => {
+
+//       const product = products.find(
+//         p => p._id.toString() === (i.productId || "").toString()
+//       );
+
+//       const name = product ? product.ProductName : i.productName;
+
+//       return `<li>${name} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
+
+//     }).join("");
+
+//     const orderDetails = {
+//       customOrderId,
+//       paymentMethod,
+//       totalAmount,
+//       itemsHtml,
+//       phone: address.mobile
+//     };
+
+//     // Send Email to Customer
+//     sendOrderConfirmationEmail(user.email, orderDetails)
+//       .catch(err => console.error("User mail error:", err));
+
+//     // Send Email to Admin
+//     sendAdminOrderNotification(orderDetails, user, address, note)
+//       .catch(err => console.error("Admin mail error:", err));
+
+//     // Online Payment
+//     if (paymentMethod === "card" || paymentMethod === "upi") {
+
+//       return res.status(201).json({
+//         message: "Order placed, proceed to payment",
+//         orderId: customOrderId,
+//         requiresPayment: true
+//       });
+//     }
+
+//     // COD
+//     res.status(201).json({
+//       message: "Order placed successfully",
+//       orderId: customOrderId
+//     });
+
+//   } catch (err) {
+
+//     console.error("Place order error:", err);
+
+//     res.status(500).json({
+//       message: "Server error"
+//     });
+//   }
+// });
+
 router.post("/place", authenticate, async (req, res) => {
   try {
+    const {
+      items,
+      paymentMethod,
+      address,
+      note,
+      customerName,
+      customerEmail,
+      couponCode,
+      subscribe
+    } = req.body;
 
-    const { items, paymentMethod, address, note, customerName, customerEmail } = req.body;
-
+    // ✅ VALIDATIONS
     if (!items || items.length === 0)
       return res.status(400).json({ message: "Cart is empty" });
 
@@ -160,14 +364,12 @@ router.post("/place", authenticate, async (req, res) => {
     let subtotal = 0;
     const orderItems = [];
 
-    // Validate and calculate items
+    // ✅ CALCULATE SUBTOTAL
     for (const item of items) {
 
       // PRODUCT
       if (item.productId) {
-
         const product = await Product.findById(item.productId);
-
         if (!product)
           return res.status(404).json({ message: "Product not found" });
 
@@ -183,14 +385,14 @@ router.post("/place", authenticate, async (req, res) => {
 
       // HAMPER
       if (item.hamperId) {
-        const hamper = await Hamper.findById(item.hamperId).populate("products.productId");
+        const hamper = await Hamper.findById(item.hamperId)
+          .populate("products.productId");
 
         if (!hamper)
           return res.status(404).json({ message: "Hamper not found" });
 
         subtotal += hamper.totalPrice * item.quantity;
 
-        // ✅ Extract product details
         const hamperItems = hamper.products.map((p) => ({
           productId: p.productId._id,
           name: p.productId.ProductName,
@@ -202,31 +404,68 @@ router.post("/place", authenticate, async (req, res) => {
           productName: "Zodiac Hamper",
           quantity: item.quantity,
           priceAtBuy: hamper.totalPrice,
-          hamperItems  // ✅ SAVE THIS
+          hamperItems
         });
       }
     }
 
-    const totalAmount = Math.round(subtotal);
+    // ✅ CHECK FIRST ORDER
+    const existingOrders = await Order.find({
+      userId: req.user.id,
+      status: { $in: ["PAID", "COD_CONFIRMED"] }
+    });
 
+    const isFirstOrder = existingOrders.length === 0;
+
+    // ✅ APPLY COUPON
+    let discount = 0;
+
+    if (couponCode) {
+      const code = couponCode.toUpperCase();
+
+      if (!COUPONS[code]) {
+        return res.status(400).json({ message: "Invalid coupon code" });
+      }
+
+      // FIRST ORDER ONLY
+      if ((code === "FIRSTORDER" || code === "WELCOME10") && !isFirstOrder) {
+        return res.status(400).json({
+          message: "This coupon is valid only for first order"
+        });
+      }
+
+      const discountPercent = COUPONS[code];
+      discount = (subtotal * discountPercent) / 100;
+    }
+
+    // ✅ FINAL TOTAL
+    const totalAmount = Math.round(subtotal - discount);
+
+    // ✅ GENERATE ORDER ID
     const customOrderId = `ord_${Date.now()}_${Math.floor(
       1000 + Math.random() * 9000
     )}`;
 
-    // Create Order
+    // ✅ CREATE ORDER
     const newOrder = new Order({
       userId: req.user.id,
       customOrderId,
-
+      subscribe,
       customerName,
       customerEmail,
 
       items: orderItems,
-      subtotal: totalAmount,
-      totalAmount,
+
+      subtotal,          // ✅ FIXED
+      totalAmount,       // ✅ FIXED
+      discount,          // ✅ IMPORTANT SAVE
+      couponCode,
 
       paymentMethod,
-      status: paymentMethod === "cod" ? "COD_CONFIRMED" : "PAYMENT_PENDING",
+      status:
+        paymentMethod === "cod"
+          ? "COD_CONFIRMED"
+          : "PAYMENT_PENDING",
 
       address: {
         houseNumber: address.houseNumber,
@@ -244,22 +483,24 @@ router.post("/place", authenticate, async (req, res) => {
 
     await newOrder.save();
 
-    // Clear Cart
+    if (subscribe) {
+      sendAdminSubscriptionNotification(customerEmail, customerName)
+        .catch(err => console.error("Subscription Mail Error:", err));
+    }
+    // ✅ CLEAR CART
     await Cart.findOneAndUpdate(
       { userId: req.user.id },
       { $set: { items: [] } }
     );
 
-    // Get user for email
+    // ✅ EMAIL
     const user = await User.findById(req.user.id);
 
     const products = await Product.find({
       _id: { $in: orderItems.map(i => i.productId).filter(Boolean) }
     });
 
-    // Build email items list
     const itemsHtml = orderItems.map(i => {
-
       const product = products.find(
         p => p._id.toString() === (i.productId || "").toString()
       );
@@ -267,7 +508,6 @@ router.post("/place", authenticate, async (req, res) => {
       const name = product ? product.ProductName : i.productName;
 
       return `<li>${name} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
-
     }).join("");
 
     const orderDetails = {
@@ -278,17 +518,14 @@ router.post("/place", authenticate, async (req, res) => {
       phone: address.mobile
     };
 
-    // Send Email to Customer
     sendOrderConfirmationEmail(user.email, orderDetails)
-      .catch(err => console.error("User mail error:", err));
+      .catch(err => console.error(err));
 
-    // Send Email to Admin
     sendAdminOrderNotification(orderDetails, user, address, note)
-      .catch(err => console.error("Admin mail error:", err));
+      .catch(err => console.error(err));
 
-    // Online Payment
+    // ✅ PAYMENT FLOW
     if (paymentMethod === "card" || paymentMethod === "upi") {
-
       return res.status(201).json({
         message: "Order placed, proceed to payment",
         orderId: customOrderId,
@@ -296,22 +533,17 @@ router.post("/place", authenticate, async (req, res) => {
       });
     }
 
-    // COD
+    // ✅ COD
     res.status(201).json({
       message: "Order placed successfully",
       orderId: customOrderId
     });
 
   } catch (err) {
-
     console.error("Place order error:", err);
-
-    res.status(500).json({
-      message: "Server error"
-    });
+    res.status(500).json({ message: "Server error" });
   }
 });
-
 
 // Get order status
 router.get("/status/:orderId", authenticate, async (req, res) => {
@@ -383,6 +615,7 @@ router.put("/cancel/:orderId", authenticate, async (req, res) => {
     order.status = "CANCELLED";
 
     await order.save();
+  
 
     res.json({
       message: "Order cancelled successfully",
@@ -430,6 +663,43 @@ router.get("/previous-orders", authenticate, async (req, res) => {
 
   } catch (err) {
     console.error("Previous orders error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.post("/coupon/validate", authenticate, async (req, res) => {
+  try {
+    const { couponCode } = req.body;
+
+    if (!couponCode) {
+      return res.status(400).json({ message: "Coupon required" });
+    }
+
+    const code = couponCode.toUpperCase();
+
+    if (!COUPONS[code]) {
+      return res.status(400).json({ message: "Invalid coupon" });
+    }
+
+    // check first order
+    const existingOrders = await Order.find({
+      userId: req.user.id,
+      status: { $in: ["PAID", "COD_CONFIRMED"] }
+    });
+
+    const isFirstOrder = existingOrders.length === 0;
+
+    if ((code === "FIRSTORDER" || code === "WELCOME10") && !isFirstOrder) {
+      return res.status(400).json({
+        message: "Only valid for first order"
+      });
+    }
+
+    res.json({
+      valid: true,
+      discountPercent: COUPONS[code]
+    });
+
+  } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });

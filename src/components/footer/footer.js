@@ -80,7 +80,7 @@ const Footer = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink className="nav-link" to="/orders">
+                <NavLink className="nav-link" to="/login">
                   Orders
                 </NavLink>
               </li>
