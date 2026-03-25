@@ -220,7 +220,7 @@ const Moonsection = () => {
             {planetData.map((p, i) => (
               <Col
                 key={i}
-                xs={4}
+                xs={2}
                 sm={3}
                 md={1}
                 className="text-center planet-item"

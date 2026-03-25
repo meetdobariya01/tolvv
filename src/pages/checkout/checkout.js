@@ -95,19 +95,19 @@ const Checkout = () => {
     }
   }, [token]);
   useEffect(() => {
-  const handleCartUpdate = () => {
-    mergeCart(); // ✅ refresh cart when event fires
-  };
+    const handleCartUpdate = () => {
+      mergeCart(); // ✅ refresh cart when event fires
+    };
 
-  window.addEventListener("cartUpdated", handleCartUpdate);
+    window.addEventListener("cartUpdated", handleCartUpdate);
 
-  return () => {
-    window.removeEventListener("cartUpdated", handleCartUpdate);
-  };
-}, [mergeCart]);
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
+  }, [mergeCart]);
   useEffect(() => {
-  mergeCart(); // ✅ load cart on page open
-}, [mergeCart]);
+    mergeCart(); // ✅ load cart on page open
+  }, [mergeCart]);
   // ================= TOTAL =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const total = subtotal;
@@ -200,7 +200,7 @@ const Checkout = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         const paymentData = await paymentRes.json();
@@ -218,7 +218,6 @@ const Checkout = () => {
       // ✅ COD SUCCESS
       alert("Order placed successfully!");
       window.location.href = "/payment";
-
     } catch (error) {
       console.error(error);
       alert("Something went wrong.");
@@ -232,8 +231,6 @@ const Checkout = () => {
 
       <div className="checkout sora">
         <div className="checkout-grid checkout-root">
-
-          
           <div className="panel billing-panel">
             <div className="panel-inner">
               <h2>Shipping Details</h2>
@@ -348,31 +345,77 @@ const Checkout = () => {
           </div>
 
           <aside className="panel summary-panel">
-            <div className="panel-inner">
-              <h2>Order Summary</h2>
+            <div className="panel-inner order-summary">
+              <h2 className="summary-title">Order Summary</h2>
 
+              {/* PRODUCT LIST */}
               <div className="items-list">
                 {cart.map((it) => (
-                  <div key={it.id}>
-                    <div className="name">{it.name}</div>
-                    <div>x{it.qty}</div>
+                  <div
+                    className="item-row d-flex align-items-center"
+                    key={it.id}
+                  >
+                    {/* IMAGE + QTY */}
+                    <div className="item-img position-relative">
+                      <img
+                        src={it.image || "./images/product.jpg"}
+                        alt={it.name}
+                      />
+                      {/* <span className="qty-badge">{it.qty}</span> */}
+                    </div>
 
-                    {/* ✅ SHOW HAMPPER PRODUCTS */}
-                    {it.hamperItems && (
-                      <ul style={{ fontSize: "12px", marginTop: "5px" }}>
-                        {it.hamperItems.map((h, i) => (
-                          <li key={i}>
-                            {h.name} × {h.quantity}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    {/* NAME */}
+                    <div className="item-info flex-grow-1">
+                      <div className="item-name">{it.name}</div>
+
+                      {/* HAMPPER PRODUCTS */}
+                      {it.hamperItems && (
+                        <ul className="hamper-list">
+                          {it.hamperItems.map((h, i) => (
+                            <li key={i}>
+                              {h.name} × {h.quantity}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+
+                    {/* PRICE */}
+                    <div className="item-price">
+                      {currencyFormat(it.price * it.qty)}
+                    </div>
                   </div>
                 ))}
               </div>
 
-              <div className="price-breakdown">
-                <div className="row total">
+              {/* COUPON */}
+              <div className="coupon-box d-flex gap-2 mt-3">
+                <input
+                  type="text"
+                  placeholder="Coupon code"
+                  className="form-control"
+                />
+                <button className="apply-btn">Apply</button>
+              </div>
+
+              {/* PRICE BREAKDOWN */}
+              <div className="price-breakdown mt-4">
+                <div className="d-flex justify-content-between">
+                  <span>Subtotal · {cart.length} item</span>
+                  <span>{currencyFormat(total)}</span>
+                </div>
+
+                <div className="d-flex justify-content-between">
+                  <span>Shipping</span>
+                  <span>-</span>
+                </div>
+
+                <div className="d-flex justify-content-between mt-5">
+                  <span>Discount</span>
+                  <span>-</span>
+                </div>
+
+                <div className="d-flex justify-content-between total">
                   <strong>Total</strong>
                   <strong>{currencyFormat(total)}</strong>
                 </div>

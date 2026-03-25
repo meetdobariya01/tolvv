@@ -283,7 +283,7 @@ body {
   /* background: linear-gradient(180deg, #fbfdff, #fff); */
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid #eef3ff;
+  /* border: 1px solid #eef3ff; */
 }
 .price-breakdown .row {
   display: flex;
@@ -349,4 +349,97 @@ body {
   .row-two {
     grid-template-columns: 1fr 1fr;
   }
+}
+.order-summary {
+  max-width: 400px;
+  margin: auto;
+}
+
+.summary-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* ITEM ROW */
+.item-row {
+  margin-bottom: 15px;
+}
+
+/* IMAGE */
+.item-img {
+  width: 60px;
+  height: 60px;
+  background: #f3f3f3;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* QTY BADGE */
+.qty-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 3px 7px;
+}
+
+/* INFO */
+.item-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hamper-list {
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+  padding-left: 15px;
+}
+
+/* PRICE */
+.item-price {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* COUPON */
+.coupon-box input {
+  border: 1px solid #000;
+  background: transparent;
+  border-radius: 6px;
+}
+
+.apply-btn {
+  border: 1px solid #000;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.apply-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* PRICE BREAKDOWN */
+.price-breakdown {
+  font-size: 14px;
+  color: #444;
+}
+
+.price-breakdown .total {
+  font-size: 16px;
+  color: #000;
 }
