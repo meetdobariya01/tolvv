@@ -106,7 +106,7 @@ const Login = () => {
       // ✅ CORRECT FUNCTION CALL
       await mergeGuestCart(token);
 
-      navigate("/Check-out");
+      navigate("/");
     } catch (err) {
       setServerError(err.response?.data?.message || "Invalid credentials");
     } finally {
