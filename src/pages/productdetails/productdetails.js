@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FiShoppingCart} from "react-icons/fi";
 import { Container, Row, Col, Nav } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
@@ -312,7 +313,7 @@ const Productdetails = ({ handleCartOpen }) => {
                   onClick={addToCart}
                   className="btn btn-outline-dark mt-3"
                 >
-                  ADD TO CART 🛒
+                  ADD TO CART <FiShoppingCart className="ms-1" size={22} />
                 </button>
               </motion.div>
             </AnimatePresence>

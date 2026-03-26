@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -191,6 +191,15 @@ const Mainproduct = ({ handleCartOpen }) => {
       name.toLowerCase().includes(zodiac.toLowerCase()),
     );
   };
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // or "smooth"
+    });
+  }, [pathname]);
   return (
     <div>
       <Header />
@@ -249,14 +258,15 @@ const Mainproduct = ({ handleCartOpen }) => {
                   <div className="product-img-wrap">
                     <Card.Img
                       src={
-                        item.Photos && Array.isArray(item.Photos) && item.Photos.length > 0
+                        item.Photos &&
+                        Array.isArray(item.Photos) &&
+                        item.Photos.length > 0
                           ? item.Photos[0].startsWith("http")
                             ? item.Photos[0]
                             : `/images/${item.Photos[0].replace("images/", "")}`
                           : "/images/default.jpg"
                       }
                     />
-                    
                   </div>
                 </NavLink>
 
@@ -278,7 +288,8 @@ const Mainproduct = ({ handleCartOpen }) => {
                         className="text-decoration-none text-dark product-page-title"
                         to={`/productdetails/${item._id}`}
                       >
-                        {item.ProductName} <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                        {item.ProductName}{" "}
+                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
                       </NavLink>
                     </h6>
                   </div>

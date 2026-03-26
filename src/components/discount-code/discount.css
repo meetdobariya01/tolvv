@@ -1,0 +1,44 @@
+.top-banner {
+  background: #6c6c6c;
+  color: #fff;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 8px 0;
+}
+
+.scroll-track {
+  display: flex;
+  width: max-content;
+  animation: scroll 50s linear infinite;
+}
+
+.scroll-content {
+  display: flex;
+}
+
+.scroll-content span {
+  margin-right: 50px;
+  font-size: 14px;
+}
+
+/* 🔥 Seamless infinite animation */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.top-banner:hover .scroll-track {
+  animation-play-state: paused;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .scroll-content span {
+    font-size: 12px;
+  }
+}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import "./profile.css";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -163,14 +163,24 @@ const AccountPage = () => {
     else fetchOrders("previous");
   }, [orderTab]);
 
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth", // or "smooth"
+    });
+  }, [pathname]);
+
   return (
     <div>
       <Header />
 
-      <Container fluid className="py-5 account-page container sora">
+      <Container fluid className=" account-page  sora">
         <Row>
           {/* SIDEBAR */}
-          <Col lg={3} md={4} className="border-end sidebar">
+          <Col lg={3} md={4} className="border-end sidebar py-5">
             <h6 className="fw-bold">YOUR ACCOUNT</h6>
             <small>{profile.email}</small>
 
@@ -213,189 +223,225 @@ const AccountPage = () => {
           <Col lg={9} md={8} className="ps-lg-5 mt-4 mt-md-0">
             {/* PROFILE */}
             {active === "profile" && (
-              <motion.div initial="hidden" animate="visible" variants={fade}>
-                <Form className="profile-form">
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="NAME"
-                      value={profile.fname}
+              <div className="d-flex justify-content-between gap-5">
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  className="py-2 py-lg-5"
+                  variants={fade}
+                >
+                  <Form className="profile-form">
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="NAME"
+                        value={profile.fname}
+                        onChange={(e) =>
+                          setProfile({ ...profile, fname: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="Phone No."
+                        value={profile.mobile}
+                        onChange={(e) =>
+                          setProfile({ ...profile, mobile: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="XYZ@gmail.com"
+                        value={profile.email}
+                        disabled
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="DD/MM/YYYY"
+                        value={profile.dob || ""}
+                        onChange={(e) =>
+                          setProfile({ ...profile, dob: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="Gender"
+                        value={profile.gender || ""}
+                        onChange={(e) =>
+                          setProfile({ ...profile, gender: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+
+                    <button
+                      className="btn btn-outline-dark"
+                      size="sm"
+                      onClick={updateProfile}
+                      type="button"
+                    >
+                      SAVE
+                    </button>
+
+                    <h5 className="mt-5">Address</h5>
+
+                    <div className="mb-3">
+                      <Button size="sm" variant="outline-dark" className="me-2">
+                        Use Default Address
+                      </Button>
+
+                      <Button size="sm" variant="outline-dark">
+                        Add New
+                      </Button>
+                    </div>
+
+                    {/* Flat / Apartment */}
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="Flat/Apartment No."
+                        value={newAddress.houseNumber}
+                        onChange={(e) =>
+                          setNewAddress({
+                            ...newAddress,
+                            houseNumber: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+
+                    {/* Building */}
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="Apartment Name"
+                        value={newAddress.buildingName}
+                        onChange={(e) =>
+                          setNewAddress({
+                            ...newAddress,
+                            buildingName: e.target.value,
+                          })
+                        }
+                      />
+                    </Form.Group>
+
+                    {/* Road / Landmark */}
+                    <Form.Group className="mb-3">
+                      <Form.Control
+                        placeholder="Street Name / Landmark"
+                        value={newAddress.road}
+                        onChange={(e) =>
+                          setNewAddress({ ...newAddress, road: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+
+                    {/* Pin / City / State */}
+                    <Row className="mb-3">
+                      <Col>
+                        <Form.Control
+                          placeholder="Pin Code"
+                          value={newAddress.pincode}
+                          onChange={(e) =>
+                            setNewAddress({
+                              ...newAddress,
+                              pincode: e.target.value,
+                            })
+                          }
+                        />
+                      </Col>
+
+                      <Col>
+                        <Form.Control
+                          placeholder="City"
+                          value={newAddress.city}
+                          onChange={(e) =>
+                            setNewAddress({
+                              ...newAddress,
+                              city: e.target.value,
+                            })
+                          }
+                        />
+                      </Col>
+
+                      <Col>
+                        <Form.Control
+                          placeholder="State"
+                          value={newAddress.landmark}
+                          onChange={(e) =>
+                            setNewAddress({
+                              ...newAddress,
+                              landmark: e.target.value,
+                            })
+                          }
+                        />
+                      </Col>
+                    </Row>
+
+                    {/* Default Address */}
+                    <Form.Check
+                      className="mb-3"
+                      label="Keep it as a default Address"
+                      checked={newAddress.isDefault}
                       onChange={(e) =>
-                        setProfile({ ...profile, fname: e.target.value })
+                        setNewAddress({
+                          ...newAddress,
+                          isDefault: e.target.checked,
+                        })
                       }
                     />
-                  </Form.Group>
 
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="Phone No."
-                      value={profile.mobile}
-                      onChange={(e) =>
-                        setProfile({ ...profile, mobile: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="XYZ@gmail.com"
-                      value={profile.email}
-                      disabled
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="DD/MM/YYYY"
-                      value={profile.dob || ""}
-                      onChange={(e) =>
-                        setProfile({ ...profile, dob: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="Gender"
-                      value={profile.gender || ""}
-                      onChange={(e) =>
-                        setProfile({ ...profile, gender: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-
-                  <button
-                    className="btn btn-outline-dark"
-                    size="sm"
-                    onClick={updateProfile}
-                    type="button"
-                  >
-                    SAVE
-                  </button>
-
-                  <h5 className="mt-5">Address</h5>
-
-                  <div className="mb-3">
-                    <Button size="sm" variant="outline-dark" className="me-2">
-                      Use Default Address
+                    <Button
+                      variant="outline-dark"
+                      size="sm"
+                      onClick={addAddress}
+                    >
+                      SAVE
                     </Button>
-
-                    <Button size="sm" variant="outline-dark">
-                      Add New
-                    </Button>
+                  </Form>
+                </motion.div>
+                <div>
+                  <div className="d-none d-md-block">
+                    <img
+                      className="w-100"
+                      src="./images/profile-picture.png"
+                      alt="image"
+                    />
                   </div>
-
-                  {/* Flat / Apartment */}
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="Flat/Apartment No."
-                      value={newAddress.houseNumber}
-                      onChange={(e) =>
-                        setNewAddress({
-                          ...newAddress,
-                          houseNumber: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* Building */}
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="Apartment Name"
-                      value={newAddress.buildingName}
-                      onChange={(e) =>
-                        setNewAddress({
-                          ...newAddress,
-                          buildingName: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* Road / Landmark */}
-                  <Form.Group className="mb-3">
-                    <Form.Control
-                      placeholder="Street Name / Landmark"
-                      value={newAddress.road}
-                      onChange={(e) =>
-                        setNewAddress({ ...newAddress, road: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-
-                  {/* Pin / City / State */}
-                  <Row className="mb-3">
-                    <Col>
-                      <Form.Control
-                        placeholder="Pin Code"
-                        value={newAddress.pincode}
-                        onChange={(e) =>
-                          setNewAddress({
-                            ...newAddress,
-                            pincode: e.target.value,
-                          })
-                        }
-                      />
-                    </Col>
-
-                    <Col>
-                      <Form.Control
-                        placeholder="City"
-                        value={newAddress.city}
-                        onChange={(e) =>
-                          setNewAddress({ ...newAddress, city: e.target.value })
-                        }
-                      />
-                    </Col>
-
-                    <Col>
-                      <Form.Control
-                        placeholder="State"
-                        value={newAddress.landmark}
-                        onChange={(e) =>
-                          setNewAddress({
-                            ...newAddress,
-                            landmark: e.target.value,
-                          })
-                        }
-                      />
-                    </Col>
-                  </Row>
-
-                  {/* Default Address */}
-                  <Form.Check
-                    className="mb-3"
-                    label="Keep it as a default Address"
-                    checked={newAddress.isDefault}
-                    onChange={(e) =>
-                      setNewAddress({
-                        ...newAddress,
-                        isDefault: e.target.checked,
-                      })
-                    }
-                  />
-
-                  <Button variant="outline-dark" size="sm" onClick={addAddress}>
-                    SAVE
-                  </Button>
-                </Form>
-              </motion.div>
+                </div>
+              </div>
             )}
 
             {/* ORDERS */}
             {active === "orders" && (
-              <motion.div initial="hidden" animate="visible" variants={fade}>
+              <motion.div
+                initial="hidden"
+                className="py-5"
+                animate="visible"
+                variants={fade}
+              >
                 {/* Tabs */}
                 <div className="order-tabs mb-4">
                   <button
-                    className={orderTab === "current" ? "active-tab" : "btn-outline-dark btn me-2"}
+                    className={
+                      orderTab === "current"
+                        ? "active-tab"
+                        : "btn-outline-dark btn me-2"
+                    }
                     onClick={() => setOrderTab("current")}
                   >
                     Current Orders
                   </button>
 
                   <button
-                    className={orderTab === "previous" ? "active-tab" : "btn-outline-dark btn ms-2 "}
+                    className={
+                      orderTab === "previous"
+                        ? "active-tab"
+                        : "btn-outline-dark btn ms-2 "
+                    }
                     onClick={() => setOrderTab("previous")}
                   >
                     Previous Orders
@@ -467,37 +513,58 @@ const AccountPage = () => {
             )}
             {/* SUPPORT */}
             {active === "support" && (
-              <motion.div initial="hidden" animate="visible" variants={fade}>
-                <p>You can reach out to us for any complaints or concerns</p>
+              <div className="d-flex justify-content-between gap-5">
+                <motion.div
+                  initial="hidden"
+                  className="py-lg-5"
+                  animate="visible"
+                  variants={fade}
+                >
+                  <p>You can reach out to us for any complaints or concerns</p>
 
-                <h6 className="fw-bold">care@tolvvsigns.com</h6>
+                  <h6 className="fw-bold">care@tolvvsigns.com</h6>
 
-                <div className="mt-4 support-links">
-                  <p>
-                    <NavLink to="/privacy-policy" className="support-link">
-                      Privacy Policy ›
-                    </NavLink>
-                  </p>
+                  <div className="mt-4 support-links">
+                    <p>
+                      <NavLink to="/privacy-policy" className="support-link">
+                        Privacy Policy{" "}
+                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                      </NavLink>
+                    </p>
 
-                  <p>
-                    <NavLink to="/terms-and-condition" className="support-link">
-                      Terms & Conditions ›
-                    </NavLink>
-                  </p>
+                    <p>
+                      <NavLink
+                        to="/terms-and-condition"
+                        className="support-link"
+                      >
+                        Terms & Conditions{" "}
+                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                      </NavLink>
+                    </p>
 
-                  <p>
-                    <NavLink to="/shipping-policy" className="support-link">
-                      Shipping Policy ›
-                    </NavLink>
-                  </p>
+                    <p>
+                      <NavLink to="/shipping-policy" className="support-link">
+                        Shipping Policy{" "}
+                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                      </NavLink>
+                    </p>
 
-                  <p>
-                    <NavLink to="/refund-policy" className="support-link">
-                      Refund Policy ›
-                    </NavLink>
-                  </p>
+                    <p>
+                      <NavLink to="/refund-policy" className="support-link">
+                        Refund Policy{" "}
+                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                      </NavLink>
+                    </p>
+                  </div>
+                </motion.div>
+                <div className="d-none d-md-block">
+                  <img
+                    className="w-100"
+                    src="./images/profile-picture-1.png"
+                    alt="image"
+                  />
                 </div>
-              </motion.div>
+              </div>
             )}
           </Col>
         </Row>

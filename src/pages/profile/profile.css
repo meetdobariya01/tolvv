@@ -1,6 +1,6 @@
 .account-page {
-  background: #f7f7f7;
-  min-height: 100vh;
+  background: #D1D3D4;
+  /* min-height: 100vh; */
 }
 
 .sidebar {
@@ -19,7 +19,7 @@
 
 .profile-form input {
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #000;
   border-radius: 0;
   background: transparent;
 }
@@ -30,7 +30,7 @@
 }
 
 .support-links p {
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #000; */
   padding: 10px 0;
   cursor: pointer;
 }
@@ -47,42 +47,19 @@
 .support-link:hover {
   color: #555;
 }
-.sidebar-menu li{
-cursor:pointer;
-color:#777;
-margin-bottom:18px;
-transition:0.3s;
+.sidebar-menu li {
+  cursor: pointer;
+  color: #777;
+  margin-bottom: 18px;
+  transition: 0.3s;
 }
 
-.sidebar-menu li:hover{
-color:black;
+.sidebar-menu li:hover {
+  color: black;
 }
 
 /* active item */
-.sidebar-menu .active-menu{
-color:black;
-font-weight:600;
-}
-.order-img{
-  width: 100px;
-  height: 100px;
-}
-.orders-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* desktop default */
-  gap: 20px;
-}
-
-/* 📱 Mobile (2 per row) */
-@media (max-width: 768px) {
-  .orders-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* 📱 Small mobile (optional: 1 per row) */
-@media (max-width: 480px) {
-  .orders-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
+.sidebar-menu .active-menu {
+  color: black;
+  font-weight: 600;
 }
