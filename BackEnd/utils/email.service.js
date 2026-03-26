@@ -179,26 +179,28 @@ const sendContactEmail = async (name, email, phone, subject, message) => {
   }
 };
 
-const sendcouponcodeEmail = async (userEmail, orderDetails) => {
-
-
-
+const sendcouponcodeEmail = async (userEmail, couponCode) => {
   return await transporter.sendMail({
-    from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
+    from: `"Tolvv" <${process.env.MAIL_USER}>`,
     to: userEmail,
-    subject: "✅ Order Confirmed – Tolvv",
+    subject: "🎁 Your Exclusive Coupon Code",
     html: `
-      <h2> This your couponcode  🎉</h2>
+      <div style="font-family: Arial; text-align: center;">
+        <h2>✨ Welcome to Tolvv ✨</h2>
 
-      <h1>
-        WELCOME10
-      </h1>
+        <p>Here’s your exclusive coupon code:</p>
 
-      <p>Thank you for contacting us </p>
+        <h1 style="letter-spacing: 3px;">
+          ${couponCode}
+        </h1>
+
+        <p>Use this code on checkout to get your discount 🎉</p>
+
+        <p>Happy Shopping 💜</p>
+      </div>
     `
   });
 };
-
 
 module.exports = {
   transporter,

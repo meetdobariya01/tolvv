@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { motion } from "framer-motion";
 import "./modal.css";
 
 const HomeModal = () => {
   const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
 
-  // ⏱ Auto open after 3 sec
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  // ⏱ Auto open after 5 sec
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
@@ -14,6 +18,43 @@ const HomeModal = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // ✅ HANDLE COUPON SEND
+  const handleGetCoupon = async () => {
+    if (!email) {
+      alert("Please enter email");
+      return;
+    }
+
+    setSending(true);
+
+    try {
+      const res = await fetch(`${API_URL}/hamper/coupon/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send coupon");
+      }
+
+      alert("Coupon sent 🎉 Check your email");
+
+      setEmail("");
+      setShow(false); // ✅ close modal
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send coupon");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <Modal
@@ -25,6 +66,7 @@ const HomeModal = () => {
     >
       <Modal.Body className="p-0">
         <div className="row g-0 modal-wrapper">
+
           {/* LEFT IMAGE */}
           <div className="col-md-6 d-none d-md-block">
             <motion.div
@@ -34,7 +76,7 @@ const HomeModal = () => {
               className="modal-image"
             >
               <img
-                src="./images/modal-image.png" // 👉 replace with your image path
+                src="./images/modal-image.png"
                 alt="ritual"
                 className="img-fluid h-100 w-100 object-fit-cover"
               />
@@ -49,6 +91,7 @@ const HomeModal = () => {
               transition={{ duration: 0.6 }}
               className="p-4 w-100"
             >
+
               {/* CLOSE BUTTON */}
               <div className="text-end">
                 <button
@@ -61,6 +104,7 @@ const HomeModal = () => {
                 <span className="artisan-font display-6">Begin</span> Your TOLVV Ritual
               </h4>
 
+              {/* CHECKBOX */}
               <div className="form-check mb-3">
                 <input className="form-check-input" type="checkbox" />
                 <label className="form-check-label small">
@@ -68,24 +112,40 @@ const HomeModal = () => {
                 </label>
               </div>
 
+              {/* EMAIL INPUT */}
               <div className="my-3">
                 <label className="form-label small">YOUR EMAIL ID</label>
                 <input
                   type="email"
                   className="form-control border-0 border-bottom rounded-0"
                   placeholder="xyz@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
-              <button className="btn btn-outline-dark btn-sm px-4">
-                GET A CODE
+              {/* BUTTON */}
+              <button
+                className="btn btn-outline-dark btn-sm px-4"
+                onClick={handleGetCoupon}
+                disabled={sending}
+              >
+                {sending ? (
+                  <>
+                    <Spinner size="sm" /> Sending...
+                  </>
+                ) : (
+                  "GET A CODE"
+                )}
               </button>
 
               <p className="small mt-3 text-muted">
                 Check your email for 10% off code
               </p>
+
             </motion.div>
           </div>
+
         </div>
       </Modal.Body>
     </Modal>

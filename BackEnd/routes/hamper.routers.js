@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Hamper = require("../Model/Hamper");
 const Product = require("../Model/Product.add.admin");
-
+const {sendcouponcodeEmail
+} = require("../utils/email.service");
 // GET PRODUCTS BY MULTIPLE ZODIAC
 router.post("/zodiac-products", async (req, res) => {
   try {
@@ -63,6 +64,28 @@ router.post("/create", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.post("/coupon/send", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const couponCode = "WELCOME10"; // or generate dynamically
+
+    await sendcouponcodeEmail(email, couponCode);
+
+    res.json({
+      success: true,
+      message: "Coupon sent successfully"
+    });
+
+  } catch (err) {
+    console.error("Coupon error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
