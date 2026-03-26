@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Order = require("../Model/order");
 const Product = require("../Model/Product.add.admin");
@@ -365,49 +366,60 @@ router.post("/place", authenticate, async (req, res) => {
     const orderItems = [];
 
     // ✅ CALCULATE SUBTOTAL
-    for (const item of items) {
+   for (const item of items) {
 
-      // PRODUCT
-      if (item.productId) {
-        const product = await Product.findById(item.productId);
-        if (!product)
-          return res.status(404).json({ message: "Product not found" });
+  // ✅ VALIDATE PRODUCT ID
+  if (item.productId) {
 
-        subtotal += product.ProductPrice * item.quantity;
-
-        orderItems.push({
-          productId: product._id,
-          productName: product.ProductName,
-          quantity: item.quantity,
-          priceAtBuy: product.ProductPrice
-        });
-      }
-
-      // HAMPER
-      if (item.hamperId) {
-        const hamper = await Hamper.findById(item.hamperId)
-          .populate("products.productId");
-
-        if (!hamper)
-          return res.status(404).json({ message: "Hamper not found" });
-
-        subtotal += hamper.totalPrice * item.quantity;
-
-        const hamperItems = hamper.products.map((p) => ({
-          productId: p.productId._id,
-          name: p.productId.ProductName,
-          quantity: p.quantity
-        }));
-
-        orderItems.push({
-          hamperId: hamper._id,
-          productName: "Zodiac Hamper",
-          quantity: item.quantity,
-          priceAtBuy: hamper.totalPrice,
-          hamperItems
-        });
-      }
+    if (!mongoose.Types.ObjectId.isValid(item.productId)) {
+      return res.status(400).json({ message: "Invalid productId" });
     }
+
+    const product = await Product.findById(item.productId);
+
+    if (!product)
+      return res.status(404).json({ message: "Product not found" });
+
+    subtotal += product.ProductPrice * item.quantity;
+
+    orderItems.push({
+      productId: product._id,
+      productName: product.ProductName,
+      quantity: item.quantity,
+      priceAtBuy: product.ProductPrice
+    });
+  }
+
+  // ✅ VALIDATE HAMPER ID
+  if (item.hamperId) {
+
+    if (!mongoose.Types.ObjectId.isValid(item.hamperId)) {
+      return res.status(400).json({ message: "Invalid hamperId" });
+    }
+
+    const hamper = await Hamper.findById(item.hamperId)
+      .populate("products.productId");
+
+    if (!hamper)
+      return res.status(404).json({ message: "Hamper not found" });
+
+    subtotal += hamper.totalPrice * item.quantity;
+
+    const hamperItems = hamper.products.map((p) => ({
+      productId: p.productId._id,
+      name: p.productId.ProductName,
+      quantity: p.quantity
+    }));
+
+    orderItems.push({
+      hamperId: hamper._id,
+      productName: "Zodiac Hamper",
+      quantity: item.quantity,
+      priceAtBuy: hamper.totalPrice,
+      hamperItems
+    });
+  }
+}
 
     // ✅ CHECK FIRST ORDER
     const existingOrders = await Order.find({

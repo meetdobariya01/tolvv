@@ -140,26 +140,75 @@ const Moonsection = () => {
   const planet = planetData.find((p) => p.name === activePlanet);
 
   // Fetch products for the selected planet
-  useEffect(() => {
-    if (!planet?.zodiac) return;
-    setLoading(true);
+useEffect(() => {
+  if (!planet?.zodiac) return;
+  setLoading(true);
 
-    const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
+  // 1. Define the specific category order
+  const categoryOrder = [
+    "Bath Gel",
+    "Body Lotion",
+    "Perfume",
+    "Essential Oil",
+    "Soap",
+    "Hamper"
+  ];
 
-    Promise.all(
-      zodiacs.map((zodiac) =>
-        axios
-          .get(`${API_URL}/products/zodiac/${zodiac}`)
-          .then((res) => res.data),
-      ),
-    )
-      .then((results) => setPlanetProducts(results.flat()))
-      .catch((err) => {
-        console.error(err);
-        setPlanetProducts([]);
-      })
-      .finally(() => setLoading(false));
-  }, [planet]);
+  // Get the individual zodiac names (e.g., ["Taurus", "Libra"])
+  const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
+
+  Promise.all(
+    zodiacs.map((zodiac) =>
+      axios
+        .get(`${API_URL}/products/zodiac/${zodiac}`)
+        .then((res) => res.data),
+    ),
+  )
+    .then((results) => {
+      let combinedProducts = results.flat();
+
+      // 2. Filter out duplicates
+      const uniqueProducts = Array.from(
+        new Map(combinedProducts.map((item) => [item._id, item])).values()
+      );
+
+      // 3. GROUPED SORTING LOGIC (Zodiac first, then Category)
+      const sortedProducts = uniqueProducts.sort((a, b) => {
+        // --- LEVEL 1: Sort by Zodiac Group ---
+        // Find which zodiac in our list matches the product name
+        const zodiacIndexA = zodiacs.findIndex(z => 
+          a.ProductName?.toLowerCase().includes(z.toLowerCase())
+        );
+        const zodiacIndexB = zodiacs.findIndex(z => 
+          b.ProductName?.toLowerCase().includes(z.toLowerCase())
+        );
+
+        if (zodiacIndexA !== zodiacIndexB) {
+          return zodiacIndexA - zodiacIndexB;
+        }
+
+        // --- LEVEL 2: Sort by Category within that Zodiac ---
+        const catIndexA = categoryOrder.findIndex(cat => 
+          a.ProductName?.toLowerCase().includes(cat.toLowerCase())
+        );
+        const catIndexB = categoryOrder.findIndex(cat => 
+          b.ProductName?.toLowerCase().includes(cat.toLowerCase())
+        );
+
+        const finalA = catIndexA === -1 ? 99 : catIndexA;
+        const finalB = catIndexB === -1 ? 99 : catIndexB;
+
+        return finalA - finalB;
+      });
+
+      setPlanetProducts(sortedProducts);
+    })
+    .catch((err) => {
+      console.error("Error fetching planet products:", err);
+      setPlanetProducts([]);
+    })
+    .finally(() => setLoading(false));
+}, [planet]);
 
   // Buy Now logic (same as Zodiac section)
   // const handleBuyNow = async (product) => {
@@ -220,7 +269,7 @@ const Moonsection = () => {
             {planetData.map((p, i) => (
               <Col
                 key={i}
-                xs={4}
+                xs={2}
                 sm={3}
                 md={1}
                 className="text-center planet-item"

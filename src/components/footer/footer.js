@@ -106,9 +106,9 @@ const Footer = () => {
             <p className="footer-text-1">
               <a
                 className="text-light text-decoration-none"
-                href="tel:+919111744744"
+                href="tel:+919824257356"
               >
-                +91 91117 44744
+                +91 98242 57356
               </a>
             </p>
 
@@ -122,7 +122,7 @@ const Footer = () => {
                 <FaInstagram />
               </a>
               <a
-                href="https://wa.me/919913644455?text=Hello%20Tolvv%20Signs%2C%20I%20would%20like%20to%20inquire%20about%20your%20products."
+                href="https://wa.me/919824257356?text=Hello%20Tolvv%20Signs%2C%20I%20would%20like%20to%20inquire%20about%20your%20products."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-light"

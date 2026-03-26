@@ -39,7 +39,7 @@ const Checkout = () => {
     if (!couponCode) return;
 
     try {
-      const res = await fetch(`${API_URL}/coupon/validate`, {
+      const res = await fetch(`${API_URL}/orders/coupon/validate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ const Checkout = () => {
       const products = data.cart?.items?.map((item) => {
         if (item.productId) {
           return {
-            id: item.productId._id,
+            id: item.productId?._id || item.productId,
             type: "product",
             name: item.productId.ProductName,
             price: item.productId.ProductPrice,
@@ -398,26 +398,21 @@ const Checkout = () => {
               {/* PRODUCT LIST */}
               <div className="items-list">
                 {cart.map((it) => (
-                  <div
-                    className="item-row d-flex align-items-center"
-                    key={it.id}
-                  >
-                    {/* IMAGE + QTY */}
-                    <div className="item-img position-relative">
-                      <img
-                        src={it.img || "./images/product.jpg"}
-                        alt={it.name}
-                      />
-                      {/* <span className="qty-badge">{it.qty}</span> */}
-                    </div>
+                  <div key={it.id} className="item-row d-flex gap-3">
 
-                    {/* NAME */}
-                    <div className="item-info flex-grow-1">
-                      <div className="item-name">{it.name}</div>
+                    {/* ✅ IMAGE */}
+                    <img
+                      src={it.img}
+                      alt={it.name}
+                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                    />
 
-                      {/* HAMPPER PRODUCTS */}
+                    <div>
+                      <div className="name">{it.name}</div>
+                      <div>x{it.qty}</div>
+
                       {it.hamperItems && (
-                        <ul className="hamper-list">
+                        <ul style={{ fontSize: "12px", marginTop: "5px" }}>
                           {it.hamperItems.map((h, i) => (
                             <li key={i}>
                               {h.name} × {h.quantity}
@@ -427,20 +422,16 @@ const Checkout = () => {
                       )}
                     </div>
 
-                    {/* PRICE */}
-                    <div className="item-price">
-                      {currencyFormat(it.price * it.qty)}
-                    </div>
                   </div>
                 ))}
               </div>
 
               {/* COUPON */}
-              <div className="coupon-box d-flex gap-2 mt-3">
+              <div className="coupon-box mt-3">
 
                 {/* Dropdown */}
                 <select
-                  className="form-control"
+                  className="coupon-select"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                 >
@@ -452,31 +443,35 @@ const Checkout = () => {
                   ))}
                 </select>
 
-                {/* OR manual input */}
-                <input
-                  type="text"
-                  placeholder="Enter code"
-                  className="form-control"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                />
+                {/* Input + Button */}
+                <div className="coupon-container">
+                  <input
+                    type="text"
+                    placeholder="Coupon code"
+                    className="coupon-input"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                  />
 
-                <button className="apply-btn" onClick={applyCoupon}>
-                  Apply
-                </button>
+                  <button className="coupon-btn sora" onClick={applyCoupon}>
+                    Apply
+                  </button>
+                </div>
+
               </div>
-                  <div className="newsletter-subscription mt-3 d-flex align-items-center gap-2">
-    <input 
-      type="checkbox" 
-      id="newsletter" 
-      checked={subscribe} 
-      onChange={(e) => setSubscribe(e.target.checked)} 
-      style={{ width: '18px', height: '18px', accentColor: '#7c3aed' }}
-    />
-    <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
-      Subscribe to our Newsletter
-    </label>
-  </div>
+
+              <div className="newsletter-subscription mt-3 d-flex align-items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="newsletter"
+                  checked={subscribe}
+                  onChange={(e) => setSubscribe(e.target.checked)}
+                  style={{ width: '18px', height: '18px', accentColor: '#7c3aed', borderBlockColor:'black'}}
+                />
+                <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                  Subscribe to our Newsletter
+                </label>
+              </div>
               {/* PRICE BREAKDOWN */}
               <div className="price-breakdown mt-4">
                 <div className="d-flex justify-content-between">
@@ -503,8 +498,8 @@ const Checkout = () => {
           </aside>
         </div>
       </div>
-      
-    
+
+
       <Footer />
     </div>
   );

@@ -443,3 +443,59 @@ body {
   font-size: 16px;
   color: #000;
 }
+.coupon-box {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap; /* responsive */
+}
+
+/* Dropdown */
+.coupon-select {
+  height: 45px;
+  padding: 0 12px;
+  border: 1px solid #999;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  min-width: 180px;
+  background:transparent;
+  cursor: pointer;
+}
+
+/* Input + button wrapper */
+.coupon-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+/* Input */
+.coupon-input {
+  flex: 1;
+  height: 45px;
+  padding: 0 15px;
+  border: 1px solid #999;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+/* Button */
+.coupon-btn {
+  height: 45px;
+  padding: 0 20px;
+  border: 1px solid #999;
+  background:transparent;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-family: sora;
+  font-weight: 600;
+}
+
+.coupon-btn:hover {
+  background-color:transparent;
+}

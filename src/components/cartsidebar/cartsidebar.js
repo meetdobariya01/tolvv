@@ -602,7 +602,7 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
 
                 {bestSellers.map((product, index) => (
                   <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
-                    <motion.div
+                    <motion.div 
                       className="product-card p-1"
                       whileHover={{ y: -10 }}
                       initial={{ opacity: 0, y: 40 }}

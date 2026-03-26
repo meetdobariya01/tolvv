@@ -384,11 +384,14 @@ const Zodic = () => {
   ];
   // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
-  useEffect(() => {
+useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${API_URL}/products`);
         const data = res.data;
+
+        // 1. Desired Order
+        const categoryOrder = ["Bath Gel", "Body Lotion", "Perfume", "Essential Oil", "Soap", "Hamper"];
 
         const grouped = {};
         Zodiac.forEach((cat) => (grouped[cat] = []));
@@ -402,13 +405,30 @@ const Zodic = () => {
           }
         });
 
+        // 2. FIXED SORT LOGIC
+        Object.keys(grouped).forEach(key => {
+          grouped[key].sort((a, b) => {
+            // Find the index by checking if the ProductName contains the category string
+            const indexA = categoryOrder.findIndex(cat => a.ProductName.includes(cat));
+            const indexB = categoryOrder.findIndex(cat => b.ProductName.includes(cat));
+
+            // If not found, move to the end (index 99)
+            const finalA = indexA === -1 ? 99 : indexA;
+            const finalB = indexB === -1 ? 99 : indexB;
+
+            return finalA - finalB;
+          });
+        });
+
         setProductsByZodiac(grouped);
       } catch (err) {
         console.error("Failed to fetch products:", err);
       }
     };
     fetchProducts();
-  });
+  }, [API_URL]); // Added dependency array to prevent infinite loops
+
+
 
   return (
     <div>
@@ -469,11 +489,13 @@ const Zodic = () => {
         >
           <div className="aries-content inter container sora">
             <div className="zodiac-header text-white text-center">
-              <p className="aries-date mb-3">{selectedZodiac.date}</p>
+              {/* <p className="aries-date mb-3">{selectedZodiac.date}</p> */}
 
-              <div className="d-flex justify-content-center align-items-center gap-4">
-                <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
-
+              <div className="d-flex justify-content-center align-items-center gap-5  ">
+                <div className="d-block">
+                  <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
+                  <p className="aries-date mb-3 ">{selectedZodiac.date}</p>
+                </div>
                 <div
                   className="aries-icon-circle d-flex justify-content-center align-items-center"
                   style={{ backgroundColor: selectedZodiac.color }}
@@ -560,14 +582,14 @@ const Zodic = () => {
                               className="zodiac-dot"
                               style={{ backgroundColor: selectedZodiac.color }}
                             ></span> */}
-
-
                           </div>
 
                           <div className="underline" />
                           <div className="size-price-row">
                             <span className="size">{p.size}</span>
-                            <span className="zodiac-price">₹ {p.ProductPrice}</span>
+                            <span className="zodiac-price">
+                              ₹ {p.ProductPrice}
+                            </span>
                           </div>
                           {/* <button
                         className="btn btn-outline-dark mt-1"
@@ -581,11 +603,8 @@ const Zodic = () => {
                   </NavLink>
                 ))}
               </div>
-
             </div>
-
           </div>
-
         </section>
       )}
     </div>

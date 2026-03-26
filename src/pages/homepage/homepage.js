@@ -203,7 +203,7 @@ const Homepage = () => {
       {/* benifits */}
 
       <section className="benefits-wrapper" id="benefits">
-        <Container fluid>
+        {/* <Container flui> */}
           <Row className="g-0 align-items-center">
             {/* Left Image */}
             <Col lg={4} md={12}>
@@ -247,7 +247,7 @@ const Homepage = () => {
               </div>
             </Col>
           </Row>
-        </Container>
+        {/* </Container> */}
       </section>
 
       {/* Know us Section */}
