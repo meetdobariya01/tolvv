@@ -179,6 +179,27 @@ const sendContactEmail = async (name, email, phone, subject, message) => {
   }
 };
 
+const sendcouponcodeEmail = async (userEmail, orderDetails) => {
+
+
+
+  return await transporter.sendMail({
+    from: `"Tolvv Orders" <${process.env.MAIL_USER}>`,
+    to: userEmail,
+    subject: "✅ Order Confirmed – Tolvv",
+    html: `
+      <h2> This your couponcode  🎉</h2>
+
+      <h1>
+        WELCOME10
+      </h1>
+
+      <p>Thank you for contacting us </p>
+    `
+  });
+};
+
+
 module.exports = {
   transporter,
   sendOTPEmail,
@@ -186,7 +207,8 @@ module.exports = {
   sendOrderConfirmationEmail,
   sendAdminOrderNotification,
   sendContactEmail,
-  sendAdminSubscriptionNotification
+  sendAdminSubscriptionNotification,
+  sendcouponcodeEmail
 };
 
 

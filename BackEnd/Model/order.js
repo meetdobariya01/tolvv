@@ -8,32 +8,37 @@ const orderSchema = new mongoose.Schema({
   customerName: { type: String, required: true },  // ✅ Store name
   customerEmail: { type: String, required: true }, // ✅ Store email
   subscribe: { type: Boolean, default: false },
- items: [
-  {
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product"
-    },
+  items: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+      },
 
-    hamperId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Hamper"
-    },
+      hamperId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Hamper"
+      },
 
-    productName: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    priceAtBuy: { type: Number, required: true },
+      productName: { type: String, required: true },
+      quantity: { type: Number, required: true },
+      priceAtBuy: { type: Number, required: true },
 
-    // ✅ ADD THIS
-    hamperItems: [
-      {
-        productId: mongoose.Schema.Types.ObjectId,
-        name: String,
-        quantity: Number
-      }
-    ]
-  }
-],
+      // ✅ ADD THIS
+      hamperItems: [
+        {
+          productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            default: null
+          },
+          name: String,
+          quantity: Number,
+          isFree: Boolean
+        }
+      ]
+    }
+  ],
 
   subtotal: { type: Number },
   cgst: { type: Number },
@@ -55,10 +60,10 @@ const orderSchema = new mongoose.Schema({
     pincode: String,
     mobile: String
   },
-discount: { type: Number, default: 0 },
-couponCode: { type: String },
+  discount: { type: Number, default: 0 },
+  couponCode: { type: String },
   note: { type: String, default: "" }
-  
+
 
 }, { timestamps: true });
 
