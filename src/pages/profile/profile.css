@@ -1,6 +1,6 @@
 .account-page {
-  background: #f7f7f7;
-  min-height: 100vh;
+  background: #D1D3D4;
+  /* min-height: 100vh; */
 }
 
 .sidebar {
@@ -19,7 +19,7 @@
 
 .profile-form input {
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #000;
   border-radius: 0;
   background: transparent;
 }
@@ -30,7 +30,7 @@
 }
 
 .support-links p {
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #000; */
   padding: 10px 0;
   cursor: pointer;
 }
@@ -47,19 +47,25 @@
 .support-link:hover {
   color: #555;
 }
-.sidebar-menu li{
-cursor:pointer;
-color:#777;
-margin-bottom:18px;
-transition:0.3s;
+.sidebar-menu li {
+  cursor: pointer;
+  color: #777;
+  margin-bottom: 18px;
+  transition: 0.3s;
 }
 
-.sidebar-menu li:hover{
-color:black;
+.sidebar-menu li:hover {
+  color: black;
 }
 
 /* active item */
-.sidebar-menu .active-menu{
-color:black;
-font-weight:600;
+.sidebar-menu .active-menu {
+  color: black;
+  font-weight: 600;
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    padding-left: 10px;
+  }
 }

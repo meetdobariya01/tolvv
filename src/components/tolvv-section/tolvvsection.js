@@ -17,7 +17,7 @@ const Tolvvsection = () => {
     <div>
       <section className="about-section sora">
         {/* <Container> */}
-        <Row className="align-items-center justify-content-center g-5 ">
+        <Row className="align-items-center justify-content-center g-0 g-md-5">
           {/* 1️⃣ LEFT SMALL TITLE */}
           <Col
             lg={3}

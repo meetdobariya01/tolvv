@@ -204,49 +204,49 @@ const Homepage = () => {
 
       <section className="benefits-wrapper" id="benefits">
         {/* <Container flui> */}
-          <Row className="g-0 align-items-center">
-            {/* Left Image */}
-            <Col lg={4} md={12}>
-              <div className="benefits-image">
-                <img
-                  src="./images/benifits.png"
-                  alt="benefits"
-                  className="img-fluid"
-                />
-              </div>
-            </Col>
+        <Row className="g-0 align-items-center">
+          {/* Left Image */}
+          <Col lg={4} md={12}>
+            <div className="benefits-image">
+              <img
+                src="./images/benifits.png"
+                alt="benefits"
+                className="img-fluid"
+              />
+            </div>
+          </Col>
 
-            {/* Right Content */}
-            <Col lg={8} md={12}>
-              <div className="benefits-content sora text-center">
-                <h2 className="benefits-title artisan-font text-center">
-                  The Benefits
-                </h2>
+          {/* Right Content */}
+          <Col lg={8} md={12}>
+            <div className="benefits-content sora text-center">
+              <h2 className="benefits-title artisan-font text-center">
+                The Benefits
+              </h2>
 
-                <p>
-                  Our Zodiac Collection blends luxurious skincare with the
-                  energy of your sign, creating a ritual that feels personally
-                  designed for you. Each soap, body lotion, bath gel, and
-                  perfume is infused with mood-enhancing aromas, skin-loving
-                  botanicals, and intention-driven formulations that resonate
-                  with your zodiac’s natural traits. Whether you’re a fiery
-                  Aries seeking invigorating freshness or a calm Pisces craving
-                  soothing hydration, every product aligns with the essence of
-                  your cosmic personality.{" "}
-                </p>
+              <p>
+                Our Zodiac Collection blends luxurious skincare with the energy
+                of your sign, creating a ritual that feels personally designed
+                for you. Each soap, body lotion, bath gel, and perfume is
+                infused with mood-enhancing aromas, skin-loving botanicals, and
+                intention-driven formulations that resonate with your zodiac’s
+                natural traits. Whether you’re a fiery Aries seeking
+                invigorating freshness or a calm Pisces craving soothing
+                hydration, every product aligns with the essence of your cosmic
+                personality.{" "}
+              </p>
 
-                <p>
-                  These products don’t just nourish your skin; they elevate your
-                  spirit. Feel the difference as signature fragrances boost your
-                  mood, celestial ingredients restore balance, and your daily
-                  routine transforms into a grounding, empowering ritual. With
-                  every use, you’re not just caring for your body—you’re
-                  connecting with your inner energy, enhancing your aura, and
-                  celebrating the unique magic of your zodiac sign.
-                </p>
-              </div>
-            </Col>
-          </Row>
+              <p>
+                These products don’t just nourish your skin; they elevate your
+                spirit. Feel the difference as signature fragrances boost your
+                mood, celestial ingredients restore balance, and your daily
+                routine transforms into a grounding, empowering ritual. With
+                every use, you’re not just caring for your body—you’re
+                connecting with your inner energy, enhancing your aura, and
+                celebrating the unique magic of your zodiac sign.
+              </p>
+            </div>
+          </Col>
+        </Row>
         {/* </Container> */}
       </section>
 

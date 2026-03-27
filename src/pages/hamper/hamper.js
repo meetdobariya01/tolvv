@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./hamper.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FiShoppingCart } from "react-icons/fi";
 import {
   faAngleRight,
   faCartShopping,
@@ -268,6 +269,11 @@ function HamperPage() {
       <Header />
       <div className="container py-5">
         <h2 className="text-center mb-5 artisan-font">Hampers</h2>
+        <p className="text-center sora">
+          Beautifully presented in our signature branded Hamper Box, made for
+          effortless Gifting. <br /> Includes a complimentary Face Towel for an
+          added touch of care
+        </p>
 
         <div className="row justify-content-center text-center sora gap-5">
           <div className="col-md-2 mb-4">
@@ -352,21 +358,16 @@ function HamperPage() {
                         </div>
                       </div>
                       <div className="product-divider"></div>
-                      <button
-                        className="btn btn-outline-dark btn-sm mt-2 w-50 w-md-50 fw-semibold"
-                        onClick={(e) => {
-                          e.stopPropagation(); // ❗ prevent card click
-                          handleBuyNow(item);
-                        }}
-                      >
-                        ADD TO CART {" "}
-                        <FontAwesomeIcon
-                          icon={faCartShopping}
-                          flip="horizontal"
-                          className="ms-2"
-                        />
-                      </button>
                     </Card.Body>
+                    <button
+                      className="btn btn-outline-dark d-flex justify-content-start mb-2  fw-semibold"
+                      onClick={(e) => {
+                        e.stopPropagation(); // ❗ prevent card click
+                        handleBuyNow(item);
+                      }}
+                    >
+                      ADD TO CART <FiShoppingCart className="ms-1" size={20} />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -571,13 +572,13 @@ function HamperPage() {
               className="btn btn-outline-dark"
               onClick={handleAddToCart}
             >
-              ADD TO CART{" "}
-              <FontAwesomeIcon
+              ADD TO CART <FiShoppingCart className="ms-1" size={22} />
+              {/* <FontAwesomeIcon
                 icon={faCartShopping}
                 flip="horizontal"
                 size="xl"
                 className="ms-2"
-              />
+              /> */}
             </button>
           </div>
         )}
