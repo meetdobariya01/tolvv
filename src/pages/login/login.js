@@ -135,7 +135,7 @@ const Login = () => {
 
       await mergeGuestCart(token);
 
-      navigate("/Check-out");
+      navigate("/");
     } catch (err) {
       setServerError("Google login failed");
     } finally {

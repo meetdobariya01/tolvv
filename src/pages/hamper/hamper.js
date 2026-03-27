@@ -366,7 +366,7 @@ function HamperPage() {
                         handleBuyNow(item);
                       }}
                     >
-                      ADD TO CART <FiShoppingCart className="ms-1" size={20} />
+                      ADD TO CART <FiShoppingCart className="ms-1 align-item-center" size={20} />
                     </button>
                   </div>
                 </div>

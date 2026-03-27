@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
 
   customerName: { type: String, required: true },  // ✅ Store name
   customerEmail: { type: String, required: true }, // ✅ Store email
-
+  subscribe: { type: Boolean, default: false },
  items: [
   {
     productId: {
@@ -55,8 +55,10 @@ const orderSchema = new mongoose.Schema({
     pincode: String,
     mobile: String
   },
-
+discount: { type: Number, default: 0 },
+couponCode: { type: String },
   note: { type: String, default: "" }
+  
 
 }, { timestamps: true });
 

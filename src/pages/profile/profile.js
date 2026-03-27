@@ -468,7 +468,7 @@ const AccountPage = () => {
                         </p>
 
                         {/* Product Row */}
-                        <div className="order-row">
+                        <div className="order-row d-flex gap-3">
                           <img
                             src={
                               Array.isArray(item?.productId?.Photos) &&

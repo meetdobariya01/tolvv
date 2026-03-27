@@ -7,7 +7,20 @@ const transporter = nodemailer.createTransport({
     pass: process.env.MAIL_PASS
   }
 });
-
+// Add this to your nodemailer utility file
+const sendAdminSubscriptionNotification = async (userEmail, userName) => {
+  return await transporter.sendMail({
+    from: `"Tolvv System" <${process.env.MAIL_USER}>`,
+    to: process.env.ADMIN_EMAIL,
+    subject: "📧 New Newsletter Subscriber",
+    html: `
+      <h2>New Subscription Request</h2>
+      <p><strong>Name:</strong> ${userName}</p>
+      <p><strong>Email:</strong> ${userEmail}</p>
+      <p>This user checked the subscription box during checkout.</p>
+    `
+  });
+};
 const sendOTPEmail = async (email, otp) => {
   return await transporter.sendMail({
     from: `"Tolvv Support" <no-reply@tolvv.com>`,
@@ -172,5 +185,8 @@ module.exports = {
   sendPasswordResetOTP,
   sendOrderConfirmationEmail,
   sendAdminOrderNotification,
-  sendContactEmail
+  sendContactEmail,
+  sendAdminSubscriptionNotification
 };
+
+

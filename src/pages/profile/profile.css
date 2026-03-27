@@ -63,9 +63,3 @@
   color: black;
   font-weight: 600;
 }
-
-@media (max-width: 576px) {
-  .sidebar {
-    padding-left: 10px;
-  }
-}

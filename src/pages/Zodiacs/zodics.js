@@ -384,11 +384,14 @@ const Zodic = () => {
   ];
   // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
-  useEffect(() => {
+useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${API_URL}/products`);
         const data = res.data;
+
+        // 1. Desired Order
+        const categoryOrder = ["Bath Gel", "Body Lotion", "Perfume", "Essential Oil", "Soap", "Hamper"];
 
         const grouped = {};
         Zodiac.forEach((cat) => (grouped[cat] = []));
@@ -402,13 +405,30 @@ const Zodic = () => {
           }
         });
 
+        // 2. FIXED SORT LOGIC
+        Object.keys(grouped).forEach(key => {
+          grouped[key].sort((a, b) => {
+            // Find the index by checking if the ProductName contains the category string
+            const indexA = categoryOrder.findIndex(cat => a.ProductName.includes(cat));
+            const indexB = categoryOrder.findIndex(cat => b.ProductName.includes(cat));
+
+            // If not found, move to the end (index 99)
+            const finalA = indexA === -1 ? 99 : indexA;
+            const finalB = indexB === -1 ? 99 : indexB;
+
+            return finalA - finalB;
+          });
+        });
+
         setProductsByZodiac(grouped);
       } catch (err) {
         console.error("Failed to fetch products:", err);
       }
     };
     fetchProducts();
-  });
+  }, [API_URL]); // Added dependency array to prevent infinite loops
+
+
 
   return (
     <div>
@@ -437,7 +457,7 @@ const Zodic = () => {
                   >
                     <div
                       className="zodiac-circle"
-                      // style={{ backgroundColor: sign.color }}
+                    // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
