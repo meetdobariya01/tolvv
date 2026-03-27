@@ -1,0 +1,21 @@
+.custom-modal .modal-content {
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.modal-wrapper {
+  /* min-height: 400px; */
+}
+
+.modal-image img {
+  object-fit: cover;
+  height: 100%;
+}
+
+/* Mobile Design */
+@media (max-width: 767px) {
+  .modal-wrapper {
+    flex-direction: column;
+  }
+}

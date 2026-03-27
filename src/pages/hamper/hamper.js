@@ -335,7 +335,7 @@ function HamperPage() {
                     />
                     <Card.Body className="product-info sora p-1">
                       <div className="product-top">
-                        <div className="title-wrap d-flex align-items-center justify-content-between w-100">
+                        <div className="title-wrap d-block d-md-flex align-items-center justify-content-between w-100">
                           <div className="price-with-dot-1 d-flex align-items-center gap-2">
                             <span
                               className="zodiac-dot"
@@ -366,7 +366,7 @@ function HamperPage() {
                         handleBuyNow(item);
                       }}
                     >
-                      ADD TO CART <FiShoppingCart className="ms-1 align-item-center" size={20} />
+                      ADD TO CART <FiShoppingCart className="ms-1 mt-1" size={20} />
                     </button>
                   </div>
                 </div>

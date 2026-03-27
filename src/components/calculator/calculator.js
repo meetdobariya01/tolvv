@@ -69,7 +69,7 @@ const Calculator = () => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="modal-content top-modal"
+              className="modal-content-1 top-modal"
               initial={{ y: -80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -80, opacity: 0 }}

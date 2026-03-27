@@ -15,6 +15,8 @@ import { useState } from "react";
 import { Alert, Spinner } from "react-bootstrap";
 import Tolvvsection from "../../components/tolvv-section/tolvvsection";
 import Reviews from "../../components/reviews/reviews";
+import HomeModal from "../../components/modal/modal";
+import TopBanner from "../../components/discount-code/discount";
 
 const Homepage = () => {
   const productss = [
@@ -143,6 +145,12 @@ const Homepage = () => {
       {/* Header Component */}
       <Header />
 
+      {/* Modal Component */}
+      <HomeModal />
+
+      {/* Discount Code */}
+      <TopBanner />
+      
       {/* Main Content */}
       <div className="carousel-container">
         <Carousel
@@ -155,7 +163,7 @@ const Homepage = () => {
           <Carousel.Item>
             <img
               className="d-block w-100 h-auto carousel-img"
-              src="./images/banner-1.jpeg"
+              src="./images/banner-1.webp"
               alt="Second slide"
             />
           </Carousel.Item>
