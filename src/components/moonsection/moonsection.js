@@ -108,81 +108,85 @@ const planetData = [
 ];
 
 const Moonsection = () => {
-  const [activePlanet, setActivePlanet] = useState("Saturn");
+  const [activePlanet, setActivePlanet] = useState(null);
   const [planetProducts, setPlanetProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const planet = planetData.find((p) => p.name === activePlanet);
 
   // Fetch products for the selected planet
-useEffect(() => {
-  if (!planet?.zodiac) return;
-  setLoading(true);
+  useEffect(() => {
+    if (!planet?.zodiac) return;
 
-  // 1. Define the specific category order
-  const categoryOrder = [
-    "Bath Gel",
-    "Body Lotion",
-    "Perfume",
-    "Essential Oil",
-    "Soap",
-    "Hamper"
-  ];
+    setLoading(true);
 
-  // Get the individual zodiac names (e.g., ["Taurus", "Libra"])
-  const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
+    const categoryOrder = [
+      "Bath Gel",
+      "Body Lotion",
+      "Perfume",
+      "Essential Oil",
+      "Soap",
+      "Hamper"
+    ];
 
-  Promise.all(
-    zodiacs.map((zodiac) =>
-      axios
-        .get(`${API_URL}/products/zodiac/${zodiac}`)
-        .then((res) => res.data),
-    ),
-  )
-    .then((results) => {
-      let combinedProducts = results.flat();
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/\s+/g, "").trim();
 
-      // 2. Filter out duplicates
-      const uniqueProducts = Array.from(
-        new Map(combinedProducts.map((item) => [item._id, item])).values()
-      );
+    const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
 
-      // 3. GROUPED SORTING LOGIC (Zodiac first, then Category)
-      const sortedProducts = uniqueProducts.sort((a, b) => {
-        // --- LEVEL 1: Sort by Zodiac Group ---
-        // Find which zodiac in our list matches the product name
-        const zodiacIndexA = zodiacs.findIndex(z => 
-          a.ProductName?.toLowerCase().includes(z.toLowerCase())
-        );
-        const zodiacIndexB = zodiacs.findIndex(z => 
-          b.ProductName?.toLowerCase().includes(z.toLowerCase())
+    Promise.all(
+      zodiacs.map((zodiac) =>
+        axios
+          .get(`${API_URL}/products/zodiac/${zodiac}`)
+          .then((res) => res.data)
+      )
+    )
+      .then((results) => {
+        const combinedProducts = results.flat();
+
+        // ✅ Remove duplicates
+        const uniqueProducts = Array.from(
+          new Map(combinedProducts.map((item) => [item._id, item])).values()
         );
 
-        if (zodiacIndexA !== zodiacIndexB) {
-          return zodiacIndexA - zodiacIndexB;
-        }
+        // ✅ FINAL SORT (THIS IS THE MAIN FIX)
+        const sortedProducts = uniqueProducts.sort((a, b) => {
 
-        // --- LEVEL 2: Sort by Category within that Zodiac ---
-        const catIndexA = categoryOrder.findIndex(cat => 
-          a.ProductName?.toLowerCase().includes(cat.toLowerCase())
-        );
-        const catIndexB = categoryOrder.findIndex(cat => 
-          b.ProductName?.toLowerCase().includes(cat.toLowerCase())
-        );
+          // 1️⃣ Zodiac grouping (Capricorn first, then Aquarius)
+          const zodiacIndexA = zodiacs.findIndex(z =>
+            a.ProductName?.toLowerCase().includes(z.toLowerCase())
+          );
 
-        const finalA = catIndexA === -1 ? 99 : catIndexA;
-        const finalB = catIndexB === -1 ? 99 : catIndexB;
+          const zodiacIndexB = zodiacs.findIndex(z =>
+            b.ProductName?.toLowerCase().includes(z.toLowerCase())
+          );
 
-        return finalA - finalB;
-      });
+          if (zodiacIndexA !== zodiacIndexB) {
+            return zodiacIndexA - zodiacIndexB;
+          }
+
+          // 2️⃣ Category strict order
+          const getCategoryIndex = (product) => {
+            const productCategory = normalize(product.Category);
+            return categoryOrder.findIndex(
+              (cat) => normalize(cat) === productCategory
+            );
+          };
+
+          const catA = getCategoryIndex(a);
+          const catB = getCategoryIndex(b);
+
+          return (catA === -1 ? 99 : catA) - (catB === -1 ? 99 : catB);
+        });
 
         setPlanetProducts(sortedProducts);
       })
       .catch((err) => {
-        console.error("Error fetching planet products:", err);
+        console.error("Error:", err);
         setPlanetProducts([]);
       })
       .finally(() => setLoading(false));
+
   }, [planet]);
 
   const getProductColor = (product) => {
@@ -298,7 +302,7 @@ useEffect(() => {
                                 backgroundColor:
                                   zodiacColors[
                                   getZodiacFromProduct(product.ProductName)
-                                  ] || "#000",
+                                  ] || "#CCC29F",
                               }}
                             ></span>
 

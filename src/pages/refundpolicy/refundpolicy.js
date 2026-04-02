@@ -1,4 +1,5 @@
-import React from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaShippingFast, FaCreditCard, FaMapMarkedAlt } from "react-icons/fa";
@@ -12,10 +13,19 @@ const fadeUp = {
 };
 
 const RefundPolicy = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // or "smooth"
+    });
+  }, [pathname]);
   return (
     <div>
       {/* Header Section */}
-      <Header />  
+      <Header />
       <Container fluid className="py-5 bg-light">
         <Container>
           {/* Page Header */}

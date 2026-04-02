@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
-  const API_URL = process.env.REACT_APP_API_URL ;
+  const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ const Payment = () => {
       name.toLowerCase().includes(zodiac.toLowerCase())
     );
   };
-  
+
   const getImageUrl = (photo) => {
     if (!photo) return "/images/default.jpg";
     if (Array.isArray(photo)) photo = photo[0];
@@ -47,7 +47,7 @@ const Payment = () => {
       ? photo
       : `/images/${photo.replace("images/", "")}`;
   };
-  
+
   const addToCart = async (product) => {
     if (!product) return;
     const token = localStorage.getItem("token");
@@ -78,13 +78,13 @@ const Payment = () => {
       console.error("Add to cart error:", error);
     }
   };
-  
+
   useEffect(() => {
     if (bestSellers.length > 0) {
       setRelatedProducts(bestSellers.slice(0, 4));
     }
   }, [bestSellers]);
-  
+
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
@@ -103,7 +103,7 @@ const Payment = () => {
     };
     fetchBestSellers();
   }, []);
-  
+
   if (loading) {
     return (
       <div>
@@ -117,7 +117,7 @@ const Payment = () => {
       </div>
     );
   }
-  
+
   return (
     <div>
       <Header />
@@ -154,7 +154,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      
+
       {relatedProducts.length > 0 && (
         <section className="product-section-1 mt-5 sora">
           <Container>
@@ -177,14 +177,17 @@ const Payment = () => {
                     </div>
                     <div className="product-info">
                       <h6 className="d-flex align-items-center gap-2">
-                        <span
-                          className="planet-dot"
-                          style={{
-                            backgroundColor: zodiacColors[getZodiacFromProduct(product.ProductName)] || "#000",
-                          }}
-                        ></span>
-                        {product.ProductName}
-                      </h6>
+  <span
+    className="zodiac-dot"
+    style={{
+      backgroundColor:
+        zodiacColors[getZodiacFromProduct(product.ProductName)] || "#000",
+    }}
+  ></span>
+  <span className="fw-bolder">
+    {product.ProductName} <span>›</span>
+  </span>
+</h6>
                       <div className="divider"></div>
                       <div className="product-meta">
                         <span className="size">{product.size || ""}</span>
@@ -207,7 +210,7 @@ const Payment = () => {
           </Container>
         </section>
       )}
-      
+
       {bestSellers.length > 0 && (
         <section className="product-section-1 mt-5 sora">
           <Container>
@@ -231,7 +234,7 @@ const Payment = () => {
                     <div className="product-info">
                       <h6 className="d-flex align-items-center gap-2">
                         <span
-                          className="planet-dot"
+                          className="zodiac-dot"
                           style={{
                             backgroundColor: zodiacColors[getZodiacFromProduct(product.ProductName)] || "#000",
                           }}
@@ -260,7 +263,7 @@ const Payment = () => {
           </Container>
         </section>
       )}
-      
+
       <Footer />
     </div>
   );

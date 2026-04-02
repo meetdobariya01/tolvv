@@ -1,10 +1,11 @@
-import React from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaShippingFast, FaCreditCard, FaMapMarkedAlt } from "react-icons/fa";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import './privacypolicy.css'
+import "./privacypolicy.css";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -12,6 +13,16 @@ const fadeUp = {
 };
 
 const Privacypolicy = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // or "smooth"
+    });
+  }, [pathname]);
+
   return (
     <div>
       {/* Header Section */}
@@ -45,8 +56,8 @@ const Privacypolicy = () => {
                   <Card.Body className="p-4 p-md-5">
                     <p>
                       The terms <strong>"We" / "Us" / "Our" / ”Company”</strong>{" "}
-                      individually and collectively refer to{" "}
-                      <strong>OM</strong> and the terms
+                      individually and collectively refer to <strong>OM</strong>{" "}
+                      and the terms
                       <strong> "You" / "Your" / "Yourself"</strong> refer to the
                       users.
                     </p>

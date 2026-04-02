@@ -15,7 +15,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const productInfo = {
   bath: {
     title: "BATH GEL",
-     images: [
+    images: [
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
@@ -46,7 +46,7 @@ const productInfo = {
   },
   oil: {
     title: "ESSENTIAL OIL",
-  images: [
+      images: [
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
@@ -60,7 +60,7 @@ const productInfo = {
   },
   eaudeperfumes: {
     title: "PERFUMES",
-  images: [
+    images: [
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
@@ -75,7 +75,7 @@ const productInfo = {
   },
   bodylotion: {
     title: "BODY LOTION",
-   images: [
+      images: [
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
