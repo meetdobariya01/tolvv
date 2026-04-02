@@ -10,7 +10,8 @@ const TopBanner = () => {
         <div className="scroll-content">
           {[...Array(10)].map((_, i) => (
             <span key={i}>
-              {text} &nbsp;&nbsp;&nbsp;&nbsp;
+              Launch Offer - 5% Off | <b>USE CODE - LAUNCH5</b>
+              &nbsp;&nbsp;&nbsp;&nbsp;
             </span>
           ))}
         </div>
@@ -19,7 +20,8 @@ const TopBanner = () => {
         <div className="scroll-content">
           {[...Array(10)].map((_, i) => (
             <span key={i}>
-              {text} &nbsp;&nbsp;&nbsp;&nbsp;
+              Launch Offer - 5% Off | <b>USE CODE - LAUNCH5</b>
+              &nbsp;&nbsp;&nbsp;&nbsp;
             </span>
           ))}
         </div>

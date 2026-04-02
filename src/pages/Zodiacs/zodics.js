@@ -32,7 +32,7 @@ const Zodic = () => {
       color: "#C10230",
       icon: "./images/zodiac/1.png",
       description:
-        "Aries, the natural ruler of healthy self-esteem, ego, fresh beginnings, spring, and physical presence, embodies the essence of selfhood. It is the sign of initiation—the spark that gives rise to identity and expression. At its core, Aries represents the formation of a strong, authentic sense of Self. Yet true evolution for Aries comes not only through bold individuality, but also through learning adaptability—acting with conviction while recognizing its role as a vital part of the greater whole.",
+        "Aries is the sign of bold beginnings—spirited, confident, and full of life force. Ruled by Mars and the element of Fire, it embodies courage and vitality. Our Aries blend reflects this vibrant energy with Coconut, Cinnamon, and Ginger. Coconut brings grounding nourishment, Cinnamon mirrors Aries’ warmth and passion, while Ginger adds an invigorating spark-awakening stamina and drive. A blend that celebrates the radiant spirit of Aries",
       letters: "A, L, E, I, O",
       energy: "Courage, Smamina",
       stamina: "High",
@@ -59,7 +59,7 @@ const Zodic = () => {
       color: "#4D5A31",
       icon: "./images/zodiac/2.png",
       description:
-        "Grounded, sensual, and steadfast — Taurus reigns as the most earthy of the earth signs, embodying loyalty, prosperity, and a deep-rooted kindness. This sign’s true evolution lies in mastering the art of balance — embracing inevitable change while staying connected to its innate power to create, nurture, and build enduring foundations.",
+        "Taurus is the sign of grounding and abundance—steady, sensual, and deeply connected to nature. Ruled by Venus and the element of Earth, it embodies stability, comfort, and quiet strength. Our Taurus blend reflects this essence with Vanilla, Rose, and Sandalwood. Soft Vanilla brings warmth and comfort, Rose reflects Taurus’ love for beauty and sensuality, while Sandalwood offers a grounding depth—mirroring its calm strength and enduring nature. A blend that celebrates the serene, nurturing spirit of Taurus",
       letters: "B, V, U",
       energy: "Stability, sensuality",
       stamina: "Strong",
@@ -86,7 +86,7 @@ const Zodic = () => {
       color: "#7E622D",
       icon: "./images/zodiac/3.png",
       description:
-        "Masters of the information age, Geminis are natural shape shifters — swift, curious, and everevolving. They move effortlessly between realms of thought and feeling, bridging the conscious and the unseen, the earthly and the divine. Intelligent, expressive, and endlessly adaptable, Gemini’s true growth unfolds when they release the need for mental control and surrender to stillness — allowing truth to rise naturally into clarity and deeper understanding.",
+        "Gemini is the sign of curiosity and expression—quick-witted, adaptable, and endlessly inquisitive. Ruled by Mercury and the element of Air, it reflects intelligence, communication, and lively energy. Our Gemini blend captures this spirit with Lavender, Lemon, and Basil. Calming Lavender brings moments of stillness, bright Lemon mirrors Gemini’s fresh, uplifting energy, while Basil adds clarity and focus—supporting its curious, active mind. A blend that celebrates the vibrant, thoughtful spirit of Gemini",
       letters: "K, Chh, Gh, Q, C",
       energy: "Divine Intelligence",
       stamina: "Medium",
@@ -113,7 +113,7 @@ const Zodic = () => {
       color: "#5F504D",
       icon: "./images/zodiac/4.png",
       description:
-        "The Cancer archetype embodies The Great Mother and The Queen — the divine nurturer within us all. Guided by instinct and attuned to the needs of others, Cancer offers unconditional care and emotional depth. Ruled by the Moon, they ebb and flow with life’s unseen tides, sensing what lies beneath the surface. Natural homemakers and protectors, their evolution comes through expanding that sacred sense of belonging — extending the love of home and family to embrace the earth and all living beings.",
+        "Cancer is the sign of nurturing and emotional depth—intuitive, protective, and deeply connected to home and belonging. Ruled by the Moon and the element of Water, it embodies empathy, care, and gentle strength. Our Cancer blend reflects this warmth with Coconut Oil, Rosemary, and Sandalwood. Nourishing Coconut Oil comforts and protects, Rosemary brings clarity and vitality, while Sandalwood offers grounding calm—mirroring Cancer’s nurturing and soulful nature. A blend that celebrates the caring spirit of Cancer.",
       letters: "Dd, H",
       energy: "Caring, Empathy",
       stamina: "Moderate",
@@ -140,7 +140,7 @@ const Zodic = () => {
       color: "#D7982B",
       icon: "./images/zodiac/5.png",
       description:
-        "Like the Lion, Leo stands proud — confident, noble, and generous at heart. Playful and expressive, they thrive in the spotlight, drawn to create, perform, and be seen. Yet true Leo maturity unfolds in the realization that their purpose is not to be the light’s source, but its radiant expression — to shine with warmth, creativity, and love, offering their brilliance as a gift of joy and blessing to the world.",
+        "Leo is the sign of radiance and creativity—confident, expressive, and generous at heart. Ruled by the Sun and the element of Fire, it embodies warmth, vitality, and joyful selfexpression. Our Leo blend reflects this vibrant spirit with Aloe Vera, Cinnamon, Orange, and Honey. Soothing Aloe Vera nurtures the skin, bright Orange mirrors Leo’s joyful energy, while Cinnamon and Honey add warmth and richness—capturing the sign’s radiant presence. A blend that celebrates the luminous spirit of Leo",
       letters: "M, T",
       energy: "Beholding Beauty",
       stamina: "High",
@@ -168,7 +168,7 @@ const Zodic = () => {
       color: "#85422B",
       icon: "./images/zodiac/6.png",
       description:
-        "The grounded face of Mercury, Virgo embodies precision, practicality, and quiet mastery. Attuned to body, mind, and environment, Virgos move through life with purpose and care, guided by an innate desire for order and well-being. Their true evolution begins when they transcend the divide born from constant self-critique and analysis — awakening instead to a higher wisdom of inclusiveness, compassion, and the seamless unity between themselves and the world they so thoughtfully tend.",
+        "Virgo is the sign of refinement and care—practical, thoughtful, and quietly dedicated to wellbeing. Ruled by Mercury and the element of Earth, it reflects clarity, order, and mindful living. Our Virgo blend captures this essence with Lavender, Fennel, and Lemongrass. Calming Lavender brings balance, Fennel supports gentle restoration, while fresh Lemongrass offers clarity and lightness—echoing Virgo’s thoughtful precision. A blend that celebrates the pure, harmonious spirit of Virgo.",
       letters: "P, Tha, N, T, Sha",
       energy: "Analysis, Order",
       stamina: "Strong",
@@ -194,7 +194,7 @@ const Zodic = () => {
       color: "#AE1857",
       icon: "./images/zodiac/7.png",
       description:
-        "Bearers of beauty, balance, and justice, Libras embody grace in connection. Naturally social and harmonizing, they seek depth and wisdom in partnership, valuing relationships as mirrors of growth and meaning. Libra’s true evolution unfolds in the realization that wholeness begins within — that through self-awareness and authentic connection, they serve both personal harmony and the greater equilibrium of all life.",
+        "Libra is the sign of harmony and beauty—graceful, thoughtful, and naturally drawn to balance. Ruled by Venus and the element of Air, it reflects connection, elegance, and peaceful equilibrium. Our Libra blend expresses this grace with Lavender, Shea Butter, and Rose. Soothing Lavender brings calm balance, nourishing Shea Butter comforts the skin, while delicate Rose embodies beauty and softness—mirroring Libra’s refined nature. A blend that celebrates the balanced spirit of Libra",
       letters: "R, T",
       energy: "Balance, Relating",
       stamina: "Medium",
@@ -220,7 +220,7 @@ const Zodic = () => {
       color: "#2D2A26",
       icon: "./images/zodiac/8.png",
       description:
-        "The innate master of transformation, Scorpio governs the realms of rebirth, depth, and emotional power. Co-ruled by Mars and Pluto, this sign moves through life with intensity and purpose, unafraid to explore the shadows in pursuit of truth. Scorpio’s true liberation arises in the cycle of surrender — in releasing the identities they so passionately build, only to be reborn, again and again, into greater authenticity and freedom.",
+        "Scorpio is the sign of depth and transformation—intense, intuitive, and powerfully introspective. Ruled by Mars and Pluto with the element of Water, it embodies mystery, strength, and renewal. Our Scorpio blend channels this depth with Jojoba Seed, Jasmine, and Black Pepper. Nourishing Jojoba restores balance, sensual Jasmine reflects emotional richness, while Black Pepper adds warmth and intensity—capturing Scorpio’s transformative spirit. A blend that celebrates the powerful essence of Scorpio",
       letters: "N, Y",
       energy: "Alchemy, Transformation",
       stamina: "Very High",
@@ -246,7 +246,7 @@ const Zodic = () => {
       color: "#490E67",
       icon: "./images/zodiac/9.png",
       description:
-        "Sagittarius, the Zodiac’s freedom-loving explorer, thrives on curiosity, philosophy, and visionary ideals. Open-minded and discerning, they recognize the limits of all belief systems, finding meaning in both worldly journeys and inner, spiritual quests. True evolution for Sagittarius comes when they surrender the pursuit of perfection, embracing instead the rich, messy reality of humanity as it is — discovering joy and wisdom in life’s imperfect truths.",
+        "Sagittarius is the sign of exploration and wisdom—optimistic, curious, and endlessly adventurous. Ruled by Jupiter and the element of Fire, it embodies freedom, vision, and expansive energy. Our Sagittarius blend reflects this vibrant spirit with Clove, Ginger, and Black Pepper. Warming Clove grounds the senses, lively Ginger awakens vitality, while Black Pepper adds bold energy—echoing Sagittarius’ adventurous drive. A blend that celebrates the free-spirited essence of Sagittarius. ",
       letters: "Bh, Dh, Ph, Ddh",
       energy: "Freedom, Divinity",
       stamina: "High",
@@ -272,7 +272,7 @@ const Zodic = () => {
       color: "#726B54",
       icon: "./images/zodiac/10.png",
       description:
-        "Ruled by Saturn, Capricorn excels at constructing both tangible and mental frameworks. Practical, disciplined, and results-driven, they often shine in business and endeavours requiring focus and mastery. True Capricorn maturity arises when they move beyond merely preserving tradition, channelling their drive to create innovative structures that serve, uplift, and honour the evolving world around them.",
+        "Capricorn is the sign of discipline and ambition—steady, focused, and deeply determined. Ruled by Saturn and the element of Earth, it embodies resilience, structure, and purposeful growth. Our Capricorn blend reflects this grounded strength with Lavender, Rosemary, Lemongrass, and Carnation Flower. Lavender soothes and restores balance, Rosemary sharpens clarity, while Lemongrass and Carnation add freshness and quiet elegance—mirroring Capricorn’s composed determination. A blend that celebrates the enduring spirit of Capricorn. ",
       letters: "Kh, J",
       energy: "Driven, Ambitious",
       stamina: "Strong",
@@ -299,7 +299,7 @@ const Zodic = () => {
       color: "#005D63",
       icon: "./images/zodiac/11.png",
       description:
-        "Co-ruled by Saturn and Uranus, Aquarius embodies the spirit of creative individuality. Independent yet deeply connected, they navigate life with intellect, originality, and a forward-thinking edge. Often altruistic and socially aware, Aquarians thrive on innovation and postconventional insight. Their true evolution emerges when they recognize that personal growth and the advancement of humanity are intertwined — that the highest expression of their power lies in serving the greater whole.",
+        "Aquarius is the sign of innovation and individuality—forward-thinking, imaginative, and deeply humanitarian. Ruled by Saturn and Uranus with the element of Air, it reflects vision, intellect, and originality. Our Aquarius blend captures this refreshing energy with Lemon, Jasmine, and Sandalwood. Bright Lemon awakens clarity, delicate Jasmine reflects creative expression, while Sandalwood brings grounding calm—balancing Aquarius’ visionary spirit. A blend that celebrates the unique essence of Aquarius. ",
       letters: "G, S, Sh",
       energy: "Visionary Creativity",
       stamina: "Medium",
@@ -325,7 +325,7 @@ const Zodic = () => {
       color: "#006098",
       icon: "./images/zodiac/12.png",
       description:
-        "Pisces is sensitive, intuitive, and artistic—compassionate and spiritual. They inspire creativity, empathy, healing, and kindness, seeing the world through soulful perception.",
+        "Pisces is the sign of intuition and imagination—compassionate, dreamy, and deeply spiritual. Ruled by Jupiter and Neptune with the element of Water, it embodies empathy, creativity, and inner depth. Our Pisces blend reflects this soulful nature with Lavender, Clove, Rose, and Sandalwood. Lavender calms the mind, Rose nurtures the heart, Clove adds gentle warmth, while Sandalwood offers grounding serenity—echoing Pisces’ mystical essence. A blend that celebrates the dreamy spirit of Pisces.",
       letters: "D, Ch, Z, Th",
       energy: "Creativity, Mysticism",
       stamina: "Low",
@@ -384,14 +384,21 @@ const Zodic = () => {
   ];
   // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
-useEffect(() => {
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${API_URL}/products`);
         const data = res.data;
 
         // 1. Desired Order
-        const categoryOrder = ["Bath Gel", "Body Lotion", "Perfume", "Essential Oil", "Soap", "Hamper"];
+        const categoryOrder = [
+          "Bath Gel",
+          "Body Lotion",
+          "Perfume",
+          "Essential Oil",
+          "Soap",
+          "Hamper",
+        ];
 
         const grouped = {};
         Zodiac.forEach((cat) => (grouped[cat] = []));
@@ -406,11 +413,15 @@ useEffect(() => {
         });
 
         // 2. FIXED SORT LOGIC
-        Object.keys(grouped).forEach(key => {
+        Object.keys(grouped).forEach((key) => {
           grouped[key].sort((a, b) => {
             // Find the index by checking if the ProductName contains the category string
-            const indexA = categoryOrder.findIndex(cat => a.ProductName.includes(cat));
-            const indexB = categoryOrder.findIndex(cat => b.ProductName.includes(cat));
+            const indexA = categoryOrder.findIndex((cat) =>
+              a.ProductName.includes(cat),
+            );
+            const indexB = categoryOrder.findIndex((cat) =>
+              b.ProductName.includes(cat),
+            );
 
             // If not found, move to the end (index 99)
             const finalA = indexA === -1 ? 99 : indexA;
@@ -427,8 +438,6 @@ useEffect(() => {
     };
     fetchProducts();
   }, [API_URL]); // Added dependency array to prevent infinite loops
-
-
 
   return (
     <div>
@@ -452,12 +461,12 @@ useEffect(() => {
                 {zodiacSigns.map((sign, index) => (
                   <div
                     key={index}
-                    className="col-3 zodiac-item text-center"
+                    className="col-4 col-lg-3  zodiac-item text-center"
                     onClick={() => setSelectedZodiac(zodiacData[sign.name])}
                   >
                     <div
                       className="zodiac-circle"
-                    // style={{ backgroundColor: sign.color }}
+                      // style={{ backgroundColor: sign.color }}
                     >
                       <img
                         src={sign.image}
@@ -491,20 +500,46 @@ useEffect(() => {
             <div className="zodiac-header text-white text-center">
               {/* <p className="aries-date mb-3">{selectedZodiac.date}</p> */}
 
-              <div className="d-flex justify-content-center align-items-center gap-5  ">
-                <div className="d-block">
-                  <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
-                  <p className="aries-date mb-3 ">{selectedZodiac.date}</p>
+              <div className="d-none d-md-block">
+                <div className="d-flex justify-content-center align-items-center gap-5  ">
+                  <div className="d-block">
+                    <h1 className="aries-title gt-super mb-0">
+                      {selectedZodiac.name}
+                    </h1>
+                    <p className="aries-date mb-3 ">{selectedZodiac.date}</p>
+                  </div>
+                  <div
+                    className="aries-icon-circle d-flex justify-content-center align-items-center"
+                    style={{ backgroundColor: selectedZodiac.color }}
+                  >
+                    <img
+                      src={selectedZodiac.icon}
+                      alt="icon"
+                      className="aries-icon-img"
+                    />
+                  </div>
                 </div>
-                <div
-                  className="aries-icon-circle d-flex justify-content-center align-items-center"
-                  style={{ backgroundColor: selectedZodiac.color }}
-                >
-                  <img
-                    src={selectedZodiac.icon}
-                    alt="icon"
-                    className="aries-icon-img"
-                  />
+              </div>
+            </div>
+
+            <div className="d-block d-md-none">
+              <div className="zodiac-header text-white d-flex justify-content-center align-items-center text-center">
+                <div>
+                  <div
+                    className="aries-icon-circle d-flex justify-content-center align-items-center mx-auto"
+                    style={{ backgroundColor: selectedZodiac.color }}
+                  >
+                    <img
+                      src={selectedZodiac.icon}
+                      alt="icon"
+                      className="aries-icon-img"
+                    />
+                  </div>
+
+                  <h1 className="aries-title text-center gt-super mb-0">
+                    {selectedZodiac.name}
+                  </h1>
+                  <p className="aries-date mb-3">{selectedZodiac.date}</p>
                 </div>
               </div>
             </div>
@@ -549,7 +584,7 @@ useEffect(() => {
                     to={`/productdetails/${p._id}`}
                     className="text-decoration-none"
                   >
-                    <div className="product-card" key={index}>
+                    <div className="product-card-1" key={index}>
                       <div className="product-box-zodiac p-1">
                         <img
                           src={

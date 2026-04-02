@@ -2,6 +2,7 @@
   border: none;
   border-radius: 0;
   overflow: hidden;
+  background: #e6e5e1;
 }
 
 .modal-wrapper {
@@ -12,7 +13,27 @@
   object-fit: cover;
   height: 100%;
 }
-
+.form-check-label {
+  font-size: 12px;
+}
+.form-label {
+  font-size: 11px;
+}
+.text-form {
+  font-size: 11px;
+}
+.get-code-btn {
+  font-size: 11px;
+}
+.begin-text {
+  font-size: 30px;
+  font-weight: 400;
+}
+.tolvv-name {
+  position: relative;
+  top: 19px;
+  right: 23px;
+}
 /* Mobile Design */
 @media (max-width: 767px) {
   .modal-wrapper {

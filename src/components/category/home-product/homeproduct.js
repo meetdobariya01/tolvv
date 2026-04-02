@@ -47,12 +47,13 @@ const Homeproduct = () => {
     <section className="products-section">
       <Container>
         <h2 className="products-heading artisan-font">All Sun Signs</h2>
+        <h5 className="products-subheading text-center mb-5 text-uppercase sora">Product</h5>
 
         <Row className="gx-4 gy-3">
           {products.map((item, index) => (
             <Col
               key={index}
-              xs={6} // ✅ MOBILE → 2 ITEMS
+              xs={4} // ✅ MOBILE → 2 ITEMS
               sm={4}
               md={4}
               lg={2}

@@ -7,11 +7,17 @@
   /* font-family: "Cursive", sans-serif; */
   text-align: center;
   /* font-size: 42px; */
-  margin-bottom: 60px;
+  /* margin-bottom: 60px; */
   color: #111;
   animation: fadeDown 1s ease;
 }
-
+.products-subheading {
+  font-size: 24px;
+  color: #555;
+  letter-spacing: 2px;
+  font-weight: 300;
+  animation: fadeDown 1s ease;
+}
 /* ✅ IMPORTANT: let Bootstrap control flex */
 .products-row {
   justify-content: center;
@@ -113,5 +119,9 @@
   }
   .product-card-collection{
     padding: 15px;
+  }
+  .products-subheading {
+    font-size: 16px;
+      margin-bottom: 0 !important; 
   }
 }

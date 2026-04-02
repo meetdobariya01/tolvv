@@ -268,51 +268,53 @@ function HamperPage() {
     <div>
       <Header />
       <div className="container py-5">
-        <h2 className="text-center mb-5 artisan-font">Hampers</h2>
-        <p className="text-center sora">
-          Beautifully presented in our signature branded Hamper Box, made for
-          effortless Gifting. <br /> Includes a complimentary Face Towel for an
-          added touch of care
-        </p>
+        <div className="">
+          <h2 className="text-center mb-5 artisan-font">Hampers</h2>
+          <p className="text-center sora">
+            Beautifully presented in our signature branded Hamper Box, made for
+            effortless Gifting. <br /> Includes a complimentary Face Towel for
+            an added touch of care
+          </p>
 
-        <div className="row justify-content-center text-center sora gap-5">
-          <div className="col-md-2 mb-4">
-            <div
-              className="hamper-card p-3"
-              onClick={() => setActiveSection("zodiac")}
-            >
-              <img src="./images/hamper.jpg" className="w-100" alt="Zodiac" />
-              <div className="d-flex align-items-center justify-content-between w-100">
-                <h5 className="mt-3 hamper-title">Zodiac Hamper</h5>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  size="xl"
-                  style={{ color: "#000" }}
-                />
+          <div className=" row justify-content-center text-center sora gap-5">
+            <div className="col-md-2 mb-4">
+              <div
+                className="hamper-card p-3"
+                onClick={() => setActiveSection("zodiac")}
+              >
+                <img src="./images/hamper.jpg" className="w-100" alt="Zodiac" />
+                <div className="d-flex align-items-center justify-content-between w-100">
+                  <h5 className="mt-3 hamper-title">Zodiac Hamper</h5>
+                  <FontAwesomeIcon
+                    icon={faAngleRight}
+                    size="xl"
+                    style={{ color: "#000" }}
+                  />
+                </div>
+                <hr />
+                <p className="hamper-subtitle">Sun Sign Hamper</p>
               </div>
-              <hr />
-              <p className="hamper-subtitle">Sun Sign Hamper</p>
             </div>
-          </div>
 
-          <div className="col-md-2 mb-4">
-            <div
-              className="hamper-card p-3"
-              onClick={() => setActiveSection("craft")}
-            >
-              <img src="./images/hamper.jpg" className="w-100" alt="Craft" />
-              <div className="d-flex align-items-center justify-content-between w-100">
-                <h5 className="mt-3 hamper-title">Craft Your Hamper</h5>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  size="xl"
-                  style={{ color: "#000" }}
-                />
+            <div className="col-md-2 mb-4">
+              <div
+                className="hamper-card p-3"
+                onClick={() => setActiveSection("craft")}
+              >
+                <img src="./images/hamper.jpg" className="w-100" alt="Craft" />
+                <div className="d-flex align-items-center justify-content-between w-100">
+                  <h5 className="mt-3 hamper-title">Craft Your Hamper</h5>
+                  <FontAwesomeIcon
+                    icon={faAngleRight}
+                    size="xl"
+                    style={{ color: "#000" }}
+                  />
+                </div>
+                <hr />
+                <p className="hamper-subtitle">
+                  Pick any sun sign and get a complimentary towel
+                </p>
               </div>
-              <hr />
-              <p className="hamper-subtitle">
-                Pick any sun sign and get a complimentary towel
-              </p>
             </div>
           </div>
         </div>
@@ -366,7 +368,8 @@ function HamperPage() {
                         handleBuyNow(item);
                       }}
                     >
-                      ADD TO CART <FiShoppingCart className="ms-1 mt-1" size={20} />
+                      ADD TO CART{" "}
+                      <FiShoppingCart className="ms-1 mt-1" size={20} />
                     </button>
                   </div>
                 </div>

@@ -62,9 +62,9 @@ const Footer = () => {
               <p className="footer-text">
                 <a
                   className="text-light text-decoration-none"
-                  href="mailto:corporategifting@tolvsigns.in"
+                  href="mailto:corporategifting@tolvvsigns.in"
                 >
-                  corporategifting@tolvsigns.in
+                  corporategifting@tolvvsigns.in
                 </a>
               </p>
             </div>
@@ -98,9 +98,9 @@ const Footer = () => {
             <p className="footer-text-1 ">
               <a
                 className="text-light text-decoration-none"
-                href="mailto:care@tolvsigns.com"
+                href="mailto:care@tolvvsigns.com"
               >
-                care@tolvsigns.com
+                care@tolvvsigns.com
               </a>
             </p>
             <p className="footer-text-1">
@@ -137,7 +137,7 @@ const Footer = () => {
             <div className="footer-right d-flex align-items-end gap-3">
               {/* Text */}
               <div className="footer-copy">
-                <p>2026 . tolvsigns.com</p>
+                <p>2026 . tolvvsigns.com</p>
                 <p>All rights reserved.</p>
               </div>
 

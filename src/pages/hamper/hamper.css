@@ -1,3 +1,6 @@
+.hamper-section{
+  background: #C6C6C8;
+}
 .hamper-card {
   cursor: pointer;
   transition: 0.3s;

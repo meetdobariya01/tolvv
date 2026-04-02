@@ -10,7 +10,7 @@ const HomeModal = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -25,7 +25,6 @@ const HomeModal = () => {
     >
       <Modal.Body className="p-0">
         <div className="row g-0 modal-wrapper">
-          
           {/* LEFT IMAGE */}
           <div className="col-md-6 d-none d-md-block">
             <motion.div
@@ -48,7 +47,7 @@ const HomeModal = () => {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="p-4 w-100"
+              className="px-4 w-100"
             >
               {/* CLOSE BUTTON */}
               <div className="text-end">
@@ -59,13 +58,14 @@ const HomeModal = () => {
               </div>
 
               <h4 className="mb-4 fw-semibold text-center text-md-start">
-                Begin Your TOLVV Ritual
+                <span className="artisan-font begin-text">Begin</span><span className="tolvv-name"> Your TOLVV Ritual</span>
               </h4>
 
-              <div className="form-check mb-3">
+              <div className="form-check mt-3 ">
                 <input className="form-check-input" type="checkbox" />
                 <label className="form-check-label small">
-                  Subscribe to our newsletter and get <b>Extra 10% off</b>
+                  Subscribe to our newsletter and get <br />{" "}
+                  <b>Extra 10% off</b> on your first order
                 </label>
               </div>
 
@@ -73,17 +73,17 @@ const HomeModal = () => {
                 <label className="form-label small">YOUR EMAIL ID</label>
                 <input
                   type="email"
-                  className="form-control border-0 border-bottom rounded-0"
+                  className="form-control border-0 underline-input text-form border-bottom rounded-0"
                   placeholder="xyz@gmail.com"
                 />
               </div>
 
-              <button className="btn btn-outline-dark btn-sm px-4">
+              <button className="btn btn-outline-dark btn-sm get-code-btn">
                 GET A CODE
               </button>
 
               <p className="small mt-3 text-muted">
-                Check your email for 10% off code
+                Your inbox has a little surprise waiting for you.
               </p>
             </motion.div>
           </div>

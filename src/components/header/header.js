@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container, Form, FormControl, Dropdown } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Container,
+  Form,
+  FormControl,
+  Dropdown,
+} from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,7 +45,7 @@ const Header = () => {
 
         const count = items.reduce(
           (sum, item) => sum + (item.quantity || 1),
-          0
+          0,
         );
 
         setCartCount(count);
@@ -50,7 +57,7 @@ const Header = () => {
 
       const count = guestCart.reduce(
         (sum, item) => sum + (item.quantity || 1),
-        0
+        0,
       );
 
       setCartCount(count);
@@ -72,17 +79,23 @@ const Header = () => {
 
   return (
     <>
-      <Navbar expand="lg" className="custom-navbar py-3" expanded={expanded}>
+      <Navbar
+        expand="lg"
+        className="custom-navbar py-3 sora"
+        expanded={expanded}
+      >
         <Container>
-
           {/* LOGO */}
           <Navbar.Brand as={NavLink} to="/" className="logo">
-            <img src="/images/logo-tolvv.png" alt="Tolvv Logo" className="logo-img" />
+            <img
+              src="/images/logo-tolvv.png"
+              alt="Tolvv Logo"
+              className="logo-img"
+            />
           </Navbar.Brand>
 
           {/* MOBILE ICONS */}
           <div className="mobile-icons d-lg-none d-flex align-items-center gap-3">
-
             {searchOpen ? (
               <FiX onClick={() => setSearchOpen(false)} />
             ) : (
@@ -112,17 +125,22 @@ const Header = () => {
             </div>
 
             <Dropdown align="end" className="sora">
-              <Dropdown.Toggle variant="link" className="p-0 border-0 text-dark">
+              <Dropdown.Toggle
+                variant="link"
+                className="p-0 border-0 text-dark"
+              >
                 <FiUser size={22} />
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item as={NavLink} to="/login">Login</Dropdown.Item>
-                <Dropdown.Item as={NavLink} to="/profile">Profile</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>
-                  Logout
+                <Dropdown.Item as={NavLink} to="/login">
+                  ACCOUNT
                 </Dropdown.Item>
+                <Dropdown.Item as={NavLink} to="/profile">
+                  ORDERS
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout}>LOGOUT</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
 
@@ -135,18 +153,29 @@ const Header = () => {
 
           <Navbar.Collapse>
             <Nav className="nav-links gap-0">
-              <Nav.Link as={NavLink} to="/product">PRODUCTS</Nav.Link>
+              <Nav.Link as={NavLink} to="/product">
+                PRODUCTS
+              </Nav.Link>
 
-              <Link to="zodiac" smooth duration={500} className="nav-link">THE TWELVEs</Link>
-              <Link to="benefits" smooth duration={500} className="nav-link">BENEFITS</Link>
-              <Link to="knowus" smooth duration={500} className="nav-link">KNOW US</Link>
-              <Link to="faqs" smooth duration={500} className="nav-link">FAQs</Link>
-              <Link to="contact" smooth duration={500} className="nav-link">CONNECT</Link>
+              <Link to="zodiac" smooth duration={500} className="nav-link">
+                THE TWELVEs
+              </Link>
+              <Link to="benefits" smooth duration={500} className="nav-link">
+                BENEFITS
+              </Link>
+              <Link to="knowus" smooth duration={500} className="nav-link">
+                KNOW US
+              </Link>
+              <Link to="faqs" smooth duration={500} className="nav-link">
+                FAQs
+              </Link>
+              <Link to="contact" smooth duration={500} className="nav-link">
+                CONNECT
+              </Link>
             </Nav>
 
             {/* DESKTOP ICONS */}
             <div className="icons ms-auto d-none d-lg-flex gap-4">
-
               {searchOpen ? (
                 <FiX onClick={() => setSearchOpen(false)} />
               ) : (
@@ -159,16 +188,16 @@ const Header = () => {
 
                 {cartCount > 0 && (
                   <span
-                  className="sora"
+                    className="sora"
                     style={{
                       position: "absolute",
                       top: "-6px",
                       right: "-10px",
                       background: "black",
                       color: "#fff",
-                      borderRadius: "50%",
+                      borderRadius: "15%",
                       fontSize: "12px",
-                      padding: "2px 6px",
+                      padding: "0px 6px",
                     }}
                   >
                     {cartCount}
@@ -177,21 +206,25 @@ const Header = () => {
               </div>
 
               <Dropdown align="end" className="sora">
-                <Dropdown.Toggle variant="link" className="p-0 border-0 text-dark">
+                <Dropdown.Toggle
+                  variant="link"
+                  className="p-0 border-0 text-dark dropdown-toggle-no-icon"
+                >
                   <FiUser size={22} />
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item as={NavLink} to="/login">Login</Dropdown.Item>
-                  <Dropdown.Item as={NavLink} to="/profile">Profile</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout}>
-                    Logout
+                  <Dropdown.Item as={NavLink} to="/login">
+                    ACCOUNT
                   </Dropdown.Item>
+                  <Dropdown.Item as={NavLink} to="/profile">
+                    ORDERS
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleLogout}>LOGOUT</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-
           </Navbar.Collapse>
         </Container>
 

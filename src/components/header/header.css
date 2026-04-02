@@ -85,7 +85,12 @@
   padding: 12px 20px;
   border: 1px solid #ddd;
 }
-
+.dropdown-toggle-no-icon::after {
+  display: none !important;
+}
+.dropdown-toggle::after {
+  display: none !important;
+}
 /* Responsive */
 @media(max-width: 991px) {
   .nav-links {

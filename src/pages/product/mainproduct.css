@@ -286,7 +286,9 @@
   .product-page-title {
     font-size: 12px;
   }
+  .product-info-collection h5 {
+    font-size: 11px;
+  }
 }
-.products-section-grid {
-  /* background-color: #fff; */
-}
+
+

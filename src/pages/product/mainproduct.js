@@ -207,12 +207,15 @@ const Mainproduct = ({ handleCartOpen }) => {
       <div className="container py-5 sora">
         <section className="products-section-grid">
           <Container>
-            <Row className="gx-3 gy-3 mb-5">
+            <Row className="gx-0 gy-3 mb-5">
               <h2 className="products-heading artisan-font mt-5">
                 All Sun Signs
               </h2>
+              <h5 className="products-subheading text-center mb-5 text-uppercase sora">
+                Product
+              </h5>
               {products.map((item, index) => (
-                <Col key={index} xs={6} sm={6} md={4} lg={2}>
+                <Col key={index} xs={4} sm={6} md={4} lg={2}>
                   <div
                     className="product-card p-2"
                     onClick={() => {
@@ -230,7 +233,10 @@ const Mainproduct = ({ handleCartOpen }) => {
                     <div className="product-info-collection">
                       <div className="d-flex justify-content-between">
                         <h5>{item.title}</h5>
-                        <FontAwesomeIcon icon={faAngleRight} size="lg" />
+                        <FontAwesomeIcon
+                          icon={faAngleRight}
+                          className="responsive-icon"
+                        />
                       </div>
                       <div className="underline" />
                       <p>{item.size}</p>

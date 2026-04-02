@@ -150,7 +150,7 @@ const Homepage = () => {
 
       {/* Discount Code */}
       <TopBanner />
-      
+
       {/* Main Content */}
       <div className="carousel-container">
         <Carousel
@@ -214,7 +214,7 @@ const Homepage = () => {
         {/* <Container flui> */}
         <Row className="g-0 align-items-center">
           {/* Left Image */}
-          <Col lg={4} md={12}>
+          <Col lg={3} md={12}>
             <div className="benefits-image">
               <img
                 src="./images/benifits.png"
@@ -225,7 +225,7 @@ const Homepage = () => {
           </Col>
 
           {/* Right Content */}
-          <Col lg={8} md={12}>
+          <Col lg={9} md={12}>
             <div className="benefits-content sora text-center">
               <h2 className="benefits-title artisan-font text-center">
                 The Benefits
@@ -260,67 +260,60 @@ const Homepage = () => {
 
       {/* Know us Section */}
       <section className="know-wrapper" id="knowus">
-        <Container>
-          <Row className="align-items-center">
-            {/* LEFT CONTENT */}
-            <Col lg={6} md={12}>
-              <div className="know-content sora ">
-                <h2 className="know-title artisan-font">Know Us Better</h2>
-                <h6 className="know-subtitle text-end">
-                  Neha, Shreeya & Aditi
-                </h6>
+        {/* <Container> */}
+        <Row className="align-items-center">
+          {/* LEFT CONTENT */}
+          <Col lg={6} md={12} className="d-flex justify-content-center px-2 px-md-5">
+            <div className="know-content sora ">
+              <h2 className="know-title artisan-font">Know Us Better</h2>
+              <h6 className="know-subtitle text-end">Neha, Shreeya & Aditi</h6>
 
-                <p className="bold">
-                  We’re Neha and Aditi, kindred souls on a shared path.
-                </p>
+              <p className="bold">
+                We’re Neha and Aditi, kindred souls on a shared path.
+              </p>
 
-                <p>
-                  United by more than friendship, a spiritual journey that has
-                  guided every step of our lives. A bond beyond emotions,
-                  founded on connection, spirituality, and the subtle guidance
-                  of the universe.
-                </p>
+              <p>
+                United by more than friendship, a spiritual journey that has
+                guided every step of our lives. A bond beyond emotions, founded
+                on connection, spirituality, and the subtle guidance of the
+                universe.
+              </p>
 
-                <p>
-                  Together, we discovered a shared passion for zodiac, the
-                  energy of the signs, and he spiritual rhythm that flows
-                  through everything around us. This passion inspired us to
-                  start our personalised bath and body brand, a space where
-                  signs meets science, where every product resonates with the
-                  unique energy of the 12 sun signs. Each product is crafted
-                  with intention, care, and love, so you can experience
-                  self-care that’s deeply personal, and aligned with your cosmic
-                  energy.
-                </p>
+              <p>
+                Together, we discovered a shared passion for zodiac, the energy
+                of the signs, and he spiritual rhythm that flows through
+                everything around us. This passion inspired us to start our
+                personalised bath and body brand, a space where signs meets
+                science, where every product resonates with the unique energy of
+                the 12 sun signs. Each product is crafted with intention, care,
+                and love, so you can experience self-care that’s deeply
+                personal, and aligned with your cosmic energy.
+              </p>
 
-                <p className="bold">Hi, I am Shreeya,</p>
+              <p className="bold">Hi, I am Shreeya,</p>
 
-                <p>
-                  As the next generation in this journey, I grew up immersed in
-                  spirituality, zodiac wisdom, and the belief that energy shapes
-                  everything. As a Capricorn, I am grounded yet deeply intuitive
-                  - drawn to the structure of science as much as the mystery of
-                  the cosmos. I help bridge tradition with a modern lens,
-                  blending branding, creativity, and intention into every detail
-                  of our products. For me, this brand is about creating rituals
-                  that feel intimate, empowering & aligned — where self-care
-                  becomes a reflection of who you truly are.
-                </p>
-              </div>
-            </Col>
+              <p>
+                As the next generation in this journey, I grew up immersed in
+                spirituality, zodiac wisdom, and the belief that energy shapes
+                everything. As a Capricorn, I am grounded yet deeply intuitive -
+                drawn to the structure of science as much as the mystery of the
+                cosmos. I help bridge tradition with a modern lens, blending
+                branding, creativity, and intention into every detail of our
+                products. For me, this brand is about creating rituals that feel
+                intimate, empowering & aligned — where self-care becomes a
+                reflection of who you truly are.
+              </p>
+            </div>
+          </Col>
 
-            {/* RIGHT IMAGE */}
-            <Col lg={6} md={12}>
-              <div className="know-image">
-                <img
-                  src="./images/knowus.png"
-                  alt="team"
-                  className="img-fluid"
-                />
-              </div>
-            </Col>
-          </Row>
-        </Container>
+          {/* RIGHT IMAGE */}
+          <Col lg={6} md={12} className="d-flex justify-content-end">
+            <div className="know-image">
+              <img src="./images/knowus.png" alt="team" className="" />
+            </div>
+          </Col>
+        </Row>
+        {/* </Container>   */}
       </section>
 
       {/* FAQ Section */}
@@ -380,7 +373,7 @@ const Homepage = () => {
                 <p className="connect-subtext">DON’T PUT YOUR DOUBTS ON HOLD</p>
               </div>
 
-              <p className="text-start mt-4 text-uppercase connect-desc">
+              <p className="text-center mt-4 text-uppercase connect-desc">
                 CONTACT US TO DISCUSS YOUR QUESTIONS OR CONNECT FOR
                 COLLABORATION
               </p>

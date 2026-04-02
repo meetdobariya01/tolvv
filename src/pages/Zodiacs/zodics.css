@@ -79,6 +79,7 @@
   height: auto;
   width: 100%;
   /* object-fit: contain; */
+  transition: all .3s ease;
 }
 
 /* PRODUCT INFO */
@@ -260,9 +261,9 @@
     align-items: center;
     text-align: center;
   }
-  .zodiac-image{
-    width: 90px;
-    height: 90px;
+  .zodiac-image {
+    width: 100px;
+    height: 100px;
   }
 }
 /* ZODIAC GRID GAP */
@@ -297,10 +298,10 @@
 
 .aries-title {
   font-size: 4rem;
-  font-family: "Playfair Display", serif;
+  /* font-family: "Playfair Display", serif; */
   font-weight: 600;
   margin-bottom: 0.5rem;
-  text-align: left;
+  /* text-align: left; */
 }
 
 .aries-icon-circle {
@@ -322,7 +323,7 @@
 .aries-date {
   font-size: 18px;
   /* margin-left: 10%; */
-  text-align: left;
+  /* text-align: left; */
 }
 
 .aries-description {
@@ -335,7 +336,7 @@
 .aries-details {
   font-size: 0.95rem;
   margin-bottom: 60px;
-  color: #f7e4e4;
+  /* color: #f7e4e4; */
 }
 
 .aries-images {
@@ -390,6 +391,23 @@
   }
 
   .aries-images {
-    gap: 1.5rem;
+    /* gap: 1.5rem; */
+  }
+  .zodiac-row {
+    row-gap: 0;
+    column-gap: 0;
+  }
+}
+@media (max-width: 576px) {
+  .aries-description {
+    font-size: 12px;
+  }
+  .aries-details{
+    font-size: 10px;
+    width: 60%;
+    margin: 0 auto 30px;
+  }
+  .aries-section {
+    padding: 20px 0 0 0;
   }
 }
