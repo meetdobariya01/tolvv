@@ -35,8 +35,14 @@ const planetData = [
     image: "./images/moon.png",
     mood: "Calm",
     bg: "#5F286E",
-    description: "The King and the Great Father embody the archetypes of the Sun - the source of all light and life, both earthly and spiritual. The Sun uplifts and energizes, offering inspiration, balance and renewal. It rules over healthy self-esteem, life purpose, creativity, healing, and vitality, illuminating the path toward wholeness and strength.",
-    meta: { energy: "Peaceful", colour: "Violet", element: "Water", rules: "Cancer" },
+    description:
+      "The King and the Great Father embody the archetypes of the Sun - the source of all light and life, both earthly and spiritual. The Sun uplifts and energizes, offering inspiration, balance and renewal. It rules over healthy self-esteem, life purpose, creativity, healing, and vitality, illuminating the path toward wholeness and strength.",
+    meta: {
+      energy: "Peaceful",
+      colour: "Violet",
+      element: "Water",
+      rules: "Cancer",
+    },
     zodiac: "Cancer",
   },
   {
@@ -108,60 +114,67 @@ const Moonsection = () => {
 
   const planet = planetData.find((p) => p.name === activePlanet);
 
-  // Helper function to get sort order for a product
-  const getSortOrder = (product) => {
-    const name = product.ProductName.toLowerCase();
-    
-    // Determine zodiac order (0 for first zodiac, 1 for second)
-    let zodiacOrder = 0;
-    if (name.includes("capricorn")) zodiacOrder = 0;
-    else if (name.includes("aquarius")) zodiacOrder = 1;
-    else if (name.includes("aries")) zodiacOrder = 0;
-    else if (name.includes("scorpio")) zodiacOrder = 1;
-    else if (name.includes("gemini")) zodiacOrder = 0;
-    else if (name.includes("virgo")) zodiacOrder = 1;
-    else if (name.includes("taurus")) zodiacOrder = 0;
-    else if (name.includes("libra")) zodiacOrder = 1;
-    else if (name.includes("leo")) zodiacOrder = 0;
-    else if (name.includes("cancer")) zodiacOrder = 0;
-    else if (name.includes("sagittarius")) zodiacOrder = 0;
-    else if (name.includes("pisces")) zodiacOrder = 1;
-    
-    // Determine category order
-    let categoryOrder = 99;
-    if (name.includes("bath gel")) categoryOrder = 0;
-    else if (name.includes("body lotion")) categoryOrder = 1;
-    else if (name.includes("perfume")) categoryOrder = 2;
-    else if (name.includes("essential oil")) categoryOrder = 3;
-    else if (name.includes("soap")) categoryOrder = 4;
-    else if (name.includes("hamper")) categoryOrder = 5;
-    
-    // Return combined sort key: zodiacOrder * 100 + categoryOrder
-    return (zodiacOrder * 100) + categoryOrder;
-  };
+  // Fetch products for the selected planet
+useEffect(() => {
+  if (!planet?.zodiac) return;
+  setLoading(true);
 
-  useEffect(() => {
-    if (!planet?.zodiac) return;
-    setLoading(true);
+  // 1. Define the specific category order
+  const categoryOrder = [
+    "Bath Gel",
+    "Body Lotion",
+    "Perfume",
+    "Essential Oil",
+    "Soap",
+    "Hamper"
+  ];
 
-    const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
+  // Get the individual zodiac names (e.g., ["Taurus", "Libra"])
+  const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
 
-    Promise.all(
-      zodiacs.map((zodiac) =>
-        axios.get(`${API_URL}/products/zodiac/${zodiac}`).then((res) => res.data)
-      )
-    )
-      .then((results) => {
-        let combinedProducts = results.flat();
+  Promise.all(
+    zodiacs.map((zodiac) =>
+      axios
+        .get(`${API_URL}/products/zodiac/${zodiac}`)
+        .then((res) => res.data),
+    ),
+  )
+    .then((results) => {
+      let combinedProducts = results.flat();
 
-        const uniqueProducts = Array.from(
-          new Map(combinedProducts.map((item) => [item._id, item])).values()
+      // 2. Filter out duplicates
+      const uniqueProducts = Array.from(
+        new Map(combinedProducts.map((item) => [item._id, item])).values()
+      );
+
+      // 3. GROUPED SORTING LOGIC (Zodiac first, then Category)
+      const sortedProducts = uniqueProducts.sort((a, b) => {
+        // --- LEVEL 1: Sort by Zodiac Group ---
+        // Find which zodiac in our list matches the product name
+        const zodiacIndexA = zodiacs.findIndex(z => 
+          a.ProductName?.toLowerCase().includes(z.toLowerCase())
+        );
+        const zodiacIndexB = zodiacs.findIndex(z => 
+          b.ProductName?.toLowerCase().includes(z.toLowerCase())
         );
 
-        // Sort using the getSortOrder function
-        const sortedProducts = [...uniqueProducts].sort((a, b) => {
-          return getSortOrder(a) - getSortOrder(b);
-        });
+        if (zodiacIndexA !== zodiacIndexB) {
+          return zodiacIndexA - zodiacIndexB;
+        }
+
+        // --- LEVEL 2: Sort by Category within that Zodiac ---
+        const catIndexA = categoryOrder.findIndex(cat => 
+          a.ProductName?.toLowerCase().includes(cat.toLowerCase())
+        );
+        const catIndexB = categoryOrder.findIndex(cat => 
+          b.ProductName?.toLowerCase().includes(cat.toLowerCase())
+        );
+
+        const finalA = catIndexA === -1 ? 99 : catIndexA;
+        const finalB = catIndexB === -1 ? 99 : catIndexB;
+
+        return finalA - finalB;
+      });
 
         setPlanetProducts(sortedProducts);
       })
@@ -259,47 +272,53 @@ const Moonsection = () => {
               <p>No products found for {planet.name}</p>
             ) : (
               <div className="product-grid">
-                {planetProducts.map((product) => {
-                  const dotColor = getProductColor(product);
-                  
-                  return (
-                    <NavLink
-                      to={`/productdetails/${product._id}`}
-                      className="text-decoration-none text-dark"
-                      key={product._id}
-                    >
-                      <div className="product-card p-1">
-                        <div className="product-box-zodiac">
-                          <img
-                            src={
-                              product.Photos?.[0]?.startsWith("http")
-                                ? product.Photos[0]
-                                : `/images/${product.Photos?.[0]?.replace("images/", "")}`
-                            }
-                            alt={product.ProductName}
-                            className="zodiac-product-img"
-                          />
-                          <div className="product-info">
-                            <div className="price-with-dot-1">
-                              <span
-                                className="zodiac-dot"
-                                style={{ backgroundColor: dotColor }}
-                              ></span>
-                              <span className="name fw-bolder">
-                                {product.ProductName} <span>›</span>
-                              </span>
-                            </div>
-                            <div className="underline" />
-                            <div className="size-price-row">
-                              <span className="size">{product.size || ""}</span>
-                              <span className="zodiac-price">₹ {product.ProductPrice}</span>
-                            </div>
+                {planetProducts.map((product) => (
+                  <NavLink
+                    to={`/productdetails/${product._id}`}
+                    className="text-decoration-none text-dark"
+                    key={product._id}
+                  >
+                    <div className="product-card-moon p-1">
+                      <div className="product-box-zodiac">
+                        <img
+                          src={
+                            product.Photos?.[0]?.startsWith("http")
+                              ? product.Photos[0]
+                              : `/images/${product.Photos?.[0]?.replace("images/", "")}`
+                          }
+                          alt={product.ProductName}
+                          className="zodiac-product-img"
+                        />
+                        <div className="product-info">
+                          {/* NAME + DOT */}
+                          <div className="price-with-dot-1">
+                            <span
+                              className="zodiac-dot"
+                              style={{
+                                backgroundColor:
+                                  zodiacColors[
+                                  getZodiacFromProduct(product.ProductName)
+                                  ] || "#000",
+                              }}
+                            ></span>
+
+                            <span className="name fw-bolder">
+                              {product.ProductName} <span>›</span>
+                            </span>
+                          </div>
+
+                          <div className="underline" />
+
+                          {/* SIZE + PRICE */}
+                          <div className="size-price-row">
+                            <span className="size">{product.size}</span>
+                            <span className="zodiac-price">₹ {product.ProductPrice}</span>
                           </div>
                         </div>
                       </div>
-                    </NavLink>
-                  );
-                })}
+                    </div>
+                  </NavLink>
+                ))}
               </div>
             )}
           </Container>
