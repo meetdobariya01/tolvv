@@ -99,3 +99,7 @@
 .feature-icon:hover img {
   transform: translateY(-4px);
 }
+.image-name {
+  letter-spacing: 1px;
+  font-size: 14px;
+}

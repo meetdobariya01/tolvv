@@ -9,6 +9,28 @@ import "./cartsidebar.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+const zodiacColors = {
+  Aries: "#c10230",
+  Taurus: "#ae1857",
+  Gemini: "#d79a2b",
+  Cancer: "#85422b",
+  Leo: "#4d5a31",
+  Virgo: "#5f504d",
+  Libra: "#7e622d",
+  Scorpio: "#2d2a26",
+  Sagittarius: "#490e67",
+  Capricorn: "#726b54",
+  Aquarius: "#005d63",
+  Pisces: "#006098",
+};
+
+const getZodiacFromProduct = (name) => {
+  if (!name) return null;
+  return Object.keys(zodiacColors).find((zodiac) =>
+    name.toLowerCase().includes(zodiac.toLowerCase())
+  );
+};
+
 const CartSidebar = ({ show, handleClose }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
@@ -21,31 +43,9 @@ const CartSidebar = ({ show, handleClose }) => {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState(null); // For product detail modal
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const zodiacColors = {
-    Aries: "#c10230",
-    Taurus: "#ae1857",
-    Gemini: "#d79a2b",
-    Cancer: "#85422b",
-    Leo: "#4d5a31",
-    Virgo: "#5f504d",
-    Libra: "#7e622d",
-    Scorpio: "#2d2a26",
-    Sagittarius: "#490e67",
-    Capricorn: "#726b54",
-    Aquarius: "#005d63",
-    Pisces: "#006098",
-  };
-  
   const token = localStorage.getItem("token");
-  
-  const getZodiacFromProduct = (name) => {
-    if (!name) return null;
-    return Object.keys(zodiacColors).find((zodiac) =>
-      name.toLowerCase().includes(zodiac.toLowerCase())
-    );
-  };
 
   const getImageUrl = (photo) => {
     if (!photo) return "/images/default.jpg";
@@ -108,7 +108,13 @@ const CartSidebar = ({ show, handleClose }) => {
           uniqueItems.reduce((s, i) => s + (i?.price || 0) * (i?.qty || 0), 0)
         );
 
-        if (uniqueItems.length > 0) fetchRelatedProducts(uniqueItems);
+        // Fetch related products based on cart items (if any)
+        if (uniqueItems.length > 0) {
+          fetchRelatedProducts(uniqueItems);
+        } else {
+          // If cart empty, fetch default "You may also like" products
+          fetchDefaultRelatedProducts();
+        }
       } else {
         let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
         const formatted = await Promise.all(
@@ -143,7 +149,7 @@ const CartSidebar = ({ show, handleClose }) => {
                 qty: item.quantity || 1,
                 img: "/images/hamper.jpg",
                 category: "Hamper",
-                hamperProducts: item.hamperProducts || [],   // ✅ include stored products
+                hamperProducts: item.hamperProducts || [],
               };
             }
             return null;
@@ -152,12 +158,17 @@ const CartSidebar = ({ show, handleClose }) => {
         const cleanItems = formatted.filter(Boolean);
         setCartItems(cleanItems);
         setTotalPrice(cleanItems.reduce((s, i) => s + i.price * i.qty, 0));
-        if (formatted.length > 0) fetchRelatedProducts(formatted);
+        if (cleanItems.length > 0) {
+          fetchRelatedProducts(cleanItems);
+        } else {
+          fetchDefaultRelatedProducts();
+        }
       }
     } catch (err) {
       console.error("Cart fetch error:", err);
       setCartItems([]);
       setTotalPrice(0);
+      fetchDefaultRelatedProducts();
     }
     setLoading(false);
   }, [token]);
@@ -173,6 +184,19 @@ const CartSidebar = ({ show, handleClose }) => {
       setRelatedProducts(filtered.slice(0, 4));
     } catch (err) {
       console.error("Related products fetch error:", err);
+    }
+  };
+
+  // New function: fetch default products when cart is empty
+  const fetchDefaultRelatedProducts = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/products`);
+      // Get any 4 products (e.g., best sellers or just first 4)
+      const defaultProducts = res.data.slice(0, 4);
+      setRelatedProducts(defaultProducts);
+    } catch (err) {
+      console.error("Default related products fetch error:", err);
+      setRelatedProducts([]);
     }
   };
 
@@ -249,7 +273,7 @@ const CartSidebar = ({ show, handleClose }) => {
           id: i.id,
           type: "hamper",
           hamperData: {},
-          hamperProducts: i.hamperProducts || [],   // ✅ preserve products
+          hamperProducts: i.hamperProducts || [],
           quantity: i.qty,
           price: i.price,
         };
@@ -276,6 +300,7 @@ const CartSidebar = ({ show, handleClose }) => {
         setTotalPrice(updatedItems.reduce((s, i) => s + i.price * i.qty, 0));
         if (updatedItems.length === 0) {
           setRelatedProducts([]);
+          fetchDefaultRelatedProducts(); // refill related when cart becomes empty
         }
       } else {
         let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
@@ -291,6 +316,7 @@ const CartSidebar = ({ show, handleClose }) => {
         setTotalPrice(updatedItems.reduce((s, i) => s + i.price * i.qty, 0));
         if (updatedItems.length === 0) {
           setRelatedProducts([]);
+          fetchDefaultRelatedProducts();
         }
       }
     } catch (error) {
@@ -352,34 +378,25 @@ const CartSidebar = ({ show, handleClose }) => {
     }
   };
 
-  // 🔥 NEW FUNCTION: Open product detail section
   const openProductDetail = (product) => {
     setSelectedProduct(product);
   };
 
-  // 🔥 NEW FUNCTION: Close product detail
   const closeProductDetail = () => {
     setSelectedProduct(null);
   };
 
-  // 🔥 UPDATED: Filter best sellers to hide products already in cart
+  // Filter best sellers to hide products already in cart
   const getFilteredBestSellers = () => {
-    // Get IDs of products in cart
     const cartProductIds = cartItems.map(item => item.id);
-    
-    // Filter out products that are already in cart
-    const filtered = bestSellers.filter(product => 
-      !cartProductIds.includes(product._id)
-    );
-    
-    return filtered;
+    return bestSellers.filter(product => !cartProductIds.includes(product._id));
   };
 
   useEffect(() => {
     const fetchBestSellers = async () => {
       try {
         const currentCategory = cartItems.length > 0
-          ? cartItems[cartItems.length - 1].category
+          ? cartItems[0].category
           : "Zodiac";
 
         const excludeIds = cartItems.map(item => item.id).filter(Boolean).join(",");
@@ -390,7 +407,14 @@ const CartSidebar = ({ show, handleClose }) => {
         const res = await axios.get(url);
         setBestSellers(res.data.slice(0, 4));
       } catch (err) {
-        console.error("Error fetching filtered best sellers:", err);
+        console.error("Error fetching best sellers:", err);
+        // Fallback: get any 4 products
+        try {
+          const fallback = await axios.get(`${API_URL}/products`);
+          setBestSellers(fallback.data.slice(0, 4));
+        } catch (e) {
+          setBestSellers([]);
+        }
       }
     };
 
@@ -511,107 +535,113 @@ const CartSidebar = ({ show, handleClose }) => {
             </>
           )}
 
-          {/* 🔥 UPDATED: Best Sellers Section - Only shows products NOT in cart */}
+          {/* Best Sellers Section - Always show if any, even when cart empty */}
           {visibleBestSellers.length > 0 && (
             <section className="product-section-1 mt-5">
               <Container>
                 <Row className="g-1">
                   <h5>Best Sellers</h5>
-                  {visibleBestSellers.map((product, index) => (
-                    <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
-                      <motion.div
-                        className="product-card p-1"
-                        whileHover={{ y: -10 }}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        onClick={() => openProductDetail(product)} // 🔥 Click opens detail
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <div className="product-img-box">
-                          <img src={getImageUrl(product.Photos)} alt={product.ProductName} />
-                        </div>
-                        <div className="product-info">
-                          <h6 className="d-flex align-items-center gap-2">
-                            <span
-                              className="planet-dot"
-                              style={{
-                                backgroundColor: zodiacColors[getZodiacFromProduct(product.ProductName)] || "#000",
-                              }}
-                            ></span>
-                            {product.ProductName}
-                          </h6>
-                          <div className="product-meta">
-                            <span>{product.size || ""}</span>
-                            <span className="price">₹ {product.ProductPrice}</span>
+                  {visibleBestSellers.map((product, index) => {
+                    const productZodiac = getZodiacFromProduct(product.ProductName);
+                    const dotColor = zodiacColors[productZodiac] || "#000";
+                    return (
+                      <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
+                        <motion.div
+                          className="product-card p-1"
+                          whileHover={{ y: -10 }}
+                          initial={{ opacity: 0, y: 40 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                          onClick={() => openProductDetail(product)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div className="product-img-box">
+                            <img src={getImageUrl(product.Photos)} alt={product.ProductName} />
                           </div>
-                          <div className="divider"></div>
-                          <button
-                            className="add-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              addToCart(product);
-                            }}
-                          >
-                            ADD TO CART
-                          </button>
-                        </div>
-                      </motion.div>
-                    </Col>
-                  ))}
+                          <div className="product-info">
+                            <h6 className="d-flex align-items-center gap-2">
+                              {/* Colored dot before name */}
+                              <span
+                                className="planet-dot"
+                                style={{ backgroundColor: dotColor }}
+                              ></span>
+                              {product.ProductName}
+                            </h6>
+                            <div className="divider"></div>
+                            <div className="product-meta">
+                              <span>{product.size || ""}</span>
+                              <span className="price">₹ {product.ProductPrice}</span>
+                            </div>
+                            <button
+                              className="add-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addToCart(product);
+                              }}
+                            >
+                              ADD TO CART
+                            </button>
+                          </div>
+                        </motion.div>
+                      </Col>
+                    );
+                  })}
                 </Row>
               </Container>
             </section>
           )}
 
-          {/* Related Products */}
+          {/* You May Also Like Section - Always show if any, even when cart empty */}
           {relatedProducts.length > 0 && (
             <section className="product-section-1 mt-5">
               <Container>
                 <Row className="g-1">
                   <h5>You may also like</h5>
-                  {relatedProducts.map((product, index) => (
-                    <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
-                      <motion.div
-                        className="product-card p-1"
-                        whileHover={{ y: -10 }}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        onClick={() => openProductDetail(product)} // 🔥 Click opens detail
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <div className="product-img-box">
-                          <img src={getImageUrl(product.Photos)} alt={product.ProductName} />
-                        </div>
-                        <div className="product-info">
-                          <h6 className="d-flex align-items-center gap-2">
-                            <span
-                              className="planet-dot"
-                              style={{
-                                backgroundColor: zodiacColors[getZodiacFromProduct(product.ProductName)] || "#000",
-                              }}
-                            ></span>
-                            {product.ProductName}
-                          </h6>
-                          <div className="divider"></div>
-                          <div className="product-meta">
-                            <span className="size">{product.size || ""}</span>
-                            <span className="price">₹ {product.ProductPrice}</span>
+                  {relatedProducts.map((product, index) => {
+                    const productZodiac = getZodiacFromProduct(product.ProductName);
+                    const dotColor = zodiacColors[productZodiac] || "#000";
+                    return (
+                      <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
+                        <motion.div
+                          className="product-card p-1"
+                          whileHover={{ y: -10 }}
+                          initial={{ opacity: 0, y: 40 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                          onClick={() => openProductDetail(product)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div className="product-img-box">
+                            <img src={getImageUrl(product.Photos)} alt={product.ProductName} />
                           </div>
-                          <button
-                            className="add-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              addToCart(product);
-                            }}
-                          >
-                            ADD TO CART
-                          </button>
-                        </div>
-                      </motion.div>
-                    </Col>
-                  ))}
+                          <div className="product-info">
+                            <h6 className="d-flex align-items-center gap-2">
+                              {/* Colored dot before name */}
+                              <span
+                                className="planet-dot"
+                                style={{ backgroundColor: dotColor }}
+                              ></span>
+                              {product.ProductName}
+                            </h6>
+                            <div className="divider"></div>
+                            <div className="product-meta">
+                              <span className="size">{product.size || ""}</span>
+                              <span className="price">₹ {product.ProductPrice}</span>
+                            </div>
+                            <button
+                              className="add-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addToCart(product);
+                              }}
+                            >
+                              ADD TO CART
+                            </button>
+                          </div>
+                        </motion.div>
+                      </Col>
+                    );
+                  })}
                 </Row>
               </Container>
             </section>
@@ -619,7 +649,7 @@ const CartSidebar = ({ show, handleClose }) => {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* 🔥 NEW: Product Detail Modal/Section */}
+      {/* Product Detail Modal */}
       {selectedProduct && (
         <div className="product-detail-modal" onClick={closeProductDetail}>
           <div className="product-detail-content" onClick={(e) => e.stopPropagation()}>

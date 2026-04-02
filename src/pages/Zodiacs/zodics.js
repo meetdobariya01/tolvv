@@ -27,9 +27,9 @@ const Zodic = () => {
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/coconut.png",
+        "./images/ingredient/Ginger-12.png",
+        "./images/ingredient/Cinnamon-07.png",
+        "./images/ingredient/Coconut-Oil-10.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -54,9 +54,9 @@ const Zodic = () => {
       element: "Earth",
       planet: "Venus",
       herbs: [
-        "./images/ingredient/Vanilla.png",
-        "./images/ingredient/Rose.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Vanilla-20.png",
+        "./images/ingredient/Rose-06.png",
+        "./images/ingredient/Sandalwood-11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -81,9 +81,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Mercury",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Lemon.png",
-        "./images/ingredient/Basil.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Lemon-08.png",
+        "./images/ingredient/Basil-15.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -108,9 +108,9 @@ const Zodic = () => {
       element: "Water",
       planet: "The Moon",
       herbs: [
-        "./images/ingredient/Coconut-Oil.png",
-        "./images/ingredient/Rosemary.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Coconut-Oil-10.png",
+        "./images/ingredient/Rosemary-01.png",
+        "./images/ingredient/Sandalwood-11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -135,10 +135,10 @@ const Zodic = () => {
       element: "Fire",
       planet: "The Sun",
       herbs: [
-        "./images/ingredient/AloVera-Extract.png",
-        "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/Orange.png",
-        "./images/ingredient/Honey.png",
+        "./images/ingredient/Honey-16.png",
+        "./images/ingredient/Alo-Vera-Extract-02.png",
+        "./images/ingredient/Cinnamon-07.png",
+        "./images/ingredient/Orange-17.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -163,9 +163,9 @@ const Zodic = () => {
       element: "Earth",
       planet: "Mercury",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Fennel-33.png",
-        "./images/ingredient/Lemongrass.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Fennel-21.png",
+        "./images/ingredient/Lemongrass-18.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -189,9 +189,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Venus",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Shea-Butter.png",
-        "./images/ingredient/Rose.png",
+        "./images/ingredient/Rose-06.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Shea-Butter-19.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -215,9 +215,9 @@ const Zodic = () => {
       element: "Water",
       planet: "Pluto / Mars",
       herbs: [
-        "./images/ingredient/Jojaba-Seed.png",
-        "./images/ingredient/Jasmine.png",
-        "./images/ingredient/Black-Pepper.png",
+        "./images/ingredient/Jojaba-Seed-14.png",
+        "./images/ingredient/Jasmine-09.png",
+        "./images/ingredient/Black-Pepper-13.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -241,9 +241,9 @@ const Zodic = () => {
       element: "Fire",
       planet: "Jupiter",
       herbs: [
-        "./images/ingredient/Clove.png",
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Black-Pepper.png",
+        "./images/ingredient/Clove-05.png",
+        "./images/ingredient/Ginger-12.png",
+        "./images/ingredient/Black-Pepper-13.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -267,10 +267,10 @@ const Zodic = () => {
       element: "Earth",
       planet: "Saturn",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Rosemary.png",
-        "./images/ingredient/Lemongrass.png",
-        "./images/ingredient/CARNATION FLOWER-15.png",
+        "./images/ingredient/CARNATION-FLOWER-03.png",
+        "./images/ingredient/Rosemary-01.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Lemongrass-18.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -294,9 +294,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Uranus / Saturn",
       herbs: [
-        "./images/ingredient/Lemon.png",
-        "./images/ingredient/Jasmine.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Lemon-08.png",
+        "./images/ingredient/Jasmine-09.png",
+        "./images/ingredient/Sandalwood-11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -320,10 +320,10 @@ const Zodic = () => {
       element: "Water",
       planet: "Neptune / Jupiter",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Clove.png",
-        "./images/ingredient/Rose.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Sandalwood-11.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Clove-05.png",
+        "./images/ingredient/Rose-06.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },

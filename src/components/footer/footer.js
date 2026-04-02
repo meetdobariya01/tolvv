@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./footer.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
-import { Link } from "react-scroll";
+import { scroller } from "react-scroll";
+
+// Custom component that replaces react-scroll Link
+const ScrollToSection = ({ to, smooth = true, duration = 500, children, className }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === "/") {
+      // Already on home page → scroll directly
+      scroller.scrollTo(to, { smooth, duration });
+    } else {
+      // Navigate to home and pass target section via state
+      navigate("/", { state: { scrollTo: to } });
+    }
+  };
+
+  return (
+    <a href={`/#${to}`} onClick={handleClick} className={className}>
+      {children}
+    </a>
+  );
+};
 
 const Footer = () => {
   return (
@@ -14,36 +37,24 @@ const Footer = () => {
             <h6 className="footer-title">USEFUL LINKS</h6>
             <ul className="footer-links">
               <li>
-                <NavLink
-                  to="zodiac"
-                  smooth
-                  duration={500}
-                  className="nav-link"
-                ></NavLink>
-              </li>
-              <li>
-                {" "}
-                <Link to="zodiac" smooth duration={500} className="nav-link">
+                <ScrollToSection to="zodiac" className="nav-link">
                   Zodiac Calculator
-                </Link>
+                </ScrollToSection>
               </li>
               <li>
-                {" "}
-                <Link to="benefits" smooth duration={500} className="nav-link">
+                <ScrollToSection to="benefits" className="nav-link">
                   Benefits
-                </Link>
+                </ScrollToSection>
               </li>
               <li>
-                {" "}
-                <Link to="knowus" smooth duration={500} className="nav-link">
+                <ScrollToSection to="knowus" className="nav-link">
                   Know Us Better
-                </Link>
+                </ScrollToSection>
               </li>
               <li>
-                {" "}
-                <Link to="faqs" smooth duration={500} className="nav-link">
+                <ScrollToSection to="faqs" className="nav-link">
                   FAQs
-                </Link>
+                </ScrollToSection>
               </li>
               <li>
                 <NavLink to="/privacy-policy" className="nav-link">
@@ -95,7 +106,7 @@ const Footer = () => {
           {/* Connect */}
           <div className="col-lg-3 col-md-6 mb-4 footer-col">
             <h6 className="footer-title">CONNECT WITH US</h6>
-            <p className="footer-text-1 ">
+            <p className="footer-text-1">
               <a
                 className="text-light text-decoration-none"
                 href="mailto:care@tolvvsigns.com"
@@ -135,13 +146,10 @@ const Footer = () => {
           {/* Right Vertical Branding */}
           <div className="col-lg-3 d-none d-lg-flex align-items-end mb-3 justify-content-end">
             <div className="footer-right d-flex align-items-end gap-3">
-              {/* Text */}
               <div className="footer-copy">
                 <p>2026 . tolvvsigns.com</p>
                 <p>All rights reserved.</p>
               </div>
-
-              {/* Logo */}
               <img
                 src="/images/logo-footer.png"
                 alt="logo"
@@ -150,8 +158,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Bottom Section */}
       </div>
     </footer>
   );

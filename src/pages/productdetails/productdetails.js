@@ -32,10 +32,10 @@ const productInfo = {
   soap: {
     title: "SOAP",
     images: [
-      "/images/icon-1.png",
-      "/images/icon-2.png",
-      "/images/icon-3.png",
-      "/images/icon-4.png",
+      { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
+      { src: "/images/icon-2.png", name: "Paraben Free" },
+      { src: "/images/icon-3.png", name: "Skin Friendly" },
+      { src: "/images/icon-4.png", name: "CrueltyFree" },
     ],
     howToUse:
       "Rediscover purity in every wash. Gentle ingredients inspired by nature, free from harshness.",
@@ -46,11 +46,11 @@ const productInfo = {
   },
   oil: {
     title: "ESSENTIAL OIL",
-    images: [
-      "/images/icon-1.png",
-      "/images/icon-2.png",
-      "/images/icon-3.png",
-      "/images/icon-4.png",
+  images: [
+      { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
+      { src: "/images/icon-2.png", name: "Paraben Free" },
+      { src: "/images/icon-3.png", name: "Skin Friendly" },
+      { src: "/images/icon-4.png", name: "CrueltyFree" },
     ],
     howToUse:
       "12’s Essential Oil is best used in three ways—by inhaling through a diffuser, applying on your skin after mixing with a carrier oil, or adding to your bath after proper dilution.",
@@ -60,11 +60,11 @@ const productInfo = {
   },
   eaudeperfumes: {
     title: "PERFUMES",
-    images: [
-      "/images/icon-1.png",
-      "/images/icon-2.png",
-      "/images/icon-3.png",
-      "/images/icon-4.png",
+  images: [
+      { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
+      { src: "/images/icon-2.png", name: "Paraben Free" },
+      { src: "/images/icon-3.png", name: "Skin Friendly" },
+      { src: "/images/icon-4.png", name: "CrueltyFree" },
     ],
     howToUse:
       "12’s Perfumes are designed for gentle elegance. Spray on pulse points like wrists and neck to uplift your spirit.",
@@ -75,11 +75,11 @@ const productInfo = {
   },
   bodylotion: {
     title: "BODY LOTION",
-    images: [
-      "/images/icon-1.png",
-      "/images/icon-2.png",
-      "/images/icon-3.png",
-      "/images/icon-4.png",
+   images: [
+      { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
+      { src: "/images/icon-2.png", name: "Paraben Free" },
+      { src: "/images/icon-3.png", name: "Skin Friendly" },
+      { src: "/images/icon-4.png", name: "CrueltyFree" },
     ],
     howToUse:
       "Apply on slightly damp skin. Gently massage in upward circular motions until fully absorbed for a radiant glow.",
@@ -91,10 +91,10 @@ const productInfo = {
   hamper: {
     title: "CURATED ZODIAC HAMPER",
     images: [
-      "/images/icon-1.png",
-      "/images/icon-2.png",
-      "/images/icon-3.png",
-      "/images/icon-4.png",
+      { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
+      { src: "/images/icon-2.png", name: "Paraben Free" },
+      { src: "/images/icon-3.png", name: "Skin Friendly" },
+      { src: "/images/icon-4.png", name: "CrueltyFree" },
     ],
     howToUse:
       "This hamper contains a curated selection of products. Refer to each individual product within the hamper for specific usage instructions.",
@@ -104,6 +104,7 @@ const productInfo = {
       "Perform a patch test for each product. Store in a cool place. Keep away from direct sunlight.",
   },
 };
+
 
 const categoryMap = {
   "bath gel": "bath",
