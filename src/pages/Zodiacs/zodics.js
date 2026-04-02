@@ -371,60 +371,70 @@ const Zodic = () => {
   ];
   // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/products`);
-        const data = res.data;
+ // In Zodic.js - Replace the sorting logic
 
-        // 1. Desired Order
-        const categoryOrder = [
-          "Bath Gel",
-          "Body Lotion",
-          "Perfume",
-          "Essential Oil",
-          "Soap",
-          "Hamper",
-        ];
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/products`);
+      const data = res.data;
 
-        const grouped = {};
-        Zodiac.forEach((cat) => (grouped[cat] = []));
+      // 1. Desired Order - exact match patterns
+      const categoryOrder = [
+        "Bath Gel",
+        "Body Lotion", 
+        "Perfume",
+        "Essential Oil",
+        "Soap",
+        "Hamper"
+      ];
 
-        data.forEach((prod) => {
-          const zodiac = prod.Zodiac?.trim();
-          if (grouped[zodiac]) {
-            if (!grouped[zodiac].find((p) => p._id === prod._id)) {
-              grouped[zodiac].push(prod);
-            }
+      // Helper function to get category priority
+      const getCategoryPriority = (productName) => {
+        // Check for exact match first
+        for (let i = 0; i < categoryOrder.length; i++) {
+          if (productName.toLowerCase().includes(categoryOrder[i].toLowerCase())) {
+            return i;
           }
+        }
+        // Check for variations
+        if (productName.toLowerCase().includes("bath")) return 0;
+        if (productName.toLowerCase().includes("lotion")) return 1;
+        if (productName.toLowerCase().includes("perfume") || productName.toLowerCase().includes("eau")) return 2;
+        if (productName.toLowerCase().includes("essential")) return 3;
+        if (productName.toLowerCase().includes("soap")) return 4;
+        if (productName.toLowerCase().includes("hamper")) return 5;
+        return 99; // Unknown category goes to end
+      };
+
+      const grouped = {};
+      Zodiac.forEach((cat) => (grouped[cat] = []));
+
+      data.forEach((prod) => {
+        const zodiac = prod.Zodiac?.trim();
+        if (grouped[zodiac]) {
+          if (!grouped[zodiac].find((p) => p._id === prod._id)) {
+            grouped[zodiac].push(prod);
+          }
+        }
+      });
+
+      // 2. FIXED SORT LOGIC - Using the helper function
+      Object.keys(grouped).forEach((key) => {
+        grouped[key].sort((a, b) => {
+          const priorityA = getCategoryPriority(a.ProductName);
+          const priorityB = getCategoryPriority(b.ProductName);
+          return priorityA - priorityB;
         });
+      });
 
-        // 2. FIXED SORT LOGIC
-        Object.keys(grouped).forEach((key) => {
-          grouped[key].sort((a, b) => {
-            // Find the index by checking if the ProductName contains the category string
-            const indexA = categoryOrder.findIndex((cat) =>
-              a.ProductName.includes(cat),
-            );
-            const indexB = categoryOrder.findIndex((cat) =>
-              b.ProductName.includes(cat),
-            );
-
-            // If not found, move to the end (index 99)
-            const finalA = indexA === -1 ? 99 : indexA;
-            const finalB = indexB === -1 ? 99 : indexB;
-
-            return finalA - finalB;
-          });
-        });
-
-        setProductsByZodiac(grouped);
-      } catch (err) {
-        console.error("Failed to fetch products:", err);
-      }
-    };
-    fetchProducts();
-  }, [API_URL]); // Added dependency array to prevent infinite loops
+      setProductsByZodiac(grouped);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+    }
+  };
+  fetchProducts();
+}, [API_URL]);// Added dependency array to prevent infinite loops
 
   return (
     <div>
