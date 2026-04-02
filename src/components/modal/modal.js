@@ -103,7 +103,7 @@ const HomeModal = () => {
                 <span className="artisan-font begin-text">Begin</span><span className="tolvv-name"> Your TOLVV Ritual</span>
               </h4>
 
-              <div className="form-check mb-3">
+              <div className="form-check mb-3 mt-5">
                 <input className="form-check-input" type="checkbox" />
                 <label className="form-check-label small">
                   Subscribe to our newsletter and get <br />{" "}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FiShoppingCart} from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
 import { Container, Row, Col, Nav } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
@@ -15,10 +15,10 @@ const productInfo = {
   bath: {
     title: "BATH GEL",
     images: [
-      "/images/icon-1.png",
-      "/images/icon-2.png",
-      "/images/icon-3.png",
-      "/images/icon-4.png",
+      { src: "/images/icon-1.png", name: "Foam Booster" },
+      { src: "/images/icon-2.png", name: "Essential Oil" },
+      { src: "/images/icon-3.png", name: "Vitamin E" },
+      { src: "/images/icon-4.png", name: "Coconut Oil" },
     ],
     howToUse:
       "Wet your skin, then work a small amount of 12’s Bath Gel into a lather using a loofah or your hands. Gently massage over your body, rinse thoroughly and pat dry.",
@@ -27,6 +27,7 @@ const productInfo = {
     caution:
       "Avoid eye contact. In case of contact, rinse immediately with water. Store in a cool, dry place.",
   },
+
   soap: {
     title: "SOAP",
     images: [
@@ -151,57 +152,57 @@ const Productdetails = ({ handleCartOpen }) => {
   }, [id]);
 
   // Add to cart (guest or logged-in)
- const addToCart = async () => {
-  if (!dbProduct) return;
-  const token = localStorage.getItem("token");
+  const addToCart = async () => {
+    if (!dbProduct) return;
+    const token = localStorage.getItem("token");
 
-  if (token) {
-    try {
-      await axios.post(
-        `${API_URL}/cart/add`,
-        { productId: dbProduct._id, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+    if (token) {
+      try {
+        await axios.post(
+          `${API_URL}/cart/add`,
+          { productId: dbProduct._id, quantity: 1 },
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+
+        if (handleCartOpen) handleCartOpen();
+      } catch (error) {
+        console.error("Add to cart error:", error.response?.data || error);
+
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    } else {
+      let cart = [];
+
+      try {
+        const stored = localStorage.getItem("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find((i) => i.productId === dbProduct._id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: dbProduct._id,
+          quantity: 1,
+          price: dbProduct.ProductPrice,
+        });
+      }
+
+      localStorage.setItem("guestCart", JSON.stringify(cart));
+
+      window.dispatchEvent(new Event("cartUpdated"));
 
       if (handleCartOpen) handleCartOpen();
-    } catch (error) {
-      console.error("Add to cart error:", error.response?.data || error);
-
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
     }
-  } else {
-    let cart = [];
-
-    try {
-      const stored = localStorage.getItem("guestCart");
-      cart = stored ? JSON.parse(stored) : [];
-    } catch {
-      cart = [];
-    }
-
-    const existing = cart.find((i) => i.productId === dbProduct._id);
-
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({
-        productId: dbProduct._id,
-        quantity: 1,
-        price: dbProduct.ProductPrice,
-      });
-    }
-
-    localStorage.setItem("guestCart", JSON.stringify(cart));
-
-    window.dispatchEvent(new Event("cartUpdated"));
-
-    if (handleCartOpen) handleCartOpen();
-  }
-};
+  };
   // UI rendering (unchanged)
   if (loading)
     return (
@@ -232,39 +233,43 @@ const Productdetails = ({ handleCartOpen }) => {
       <Container fluid className="py-5 container sora">
         <Row className="align-items-start">
           <Col md={4}>
-            {dbProduct.Photos && Array.isArray(dbProduct.Photos) && dbProduct.Photos.length > 0 && (
-              <motion.img
-                key={dbProduct.Photos[0]}
-                src={
-                  dbProduct.Photos[0].startsWith("http")
-                    ? dbProduct.Photos[0]
-                    : `/images/${dbProduct.Photos[0].replace("images/", "")}`
-                }
-                alt={dbProduct.ProductName}
-                className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
-                style={{ objectFit: "cover", maxHeight: "600px" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              />
-            )}
+            {dbProduct.Photos &&
+              Array.isArray(dbProduct.Photos) &&
+              dbProduct.Photos.length > 0 && (
+                <motion.img
+                  key={dbProduct.Photos[0]}
+                  src={
+                    dbProduct.Photos[0].startsWith("http")
+                      ? dbProduct.Photos[0]
+                      : `/images/${dbProduct.Photos[0].replace("images/", "")}`
+                  }
+                  alt={dbProduct.ProductName}
+                  className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
+                  style={{ objectFit: "cover", maxHeight: "600px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                />
+              )}
           </Col>
 
           <Col md={4}>
-            {dbProduct.Photos && Array.isArray(dbProduct.Photos) && dbProduct.Photos.length > 1 && (
-              <motion.img
-                key={dbProduct.Photos[1]}
-                src={
-                  dbProduct.Photos[1].startsWith("http")
-                    ? dbProduct.Photos[1]
-                    : `/images/${dbProduct.Photos[1].replace("images/", "")}`
-                }
-                alt={dbProduct.ProductName}
-                className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
-                style={{ objectFit: "cover", maxHeight: "600px" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              />
-            )}
+            {dbProduct.Photos &&
+              Array.isArray(dbProduct.Photos) &&
+              dbProduct.Photos.length > 1 && (
+                <motion.img
+                  key={dbProduct.Photos[1]}
+                  src={
+                    dbProduct.Photos[1].startsWith("http")
+                      ? dbProduct.Photos[1]
+                      : `/images/${dbProduct.Photos[1].replace("images/", "")}`
+                  }
+                  alt={dbProduct.ProductName}
+                  className="img-fluid rounded shadow-sm w-100 mb-4 mb-md-0"
+                  style={{ objectFit: "cover", maxHeight: "600px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                />
+              )}
           </Col>
           <Col md={4}>
             <AnimatePresence mode="wait">
@@ -275,9 +280,9 @@ const Productdetails = ({ handleCartOpen }) => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h1 className="fw-bold playfair-display text-uppercase mb-3">
+                <h4 className="sora text-uppercase mb-3">
                   {dbProduct.ProductName}
-                </h1>
+                </h4>
                 <Row className="mb-4 g-3">
                   {productInfo[activeTab]?.images?.map((img, idx) => (
                     <Col xs={6} md={3} key={idx} className="text-center">
@@ -289,6 +294,7 @@ const Productdetails = ({ handleCartOpen }) => {
                         whileHover={{ scale: 1.08 }}
                         transition={{ duration: 0.2 }}
                       />
+                      <p className="mt-2 small text-dark">{productInfo[activeTab]?.images[idx]?.name || ""}</p>
                     </Col>
                   ))}
                 </Row>
@@ -300,15 +306,17 @@ const Productdetails = ({ handleCartOpen }) => {
                   <h6 className="fw-bold">CAUTION</h6>
                   <p className="small">{productInfo[activeTab]?.caution}</p>
                 </div>
-                <Nav.Link
+                {/* <Nav.Link
                   href="/refund-policy"
                   className="text-decoration-none"
                 >
                   <h6 className="fw-bold">
                     Refund Policy <span>›</span>
                   </h6>
-                </Nav.Link>
+                </Nav.Link> */}
                 {/* <h2 className="mt-4">₹{dbProduct.ProductPrice}</h2> */}
+                <p className="m-0">Best Before : 36 Months</p>
+                <p>Country of Origin : India</p>
                 <button
                   onClick={addToCart}
                   className="btn btn-outline-dark mt-3"

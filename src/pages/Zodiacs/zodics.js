@@ -493,7 +493,7 @@ const Zodic = () => {
                     <h1 className="aries-title gt-super mb-0">
                       {selectedZodiac.name}
                     </h1>
-                    <p className="aries-date mb-3 ">{selectedZodiac.date}</p>
+                    <p className="aries-date mb-3 gt-super">{selectedZodiac.date}</p>
                   </div>
                   <div
                     className="aries-icon-circle d-flex justify-content-center align-items-center"
@@ -526,7 +526,7 @@ const Zodic = () => {
                   <h1 className="aries-title text-center gt-super mb-0">
                     {selectedZodiac.name}
                   </h1>
-                  <p className="aries-date mb-3">{selectedZodiac.date}</p>
+                  <p className="aries-date gt-super mb-3">{selectedZodiac.date}</p>
                 </div>
               </div>
             </div>

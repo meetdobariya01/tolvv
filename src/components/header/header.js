@@ -195,7 +195,7 @@ const Header = () => {
 
             {/* DESKTOP ICONS */}
             <div className="icons ms-auto d-none d-lg-flex gap-4">
-              {searchOpen ? (
+              {searchOpen ? ( 
                 <FiX onClick={() => setSearchOpen(false)} />
               ) : (
                 <FiSearch onClick={() => setSearchOpen(true)} />
