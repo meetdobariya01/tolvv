@@ -63,7 +63,7 @@ body, html {
 
 @font-face {
   font-family: "GT-Super";
-  src: url("../public/assest/fonts/GT-Super-Display-Super-Trial.otf") format("truetype");
+  src: url("../public/assest/fonts/GT-Super-Display-Regular-Trial.otf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

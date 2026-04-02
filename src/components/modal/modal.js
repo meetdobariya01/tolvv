@@ -7,7 +7,7 @@ const HomeModal = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
-
+  const [subscribe, setSubscribe] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
 
   // ⏱ Auto open after 5 sec
@@ -103,8 +103,13 @@ const HomeModal = () => {
                 <span className="artisan-font begin-text">Begin</span><span className="tolvv-name"> Your TOLVV Ritual</span>
               </h4>
 
-              <div className="form-check mb-3">
-                <input className="form-check-input" type="checkbox" />
+              <div className="form-check mb-3 mt-5">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  checked={subscribe}
+                  onChange={(e) => setSubscribe(e.target.checked)}
+                />
                 <label className="form-check-label small">
                   Subscribe to our newsletter and get <br />{" "}
                   <b>Extra 10% off</b> on your first order
@@ -122,8 +127,12 @@ const HomeModal = () => {
                 />
               </div>
 
-              <button className="btn btn-outline-dark btn-sm px-4">
-                GET A CODE
+              <button
+                className="btn btn-outline-dark btn-sm px-4"
+                onClick={handleGetCoupon}
+                disabled={sending}
+              >
+                {sending ? <Spinner size="sm" /> : "GET A CODE"}
               </button>
 
               <p className="small mt-3 text-muted">

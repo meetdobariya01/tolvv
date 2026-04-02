@@ -13,331 +13,31 @@ const {
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
 const COUPONS = {
-  LAUNCH5: 5,
-  WELCOME10: 10,
-  IVY755WA: 15
+  LAUNCH5: { discount: 5, firstOrderOnly: true },
+  WELCOME10: { discount: 10, firstOrderOnly: true },
+  IVY755WA: { discount: 15, firstOrderOnly: false }
 };
-// Place order
-// router.post("/place", authenticate, async (req, res) => {
-//   try {
-//     const { items, paymentMethod, address, note, customerName, customerEmail } = req.body;
+const validateCoupon = async (code, userId) => {
+  const coupon = COUPONS[code];
 
-//     if (!items || items.length === 0)
-//       return res.status(400).json({ message: "Cart is empty" });
+  if (!coupon) {
+    throw new Error("Invalid coupon code");
+  }
 
-//     if (!address || !address.city || !address.pincode)
-//       return res.status(400).json({ message: "Address incomplete" });
-//     if (!address?.mobile)
-//       return res.status(400).json({ message: "Phone number required" });
+  const existingOrders = await Order.find({
+    userId,
+    status: { $in: ["PAID", "COD_CONFIRMED"] }
+  });
 
-//     let subtotal = 0;
-//     const orderItems = [];
+  const isFirstOrder = existingOrders.length === 0;
 
-//     // Price validation
-//     for (const item of items) {
+  if (coupon.firstOrderOnly && !isFirstOrder) {
+    throw new Error("This coupon is valid only for first order");
+  }
 
-//       // PRODUCT ORDER
-//       if (item.productId) {
+  return coupon.discount; // return percent
+};
 
-//         const product = await Product.findById(item.productId);
-
-//         if (!product)
-//           return res.status(404).json({ message: "Product not found" });
-
-//         subtotal += product.ProductPrice * item.quantity;
-
-//         orderItems.push({
-//           productId: product._id,
-//           productName: product.ProductName,
-//           quantity: item.quantity,
-//           priceAtBuy: product.ProductPrice
-//         });
-
-//       }
-
-//       // HAMPER ORDER
-//       if (item.hamperId) {
-
-//         const hamper = await Hamper.findById(item.hamperId);
-
-//         if (!hamper)
-//           return res.status(404).json({ message: "Hamper not found" });
-
-//         subtotal += hamper.totalPrice * item.quantity;
-
-//         orderItems.push({
-//           hamperId: hamper._id,
-//           productName: "Zodiac Hamper",
-//           quantity: item.quantity,
-//           priceAtBuy: hamper.totalPrice
-//         });
-
-//       }
-
-//     }
-
-//     const totalAmount = Math.round(subtotal);
-//     const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
-
-//     // Create order
-//     const newOrder = new Order({
-//       userId: req.user.id,
-//       customOrderId,
-
-//       customerName,
-//       customerEmail,
-
-//       items: orderItems,
-//       subtotal: totalAmount,
-//       totalAmount,
-//       paymentMethod,
-
-//       status: paymentMethod === "cod" ? "COD_CONFIRMED" : "PAYMENT_PENDING",
-
-//       address,
-//       note: note || ""
-//     });
-
-//     await newOrder.save();
-
-//     // Clear cart
-//     await Cart.findOneAndUpdate(
-//       { userId: req.user.id },
-//       { $set: { items: [] } }
-//     );
-
-//     // Send emails
-//     const user = await User.findById(req.user.id);
-//     const products = await Product.find({
-//       _id: { $in: orderItems.map(i => i.productId) }
-//     });
-
-//     const itemsHtml = orderItems.map(i => {
-//       const product = products.find(p => p._id.toString() === i.productId.toString());
-//       return `<li>${product.ProductName} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
-//     }).join("");
-
-//     const orderDetails = { customOrderId, paymentMethod, totalAmount, itemsHtml };
-
-//     // Send emails (don't await to not block response)
-//     sendOrderConfirmationEmail(user.email, orderDetails).catch(err =>
-//       console.error("User mail error:", err)
-//     );
-
-//     sendAdminOrderNotification(orderDetails, user, address, note).catch(err =>
-//       console.error("Admin mail error:", err)
-//     );
-
-//     // Handle payment redirection for online payments
-//     if (paymentMethod === "card" || paymentMethod === "upi") {
-//       // This will be handled in payment routes
-//       return res.status(201).json({
-//         message: "Order placed, proceed to payment",
-//         orderId: customOrderId,
-//         requiresPayment: true
-//       });
-//     }
-
-//     // COD response
-//     res.status(201).json({
-//       message: "Order placed successfully",
-//       orderId: customOrderId
-//     });
-
-//   } catch (err) {
-//     console.error("Place order error:", err);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
-
-// router.post("/place", authenticate, async (req, res) => {
-//   try {
-
-//     const { items, paymentMethod, address, note, customerName, customerEmail, couponCode } = req.body;
-
-//     if (!items || items.length === 0)
-//       return res.status(400).json({ message: "Cart is empty" });
-
-//     if (!address || !address.city || !address.pincode)
-//       return res.status(400).json({ message: "Address incomplete" });
-
-//     if (!address?.mobile)
-//       return res.status(400).json({ message: "Phone number required" });
-
-//     let subtotal = 0;
-//     const orderItems = [];
-
-//     // ✅ LOOP ONLY FOR SUBTOTAL
-//     for (const item of items) {
-
-//       if (item.productId) {
-//         const product = await Product.findById(item.productId);
-
-//         if (!product)
-//           return res.status(404).json({ message: "Product not found" });
-
-//         subtotal += product.ProductPrice * item.quantity;
-
-//         orderItems.push({
-//           productId: product._id,
-//           productName: product.ProductName,
-//           quantity: item.quantity,
-//           priceAtBuy: product.ProductPrice
-//         });
-//       }
-
-//       if (item.hamperId) {
-//         const hamper = await Hamper.findById(item.hamperId).populate("products.productId");
-
-//         if (!hamper)
-//           return res.status(404).json({ message: "Hamper not found" });
-
-//         subtotal += hamper.totalPrice * item.quantity;
-
-//         const hamperItems = hamper.products.map((p) => ({
-//           productId: p.productId._id,
-//           name: p.productId.ProductName,
-//           quantity: p.quantity
-//         }));
-
-//         orderItems.push({
-//           hamperId: hamper._id,
-//           productName: "Zodiac Hamper",
-//           quantity: item.quantity,
-//           priceAtBuy: hamper.totalPrice,
-//           hamperItems
-//         });
-//       }
-//     }
-//     // ✅ CHECK FIRST ORDER
-//     const existingOrders = await Order.find({
-//       userId: req.user.id,
-//       status: { $in: ["PAID", "COD_CONFIRMED"] }
-//     });
-
-//     const isFirstOrder = existingOrders.length === 0;
-
-//     // ✅ APPLY COUPON
-//     let discount = 0;
-
-//     if (couponCode) {
-
-//       const code = couponCode.toUpperCase();
-
-//       // ❌ invalid coupon
-//       if (!COUPONS[code]) {
-//         return res.status(400).json({ message: "Invalid coupon code" });
-//       }
-
-//       // 🚫 FIRST ORDER ONLY COUPONS
-//       if ((code === "FIRSTORDER" || code === "WELCOME10") && !isFirstOrder) {
-//         return res.status(400).json({
-//           message: "This coupon is valid only for first order"
-//         });
-//       }
-
-//       const discountPercent = COUPONS[code];
-//       discount = (subtotal * discountPercent) / 100;
-//     }
-
-//     // Create Order
-//     const newOrder = new Order({
-//       userId: req.user.id,
-//       customOrderId,
-
-//       customerName,
-//       customerEmail,
-
-//       items: orderItems,
-//       subtotal: totalAmount,
-//       totalAmount,
-//       couponCode,
-//       paymentMethod,
-//       status: paymentMethod === "cod" ? "COD_CONFIRMED" : "PAYMENT_PENDING",
-
-//       address: {
-//         houseNumber: address.houseNumber,
-//         buildingName: address.buildingName,
-//         societyName: address.societyName,
-//         road: address.road,
-//         landmark: address.landmark,
-//         city: address.city,
-//         pincode: address.pincode,
-//         mobile: address.mobile
-//       },
-
-//       note: note || ""
-//     });
-
-//     await newOrder.save();
-
-//     // Clear Cart
-//     await Cart.findOneAndUpdate(
-//       { userId: req.user.id },
-//       { $set: { items: [] } }
-//     );
-
-//     // Get user for email
-//     const user = await User.findById(req.user.id);
-
-//     const products = await Product.find({
-//       _id: { $in: orderItems.map(i => i.productId).filter(Boolean) }
-//     });
-
-//     // Build email items list
-//     const itemsHtml = orderItems.map(i => {
-
-//       const product = products.find(
-//         p => p._id.toString() === (i.productId || "").toString()
-//       );
-
-//       const name = product ? product.ProductName : i.productName;
-
-//       return `<li>${name} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
-
-//     }).join("");
-
-//     const orderDetails = {
-//       customOrderId,
-//       paymentMethod,
-//       totalAmount,
-//       itemsHtml,
-//       phone: address.mobile
-//     };
-
-//     // Send Email to Customer
-//     sendOrderConfirmationEmail(user.email, orderDetails)
-//       .catch(err => console.error("User mail error:", err));
-
-//     // Send Email to Admin
-//     sendAdminOrderNotification(orderDetails, user, address, note)
-//       .catch(err => console.error("Admin mail error:", err));
-
-//     // Online Payment
-//     if (paymentMethod === "card" || paymentMethod === "upi") {
-
-//       return res.status(201).json({
-//         message: "Order placed, proceed to payment",
-//         orderId: customOrderId,
-//         requiresPayment: true
-//       });
-//     }
-
-//     // COD
-//     res.status(201).json({
-//       message: "Order placed successfully",
-//       orderId: customOrderId
-//     });
-
-//   } catch (err) {
-
-//     console.error("Place order error:", err);
-
-//     res.status(500).json({
-//       message: "Server error"
-//     });
-//   }
-// });
 
 router.post("/place", authenticate, async (req, res) => {
   try {
@@ -444,22 +144,19 @@ router.post("/place", authenticate, async (req, res) => {
 
     // ✅ APPLY COUPON
     let discount = 0;
+    let discountPercent = 0;
 
     if (couponCode) {
       const code = couponCode.toUpperCase();
 
-      if (!COUPONS[code]) {
-        return res.status(400).json({ message: "Invalid coupon code" });
-      }
-
-      // FIRST ORDER ONLY
-      if ((code === "FIRSTORDER" || code === "WELCOME10") && !isFirstOrder) {
+      try {
+        discountPercent = await validateCoupon(code, req.user.id);
+      } catch (err) {
         return res.status(400).json({
-          message: "This coupon is valid only for first order"
+          message: err.message
         });
       }
 
-      const discountPercent = COUPONS[code];
       discount = (subtotal * discountPercent) / 100;
     }
 
@@ -710,12 +407,12 @@ router.post("/coupon/validate", authenticate, async (req, res) => {
     }
 
     const code = couponCode.toUpperCase();
+    const coupon = COUPONS[code];
 
-    if (!COUPONS[code]) {
+    if (!coupon) {
       return res.status(400).json({ message: "Invalid coupon" });
     }
 
-    // check first order
     const existingOrders = await Order.find({
       userId: req.user.id,
       status: { $in: ["PAID", "COD_CONFIRMED"] }
@@ -723,18 +420,19 @@ router.post("/coupon/validate", authenticate, async (req, res) => {
 
     const isFirstOrder = existingOrders.length === 0;
 
-    if ((code === "FIRSTORDER" || code === "WELCOME10") && !isFirstOrder) {
+    if (coupon.firstOrderOnly && !isFirstOrder) {
       return res.status(400).json({
-        message: "Only valid for first order"
+        message: "This coupon is valid only for first order"
       });
     }
 
-    res.json({
+    return res.json({
       valid: true,
-      discountPercent: COUPONS[code]
+      discountPercent: coupon.discount
     });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });

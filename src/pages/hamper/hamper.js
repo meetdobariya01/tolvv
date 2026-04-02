@@ -7,6 +7,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import {
   faAngleRight,
   faCartShopping,
+  faAngleLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card } from "react-bootstrap";
 import axios from "axios";
@@ -78,6 +79,8 @@ function HamperPage({ handleCartOpen }) {
 
   const handleZodiacSelect = (name) => {
     setSelectedZodiac(name);
+      setSelectedCategories([]);
+
     // Don't clear existing products when zodiac changes
   };
 
@@ -323,7 +326,7 @@ const handleAddToCart = async () => {
   return (
     <div>
       <Header />
-      <div className="container py-5">
+      <div className="container py-5 ">
         <div className="">
           <h2 className="text-center mb-5 artisan-font">Hampers</h2>
           <p className="text-center sora">
@@ -332,44 +335,73 @@ const handleAddToCart = async () => {
             an added touch of care
           </p>
 
-          <div className=" row justify-content-center text-center sora gap-5">
-            <div className="col-md-2 mb-4">
-              <div
-                className="hamper-card p-3"
-                onClick={() => setActiveSection("zodiac")}
-              >
-                <img src="./images/hamper.jpg" className="w-100" alt="Zodiac" />
-                <div className="d-flex align-items-center justify-content-between w-100">
-                  <h5 className="mt-3 hamper-title">Zodiac Hamper</h5>
-                  <FontAwesomeIcon
-                    icon={faAngleRight}
-                    size="xl"
-                    style={{ color: "#000" }}
-                  />
+          <div className="sora">
+            <div className="container-fluid">
+              <div className="row align-items-center justify-content-center">
+                {/* LEFT CARD */}
+                <div className="col-lg-4 col-md-4 col-10 mb-4 mb-lg-0">
+                  <div
+                    className="hamper-card side-card d-flex gap-2 left-card"
+                    onClick={() => setActiveSection("zodiac")}
+                  >
+                    <div className="align-items-center">
+                      <div className="d-flex justify-content-between align-items-center mt-3">
+                        <h5 className="hamper-title">Zodiac Hampers</h5>
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </div>
+                      <hr />
+                      <p className="hamper-subtitle">
+                        Choose Your Sun Sign <br />
+                        To Explore Products Crafted For It & Enjoy A
+                        Complimentary Face Towel
+                      </p>
+                    </div>
+                    <img
+                      src="./images/hamper-1.png"
+                      className="w-50"
+                      alt="Zodiac"
+                    />
+                  </div>
                 </div>
-                <hr />
-                <p className="hamper-subtitle">Sun Sign Hamper</p>
-              </div>
-            </div>
 
-            <div className="col-md-2 mb-4">
-              <div
-                className="hamper-card p-3"
-                onClick={() => setActiveSection("craft")}
-              >
-                <img src="./images/hamper.jpg" className="w-100" alt="Craft" />
-                <div className="d-flex align-items-center justify-content-between w-100">
-                  <h5 className="mt-3 hamper-title">Craft Your Hamper</h5>
-                  <FontAwesomeIcon
-                    icon={faAngleRight}
-                    size="xl"
-                    style={{ color: "#000" }}
-                  />
+                {/* CENTER IMAGE */}
+                <div className="col-lg-4 col-md-6 col-12 text-center mb-4 mb-lg-0">
+                  <div className="center-image-wrapper">
+                    <img
+                      src="./images/hamper-banner.png"
+                      className="center-image"
+                      alt="Main"
+                    />
+                  </div>
                 </div>
-                <hr />
-                <p className="hamper-subtitle">
-                  Pick any sun sign and get a complimentary towel
-                </p>
+
+                {/* RIGHT CARD */}
+                <div className="col-lg-4 col-md-4 col-10">
+                  <div
+                    className="hamper-card side-card d-flex gap-2 right-card"
+                    onClick={() => setActiveSection("craft")}
+                  >
+                    <img
+                      src="./images/hamper-2.png"
+                      className="w-50"
+                      alt="Craft"
+                    />
+                    <div>
+                      <div className="d-flex justify-content-between align-items-center mt-3">
+                        <FontAwesomeIcon icon={faAngleLeft} />
+                        <h5 className="hamper-title text-end w-100">
+                          Curate Your Hamper
+                        </h5>
+                      </div>
+                      <hr />
+                      <p className="hamper-subtitle text-end">
+                        Choose Your Sun Sign <br />
+                        To Explore Products Crafted For It & Enjoy A
+                        Complimentary Face Towel
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [subscribe, setSubscribe] = useState(false);
-
+  const [couponApplied, setCouponApplied] = useState(false);
   const [cart, setCart] = useState([]);
   const [billing, setBilling] = useState({
     name: "",
@@ -21,9 +21,9 @@ const Checkout = () => {
     city: "",
     pincode: "",
   });
-// ================= APPLY COUPON =================
-const applyCoupon = async () => {
-  if (!couponCode) return;
+  // ================= APPLY COUPON =================
+  const applyCoupon = async () => {
+  if (!couponCode || couponApplied) return;
 
   try {
     const res = await fetch(`${API_URL}/orders/coupon/validate`, {
@@ -38,12 +38,16 @@ const applyCoupon = async () => {
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message);
+      alert(data.message || "Coupon not valid for this order");
       setDiscount(0);
+      setCouponApplied(false);
       return;
     }
 
-    setDiscount((subtotal * data.discountPercent) / 100);
+    const discountAmount = (subtotal * data.discountPercent) / 100;
+
+    setDiscount(discountAmount);
+    setCouponApplied(true);
 
   } catch (err) {
     console.error(err);
@@ -436,6 +440,7 @@ const applyCoupon = async () => {
                       placeholder="Enter Coupon Code"
                       className="coupon-input"
                       value={couponCode}
+                      disabled={couponApplied}
                       onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                     />
 

@@ -9,7 +9,7 @@ const Zodiacdetails = () => {
       name: "Aries",
       date: "March 21 - April 19",
       color: "#C10230",
-      icon: "./images/zodiac/1.png",
+      icon: "/images/zodiac/1.png",
       description:
         "Aries, the natural ruler of healthy self-esteem, ego, fresh beginnings, spring, and physical presence, embodies the essence of selfhood. It is the sign of initiation—the spark that gives rise to identity and expression. At its core, Aries represents the formation of a strong, authentic sense of Self. Yet true evolution for Aries comes not only through bold individuality, but also through learning adaptability—acting with conviction while recognizing its role as a vital part of the greater whole.",
       letters: "A, L, E, I, O",
@@ -37,7 +37,7 @@ const Zodiacdetails = () => {
       name: "Taurus",
       date: "April 20 - May 20",
       color: "#4D5A31",
-      icon: "./images/zodiac/2.png",
+      icon: "/images/zodiac/2.png",
       description:
         "Grounded, sensual, and steadfast — Taurus reigns as the most earthy of the earth signs, embodying loyalty, prosperity, and a deep-rooted kindness. This sign’s true evolution lies in mastering the art of balance — embracing inevitable change while staying connected to its innate power to create, nurture, and build enduring foundations.",
       letters: "B, V, U",
@@ -64,7 +64,7 @@ const Zodiacdetails = () => {
       name: "Gemini",
       date: "May 21 - June 20",
       color: "#7E622D",
-      icon: "./images/zodiac/3.png",
+      icon: "/images/zodiac/3.png",
       description:
         "Masters of the information age, Geminis are natural shape shifters — swift, curious, and everevolving. They move effortlessly between realms of thought and feeling, bridging the conscious and the unseen, the earthly and the divine. Intelligent, expressive, and endlessly adaptable, Gemini’s true growth unfolds when they release the need for mental control and surrender to stillness — allowing truth to rise naturally into clarity and deeper understanding.",
       letters: "K, Chh, Gh, Q, C",
@@ -91,7 +91,7 @@ const Zodiacdetails = () => {
       name: "Cancer",
       date: "June 21 - July 22",
       color: "#5F504D",
-      icon: "./images/zodiac/4.png",
+      icon: "/images/zodiac/4.png",
       description:
         "The Cancer archetype embodies The Great Mother and The Queen — the divine nurturer within us all. Guided by instinct and attuned to the needs of others, Cancer offers unconditional care and emotional depth. Ruled by the Moon, they ebb and flow with life’s unseen tides, sensing what lies beneath the surface. Natural homemakers and protectors, their evolution comes through expanding that sacred sense of belonging — extending the love of home and family to embrace the earth and all living beings.",
       letters: "Dd, H",
@@ -118,7 +118,7 @@ const Zodiacdetails = () => {
       name: "Leo",
       date: "July 23 - August 22",
       color: "#D7982B",
-      icon: "./images/zodiac/5.png",
+      icon: "/images/zodiac/5.png",
       description:
         "Like the Lion, Leo stands proud — confident, noble, and generous at heart. Playful and expressive, they thrive in the spotlight, drawn to create, perform, and be seen. Yet true Leo maturity unfolds in the realization that their purpose is not to be the light’s source, but its radiant expression — to shine with warmth, creativity, and love, offering their brilliance as a gift of joy and blessing to the world.",
       letters: "M, T",
@@ -146,7 +146,7 @@ const Zodiacdetails = () => {
       name: "Virgo",
       date: "August 23 - September 22",
       color: "#85422B",
-      icon: "./images/zodiac/6.png",
+      icon: "/images/zodiac/6.png",
       description:
         "The grounded face of Mercury, Virgo embodies precision, practicality, and quiet mastery. Attuned to body, mind, and environment, Virgos move through life with purpose and care, guided by an innate desire for order and well-being. Their true evolution begins when they transcend the divide born from constant self-critique and analysis — awakening instead to a higher wisdom of inclusiveness, compassion, and the seamless unity between themselves and the world they so thoughtfully tend.",
       letters: "P, Tha, N, T, Sha",
@@ -172,7 +172,7 @@ const Zodiacdetails = () => {
       name: "Libra",
       date: "September 23 - October 22",
       color: "#AE1857",
-      icon: "./images/zodiac/7.png",
+      icon: "/images/zodiac/7.png",
       description:
         "Bearers of beauty, balance, and justice, Libras embody grace in connection. Naturally social and harmonizing, they seek depth and wisdom in partnership, valuing relationships as mirrors of growth and meaning. Libra’s true evolution unfolds in the realization that wholeness begins within — that through self-awareness and authentic connection, they serve both personal harmony and the greater equilibrium of all life.",
       letters: "R, T",
@@ -198,7 +198,7 @@ const Zodiacdetails = () => {
       name: "Scorpio",
       date: "October 23 - November 21",
       color: "#2D2A26",
-      icon: "./images/zodiac/8.png",
+      icon: "/images/zodiac/8.png",
       description:
         "The innate master of transformation, Scorpio governs the realms of rebirth, depth, and emotional power. Co-ruled by Mars and Pluto, this sign moves through life with intensity and purpose, unafraid to explore the shadows in pursuit of truth. Scorpio’s true liberation arises in the cycle of surrender — in releasing the identities they so passionately build, only to be reborn, again and again, into greater authenticity and freedom.",
       letters: "N, Y",
@@ -224,7 +224,7 @@ const Zodiacdetails = () => {
       name: "Sagittarius",
       date: "November 22 - December 21",
       color: "#490E67",
-      icon: "./images/zodiac/9.png",
+      icon: "/images/zodiac/9.png",
       description:
         "Sagittarius, the Zodiac’s freedom-loving explorer, thrives on curiosity, philosophy, and visionary ideals. Open-minded and discerning, they recognize the limits of all belief systems, finding meaning in both worldly journeys and inner, spiritual quests. True evolution for Sagittarius comes when they surrender the pursuit of perfection, embracing instead the rich, messy reality of humanity as it is — discovering joy and wisdom in life’s imperfect truths.",
       letters: "Bh, Dh, Ph, Ddh",
@@ -408,7 +408,9 @@ const Zodiacdetails = () => {
 
               {/* ZODIAC GRID */}
               <div className="container details-zodiac-section text-center sora">
-                <h5 className="mb-4 text-dark fw-semibold text-start">Explore Other Sun Sign</h5>
+                <h5 className="mb-4 text-dark fw-semibold text-start">
+                  Explore Other Sun Sign
+                </h5>
 
                 <div className="row justify-content-center details-zodiac-row">
                   {zodiacSigns.map((sign, index) => (
@@ -424,7 +426,9 @@ const Zodiacdetails = () => {
                           className="details-zodiac-image"
                         />
                       </div>
-                      <p className="details-zodiac-name mt-2 text-dark">{sign.name}</p>
+                      <p className="details-zodiac-name mt-2 text-dark">
+                        {sign.name}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -448,20 +452,52 @@ const Zodiacdetails = () => {
           >
             <div className="aries-content inter container sora">
               <div className="zodiac-header text-white text-center">
-                <p className="aries-date mb-3">{selectedZodiac.date}</p>
+                {/* <p className="aries-date mb-3">{selectedZodiac.date}</p> */}
 
-                <div className="d-flex justify-content-center align-items-center gap-4">
-                  <h1 className="aries-title mb-0">{selectedZodiac.name}</h1>
+                <div className="d-none d-md-block">
+                  <div className="d-flex justify-content-center align-items-center gap-5  ">
+                    <div className="d-block">
+                      <h1 className="aries-title gt-super mb-0">
+                        {selectedZodiac.name}
+                      </h1>
+                      <p className="aries-date mb-3 gt-super">
+                        {selectedZodiac.date}
+                      </p>
+                    </div>
+                    <div
+                      className="aries-icon-circle d-flex justify-content-center align-items-center"
+                      style={{ backgroundColor: selectedZodiac.color }}
+                    >
+                      <img
+                        src={selectedZodiac.icon}
+                        alt="icon"
+                        className="aries-icon-img"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                  <div
-                    className="aries-icon-circle d-flex justify-content-center align-items-center"
-                    style={{ backgroundColor: selectedZodiac.color }}
-                  >
-                    <img
-                      src={selectedZodiac.icon}
-                      alt="icon"
-                      className="aries-icon-img"
-                    />
+              <div className="d-block d-md-none">
+                <div className="zodiac-header text-white d-flex justify-content-center align-items-center text-center">
+                  <div>
+                    <div
+                      className="aries-icon-circle d-flex justify-content-center align-items-center mx-auto"
+                      style={{ backgroundColor: selectedZodiac.color }}
+                    >
+                      <img
+                        src={selectedZodiac.icon}
+                        alt="icon"
+                        className="aries-icon-img"
+                      />
+                    </div>
+
+                    <h1 className="aries-title text-center gt-super mb-0">
+                      {selectedZodiac.name}
+                    </h1>
+                    <p className="aries-date gt-super mb-3">
+                      {selectedZodiac.date}
+                    </p>
                   </div>
                 </div>
               </div>
