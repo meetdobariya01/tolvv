@@ -99,8 +99,8 @@ const HomeModal = () => {
                 ></button>
               </div>
 
-              <h4 className="mb-4 fw-semibold text-center text-md-start">
-                <span className="artisan-font begin-text">Begin</span><span className="tolvv-name"> Your TOLVV Ritual</span>
+              <h4 className="mb-4 fw-semibold text-center text-md-start ms-4">
+                <span className="artisan-font begin-text">Begin</span><span className="tolvv-name fw-normal"> Your TOLVV Ritual</span>
               </h4>
 
               <div className="form-check mb-3 mt-5">
@@ -116,7 +116,7 @@ const HomeModal = () => {
                 </label>
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 ms-4">
                 <label className="form-label small">YOUR EMAIL ID</label>
                 <input
                   type="email"
@@ -128,14 +128,14 @@ const HomeModal = () => {
               </div>
 
               <button
-                className="btn btn-outline-dark btn-sm px-4"
+                className="btn btn-outline-dark btn-sm px-4 ms-4"
                 onClick={handleGetCoupon}
                 disabled={sending}
               >
                 {sending ? <Spinner size="sm" /> : "GET A CODE"}
               </button>
 
-              <p className="small mt-3 text-muted">
+              <p className="small mt-3 text-muted ms-4">
                 Your inbox has a little surprise waiting for you.
               </p>
 

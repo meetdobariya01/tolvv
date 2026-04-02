@@ -89,8 +89,14 @@ const planetData = [
     image: "/images/saturn.png",
     mood: "Wisdom",
     bg: "#211F1B",
-    description: "The Wise Elder Woman of the cosmos and our inner world, she guides us toward profound self-knowledge through direct experience with Source. Her teachings are rooted in silence, discipline, time, and a grounded connection to reality.",
-    meta: { energy: "Wisdom, Mastery", colour: "Black", element: "Earth", rules: "Capricorn & Aquarius" },
+    description:
+      "The Wise Elder Woman of the cosmos and our inner world, she guides us toward profound self-knowledge through direct experience with Source. Her teachings are rooted in silence, discipline, time, and a grounded connection to reality. She embodies the art of boundaries and the practice of self-mastery — inviting us to cultivate inner strength, discipline, and the refinement of our skills and spirit.",
+    meta: {
+      energy: "Wisdom, Mastery",
+      colour: "Black",
+      element: "Earth",
+      rules: "Capricorn & Aquarius",
+    },
     zodiac: "Capricorn & Aquarius",
   },
 ];

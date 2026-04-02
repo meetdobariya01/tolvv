@@ -8,17 +8,18 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 // import Cookies from "js-cookie";
 import Zodiacdetails from "../../components/zodiac-details/zodiacdetails";
+import "./productdetails.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 const productInfo = {
   bath: {
     title: "BATH GEL",
-    images: [
-      { src: "/images/icon-1.png", name: "Foam Booster" },
-      { src: "/images/icon-2.png", name: "Essential Oil" },
-      { src: "/images/icon-3.png", name: "Vitamin E" },
-      { src: "/images/icon-4.png", name: "Coconut Oil" },
+     images: [
+      { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
+      { src: "/images/icon-2.png", name: "Paraben Free" },
+      { src: "/images/icon-3.png", name: "Skin Friendly" },
+      { src: "/images/icon-4.png", name: "CrueltyFree" },
     ],
     howToUse:
       "Wet your skin, then work a small amount of 12’s Bath Gel into a lather using a loofah or your hands. Gently massage over your body, rinse thoroughly and pat dry.",
@@ -290,7 +291,7 @@ const Productdetails = ({ handleCartOpen }) => {
                 />
               )}
           </Col>
-          
+
           <Col md={4}>
             <AnimatePresence mode="wait">
               <motion.div
@@ -307,16 +308,14 @@ const Productdetails = ({ handleCartOpen }) => {
                   {productInfo[activeTab]?.images?.map((img, idx) => (
                     <Col xs={6} md={3} key={idx} className="text-center">
                       <motion.img
-                        src={img}
-                        alt="feature icon"
+                        src={img.src}
+                        alt={img.name}
                         className="img-fluid"
                         style={{ maxHeight: "100px" }}
                         whileHover={{ scale: 1.08 }}
                         transition={{ duration: 0.2 }}
                       />
-                      <p className="mt-2 small text-dark">
-                        {productInfo[activeTab]?.images[idx]?.name || ""}
-                      </p>
+                      <p className="mt-2  image-name text-dark">{img.name}</p>
                     </Col>
                   ))}
                 </Row>
@@ -350,6 +349,8 @@ const Productdetails = ({ handleCartOpen }) => {
           </Col>
         </Row>
         <hr />
+        <h5>You May Also Like</h5>
+
         <Row className="mt-5 text-center text-decoration-none">
           {[
             { key: "Bath Gel", label: "BATH GEL" },
