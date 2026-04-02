@@ -69,8 +69,7 @@
   margin-bottom: 8px;
   border: 1px solid #000;
   background: transparent;
-  border-radius: 
-  5px;
+  border-radius: 5px;
 }
 
 .check-btn {
@@ -95,7 +94,7 @@
 .checkout-btn {
   width: 100%;
   border: 1px solid black;
-      background: transparent;
+  background: transparent;
   padding: 10px;
 }
 
@@ -202,7 +201,7 @@
 
 .add-btn-1 {
   /* background: black; */
-  color:#000;
+  color: #000;
   /* border: none; */
   padding: 6px 12px;
   font-size: 10px;
@@ -211,7 +210,7 @@
   height: 31px;
   background: transparent;
   border-radius: 5px;
-  border-color: black ;
+  border-color: black;
   border: 1px solid black;
 }
 
@@ -226,6 +225,9 @@
   .product-img-box img {
     max-height: 180px;
   }
+  .add-btn-1 {
+    width: auto;
+  }
 }
 
 .product-title {
@@ -235,26 +237,4 @@
 }
 .add-btn-1{
   width: auto;
-}
-.product-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.zodiac-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-  margin-top: 1px; /* 🔥 tiny vertical fix */
-}
-
-.product-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
 }
