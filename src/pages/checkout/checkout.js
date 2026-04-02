@@ -27,6 +27,7 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [placing, setPlacing] = useState(false);
   const [addFreeProduct, setAddFreeProduct] = useState(false);
+const [refreshKey, setRefreshKey] = useState(0);
 
   const token = localStorage.getItem("token");
 
@@ -121,17 +122,22 @@ const Checkout = () => {
           };
         }
 
-        if (item.hamperId) {
-          return {
-            id: item.hamperId._id,
-            type: "hamper",
-            name: "Custom Hamper",
-            price: item.hamperId.totalPrice,
-            qty: item.quantity,
-            img: "/images/hamper.jpg",
-          };
-        }
+       if (item.hamperId) {
+  return {
+    id: item.hamperId._id,
+    type: "hamper",
+    name: "Custom Hamper",
+    price: item.hamperId.totalPrice,
+    qty: item.quantity,
+    img: "/images/hamper.jpg",
 
+    // ✅ ADD THIS
+    hamperItems: item.hamperId.products?.map((p) => ({
+      name: p.productId?.ProductName,
+      quantity: p.quantity,
+    })) || []
+  };
+}
         return null;
       }) || [];
 
@@ -151,9 +157,24 @@ const Checkout = () => {
       window.removeEventListener("cartUpdated", handleCartUpdate);
     };
   }, [mergeCart]);
-  useEffect(() => {
-    mergeCart(); // ✅ load cart on page open
-  }, [mergeCart]);
+ useEffect(() => {
+  mergeCart();
+}, [token]);
+
+
+useEffect(() => {
+  const handleCartUpdate = () => {
+    setRefreshKey(prev => prev + 1);
+    mergeCart();
+  };
+
+  window.addEventListener("cartUpdated", handleCartUpdate);
+
+  return () => {
+    window.removeEventListener("cartUpdated", handleCartUpdate);
+  };
+}, []);
+// 👈 add token dependency
   // ================= TOTAL =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const total = subtotal - discount;

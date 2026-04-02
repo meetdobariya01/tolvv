@@ -82,7 +82,10 @@ function AppWrapper() {
 
         <Route path="/category" element={<Category />} />
         <Route path="/profile" element={<AccountPage />} />
-        <Route path="/hamper" element={<HamperPage />} />
+        <Route
+          path="/hamper"
+          element={<HamperPage handleCartOpen={handleCartOpen} />}
+        />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

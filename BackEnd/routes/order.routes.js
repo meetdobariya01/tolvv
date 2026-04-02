@@ -524,17 +524,27 @@ router.post("/place", authenticate, async (req, res) => {
     const products = await Product.find({
       _id: { $in: orderItems.map(i => i.productId).filter(Boolean) }
     });
-
     const itemsHtml = orderItems.map(i => {
-      const product = products.find(
-        p => p._id.toString() === (i.productId || "").toString()
-      );
 
-      const name = product ? product.ProductName : i.productName;
+      // ✅ NORMAL PRODUCT
+      if (!i.hamperItems) {
+        return `<li>${i.productName} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
+      }
 
-      return `<li>${name} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
+      // ✅ HAMPER WITH ITEMS
+      const hamperList = i.hamperItems.map(h => {
+        return `<li style="margin-left:15px;">
+      - ${h.name} × ${h.quantity} ${h.isFree ? "(FREE)" : ""}
+    </li>`;
+      }).join("");
+
+      return `
+    <li>
+      <strong>${i.productName}</strong> — ₹${i.priceAtBuy} × ${i.quantity}
+      <ul>${hamperList}</ul>
+    </li>
+  `;
     }).join("");
-
     const orderDetails = {
       customOrderId,
       paymentMethod,

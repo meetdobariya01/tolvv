@@ -14,7 +14,7 @@ const HomeModal = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -66,7 +66,7 @@ const HomeModal = () => {
     >
       <Modal.Body className="p-0">
         <div className="row g-0 modal-wrapper">
-
+          
           {/* LEFT IMAGE */}
           <div className="col-md-6 d-none d-md-block">
             <motion.div
@@ -101,7 +101,7 @@ const HomeModal = () => {
               </div>
 
               <h4 className="mb-4 fw-semibold text-center text-md-start">
-                <span className="artisan-font display-6">Begin</span> Your TOLVV Ritual
+                Begin Your TOLVV Ritual
               </h4>
 
               {/* CHECKBOX */}
@@ -112,8 +112,7 @@ const HomeModal = () => {
                 </label>
               </div>
 
-              {/* EMAIL INPUT */}
-              <div className="my-3">
+              <div className="mb-3">
                 <label className="form-label small">YOUR EMAIL ID</label>
                 <input
                   type="email"

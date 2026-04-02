@@ -76,32 +76,34 @@ const Mainproduct = ({ handleCartOpen }) => {
     Aquarius: "#519AA2",
     Pisces: "#043D5D",
   };
+
+  
   const categories = products.map((p) => p.category);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/products`);
-        const data = res.data;
+ useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/products`);
+      const data = res.data;
 
-        const grouped = {};
-        categories.forEach((cat) => (grouped[cat] = []));
+      const grouped = {};
+      categories.forEach((cat) => (grouped[cat] = []));
 
-        data.forEach((prod) => {
-          const category = prod.Category?.trim();
-          if (grouped[category]) {
-            grouped[category].push(prod);
-          }
-        });
+      data.forEach((prod) => {
+        const category = prod.Category?.trim();
+        if (grouped[category]) {
+          grouped[category].push(prod);
+        }
+      });
 
-        setProductsByCategory(grouped);
-      } catch (err) {
-        console.error("Failed to fetch products:", err);
-      }
-    };
+      setProductsByCategory(grouped);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+    }
+  };
 
-    fetchProducts();
-  });
+  fetchProducts();
+}, []); // ✅ IMPORTANT
 
   const handleBuyNow = async (product) => {
     if (!product) return;

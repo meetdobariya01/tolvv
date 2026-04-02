@@ -10,20 +10,7 @@ import Calculator from "../../components/calculator/calculator";
 const Zodic = () => {
   // const [active, setActive] = useState(null);
 
-  // const zodiacColors = {
-  //   Aries: "#c10230",
-  //   Taurus: "#ae1857",
-  //   Gemini: "#d79a2b",
-  //   Cancer: "#85422b",
-  //   Leo: "#4d5a31",
-  //   Virgo: "#5f504d",
-  //   Libra: "#7e622d",
-  //   Scorpio: "#2d2a26",
-  //   Sagittarius: "#490e67",
-  //   Capricorn: "#726b54",
-  //   Aquarius: "#005d63",
-  //   Pisces: "#006098",
-  // };
+  const zodiacColors = { Aries: "#7A1318", Taurus: "#7A8B3D", Gemini: "#BB892C", Cancer: "#8A8C8E", Leo: "#E8C43A", Virgo: "#DC4D2D", Libra: "#F04E4C", Scorpio: "#000000", Sagittarius: "#74489D", Capricorn: "#CCC29F", Aquarius: "#519AA2", Pisces: "#043D5D", }
 
   const zodiacData = {
     Aries: {
@@ -384,7 +371,7 @@ const Zodic = () => {
   ];
   // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
-useEffect(() => {
+  useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${API_URL}/products`);
@@ -565,7 +552,7 @@ useEffect(() => {
                           <div className="price-with-dot-1">
                             <span
                               className="zodiac-dot"
-                              style={{ backgroundColor: selectedZodiac.color }}
+                              style={{ backgroundColor: zodiacColors[selectedZodiac.name] }}
                             ></span>
 
                             <span className="zodiac-price fw-bolder">

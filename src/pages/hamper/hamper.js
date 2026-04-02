@@ -36,14 +36,15 @@ const productData = [
   { id: 5, name: "Soap", size: "100 gms", img: "/images/sp.png" },
 ];
 
-function HamperPage() {
+function HamperPage({ handleCartOpen }) {
   const [activeSection, setActiveSection] = useState(null);
-  const [selectedZodiacs, setSelectedZodiacs] = useState([]);
+  // const [selectedZodiacs, setSelectedZodiacs] = useState([]);
   // CHANGED: Initialize as an array for multiple selection
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
   const [qty, setQty] = useState({});
   const [zodiacHampers, setZodiacHampers] = useState([]);
+  const [selectedZodiac, setSelectedZodiac] = useState("");
   const zodiacColors = {
     Aries: "#7A1318",
     Taurus: "#7A8B3D",
@@ -77,6 +78,9 @@ function HamperPage() {
 
     fetchHampers();
   }, []);
+  const handleZodiacSelect = (name) => {
+    setSelectedZodiac(name);
+  };
   const getImage = (photos) => {
     if (!photos) return "";
 
@@ -106,10 +110,12 @@ function HamperPage() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
-        alert("Added to cart!");
+        // ✅ OPEN CART SIDEBAR
+        if (handleCartOpen) handleCartOpen();
+
       } catch (error) {
         console.error(error);
       }
@@ -142,16 +148,20 @@ function HamperPage() {
 
       localStorage.setItem("guestCart", JSON.stringify(cart));
 
-      alert("Added to cart!");
+      // ✅ OPTIONAL: update cart UI globally
+      window.dispatchEvent(new Event("cartUpdated"));
+
+      // ✅ OPEN CART SIDEBAR
+      if (handleCartOpen) handleCartOpen();
     }
   };
   useEffect(() => {
     // UPDATED: Check for length of categories array
-    if (selectedZodiacs.length > 0 && selectedCategories.length > 0) {
+    if (selectedZodiac && selectedCategories.length > 0) {
       const getProducts = async () => {
         try {
           const res = await axios.post(`${API_URL}/hamper/zodiac-products`, {
-            zodiacs: selectedZodiacs,
+            zodiacs: [selectedZodiac],
             // Send the array to your backend (ensure backend handles { Category: { $in: categories } })
             category: selectedCategories,
           });
@@ -164,13 +174,13 @@ function HamperPage() {
     } else {
       setFetchedProducts([]); // Clear products if selection is empty
     }
-  }, [selectedZodiacs, selectedCategories]);
+  }, [selectedZodiac, selectedCategories]);
 
-  const handleZodiacToggle = (name) => {
-    setSelectedZodiacs((prev) =>
-      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name],
-    );
-  };
+  // const handleZodiacToggle = (name) => {
+  //   setSelectedZodiacs((prev) =>
+  //     prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name],
+  //   );
+  // };
 
   // NEW: Handle Category Multiple Selection (Checkbox style)
   const handleCategoryToggle = (name) => {
@@ -203,7 +213,7 @@ function HamperPage() {
     }
 
     const payload = {
-      zodiacs: selectedZodiacs,
+      zodiacs: [selectedZodiac],
       products: selectedItems.map((p) => ({
         productId: p._id,
         quantity: qty[p._id],
@@ -387,14 +397,15 @@ function HamperPage() {
               {zodiacData.map((zodiac, index) => (
                 <div key={index} className="zodiac-item-1 text-center">
                   <input
-                    type="checkbox"
-                    checked={selectedZodiacs.includes(zodiac.name)}
-                    onChange={() => handleZodiacToggle(zodiac.name)}
+                    type="radio"
+                    name="zodiac"
+                    checked={selectedZodiac === zodiac.name}
+                    onChange={() => handleZodiacSelect(zodiac.name)}
                     className="mb-2 ms-5"
                   />
                   <div
-                    className={`zodiac-img ${selectedZodiacs.includes(zodiac.name)}`}
-                    onClick={() => handleZodiacToggle(zodiac.name)}
+                    className={`zodiac-img ${selectedZodiac === zodiac.name ? "active" : ""}`}
+                    onClick={() => handleZodiacSelect(zodiac.name)}
                   >
                     <img src={zodiac.img} alt={zodiac.name} />
                   </div>
