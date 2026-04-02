@@ -7,7 +7,7 @@ const {sendcouponcodeEmail
 // GET PRODUCTS BY MULTIPLE ZODIAC
 router.post("/zodiac-products", async (req, res) => {
   try {
-    const { zodiacs, category } = req.body;
+    const { zodiacs, category } = req.body; // category is now an array from your frontend
 
     if (!zodiacs || zodiacs.length === 0) {
       return res.status(400).json({ message: "Zodiacs required" });
@@ -17,18 +17,14 @@ router.post("/zodiac-products", async (req, res) => {
       Zodiac: { $in: zodiacs }
     };
 
-    // Apply category filter if it's not "All"
-    if (category && category !== "All") {
-      query.Category = category; 
+    // Since selectedCategories is an array, use $in
+    if (category && category.length > 0) {
+      query.Category = { $in: category }; 
     }
 
-    console.log("QUERY:", query);
     const products = await Product.find(query);
-    console.log("FOUND:", products.length);
-
     res.json(products);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });

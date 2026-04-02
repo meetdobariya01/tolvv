@@ -5,7 +5,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import "./login.css";
 import Cookies from "js-cookie";
-
+import { useLocation } from "react-router-dom";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
@@ -13,7 +13,8 @@ const api_base = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const navigate = useNavigate();
-
+const location = useLocation();
+const redirectPath = location.state?.from || "/";
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -65,22 +66,28 @@ const Login = () => {
 
   // -----------------------------
   // Merge guest cart
-  const mergeGuestCart = async (token) => {
-    const guestCart = Cookies.get("guestCart");
-    if (!guestCart) return;
+const mergeGuestCart = async (token) => {
+  const guestCart = localStorage.getItem("guestCart");
+  if (!guestCart) return;
 
-    const guestItems = JSON.parse(guestCart);
+  const guestItems = JSON.parse(guestCart);
 
+  try {
     await axios.post(
       `${api_base}/cart/merge`,
       { guestItems },
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
 
-    Cookies.remove("guestCart");
-  };
+    // ✅ CLEAR AFTER MERGE
+    localStorage.removeItem("guestCart");
+
+  } catch (err) {
+    console.error("Merge cart error:", err);
+  }
+};
 
   // -----------------------------
   // Email / Password Login
@@ -106,7 +113,7 @@ const Login = () => {
       // ✅ CORRECT FUNCTION CALL
       await mergeGuestCart(token);
 
-      navigate("/");
+      navigate(redirectPath);
     } catch (err) {
       setServerError(err.response?.data?.message || "Invalid credentials");
     } finally {

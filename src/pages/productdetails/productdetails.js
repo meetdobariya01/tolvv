@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FiShoppingCart} from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
 import { Container, Row, Col, Nav } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../../components/header/header";
@@ -96,8 +96,8 @@ const productInfo = {
     ],
     howToUse:
       "This hamper contains a curated selection of products. Refer to each individual product within the hamper for specific usage instructions.",
-    ingredients:
-      "A proprietary blend of Bath Gel, Soap, Essential Oil, and Perfume tailored to your Zodiac energy.",
+    // ingredients:
+    //   "A proprietary blend of Bath Gel, Soap, Essential Oil, and Perfume tailored to your Zodiac energy.",
     caution:
       "Perform a patch test for each product. Store in a cool place. Keep away from direct sunlight.",
   },
@@ -151,57 +151,57 @@ const Productdetails = ({ handleCartOpen }) => {
   }, [id]);
 
   // Add to cart (guest or logged-in)
- const addToCart = async () => {
-  if (!dbProduct) return;
-  const token = localStorage.getItem("token");
+  const addToCart = async () => {
+    if (!dbProduct) return;
+    const token = localStorage.getItem("token");
 
-  if (token) {
-    try {
-      await axios.post(
-        `${API_URL}/cart/add`,
-        { productId: dbProduct._id, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+    if (token) {
+      try {
+        await axios.post(
+          `${API_URL}/cart/add`,
+          { productId: dbProduct._id, quantity: 1 },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (handleCartOpen) handleCartOpen();
+      } catch (error) {
+        console.error("Add to cart error:", error.response?.data || error);
+
+        if (error.response?.status === 401) {
+          alert("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    } else {
+      let cart = [];
+
+      try {
+        const stored = localStorage.getItem("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch {
+        cart = [];
+      }
+
+      const existing = cart.find((i) => i.productId === dbProduct._id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: dbProduct._id,
+          quantity: 1,
+          price: dbProduct.ProductPrice,
+        });
+      }
+
+      localStorage.setItem("guestCart", JSON.stringify(cart));
+
+      window.dispatchEvent(new Event("cartUpdated"));
 
       if (handleCartOpen) handleCartOpen();
-    } catch (error) {
-      console.error("Add to cart error:", error.response?.data || error);
-
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
     }
-  } else {
-    let cart = [];
-
-    try {
-      const stored = localStorage.getItem("guestCart");
-      cart = stored ? JSON.parse(stored) : [];
-    } catch {
-      cart = [];
-    }
-
-    const existing = cart.find((i) => i.productId === dbProduct._id);
-
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({
-        productId: dbProduct._id,
-        quantity: 1,
-        price: dbProduct.ProductPrice,
-      });
-    }
-
-    localStorage.setItem("guestCart", JSON.stringify(cart));
-
-    window.dispatchEvent(new Event("cartUpdated"));
-
-    if (handleCartOpen) handleCartOpen();
-  }
-};
+  };
   // UI rendering (unchanged)
   if (loading)
     return (
@@ -295,8 +295,12 @@ const Productdetails = ({ handleCartOpen }) => {
                 <div className="details-text">
                   <h6 className="fw-bold">HOW TO USE</h6>
                   <p>{productInfo[activeTab]?.howToUse}</p>
-                  <h6 className="fw-bold">INGREDIENTS</h6>
-                  <p>{productInfo[activeTab]?.ingredients}</p>
+                  {productInfo[activeTab]?.ingredients && (
+                    <>
+                      <h6 className="fw-bold">INGREDIENTS</h6>
+                     <p>{productInfo[activeTab]?.ingredients}</p>
+                    </>
+                  )}
                   <h6 className="fw-bold">CAUTION</h6>
                   <p className="small">{productInfo[activeTab]?.caution}</p>
                 </div>

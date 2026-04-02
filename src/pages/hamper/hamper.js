@@ -38,13 +38,15 @@ const productData = [
 
 function HamperPage({ handleCartOpen }) {
   const [activeSection, setActiveSection] = useState(null);
-  // const [selectedZodiacs, setSelectedZodiacs] = useState([]);
-  // CHANGED: Initialize as an array for multiple selection
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [fetchedProducts, setFetchedProducts] = useState([]);
   const [qty, setQty] = useState({});
   const [zodiacHampers, setZodiacHampers] = useState([]);
   const [selectedZodiac, setSelectedZodiac] = useState("");
+  
+  // New state to track all added products (accumulated across zodiac changes)
+  const [allAddedProducts, setAllAddedProducts] = useState([]);
+  
   const zodiacColors = {
     Aries: "#7A1318",
     Taurus: "#7A8B3D",
@@ -59,13 +61,9 @@ function HamperPage({ handleCartOpen }) {
     Aquarius: "#519AA2",
     Pisces: "#043D5D",
   };
+  
   const normalize = (str) => str?.toLowerCase().replace(/\s/g, "");
 
-  const getCategoryCount = (category) => {
-    return fetchedProducts
-      .filter((p) => normalize(p.Category) === normalize(category))
-      .reduce((sum, p) => sum + (qty[p._id] || 0), 0);
-  };
   useEffect(() => {
     const fetchHampers = async () => {
       try {
@@ -75,205 +73,253 @@ function HamperPage({ handleCartOpen }) {
         console.error(err);
       }
     };
-
     fetchHampers();
   }, []);
+
   const handleZodiacSelect = (name) => {
     setSelectedZodiac(name);
+    // Don't clear existing products when zodiac changes
   };
+
   const getImage = (photos) => {
     if (!photos) return "";
-
     const img = Array.isArray(photos) ? photos[0] : photos;
-
-    // 👉 If already full URL, return as is
     if (img.startsWith("http")) return img;
-
-    // 👉 Otherwise attach API URL
     return `${img}`;
   };
-  const handleBuyNow = async (product) => {
-    if (!product) return;
 
-    const token = localStorage.getItem("token");
+ const handleBuyNow = async (product) => {
+  if (!product) return;
 
-    // ✅ Logged-in user
-    if (token) {
-      try {
-        await axios.post(
-          `${API_URL}/cart/add`,
-          {
-            productId: product._id,
-            quantity: 1,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  const token = localStorage.getItem("token");
 
-        // ✅ OPEN CART SIDEBAR
-        if (handleCartOpen) handleCartOpen();
-
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    // ✅ Guest user
-    else {
-      let cart = [];
-
-      try {
-        const stored = localStorage.getItem("guestCart");
-        cart = stored ? JSON.parse(stored) : [];
-      } catch {
-        cart = [];
-      }
-
-      const existing = cart.find((item) => item.productId === product._id);
-
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
+  if (token) {
+    try {
+      await axios.post(
+        `${API_URL}/cart/add`,
+        {
           productId: product._id,
           quantity: 1,
-          price: product.ProductPrice,
-          name: product.ProductName,
-          img: getImage(product.Photos),
-        });
-      }
-
-      localStorage.setItem("guestCart", JSON.stringify(cart));
-
-      // ✅ OPTIONAL: update cart UI globally
-      window.dispatchEvent(new Event("cartUpdated"));
-
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      
       // ✅ OPEN CART SIDEBAR
-      if (handleCartOpen) handleCartOpen();
+      if (handleCartOpen) {
+        handleCartOpen();
+      }
+      
+    } catch (error) {
+      console.error(error);
     }
-  };
+  } else {
+    let cart = [];
+    try {
+      const stored = localStorage.getItem("guestCart");
+      cart = stored ? JSON.parse(stored) : [];
+    } catch {
+      cart = [];
+    }
+    
+    const existing = cart.find((item) => item.productId === product._id);
+    
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        productId: product._id,
+        quantity: 1,
+        price: product.ProductPrice,
+        name: product.ProductName,
+        img: getImage(product.Photos),
+      });
+    }
+    
+    localStorage.setItem("guestCart", JSON.stringify(cart));
+    
+    // Dispatch event to update cart UI
+    window.dispatchEvent(new Event("cartUpdated"));
+    
+    // ✅ OPEN CART SIDEBAR
+    if (handleCartOpen) {
+      handleCartOpen();
+    }
+  }
+};
+  // Fetch products when zodiac or categories change, but ADD to existing products instead of replacing
   useEffect(() => {
-    // UPDATED: Check for length of categories array
     if (selectedZodiac && selectedCategories.length > 0) {
       const getProducts = async () => {
         try {
           const res = await axios.post(`${API_URL}/hamper/zodiac-products`, {
             zodiacs: [selectedZodiac],
-            // Send the array to your backend (ensure backend handles { Category: { $in: categories } })
             category: selectedCategories,
           });
+          
+          // NEW: Filter out products that are already in allAddedProducts to avoid duplicates
+          const existingProductIds = new Set(allAddedProducts.map(p => p._id));
+          const newProducts = res.data.filter(p => !existingProductIds.has(p._id));
+          
+          // Add new products to the accumulated list
+          setAllAddedProducts(prev => [...prev, ...newProducts]);
           setFetchedProducts(res.data);
         } catch (err) {
           console.error("Fetch Error:", err);
         }
       };
       getProducts();
-    } else {
-      setFetchedProducts([]); // Clear products if selection is empty
     }
   }, [selectedZodiac, selectedCategories]);
 
-  // const handleZodiacToggle = (name) => {
-  //   setSelectedZodiacs((prev) =>
-  //     prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name],
-  //   );
-  // };
-
-  // NEW: Handle Category Multiple Selection (Checkbox style)
+  // Handle Category Selection (Checkbox style)
   const handleCategoryToggle = (name) => {
     setSelectedCategories((prev) =>
-      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name],
+      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
     );
+  };
+
+  // Handle direct product addition when clicking on product
+  const handleProductClick = (product) => {
+    // Check if zodiac is selected first
+    if (!selectedZodiac) {
+      alert("Please select a zodiac sign first");
+      return;
+    }
+    
+    // Check if product already exists in allAddedProducts
+    const productExists = allAddedProducts.some(p => p._id === product._id);
+    
+    if (!productExists) {
+      // Add product directly
+      setAllAddedProducts(prev => [...prev, product]);
+      // Also add to qty with default quantity 1
+      setQty(prev => ({
+        ...prev,
+        [product._id]: (prev[product._id] || 0) + 1
+      }));
+    } else {
+      // If product exists, increase quantity
+      setQty(prev => ({
+        ...prev,
+        [product._id]: (prev[product._id] || 0) + 1
+      }));
+    }
   };
 
   const updateQty = (id, type) => {
     setQty((prev) => {
       const current = prev[id] || 0;
+      const newQty = type === "inc" ? current + 1 : Math.max(0, current - 1);
+      
+      // If quantity becomes 0, optionally keep the product but with 0 quantity
       return {
         ...prev,
-        [id]: type === "inc" ? current + 1 : Math.max(0, current - 1),
+        [id]: newQty,
       };
     });
   };
 
-  const handleAddToCart = async () => {
-    const selectedItems = fetchedProducts.filter((p) => qty[p._id] > 0);
+const handleAddToCart = async () => {
+  // Use allAddedProducts instead of fetchedProducts
+  const selectedItems = allAddedProducts.filter((p) => (qty[p._id] || 0) > 0);
 
-    const total = selectedItems.reduce(
-      (sum, p) => sum + p.ProductPrice * qty[p._id],
-      0,
-    );
+  const total = selectedItems.reduce(
+    (sum, p) => sum + p.ProductPrice * (qty[p._id] || 0),
+    0,
+  );
 
-    if (total < 2500) {
-      alert(`Minimum hamper value must be ₹2500. Current total: ₹${total}`);
-      return;
-    }
+  if (total < 2500) {
+    alert(`Minimum hamper value must be ₹2500. Current total: ₹${total}`);
+    return;
+  }
 
-    const payload = {
-      zodiacs: [selectedZodiac],
-      products: selectedItems.map((p) => ({
-        productId: p._id,
-        quantity: qty[p._id],
-      })),
-      totalPrice: total,
-    };
-
-    const token = localStorage.getItem("token");
-
-    try {
-      // ================= LOGGED-IN =================
-      if (token) {
-        const res = await axios.post(`${API_URL}/hamper/create`, payload);
-
-        const hamperId = res.data.hamper._id;
-
-        await axios.post(
-          `${API_URL}/cart/add-hamper`,
-          { hamperId, quantity: 1 },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        alert("Hamper added to cart!");
-      }
-
-      // ================= GUEST USER =================
-      else {
-        let cart = [];
-
-        try {
-          const stored = localStorage.getItem("guestCart");
-          cart = stored ? JSON.parse(stored) : [];
-        } catch {
-          cart = [];
-        }
-
-        // 🔥 Store FULL hamper object locally
-        cart.push({
-          type: "hamper",
-          hamperData: payload, // full hamper config
-          quantity: 1,
-          price: total,
-          name: "Custom Hamper",
-          img: "/images/hamper.jpg",
-        });
-
-        localStorage.setItem("guestCart", JSON.stringify(cart));
-
-        alert("Hamper added to cart!");
-      }
-    } catch (err) {
-      alert(err.response?.data?.message || "Error adding hamper");
-    }
+  const payload = {
+    zodiacs: [selectedZodiac],
+    products: selectedItems.map((p) => ({
+      productId: p._id,
+      quantity: qty[p._id] || 0,
+    })),
+    totalPrice: total,
   };
 
+  const token = localStorage.getItem("token");
+
+  try {
+    if (token) {
+      const res = await axios.post(`${API_URL}/hamper/create`, payload);
+      const hamperId = res.data.hamper._id;
+      await axios.post(
+        `${API_URL}/cart/add-hamper`,
+        { hamperId, quantity: 1 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      alert("Hamper added to cart!");
+      
+      // ✅ OPEN CART SIDEBAR AFTER ADDING TO CART
+      if (handleCartOpen) {
+        handleCartOpen();
+      }
+      
+      // Optional: Reset the hamper selection after adding to cart
+      // setAllAddedProducts([]);
+      // setQty({});
+      // setSelectedCategories([]);
+      // setSelectedZodiac("");
+      
+    } else {
+      let cart = [];
+      try {
+        const stored = localStorage.getItem("guestCart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch {
+        cart = [];
+      }
+      
+      // Create a unique ID for the hamper
+      const hamperId = `hamper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      cart.push({
+        id: hamperId,
+        type: "hamper",
+        hamperData: payload,
+        quantity: 1,
+        price: total,
+        name: "Custom Hamper",
+        img: "/images/hamper.jpg",
+      });
+      
+      localStorage.setItem("guestCart", JSON.stringify(cart));
+      
+      // Dispatch event to update cart UI
+      window.dispatchEvent(new Event("cartUpdated"));
+      
+      alert("Hamper added to cart!");
+      
+      // ✅ OPEN CART SIDEBAR AFTER ADDING TO CART
+      if (handleCartOpen) {
+        handleCartOpen();
+      }
+      
+      // Optional: Reset the hamper selection after adding to cart
+      // setAllAddedProducts([]);
+      // setQty({});
+      // setSelectedCategories([]);
+      // setSelectedZodiac("");
+    }
+  } catch (err) {
+    alert(err.response?.data?.message || "Error adding hamper");
+  }
+};
   const navigate = useNavigate();
+  
   return (
     <div>
       <Header />
@@ -356,12 +402,10 @@ function HamperPage({ handleCartOpen }) {
                                   zodiacColors[item.Zodiac] || "#000",
                               }}
                             ></span>
-
                             <h6 className="product-page-title">
                               {item.ProductName} <span>›</span>
                             </h6>
                           </div>
-
                           <div className="price-with-dot-1 d-flex align-items-center gap-2">
                             <span className="product-price">
                               ₹ {item.ProductPrice}
@@ -372,9 +416,9 @@ function HamperPage({ handleCartOpen }) {
                       <div className="product-divider"></div>
                     </Card.Body>
                     <button
-                      className="btn btn-outline-dark d-flex justify-content-start mb-2  fw-semibold"
+                      className="btn btn-outline-dark d-flex justify-content-start mb-2 fw-semibold"
                       onClick={(e) => {
-                        e.stopPropagation(); // ❗ prevent card click
+                        e.stopPropagation();
                         handleBuyNow(item);
                       }}
                     >
@@ -427,74 +471,43 @@ function HamperPage({ handleCartOpen }) {
                   >
                     <div
                       className="hamper-product-card"
-                      onClick={() => handleCategoryToggle(item.name)}
                       style={{
-                        border: selectedCategories.includes(item.name),
-                        cursor: "pointer",
                         padding: "10px",
                         position: "relative",
                       }}
                     >
-                      {/* CHANGED: type="checkbox" and checked logic */}
                       <input
                         type="checkbox"
                         name="cat"
                         checked={selectedCategories.includes(item.name)}
-                        readOnly
+                        onChange={() => handleCategoryToggle(item.name)}
                         className="product-checkbox"
                         style={{
                           position: "absolute",
                           top: "10px",
                           right: "10px",
+                          zIndex: 1,
                         }}
                       />
-                      <div className="hamper-product-img">
+                      <div 
+                        className="hamper-product-img"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          // When clicking on product image/info, fetch and add products from this category
+                          if (!selectedZodiac) {
+                            alert("Please select a zodiac sign first");
+                            return;
+                          }
+                          handleCategoryToggle(item.name);
+                        }}
+                      >
                         <img src={item.img} alt={item.name} />
                       </div>
                       <div className="hamper-product-info">
                         <h6>{item.name}</h6>
                         <div className="divider"></div>
-
-                        {/* ✅ CATEGORY QTY CONTROL */}
                         <div className="d-flex justify-content-between align-items-center mt-2">
                           <small className="text-muted">{item.size}</small>
-
-                          {/* <div className="qty-box d-flex align-items-center gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-
-                                const product = fetchedProducts.find(
-                                  (p) =>
-                                    normalize(p.Category) ===
-                                      normalize(item.name) &&
-                                    (qty[p._id] || 0) > 0,
-                                );
-
-                                if (product) updateQty(product._id, "dec");
-                              }}
-                            >
-                              -
-                            </button>
-
-                            <span>{getCategoryCount(item.name)}</span>
-
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-
-                                const product = fetchedProducts.find(
-                                  (p) =>
-                                    normalize(p.Category) ===
-                                    normalize(item.name),
-                                );
-
-                                if (product) updateQty(product._id, "inc");
-                              }}
-                            >
-                              +
-                            </button>
-                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -506,8 +519,8 @@ function HamperPage({ handleCartOpen }) {
             <div className="container my-4">
               <h6 className="fw-semibold mb-3 fs-5">Your Hamper</h6>
               <div className="row g-3">
-                {fetchedProducts.length > 0 ? (
-                  fetchedProducts.map((item) => (
+                {allAddedProducts.length > 0 ? (
+                  allAddedProducts.map((item) => (
                     <div key={item._id} className="col-lg-3 col-md-4 col-6">
                       <div className="hamper-card p-2">
                         <input
@@ -542,7 +555,6 @@ function HamperPage({ handleCartOpen }) {
                                   display: "inline-block",
                                 }}
                               ></span>
-
                               <h6 className="mb-0" style={{ fontSize: "14px" }}>
                                 {item.ProductName}
                               </h6>
@@ -574,8 +586,9 @@ function HamperPage({ handleCartOpen }) {
                   ))
                 ) : (
                   <p className="text-muted">
-                    Select at least one Zodiac and one Category to load
-                    products.
+                    {!selectedZodiac 
+                      ? "Please select a zodiac sign first" 
+                      : "Select at least one category to add products to your hamper"}
                   </p>
                 )}
               </div>
@@ -587,12 +600,6 @@ function HamperPage({ handleCartOpen }) {
               onClick={handleAddToCart}
             >
               ADD TO CART <FiShoppingCart className="ms-1" size={22} />
-              {/* <FontAwesomeIcon
-                icon={faCartShopping}
-                flip="horizontal"
-                size="xl"
-                className="ms-2"
-              /> */}
             </button>
           </div>
         )}

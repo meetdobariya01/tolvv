@@ -347,7 +347,7 @@ const CartSidebar = ({ show, handleClose }) => { // Remove navigate from props
     if (token) {
       navigate("/Check-out"); // Navigate to checkout
     } else {
-      navigate("/login"); // Navigate to login
+     navigate("/login", { state: { from: "/Check-out" } }); // Navigate to login
     }
   };
 

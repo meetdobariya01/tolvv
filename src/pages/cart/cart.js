@@ -233,9 +233,12 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    if (!token) navigate("/login");
-    else navigate("/Check-out", { state: { note, shipping } });
-  };
+  if (!token) {
+    navigate("/login", { state: { from: "/Check-out" } }); // ✅ FIX
+  } else {
+    navigate("/Check-out", { state: { note, shipping } });
+  }
+};
 
   if (loading)
     return (

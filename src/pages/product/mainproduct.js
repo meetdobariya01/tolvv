@@ -77,9 +77,22 @@ const Mainproduct = ({ handleCartOpen }) => {
     Pisces: "#043D5D",
   };
 
-  
+  const location = useLocation();
   const categories = products.map((p) => p.category);
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const category = params.get("category");
 
+  if (category) {
+    setActiveKey(category);
+
+    setTimeout(() => {
+      document
+        .getElementById("product-grid")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  }
+}, [location.search]);
  useEffect(() => {
   const fetchProducts = async () => {
     try {
