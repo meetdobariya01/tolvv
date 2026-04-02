@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { motion } from "framer-motion";
 import "./modal.css";
 
 const HomeModal = () => {
   const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
 
-  // ⏱ Auto open after 3 sec
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  // ⏱ Auto open after 5 sec
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
@@ -14,6 +18,43 @@ const HomeModal = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // ✅ HANDLE COUPON SEND
+  const handleGetCoupon = async () => {
+    if (!email) {
+      alert("Please enter email");
+      return;
+    }
+
+    setSending(true);
+
+    try {
+      const res = await fetch(`${API_URL}/hamper/coupon/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to send coupon");
+      }
+
+      alert("Coupon sent 🎉 Check your email");
+
+      setEmail("");
+      setShow(false); // ✅ close modal
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send coupon");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <Modal
@@ -34,7 +75,7 @@ const HomeModal = () => {
               className="modal-image"
             >
               <img
-                src="./images/modal-image.png" // 👉 replace with your image path
+                src="./images/modal-image.png"
                 alt="ritual"
                 className="img-fluid h-100 w-100 object-fit-cover"
               />
@@ -49,6 +90,7 @@ const HomeModal = () => {
               transition={{ duration: 0.6 }}
               className="px-4 w-100"
             >
+
               {/* CLOSE BUTTON */}
               <div className="text-end">
                 <button
@@ -61,7 +103,7 @@ const HomeModal = () => {
                 <span className="artisan-font begin-text">Begin</span><span className="tolvv-name"> Your TOLVV Ritual</span>
               </h4>
 
-              <div className="form-check mt-3 ">
+              <div className="form-check mb-3">
                 <input className="form-check-input" type="checkbox" />
                 <label className="form-check-label small">
                   Subscribe to our newsletter and get <br />{" "}
@@ -75,18 +117,22 @@ const HomeModal = () => {
                   type="email"
                   className="form-control border-0 underline-input text-form border-bottom rounded-0"
                   placeholder="xyz@gmail.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
-              <button className="btn btn-outline-dark btn-sm get-code-btn">
+              <button className="btn btn-outline-dark btn-sm px-4">
                 GET A CODE
               </button>
 
               <p className="small mt-3 text-muted">
                 Your inbox has a little surprise waiting for you.
               </p>
+
             </motion.div>
           </div>
+
         </div>
       </Modal.Body>
     </Modal>

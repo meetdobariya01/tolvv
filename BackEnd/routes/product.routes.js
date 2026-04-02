@@ -131,6 +131,29 @@ router.get("/zodiac-hampers", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// 🔍 SEARCH PRODUCTS (PUT THIS FIRST)
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.q?.toLowerCase() || "";
+
+    if (!query) {
+      const products = await Product.find();
+      return res.json(products);
+    }
+
+    const products = await Product.find({
+      $or: [
+        { ProductName: { $regex: query, $options: "i" } },
+        { Category: { $regex: query, $options: "i" } }
+      ]
+    });
+
+    res.json(products);
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -152,5 +175,7 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
 
 module.exports = router;

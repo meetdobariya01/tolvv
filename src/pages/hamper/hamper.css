@@ -109,7 +109,7 @@
 
 /* Active (selected) effect */
 .zodiac-img.active {
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
   transform: scale(1.1);
 }
 

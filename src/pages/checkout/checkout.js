@@ -12,7 +12,7 @@ const Checkout = () => {
   const [discount, setDiscount] = useState(0);
   const [subscribe, setSubscribe] = useState(false);
   const COUPONS = {
-    FIRSTORDER: 5,
+    LAUNCH5: 5,
     WELCOME10: 10,
   };
   const [cart, setCart] = useState([]);
@@ -26,6 +26,8 @@ const Checkout = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [placing, setPlacing] = useState(false);
+  const [addFreeProduct, setAddFreeProduct] = useState(false);
+const [refreshKey, setRefreshKey] = useState(0);
 
   const token = localStorage.getItem("token");
 
@@ -120,17 +122,22 @@ const Checkout = () => {
           };
         }
 
-        if (item.hamperId) {
-          return {
-            id: item.hamperId._id,
-            type: "hamper",
-            name: "Custom Hamper",
-            price: item.hamperId.totalPrice,
-            qty: item.quantity,
-            img: "/images/hamper.jpg",
-          };
-        }
+       if (item.hamperId) {
+  return {
+    id: item.hamperId._id,
+    type: "hamper",
+    name: "Custom Hamper",
+    price: item.hamperId.totalPrice,
+    qty: item.quantity,
+    img: "/images/hamper.jpg",
 
+    // ✅ ADD THIS
+    hamperItems: item.hamperId.products?.map((p) => ({
+      name: p.productId?.ProductName,
+      quantity: p.quantity,
+    })) || []
+  };
+}
         return null;
       }) || [];
 
@@ -150,13 +157,32 @@ const Checkout = () => {
       window.removeEventListener("cartUpdated", handleCartUpdate);
     };
   }, [mergeCart]);
-  useEffect(() => {
-    mergeCart(); // ✅ load cart on page open
-  }, [mergeCart]);
+ useEffect(() => {
+  mergeCart();
+}, [token]);
+
+
+useEffect(() => {
+  const handleCartUpdate = () => {
+    setRefreshKey(prev => prev + 1);
+    mergeCart();
+  };
+
+  window.addEventListener("cartUpdated", handleCartUpdate);
+
+  return () => {
+    window.removeEventListener("cartUpdated", handleCartUpdate);
+  };
+}, []);
+// 👈 add token dependency
   // ================= TOTAL =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
   const total = subtotal - discount;
-
+  const hasHamper = cart.some(
+    (item) =>
+      item.type === "hamper" ||
+      item.name?.toLowerCase().includes("hamper")
+  );
   // ================= HANDLERS =================
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
@@ -187,25 +213,29 @@ const Checkout = () => {
     setPlacing(true);
 
     try {
-      const orderItems = cart
-        .map((item) => {
-          if (item.type === "product") {
-            return {
-              productId: item.id,
-              quantity: item.qty,
-            };
-          }
+      let orderItems = cart.map((item) => {
 
-          if (item.type === "hamper") {
-            return {
-              hamperId: item.id,
-              quantity: item.qty,
-            };
-          }
+        // ✅ NORMAL PRODUCT
+        if (item.type === "product") {
+          return {
+            productId: item.id,
+            quantity: item.qty,
+          };
+        }
 
-          return null; // ✅ FIX
-        })
-        .filter(Boolean); // ✅ removes null
+        // ✅ HAMPER
+        if (item.type === "hamper") {
+          return {
+            hamperId: item.id,
+            quantity: item.qty,
+            addFreeProduct: addFreeProduct // 👈 send flag to backend
+          };
+        }
+
+        return null;
+      }).filter(Boolean);
+
+
 
       const res = await fetch(`${API_URL}/orders/place`, {
         method: "POST",
@@ -238,7 +268,7 @@ const Checkout = () => {
         return;
       }
 
-      // ✅ ONLINE PAYMENT
+      // ONLINE PAYMENT
       if (paymentMethod === "upi" || paymentMethod === "card") {
         const paymentRes = await fetch(
           `${API_URL}/payment/initiate/${data.orderId}`,
@@ -247,7 +277,7 @@ const Checkout = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         const paymentData = await paymentRes.json();
@@ -262,9 +292,9 @@ const Checkout = () => {
         return;
       }
 
-      // ✅ COD SUCCESS
       alert("Order placed successfully!");
       window.location.href = "/payment";
+
     } catch (error) {
       console.error(error);
       alert("Something went wrong.");
@@ -427,27 +457,14 @@ const Checkout = () => {
               </div>
 
               {/* COUPON */}
+              {/* COUPON */}
+              {/* COUPON */}
               <div className="coupon-box mt-3">
 
-                {/* Dropdown */}
-                <select
-                  className="coupon-select"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value)}
-                >
-                  <option value="">Select Coupon</option>
-                  {Object.keys(COUPONS).map((code) => (
-                    <option key={code} value={code}>
-                      {code} ({COUPONS[code]}% OFF)
-                    </option>
-                  ))}
-                </select>
-
-                {/* Input + Button */}
                 <div className="coupon-container">
                   <input
                     type="text"
-                    placeholder="Coupon code"
+                    placeholder="Enter Coupon Code"
                     className="coupon-input"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
@@ -466,12 +483,31 @@ const Checkout = () => {
                   id="newsletter"
                   checked={subscribe}
                   onChange={(e) => setSubscribe(e.target.checked)}
-                  style={{ width: '18px', height: '18px', accentColor: '#7c3aed', borderBlockColor:'black'}}
+                  style={{ width: '18px', height: '18px', accentColor: '#7c3aed', borderBlockColor: 'black' }}
                 />
                 <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
                   Subscribe to our Newsletter
                 </label>
               </div>
+
+              {/* ✅ FREE PRODUCT (ONLY FOR HAMPER) */}
+              {hasHamper && (
+                <div className="free-product-box mt-3 d-flex align-items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="freeProduct"
+                    checked={addFreeProduct}
+                    onChange={(e) => setAddFreeProduct(e.target.checked)}
+                    style={{ width: "18px", height: "18px" }}
+                  />
+                  <label
+                    htmlFor="freeProduct"
+                    style={{ fontSize: "14px", cursor: "pointer" }}
+                  >
+                    Add Complimentary Free Product
+                  </label>
+                </div>
+              )}
               {/* PRICE BREAKDOWN */}
               <div className="price-breakdown mt-4">
                 <div className="d-flex justify-content-between">

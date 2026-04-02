@@ -13,7 +13,7 @@ const {
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
 const COUPONS = {
-  FIRSTORDER: 5,
+  LAUNCH5: 5,
   WELCOME10: 10,
   IVY755WA: 15
 };
@@ -366,60 +366,73 @@ router.post("/place", authenticate, async (req, res) => {
     const orderItems = [];
 
     // ✅ CALCULATE SUBTOTAL
-   for (const item of items) {
+    for (const item of items) {
 
-  // ✅ VALIDATE PRODUCT ID
-  if (item.productId) {
+      // ✅ VALIDATE PRODUCT ID
+      if (item.productId) {
 
-    if (!mongoose.Types.ObjectId.isValid(item.productId)) {
-      return res.status(400).json({ message: "Invalid productId" });
+        if (!mongoose.Types.ObjectId.isValid(item.productId)) {
+          return res.status(400).json({ message: "Invalid productId" });
+        }
+
+        const product = await Product.findById(item.productId);
+
+        if (!product)
+          return res.status(404).json({ message: "Product not found" });
+
+        // ✅ FREE PRODUCT LOGIC
+        const isFree = item.isFree === true;
+
+        if (!isFree) {
+          subtotal += product.ProductPrice * item.quantity;
+        }
+
+        orderItems.push({
+          productId: product._id,
+          productName: isFree ? `${product.ProductName} (FREE)` : product.ProductName,
+          quantity: item.quantity,
+          priceAtBuy: isFree ? 0 : product.ProductPrice,
+          isFree: isFree // optional
+        });
+      }
+
+      // ✅ VALIDATE HAMPER ID
+      if (item.hamperId) {
+
+        const hamper = await Hamper.findById(item.hamperId)
+          .populate("products.productId");
+
+        if (!hamper)
+          return res.status(404).json({ message: "Hamper not found" });
+
+        subtotal += hamper.totalPrice * item.quantity;
+
+        let hamperItems = hamper.products.map((p) => ({
+          productId: p.productId._id,
+          name: p.productId.ProductName,
+          quantity: p.quantity,
+          isFree: false
+        }));
+
+        // ✅ MANUAL FREE ITEM (NO DB)
+        if (item.addFreeProduct) {
+          hamperItems.push({
+            productId: null,
+            name: "Complimentary Gift 🎁",
+            quantity: 1,
+            isFree: true
+          });
+        }
+
+        orderItems.push({
+          hamperId: hamper._id,
+          productName: "Custom Hamper",
+          quantity: item.quantity,
+          priceAtBuy: hamper.totalPrice,
+          hamperItems
+        });
+      }
     }
-
-    const product = await Product.findById(item.productId);
-
-    if (!product)
-      return res.status(404).json({ message: "Product not found" });
-
-    subtotal += product.ProductPrice * item.quantity;
-
-    orderItems.push({
-      productId: product._id,
-      productName: product.ProductName,
-      quantity: item.quantity,
-      priceAtBuy: product.ProductPrice
-    });
-  }
-
-  // ✅ VALIDATE HAMPER ID
-  if (item.hamperId) {
-
-    if (!mongoose.Types.ObjectId.isValid(item.hamperId)) {
-      return res.status(400).json({ message: "Invalid hamperId" });
-    }
-
-    const hamper = await Hamper.findById(item.hamperId)
-      .populate("products.productId");
-
-    if (!hamper)
-      return res.status(404).json({ message: "Hamper not found" });
-
-    subtotal += hamper.totalPrice * item.quantity;
-
-    const hamperItems = hamper.products.map((p) => ({
-      productId: p.productId._id,
-      name: p.productId.ProductName,
-      quantity: p.quantity
-    }));
-
-    orderItems.push({
-      hamperId: hamper._id,
-      productName: "Zodiac Hamper",
-      quantity: item.quantity,
-      priceAtBuy: hamper.totalPrice,
-      hamperItems
-    });
-  }
-}
 
     // ✅ CHECK FIRST ORDER
     const existingOrders = await Order.find({
@@ -511,17 +524,27 @@ router.post("/place", authenticate, async (req, res) => {
     const products = await Product.find({
       _id: { $in: orderItems.map(i => i.productId).filter(Boolean) }
     });
-
     const itemsHtml = orderItems.map(i => {
-      const product = products.find(
-        p => p._id.toString() === (i.productId || "").toString()
-      );
 
-      const name = product ? product.ProductName : i.productName;
+      // ✅ NORMAL PRODUCT
+      if (!i.hamperItems) {
+        return `<li>${i.productName} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
+      }
 
-      return `<li>${name} — ₹${i.priceAtBuy} × ${i.quantity}</li>`;
+      // ✅ HAMPER WITH ITEMS
+      const hamperList = i.hamperItems.map(h => {
+        return `<li style="margin-left:15px;">
+      - ${h.name} × ${h.quantity} ${h.isFree ? "(FREE)" : ""}
+    </li>`;
+      }).join("");
+
+      return `
+    <li>
+      <strong>${i.productName}</strong> — ₹${i.priceAtBuy} × ${i.quantity}
+      <ul>${hamperList}</ul>
+    </li>
+  `;
     }).join("");
-
     const orderDetails = {
       customOrderId,
       paymentMethod,
@@ -627,7 +650,7 @@ router.put("/cancel/:orderId", authenticate, async (req, res) => {
     order.status = "CANCELLED";
 
     await order.save();
-  
+
 
     res.json({
       message: "Order cancelled successfully",

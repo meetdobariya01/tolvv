@@ -20,7 +20,8 @@ const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
 
   // ✅ FIXED
@@ -30,7 +31,25 @@ const Header = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      if (!searchQuery.trim()) {
+        setSearchResults([]);
+        return;
+      }
 
+      try {
+        const res = await axios.get(
+          `${API_URL}/products/search?q=${searchQuery}`
+        );
+        setSearchResults(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 300); // 🔥 delay
+
+    return () => clearTimeout(delay);
+  }, [searchQuery]);
   // ✅ FIXED CART COUNT FUNCTION
   const updateCartCount = async () => {
     const token = localStorage.getItem("token");
@@ -239,12 +258,66 @@ const Header = () => {
               transition={{ duration: 0.4 }}
             >
               <Form className="search-form">
-                <FormControl
-                  type="search"
-                  placeholder="Search products..."
-                  className="search-input"
-                />
+                <div style={{ position: "relative" }}>
+                  <FormControl
+                    type="search"
+                    placeholder="Search products..."
+                    className="search-input"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+
+                  {searchQuery && (
+                    <FiX
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setSearchQuery("");
+                        setSearchResults([]);
+                      }}
+                    />
+                  )}
+                </div>
               </Form>
+
+              {/* ✅ DROPDOWN */}
+              {searchResults.length > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "500px",
+                    zIndex: 9999,
+                  }}
+                >
+                  {searchResults.map((item) => (
+                    <div
+                      key={item._id}
+                      style={{
+                        padding: "10px",
+                        cursor: "pointer",
+                        borderBottom: "1px solid #eee",
+                        background:"blur(10px) rgba(245, 155, 155, 0.8)",
+                      }}
+                      onClick={() => {
+                        navigate(`/productdetails/${item._id}`);
+                        setSearchOpen(false);
+                        setSearchQuery("");
+                        setSearchResults([]);
+                      }}
+                    >
+                      {item.ProductName}
+                    </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

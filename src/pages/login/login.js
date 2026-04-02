@@ -100,7 +100,7 @@ const Login = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("role", user.role);
       localStorage.setItem("userId", user.id);
-
+      
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       // ✅ CORRECT FUNCTION CALL
