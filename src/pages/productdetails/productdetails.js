@@ -130,10 +130,22 @@ const Productdetails = ({ handleCartOpen }) => {
   const getZodiacName = (name) => {
     if (!name) return "";
     const zodiacs = [
-      "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-      "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+      "Aries",
+      "Taurus",
+      "Gemini",
+      "Cancer",
+      "Leo",
+      "Virgo",
+      "Libra",
+      "Scorpio",
+      "Sagittarius",
+      "Capricorn",
+      "Aquarius",
+      "Pisces",
     ];
-    return zodiacs.find(z => name.toLowerCase().includes(z.toLowerCase())) || "";
+    return (
+      zodiacs.find((z) => name.toLowerCase().includes(z.toLowerCase())) || ""
+    );
   };
   // Fetch product data (unchanged)
   useEffect(() => {
@@ -168,7 +180,7 @@ const Productdetails = ({ handleCartOpen }) => {
         await axios.post(
           `${API_URL}/cart/add`,
           { productId: dbProduct._id, quantity: 1 },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
 
         if (handleCartOpen) handleCartOpen();
@@ -278,6 +290,7 @@ const Productdetails = ({ handleCartOpen }) => {
                 />
               )}
           </Col>
+          
           <Col md={4}>
             <AnimatePresence mode="wait">
               <motion.div
@@ -301,28 +314,17 @@ const Productdetails = ({ handleCartOpen }) => {
                         whileHover={{ scale: 1.08 }}
                         transition={{ duration: 0.2 }}
                       />
-                      <p className="mt-2 small text-dark">{productInfo[activeTab]?.images[idx]?.name || ""}</p>
+                      <p className="mt-2 small text-dark">
+                        {productInfo[activeTab]?.images[idx]?.name || ""}
+                      </p>
                     </Col>
                   ))}
                 </Row>
                 <div className="details-text">
                   <h6 className="fw-bold">HOW TO USE</h6>
                   <p>{productInfo[activeTab]?.howToUse}</p>
-                  {productInfo[activeTab]?.ingredients && (
-                    <>
-                      <h6 className="fw-bold">INGREDIENTS</h6>
-                      <p>
-                        {/* 1. Show standard ingredients first */}
-                        {productInfo[activeTab]?.ingredients}
-
-                        {/* 2. Dynamically add the Fragrance line at the end */}
-                        {getZodiacName(dbProduct.ProductName) &&
-                          `, ${getZodiacName(dbProduct.ProductName)}’s Seven Senses Fragrance.`
-                        }
-                      </p>
-                    </>
-
-                  )}
+                  <h6 className="fw-bold">INGREDIENTS</h6>
+                  <p>{productInfo[activeTab]?.ingredients}</p>
                   <h6 className="fw-bold">CAUTION</h6>
                   <p className="small">{productInfo[activeTab]?.caution}</p>
                 </div>
@@ -336,7 +338,7 @@ const Productdetails = ({ handleCartOpen }) => {
                 </Nav.Link> */}
                 {/* <h2 className="mt-4">₹{dbProduct.ProductPrice}</h2> */}
                 <p className="m-0">Best Before : 36 Months</p>
-                <p>Country of Origin : India</p>
+                <p>Country of Origin: India</p>
                 <button
                   onClick={addToCart}
                   className="btn btn-outline-dark mt-3"
@@ -348,12 +350,12 @@ const Productdetails = ({ handleCartOpen }) => {
           </Col>
         </Row>
         <hr />
-        <Row className="mt-5 text-center">
+        <Row className="mt-5 text-center text-decoration-none">
           {[
             { key: "Bath Gel", label: "BATH GEL" },
             { key: "Soap", label: "SOAP" },
             { key: "Essential Oil", label: "ESSENTIAL OIL" },
-            { key: "Perfume", label: "EAU DE PERFUMES" },
+            { key: "Perfume", label: "PERFUMES" },
             { key: "Body Lotion", label: "BODY LOTION" },
             { key: "Hamper", label: "HAMPER" },
           ]
@@ -367,13 +369,15 @@ const Productdetails = ({ handleCartOpen }) => {
             .map((item) => (
               <Col xs={4} md={2} key={item.key}>
                 <span
-                  className="product-link"
-                  style={{ cursor: "pointer", fontWeight: "bold", textDecoration: "underline" }}
+                  className="product-link border border-dark rounded px-2 py-1"
+                  style={{ cursor: "pointer", fontWeight: "bold" }}
                   onClick={() => {
                     /* 2. NAVIGATE: Go to the /product page and pass the category 
                        in the URL so Mainproduct.js can scroll to it.
                     */
-                    navigate(`/product?category=${encodeURIComponent(item.key)}`);
+                    navigate(
+                      `/product?category=${encodeURIComponent(item.key)}`,
+                    );
                   }}
                 >
                   {item.label}

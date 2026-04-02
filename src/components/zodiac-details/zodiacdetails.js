@@ -4,6 +4,30 @@ import axios from "axios";
 import "./zodiacdetails.css";
 
 const Zodiacdetails = () => {
+  // Zodiac colors matching moonsection
+  const zodiacColors = {
+    Aries: "#7A1318",
+    Taurus: "#7A8B3D",
+    Gemini: "#BB892C",
+    Cancer: "#8A8C8E",
+    Leo: "#E8C43A",
+    Virgo: "#DC4D2D",
+    Libra: "#F04E4C",
+    Scorpio: "#000000",
+    Sagittarius: "#74489D",
+    Capricorn: "#CCC29F",
+    Aquarius: "#519AA2",
+    Pisces: "#043D5D",
+  };
+
+  // Function to get zodiac from product name (same as moonsection)
+  const getZodiacFromProduct = (name) => {
+    if (!name) return null;
+    return Object.keys(zodiacColors).find((zodiac) =>
+      name.toLowerCase().includes(zodiac.toLowerCase())
+    );
+  };
+
   const zodiacData = {
     Aries: {
       name: "Aries",
@@ -19,20 +43,11 @@ const Zodiacdetails = () => {
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "/images/ingredient/Ginger.png",
-        "/images/ingredient/Ginger.png",
-        "/images/ingredient/Cinnamon-23.png",
-        "/images/ingredient/Coconut-Oil.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Ginger-12.png",
+        "/images/ingredient/Cinnamon-07.png",
+        "/images/ingredient/Coconut-Oil-10.png",
       ],
     },
-
     Taurus: {
       name: "Taurus",
       date: "April 20 - May 20",
@@ -47,19 +62,11 @@ const Zodiacdetails = () => {
       element: "Earth",
       planet: "Venus",
       herbs: [
-        "/images/ingredient/Vanilla.png",
-        "/images/ingredient/Rose.png",
-        "/images/ingredient/Sandalwood.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Vanilla-20.png",
+        "/images/ingredient/Rose-06.png",
+        "/images/ingredient/Sandalwood-11.png",
       ],
     },
-
     Gemini: {
       name: "Gemini",
       date: "May 21 - June 20",
@@ -74,19 +81,11 @@ const Zodiacdetails = () => {
       element: "Air",
       planet: "Mercury",
       herbs: [
-        "/images/ingredient/Lavender.png",
-        "/images/ingredient/Lemon.png",
-        "/images/ingredient/Basil.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Lavender-04.png",
+        "/images/ingredient/Lemon-08.png",
+        "/images/ingredient/Basil-15.png",
       ],
     },
-
     Cancer: {
       name: "Cancer",
       date: "June 21 - July 22",
@@ -101,19 +100,11 @@ const Zodiacdetails = () => {
       element: "Water",
       planet: "The Moon",
       herbs: [
-        "/images/ingredient/Coconut-Oil.png",
-        "/images/ingredient/Rosemary.png",
-        "/images/ingredient/Sandalwood.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Coconut-Oil-10.png",
+        "/images/ingredient/Rosemary-01.png",
+        "/images/ingredient/Sandalwood-11.png",
       ],
     },
-
     Leo: {
       name: "Leo",
       date: "July 23 - August 22",
@@ -128,20 +119,12 @@ const Zodiacdetails = () => {
       element: "Fire",
       planet: "The Sun",
       herbs: [
-        "/images/ingredient/AloVera-Extract.png",
-        "/images/ingredient/Cinnamon-23.png",
-        "/images/ingredient/Orange.png",
-        "/images/ingredient/Honey.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Honey-16.png",
+        "/images/ingredient/Alo-Vera-Extract-02.png",
+        "/images/ingredient/Cinnamon-07.png",
+        "/images/ingredient/Orange-17.png",
       ],
     },
-
     Virgo: {
       name: "Virgo",
       date: "August 23 - September 22",
@@ -156,16 +139,9 @@ const Zodiacdetails = () => {
       element: "Earth",
       planet: "Mercury",
       herbs: [
-        "/images/ingredient/Lavender.png",
-        "/images/ingredient/Fennel-33.png",
-        "/images/ingredient/Lemongrass.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Lavender-04.png",
+        "/images/ingredient/Fennel-21.png",
+        "/images/ingredient/Lemongrass-18.png",
       ],
     },
     Libra: {
@@ -182,16 +158,9 @@ const Zodiacdetails = () => {
       element: "Air",
       planet: "Venus",
       herbs: [
-        "/images/ingredient/Lavender.png",
-        "/images/ingredient/Shea-Butter.png",
-        "/images/ingredient/Rose.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Rose-06.png",
+        "/images/ingredient/Lavender-04.png",
+        "/images/ingredient/Shea-Butter-19.png",
       ],
     },
     Scorpio: {
@@ -208,16 +177,9 @@ const Zodiacdetails = () => {
       element: "Water",
       planet: "Pluto / Mars",
       herbs: [
-        "/images/ingredient/Jojaba-Seed.png",
-        "/images/ingredient/Jasmine.png",
-        "/images/ingredient/Black-Pepper.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Jojaba-Seed-14.png",
+        "/images/ingredient/Jasmine-09.png",
+        "/images/ingredient/Black-Pepper-13.png",
       ],
     },
     Sagittarius: {
@@ -234,16 +196,9 @@ const Zodiacdetails = () => {
       element: "Fire",
       planet: "Jupiter",
       herbs: [
-        "/images/ingredient/Clove.png",
-        "/images/ingredient/Ginger.png",
-        "/images/ingredient/Black-Pepper.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Clove-05.png",
+        "/images/ingredient/Ginger-12.png",
+        "/images/ingredient/Black-Pepper-13.png",
       ],
     },
     Capricorn: {
@@ -260,17 +215,10 @@ const Zodiacdetails = () => {
       element: "Earth",
       planet: "Saturn",
       herbs: [
-        "/images/ingredient/Lavender.png",
-        "/images/ingredient/Rosemary.png",
-        "/images/ingredient/Lemongrass.png",
-        "/images/ingredient/CARNATION FLOWER-15.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/CARNATION-FLOWER-03.png",
+        "/images/ingredient/Rosemary-01.png",
+        "/images/ingredient/Lavender-04.png",
+        "/images/ingredient/Lemongrass-18.png",
       ],
     },
     Aquarius: {
@@ -287,16 +235,9 @@ const Zodiacdetails = () => {
       element: "Air",
       planet: "Uranus / Saturn",
       herbs: [
-        "/images/ingredient/Lemon.png",
-        "/images/ingredient/Jasmine.png",
-        "/images/ingredient/Sandalwood.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Lemon-08.png",
+        "/images/ingredient/Jasmine-09.png",
+        "/images/ingredient/Sandalwood-11.png",
       ],
     },
     Pisces: {
@@ -313,17 +254,10 @@ const Zodiacdetails = () => {
       element: "Water",
       planet: "Neptune / Jupiter",
       herbs: [
-        "/images/ingredient/Lavender.png",
-        "/images/ingredient/Clove.png",
-        "/images/ingredient/Rose.png",
-        "/images/ingredient/Sandalwood.png",
-      ],
-      products: [
-        { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
-        { name: "Body Lotion", size: "200 ml", img: "./images/bl.png" },
-        { name: "Perfume", size: "50 ml", img: "./images/pr.png" },
-        { name: "Essential Oil", size: "30 ml", img: "./images/eo.png" },
-        { name: "Soap", size: "100 gm", img: "./images/sp.png" },
+        "/images/ingredient/Sandalwood-11.png",
+        "/images/ingredient/Lavender-04.png",
+        "/images/ingredient/Clove-05.png",
+        "/images/ingredient/Rose-06.png",
       ],
     },
   };
@@ -344,10 +278,7 @@ const Zodiacdetails = () => {
   ];
 
   const API_URL = process.env.REACT_APP_API_URL;
-
-  // const [activeKey, setActiveKey] = useState(null);
   const [productsByZodiac, setProductsByZodiac] = useState({});
-  // const navigate = useNavigate();
   const Zodiac = [
     "Aries",
     "Taurus",
@@ -362,8 +293,31 @@ const Zodiacdetails = () => {
     "Aquarius",
     "Pisces",
   ];
-  // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
+
+  // Helper function to get sort order for a product
+  const getSortOrder = (product) => {
+    const name = product.ProductName.toLowerCase();
+    
+    // Determine category order: Bath Gel → Body Lotion → Perfume → Essential Oil → Soap → Hamper
+    let categoryOrder = 99;
+    if (name.includes("bath gel")) categoryOrder = 0;
+    else if (name.includes("body lotion")) categoryOrder = 1;
+    else if (name.includes("perfume")) categoryOrder = 2;
+    else if (name.includes("essential oil")) categoryOrder = 3;
+    else if (name.includes("soap")) categoryOrder = 4;
+    else if (name.includes("hamper")) categoryOrder = 5;
+    
+    return categoryOrder;
+  };
+
+  // Function to get product dot color (same as moonsection)
+  const getProductDotColor = (product) => {
+    const name = product.ProductName;
+    const productZodiac = getZodiacFromProduct(name);
+    return zodiacColors[productZodiac] || "#CCC29F";
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -382,13 +336,20 @@ const Zodiacdetails = () => {
           }
         });
 
+        // Sort products for each zodiac by category order
+        Object.keys(grouped).forEach((key) => {
+          grouped[key].sort((a, b) => {
+            return getSortOrder(a) - getSortOrder(b);
+          });
+        });
+
         setProductsByZodiac(grouped);
       } catch (err) {
         console.error("Failed to fetch products:", err);
       }
     };
     fetchProducts();
-  });
+  }, []);
 
   return (
     <div>
@@ -397,16 +358,6 @@ const Zodiacdetails = () => {
         <div className="twelve-section-details py-5">
           <div className="container">
             <div className="row align-items-center text-white">
-              {/* LEFT TEXT */}
-              {/* <div className="col-12 col-md-4 text-center  left-text">
-                <h2 className="artisan-font">The Twelves</h2>
-                <p className="subtitle sora">EXPLORE BY YOUR SUN SIGN</p>
-                <div className="my-5">
-                  <Calculator />
-                </div>
-              </div> */}
-
-              {/* ZODIAC GRID */}
               <div className="container details-zodiac-section text-center sora">
                 <h5 className="mb-4 text-dark fw-semibold text-start">
                   Explore Other Sun Sign
@@ -433,18 +384,11 @@ const Zodiacdetails = () => {
                   ))}
                 </div>
               </div>
-
-              {/* RIGHT VERTICAL TEXT */}
-              {/* <div className="col-md-1 d-none d-md-flex ">
-                <div className="vertical-text">
-                  NURTURE <span className="fw-light">YOUR</span> NATURE
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
 
-        {/* RED SECTION (Dynamic Content) */}
+        {/* DYNAMIC CONTENT */}
         {selectedZodiac && (
           <section
             className="aries-section text-center"
@@ -452,10 +396,8 @@ const Zodiacdetails = () => {
           >
             <div className="aries-content inter container sora">
               <div className="zodiac-header text-white text-center">
-                {/* <p className="aries-date mb-3">{selectedZodiac.date}</p> */}
-
                 <div className="d-none d-md-block">
-                  <div className="d-flex justify-content-center align-items-center gap-5  ">
+                  <div className="d-flex justify-content-center align-items-center gap-5">
                     <div className="d-block">
                       <h1 className="aries-title gt-super mb-0">
                         {selectedZodiac.name}
@@ -491,7 +433,6 @@ const Zodiacdetails = () => {
                         className="aries-icon-img"
                       />
                     </div>
-
                     <h1 className="aries-title text-center gt-super mb-0">
                       {selectedZodiac.name}
                     </h1>
@@ -522,70 +463,60 @@ const Zodiacdetails = () => {
             <p className="gt-super ingredients">INGREDIENTS</p>
 
             {/* Herbs Section */}
-            <div className="aries-images container d-flex justify-content-center  flex-wrap">
+            <div className="aries-images container d-flex justify-content-around flex-wrap">
               {selectedZodiac.herbs.map((img, i) => (
                 <img key={i} src={img} alt="herb" className="half-out-image" />
               ))}
             </div>
 
-            {/* PRODUCTS */}
-            {/* PRODUCTS – WHITE BACKGROUND */}
+            {/* PRODUCTS - SORTED BY CATEGORY ORDER WITH DYNAMIC DOT COLOR */}
             <div className="product-wrapper py-5">
-              {/* <h2 className="product-text mb-4 text-center sora">
-            {xyz.find((item) => item.name === selectedZodiac.name)?.xyz1}
-          </h2> */}
-
               <div className="container sora">
                 <div className="product-grid mt-5">
-                  {productsByZodiac[selectedZodiac.name]?.map((p, index) => (
-                    <NavLink
-                      to={`/productdetails/${p._id}`}
-                      className="text-decoration-none"
-                    >
-                      <div className="product-card" key={index}>
-                        <div className="product-box-zodiac p-1">
-                          <img
-                            src={
-                              p.Photos?.[0]?.startsWith("http")
-                                ? p.Photos[0]
-                                : `/images/${p.Photos?.[0]?.replace("images/", "")}`
-                            }
-                            alt={p.ProductName}
-                            className="zodiac-product-img"
-                          />
-
-                          <div className="product-info">
-                            <p className="name">
-                              {p.ProductName} <span>›</span>
-                            </p>
-                            {/* <p className="name">{p.ProductName}</p> */}
-                            {/* <p className="size">{p.size}</p> */}
-                            <div className="price-with-dot-1">
-                              <span
-                                className="zodiac-dot"
-                                style={{
-                                  backgroundColor: selectedZodiac.color,
-                                }}
-                              ></span>
-
-                              <span className="zodiac-price">
-                                ₹ {p.ProductPrice}
-                              </span>
-                            </div>
-
-                            <div className="underline" />
-                            <p className="size">{p.size}</p>
-                            {/* <button
-                        className="btn btn-outline-dark mt-1"
-                        onClick={() => handleBuyNow(p)}
+                  {productsByZodiac[selectedZodiac.name]?.map((p, index) => {
+                    const dotColor = getProductDotColor(p);
+                    
+                    return (
+                      <NavLink
+                        to={`/productdetails/${p._id}`}
+                        className="text-decoration-none"
+                        key={p._id}
                       >
-                        Buy Now
-                      </button> */}
+                        <div className="product-card">
+                          <div className="product-box-zodiac p-1">
+                            <img
+                              src={
+                                p.Photos?.[0]?.startsWith("http")
+                                  ? p.Photos[0]
+                                  : `/images/${p.Photos?.[0]?.replace("images/", "")}`
+                              }
+                              alt={p.ProductName}
+                              className="zodiac-product-img"
+                            />
+
+                            <div className="product-info">
+                              <p className="name">
+                                {p.ProductName} <span>›</span>
+                              </p>
+                              <div className="price-with-dot-1">
+                                <span
+                                  className="zodiac-dot"
+                                  style={{
+                                    backgroundColor: dotColor,
+                                  }}
+                                ></span>
+                                <span className="zodiac-price">
+                                  ₹ {p.ProductPrice}
+                                </span>
+                              </div>
+                              <div className="underline" />
+                              <p className="size">{p.size}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </NavLink>
-                  ))}
+                      </NavLink>
+                    );
+                  })}
                 </div>
               </div>
             </div>

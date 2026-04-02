@@ -143,6 +143,7 @@ const CartSidebar = ({ show, handleClose }) => {
                 qty: item.quantity || 1,
                 img: "/images/hamper.jpg",
                 category: "Hamper",
+                hamperProducts: item.hamperProducts || [],   // ✅ include stored products
               };
             }
             return null;
@@ -240,10 +241,15 @@ const CartSidebar = ({ show, handleClose }) => {
     const merged = updatedItems.map((i) => {
       if (i.category === "Hamper") {
         const old = existing.find(e => e.id === i.id);
-        return old || {
+        return old ? {
+          ...old,
+          quantity: i.qty,
+          price: i.price,
+        } : {
           id: i.id,
           type: "hamper",
           hamperData: {},
+          hamperProducts: i.hamperProducts || [],   // ✅ preserve products
           quantity: i.qty,
           price: i.price,
         };

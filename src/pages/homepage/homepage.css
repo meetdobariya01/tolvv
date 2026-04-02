@@ -590,8 +590,8 @@
 /* RIGHT IMAGE */
 
 .know-image {
-  border-top-right-radius: 40px;
-  border-bottom-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
   animation: imageFade 1.5s ease;

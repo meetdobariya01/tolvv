@@ -289,6 +289,16 @@ const handleAddToCart = async () => {
       // Create a unique ID for the hamper
       const hamperId = `hamper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       
+      // Build product details for cart display
+      const hamperProductsDetails = selectedItems.map(p => ({
+        _id: p._id,
+        productId: {
+          ProductName: p.ProductName,
+          ProductPrice: p.ProductPrice,
+        },
+        quantity: qty[p._id] || 0,
+      }));
+      
       cart.push({
         id: hamperId,
         type: "hamper",
@@ -297,6 +307,7 @@ const handleAddToCart = async () => {
         price: total,
         name: "Custom Hamper",
         img: "/images/hamper.jpg",
+        hamperProducts: hamperProductsDetails,   // ✅ store inner products
       });
       
       localStorage.setItem("guestCart", JSON.stringify(cart));

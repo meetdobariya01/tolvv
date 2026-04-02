@@ -102,7 +102,7 @@ const sendAdminOrderNotification = async (orderDetails, user, address, note) => 
 
       <p><strong>Order ID:</strong> ${customOrderId}</p>
 
-      <p><strong>Customer Name:</strong> ${user.name || "Customer"}</p>
+      <!-- <p><strong>Customer Name:</strong> ${user.name || "Customer"}</p> -->
 
       <p><strong>Email:</strong> ${user.email}</p>
 
@@ -115,7 +115,8 @@ const sendAdminOrderNotification = async (orderDetails, user, address, note) => 
       <h3>Delivery Address</h3>
 
       <p>
-        ${address.houseNumber || ""}, ${address.buildingName || ""}<br/>
+        Customer Name: ${address.buildingName || ""},
+        address: ${address.houseNumber || ""}<br/>
         ${address.road || ""}<br/>
         ${address.city} - ${address.pincode}
       </p>

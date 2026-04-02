@@ -102,6 +102,38 @@ const Moonsection = () => {
 
   const planet = planetData.find((p) => p.name === activePlanet);
 
+  // Helper function to get sort order for a product
+  const getSortOrder = (product) => {
+    const name = product.ProductName.toLowerCase();
+    
+    // Determine zodiac order (0 for first zodiac, 1 for second)
+    let zodiacOrder = 0;
+    if (name.includes("capricorn")) zodiacOrder = 0;
+    else if (name.includes("aquarius")) zodiacOrder = 1;
+    else if (name.includes("aries")) zodiacOrder = 0;
+    else if (name.includes("scorpio")) zodiacOrder = 1;
+    else if (name.includes("gemini")) zodiacOrder = 0;
+    else if (name.includes("virgo")) zodiacOrder = 1;
+    else if (name.includes("taurus")) zodiacOrder = 0;
+    else if (name.includes("libra")) zodiacOrder = 1;
+    else if (name.includes("leo")) zodiacOrder = 0;
+    else if (name.includes("cancer")) zodiacOrder = 0;
+    else if (name.includes("sagittarius")) zodiacOrder = 0;
+    else if (name.includes("pisces")) zodiacOrder = 1;
+    
+    // Determine category order
+    let categoryOrder = 99;
+    if (name.includes("bath gel")) categoryOrder = 0;
+    else if (name.includes("body lotion")) categoryOrder = 1;
+    else if (name.includes("perfume")) categoryOrder = 2;
+    else if (name.includes("essential oil")) categoryOrder = 3;
+    else if (name.includes("soap")) categoryOrder = 4;
+    else if (name.includes("hamper")) categoryOrder = 5;
+    
+    // Return combined sort key: zodiacOrder * 100 + categoryOrder
+    return (zodiacOrder * 100) + categoryOrder;
+  };
+
   useEffect(() => {
     if (!planet?.zodiac) return;
     setLoading(true);
@@ -120,44 +152,9 @@ const Moonsection = () => {
           new Map(combinedProducts.map((item) => [item._id, item])).values()
         );
 
-        // ✅ SORT: First by Zodiac, then by Category
-        const sortedProducts = uniqueProducts.sort((a, b) => {
-          // Get zodiac order (Capricorn first, then Aquarius for Saturn planet)
-          const getZodiacPriority = (productName) => {
-            const name = productName.toLowerCase();
-            if (name.includes("capricorn")) return 0;
-            if (name.includes("aquarius")) return 1;
-            if (name.includes("aries")) return 0;
-            if (name.includes("scorpio")) return 1;
-            if (name.includes("gemini")) return 0;
-            if (name.includes("virgo")) return 1;
-            if (name.includes("taurus")) return 0;
-            if (name.includes("libra")) return 1;
-            if (name.includes("leo")) return 0;
-            if (name.includes("cancer")) return 0;
-            if (name.includes("sagittarius")) return 0;
-            if (name.includes("pisces")) return 0;
-            return 0;
-          };
-          
-          // Get category order
-          const getCategoryPriority = (productName) => {
-            const name = productName.toLowerCase();
-            if (name.includes("bath gel")) return 0;
-            if (name.includes("body lotion")) return 1;
-            if (name.includes("perfume")) return 2;
-            if (name.includes("essential oil")) return 3;
-            if (name.includes("soap")) return 4;
-            if (name.includes("hamper")) return 5;
-            return 99;
-          };
-          
-          // First compare by zodiac
-          const zodiacCompare = getZodiacPriority(a.ProductName) - getZodiacPriority(b.ProductName);
-          if (zodiacCompare !== 0) return zodiacCompare;
-          
-          // Then compare by category
-          return getCategoryPriority(a.ProductName) - getCategoryPriority(b.ProductName);
+        // Sort using the getSortOrder function
+        const sortedProducts = [...uniqueProducts].sort((a, b) => {
+          return getSortOrder(a) - getSortOrder(b);
         });
 
         setPlanetProducts(sortedProducts);
@@ -177,6 +174,7 @@ const Moonsection = () => {
 
   return (
     <>
+      {/* PLANET SELECTOR SECTION */}
       <section className="planet-section">
         <Container>
           <h2 className="planet-heading sora">EXPLORE BY YOUR RULING PLANET</h2>
@@ -200,6 +198,7 @@ const Moonsection = () => {
         </Container>
       </section>
 
+      {/* PLANET DETAILS SECTION */}
       {planet && (
         <AnimatePresence mode="wait">
           <motion.section
@@ -244,6 +243,7 @@ const Moonsection = () => {
         </AnimatePresence>
       )}
 
+      {/* PRODUCTS SECTION */}
       {planet && (
         <section className="moon-products sora">
           <Container>
