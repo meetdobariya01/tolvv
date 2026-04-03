@@ -7,10 +7,10 @@ import {
   FormControl,
   Dropdown,
 } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation  } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-scroll";
+// import { Link } from "react-scroll";
 import CartSidebar from "../cartsidebar/cartsidebar";
 import "./header.css";
 import axios from "axios";
@@ -23,6 +23,28 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
+  const handleScrollToSection = (sectionId) => {
+    if (window.location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: sectionId } });
+    } else {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const section = document.getElementById(location.state.scrollTo);
+      if (section) {
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    }
+  }, [location]);
 
   // ✅ FIXED
   const API_URL = process.env.REACT_APP_API_URL;
@@ -40,7 +62,7 @@ const Header = () => {
 
       try {
         const res = await axios.get(
-          `${API_URL}/products/search?q=${searchQuery}`
+          `${API_URL}/products/search?q=${searchQuery}`,
         );
         setSearchResults(res.data);
       } catch (err) {
@@ -176,26 +198,30 @@ const Header = () => {
                 PRODUCTS
               </Nav.Link>
 
-              <Link to="zodiac" smooth duration={500} className="nav-link">
+              <Nav.Link onClick={() => handleScrollToSection("zodiac")}>
                 THE TWELVEs
-              </Link>
-              <Link to="benefits" smooth duration={500} className="nav-link">
+              </Nav.Link>
+
+              <Nav.Link onClick={() => handleScrollToSection("benefits")}>
                 BENEFITS
-              </Link>
-              <Link to="knowus" smooth duration={500} className="nav-link">
+              </Nav.Link>
+
+              <Nav.Link onClick={() => handleScrollToSection("knowus")}>
                 KNOW US
-              </Link>
-              <Link to="faqs" smooth duration={500} className="nav-link">
+              </Nav.Link>
+
+              <Nav.Link onClick={() => handleScrollToSection("faqs")}>
                 FAQs
-              </Link>
-              <Link to="contact" smooth duration={500} className="nav-link">
+              </Nav.Link>
+
+              <Nav.Link onClick={() => handleScrollToSection("contact")}>
                 CONNECT
-              </Link>
+              </Nav.Link>
             </Nav>
 
             {/* DESKTOP ICONS */}
             <div className="icons ms-auto d-none d-lg-flex gap-4">
-              {searchOpen ? ( 
+              {searchOpen ? (
                 <FiX onClick={() => setSearchOpen(false)} />
               ) : (
                 <FiSearch onClick={() => setSearchOpen(true)} />
@@ -304,7 +330,7 @@ const Header = () => {
                         padding: "10px",
                         cursor: "pointer",
                         borderBottom: "1px solid #eee",
-                        background:"blur(10px) rgba(245, 155, 155, 0.8)",
+                        background: "blur(10px) rgba(245, 155, 155, 0.8)",
                       }}
                       onClick={() => {
                         navigate(`/productdetails/${item._id}`);

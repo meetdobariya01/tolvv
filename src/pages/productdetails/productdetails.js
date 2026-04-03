@@ -303,7 +303,7 @@ const Productdetails = ({ handleCartOpen }) => {
                   <p>{productInfo[activeTab]?.howToUse}</p>
                   <h6 className="fw-bold">INGREDIENTS</h6>
                   <p>{productInfo[activeTab]?.ingredients}</p>
-                  <h6 className="fw-bold">CAUTION</h6>
+                  <h6 className="fw-bold">CARE</h6>
                   <p className="small">{productInfo[activeTab]?.caution}</p>
                 </div>
                 {/* <Nav.Link
@@ -316,7 +316,7 @@ const Productdetails = ({ handleCartOpen }) => {
                 </Nav.Link> */}
                 {/* <h2 className="mt-4">₹{dbProduct.ProductPrice}</h2> */}
                 <p className="m-0">Best Before : 36 Months</p>
-                <p>Country of Origin : India</p>
+                <p>Country of Origin: India</p>
                 <button
                   onClick={addToCart}
                   className="btn btn-outline-dark mt-3"

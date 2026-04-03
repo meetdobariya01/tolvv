@@ -14,7 +14,7 @@ const HomeModal = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(true);
-    }, 1000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);

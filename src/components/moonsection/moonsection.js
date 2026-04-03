@@ -366,7 +366,7 @@ useEffect(() => {
                     className="text-decoration-none text-dark"
                     key={product._id}
                   >
-                    <div className="product-card p-1">
+                    <div className="product-card-moon p-1">
                       <div className="product-box-zodiac">
                         <img
                           src={

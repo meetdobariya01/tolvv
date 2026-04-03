@@ -10,7 +10,20 @@ import Calculator from "../../components/calculator/calculator";
 const Zodic = () => {
   // const [active, setActive] = useState(null);
 
-  const zodiacColors = { Aries: "#7A1318", Taurus: "#7A8B3D", Gemini: "#BB892C", Cancer: "#8A8C8E", Leo: "#E8C43A", Virgo: "#DC4D2D", Libra: "#F04E4C", Scorpio: "#000000", Sagittarius: "#74489D", Capricorn: "#CCC29F", Aquarius: "#519AA2", Pisces: "#043D5D", }
+  const zodiacColors = {
+    Aries: "#7A1318",
+    Taurus: "#7A8B3D",
+    Gemini: "#BB892C",
+    Cancer: "#8A8C8E",
+    Leo: "#E8C43A",
+    Virgo: "#DC4D2D",
+    Libra: "#F04E4C",
+    Scorpio: "#000000",
+    Sagittarius: "#74489D",
+    Capricorn: "#CCC29F",
+    Aquarius: "#519AA2",
+    Pisces: "#043D5D",
+  };
 
   const zodiacData = {
     Aries: {
@@ -27,9 +40,9 @@ const Zodic = () => {
       element: "Fire",
       planet: "Mars",
       herbs: [
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/coconut.png",
+        "./images/ingredient/Ginger-12.png",
+        "./images/ingredient/Cinnamon-07.png",
+        "./images/ingredient/Coconut-Oil-10.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -54,9 +67,9 @@ const Zodic = () => {
       element: "Earth",
       planet: "Venus",
       herbs: [
-        "./images/ingredient/Vanilla.png",
-        "./images/ingredient/Rose.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Vanilla-20.png",
+        "./images/ingredient/Rose-06.png",
+        "./images/ingredient/Sandalwood-11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -81,9 +94,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Mercury",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Lemon.png",
-        "./images/ingredient/Basil.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Lemon-08.png",
+        "./images/ingredient/Basil-15.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -108,9 +121,9 @@ const Zodic = () => {
       element: "Water",
       planet: "The Moon",
       herbs: [
-        "./images/ingredient/Coconut-Oil.png",
-        "./images/ingredient/Rosemary.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Coconut-Oil-10.png",
+        "./images/ingredient/Rosemary-01.png",
+        "./images/ingredient/Sandalwood-11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -135,10 +148,10 @@ const Zodic = () => {
       element: "Fire",
       planet: "The Sun",
       herbs: [
-        "./images/ingredient/AloVera-Extract.png",
-        "./images/ingredient/Cinnamon-23.png",
-        "./images/ingredient/Orange.png",
-        "./images/ingredient/Honey.png",
+        "./images/ingredient/Honey-16.png",
+        "./images/ingredient/Alo-Vera-Extract-02.png",
+        "./images/ingredient/Cinnamon-07.png",
+        "./images/ingredient/Orange-17.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -163,9 +176,9 @@ const Zodic = () => {
       element: "Earth",
       planet: "Mercury",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Fennel-33.png",
-        "./images/ingredient/Lemongrass.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Fennel-21.png",
+        "./images/ingredient/Lemongrass-18.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -189,9 +202,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Venus",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Shea-Butter.png",
-        "./images/ingredient/Rose.png",
+        "./images/ingredient/Rose-06.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Shea-Butter-19.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -215,9 +228,9 @@ const Zodic = () => {
       element: "Water",
       planet: "Pluto / Mars",
       herbs: [
-        "./images/ingredient/Jojaba-Seed.png",
-        "./images/ingredient/Jasmine.png",
-        "./images/ingredient/Black-Pepper.png",
+        "./images/ingredient/Jojaba-Seed-14.png",
+        "./images/ingredient/Jasmine-09.png",
+        "./images/ingredient/Black-Pepper-13.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -241,9 +254,9 @@ const Zodic = () => {
       element: "Fire",
       planet: "Jupiter",
       herbs: [
-        "./images/ingredient/Clove.png",
-        "./images/ingredient/Ginger.png",
-        "./images/ingredient/Black-Pepper.png",
+        "./images/ingredient/Clove-05.png",
+        "./images/ingredient/Ginger-12.png",
+        "./images/ingredient/Black-Pepper-13.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -267,10 +280,10 @@ const Zodic = () => {
       element: "Earth",
       planet: "Saturn",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Rosemary.png",
-        "./images/ingredient/Lemongrass.png",
-        "./images/ingredient/CARNATION FLOWER-15.png",
+        "./images/ingredient/CARNATION-FLOWER-03.png",
+        "./images/ingredient/Rosemary-01.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Lemongrass-18.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -294,9 +307,9 @@ const Zodic = () => {
       element: "Air",
       planet: "Uranus / Saturn",
       herbs: [
-        "./images/ingredient/Lemon.png",
-        "./images/ingredient/Jasmine.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Lemon-08.png",
+        "./images/ingredient/Jasmine-09.png",
+        "./images/ingredient/Sandalwood-11.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -320,10 +333,10 @@ const Zodic = () => {
       element: "Water",
       planet: "Neptune / Jupiter",
       herbs: [
-        "./images/ingredient/Lavender.png",
-        "./images/ingredient/Clove.png",
-        "./images/ingredient/Rose.png",
-        "./images/ingredient/Sandalwood.png",
+        "./images/ingredient/Sandalwood-11.png",
+        "./images/ingredient/Lavender-04.png",
+        "./images/ingredient/Clove-05.png",
+        "./images/ingredient/Rose-06.png",
       ],
       products: [
         { name: "Bath Gel", size: "200 ml", img: "./images/bb.png" },
@@ -493,7 +506,9 @@ const Zodic = () => {
                     <h1 className="aries-title gt-super mb-0">
                       {selectedZodiac.name}
                     </h1>
-                    <p className="aries-date mb-3 gt-super">{selectedZodiac.date}</p>
+                    <p className="aries-date mb-3 gt-super">
+                      {selectedZodiac.date}
+                    </p>
                   </div>
                   <div
                     className="aries-icon-circle d-flex justify-content-center align-items-center"
@@ -526,7 +541,9 @@ const Zodic = () => {
                   <h1 className="aries-title text-center gt-super mb-0">
                     {selectedZodiac.name}
                   </h1>
-                  <p className="aries-date gt-super mb-3">{selectedZodiac.date}</p>
+                  <p className="aries-date gt-super mb-3">
+                    {selectedZodiac.date}
+                  </p>
                 </div>
               </div>
             </div>
@@ -551,7 +568,7 @@ const Zodic = () => {
           <p className="gt-super ingredients">INGREDIENTS</p>
 
           {/* Herbs Section */}
-          <div className="aries-images container d-flex justify-content-center  flex-wrap">
+          <div className="aries-images container d-flex justify-content-around  flex-wrap">
             {selectedZodiac.herbs.map((img, i) => (
               <img key={i} src={img} alt="herb" className="half-out-image" />
             ))}
@@ -587,7 +604,10 @@ const Zodic = () => {
                           <div className="price-with-dot-1">
                             <span
                               className="zodiac-dot"
-                              style={{ backgroundColor: zodiacColors[selectedZodiac.name] }}
+                              style={{
+                                backgroundColor:
+                                  zodiacColors[selectedZodiac.name],
+                              }}
                             ></span>
 
                             <span className="zodiac-price fw-bolder">
