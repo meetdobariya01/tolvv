@@ -34,7 +34,7 @@ const planetData = [
     mood: "Calm",
     bg: "#5F286E",
     description:
-      "The King and the Great Father embody the archetypes of the Sun - the source of all light and life, both earthly and spiritual. The Sun uplifts and energizes, offering inspiration, balance and renewal. It rules over healthy self-esteem, life purpose, creativity, healing, and vitality, illuminating the path toward wholeness and strength.",
+      "The Great Mother and the Inner Guardian embody the archetypes of the Moon—the keeper of emotions, intuition, and inner rhythms. The Moon soothes and reflects, guiding us through cycles of change, rest, and renewal. It governs emotional intelligence, subconscious wisdom, nurturing, and inner healing, gently illuminating the path toward self-awareness, balance, and deep inner strength.",
     meta: {
       energy: "Peaceful",
       colour: "Violet",
@@ -140,75 +140,75 @@ const Moonsection = () => {
   const planet = planetData.find((p) => p.name === activePlanet);
 
   // Fetch products for the selected planet
-useEffect(() => {
-  if (!planet?.zodiac) return;
-  setLoading(true);
+  useEffect(() => {
+    if (!planet?.zodiac) return;
+    setLoading(true);
 
-  // 1. Define the specific category order
-  const categoryOrder = [
-    "Bath Gel",
-    "Body Lotion",
-    "Perfume",
-    "Essential Oil",
-    "Soap",
-    "Hamper"
-  ];
+    // 1. Define the specific category order
+    const categoryOrder = [
+      "Bath Gel",
+      "Body Lotion",
+      "Perfume",
+      "Essential Oil",
+      "Soap",
+      "Hamper",
+    ];
 
-  // Get the individual zodiac names (e.g., ["Taurus", "Libra"])
-  const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
+    // Get the individual zodiac names (e.g., ["Taurus", "Libra"])
+    const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
 
-  Promise.all(
-    zodiacs.map((zodiac) =>
-      axios
-        .get(`${API_URL}/products/zodiac/${zodiac}`)
-        .then((res) => res.data),
-    ),
-  )
-    .then((results) => {
-      let combinedProducts = results.flat();
+    Promise.all(
+      zodiacs.map((zodiac) =>
+        axios
+          .get(`${API_URL}/products/zodiac/${zodiac}`)
+          .then((res) => res.data),
+      ),
+    )
+      .then((results) => {
+        let combinedProducts = results.flat();
 
-      // 2. Filter out duplicates
-      const uniqueProducts = Array.from(
-        new Map(combinedProducts.map((item) => [item._id, item])).values()
-      );
-
-      // 3. GROUPED SORTING LOGIC (Zodiac first, then Category)
-      const sortedProducts = uniqueProducts.sort((a, b) => {
-        // --- LEVEL 1: Sort by Zodiac Group ---
-        // Find which zodiac in our list matches the product name
-        const zodiacIndexA = zodiacs.findIndex(z => 
-          a.ProductName?.toLowerCase().includes(z.toLowerCase())
-        );
-        const zodiacIndexB = zodiacs.findIndex(z => 
-          b.ProductName?.toLowerCase().includes(z.toLowerCase())
+        // 2. Filter out duplicates
+        const uniqueProducts = Array.from(
+          new Map(combinedProducts.map((item) => [item._id, item])).values(),
         );
 
-        if (zodiacIndexA !== zodiacIndexB) {
-          return zodiacIndexA - zodiacIndexB;
-        }
+        // 3. GROUPED SORTING LOGIC (Zodiac first, then Category)
+        const sortedProducts = uniqueProducts.sort((a, b) => {
+          // --- LEVEL 1: Sort by Zodiac Group ---
+          // Find which zodiac in our list matches the product name
+          const zodiacIndexA = zodiacs.findIndex((z) =>
+            a.ProductName?.toLowerCase().includes(z.toLowerCase()),
+          );
+          const zodiacIndexB = zodiacs.findIndex((z) =>
+            b.ProductName?.toLowerCase().includes(z.toLowerCase()),
+          );
 
-        // --- LEVEL 2: Sort by Category within that Zodiac ---
-        const catIndexA = categoryOrder.findIndex(cat => 
-          a.ProductName?.toLowerCase().includes(cat.toLowerCase())
-        );
-        const catIndexB = categoryOrder.findIndex(cat => 
-          b.ProductName?.toLowerCase().includes(cat.toLowerCase())
-        );
+          if (zodiacIndexA !== zodiacIndexB) {
+            return zodiacIndexA - zodiacIndexB;
+          }
 
-        const finalA = catIndexA === -1 ? 99 : catIndexA;
-        const finalB = catIndexB === -1 ? 99 : catIndexB;
+          // --- LEVEL 2: Sort by Category within that Zodiac ---
+          const catIndexA = categoryOrder.findIndex((cat) =>
+            a.ProductName?.toLowerCase().includes(cat.toLowerCase()),
+          );
+          const catIndexB = categoryOrder.findIndex((cat) =>
+            b.ProductName?.toLowerCase().includes(cat.toLowerCase()),
+          );
 
-        return finalA - finalB;
-      });
+          const finalA = catIndexA === -1 ? 99 : catIndexA;
+          const finalB = catIndexB === -1 ? 99 : catIndexB;
 
-      setPlanetProducts(sortedProducts);
-    })
-    .catch((err) => {
-      console.error("Error fetching planet products:", err);
-      setPlanetProducts([]);
-    })
-    .finally(() => setLoading(false));
-}, [planet]);
+          return finalA - finalB;
+        });
+
+        setPlanetProducts(sortedProducts);
+      })
+      .catch((err) => {
+        console.error("Error fetching planet products:", err);
+        setPlanetProducts([]);
+      })
+      .finally(() => setLoading(false));
+  }, [planet]);
 
   // Buy Now logic (same as Zodiac section)
   // const handleBuyNow = async (product) => {
@@ -352,7 +352,6 @@ useEffect(() => {
       {/* PRODUCTS */}
       {planet && (
         <section className="moon-products sora">
-
           <Container>
             {loading ? (
               <p>Loading products...</p>
@@ -385,7 +384,7 @@ useEffect(() => {
                               style={{
                                 backgroundColor:
                                   zodiacColors[
-                                  getZodiacFromProduct(product.ProductName)
+                                    getZodiacFromProduct(product.ProductName)
                                   ] || "#000",
                               }}
                             ></span>
@@ -400,7 +399,9 @@ useEffect(() => {
                           {/* SIZE + PRICE */}
                           <div className="size-price-row">
                             <span className="size">{product.size}</span>
-                            <span className="zodiac-price">₹ {product.ProductPrice}</span>
+                            <span className="zodiac-price">
+                              ₹ {product.ProductPrice}
+                            </span>
                           </div>
                         </div>
                       </div>
