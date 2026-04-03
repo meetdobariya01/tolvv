@@ -97,8 +97,8 @@ const productInfo = {
     ],
     howToUse:
       "This hamper contains a curated selection of products. Refer to each individual product within the hamper for specific usage instructions.",
-    ingredients:
-      "A proprietary blend of Bath Gel, Soap, Essential Oil, and Perfume tailored to your Zodiac energy.",
+    // ingredients:
+    //   "A proprietary blend of Bath Gel, Soap, Essential Oil, and Perfume tailored to your Zodiac energy.",
     caution:
       "Perform a patch test for each product. Store in a cool place. Keep away from direct sunlight.",
   },
@@ -127,7 +127,14 @@ const Productdetails = ({ handleCartOpen }) => {
   const [activeTab, setActiveTab] = useState("bath");
   const [dbProduct, setDbProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const getZodiacName = (name) => {
+    if (!name) return "";
+    const zodiacs = [
+      "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+      "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+    ];
+    return zodiacs.find(z => name.toLowerCase().includes(z.toLowerCase())) || "";
+  };
   // Fetch product data (unchanged)
   useEffect(() => {
     const fetchProductData = async () => {
@@ -161,7 +168,7 @@ const Productdetails = ({ handleCartOpen }) => {
         await axios.post(
           `${API_URL}/cart/add`,
           { productId: dbProduct._id, quantity: 1 },
-          { headers: { Authorization: `Bearer ${token}` } },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
         if (handleCartOpen) handleCartOpen();
@@ -303,7 +310,7 @@ const Productdetails = ({ handleCartOpen }) => {
                   <p>{productInfo[activeTab]?.howToUse}</p>
                   <h6 className="fw-bold">INGREDIENTS</h6>
                   <p>{productInfo[activeTab]?.ingredients}</p>
-                  <h6 className="fw-bold">CARE</h6>
+                  <h6 className="fw-bold">CAUTION</h6>
                   <p className="small">{productInfo[activeTab]?.caution}</p>
                 </div>
                 {/* <Nav.Link
@@ -330,22 +337,36 @@ const Productdetails = ({ handleCartOpen }) => {
         <hr />
         <Row className="mt-5 text-center">
           {[
-            { key: "bath", label: "BATH LOTION" },
-            { key: "soap", label: "SOAP" },
-            { key: "oil", label: "ESSENTIAL OIL" },
-            { key: "eaudeperfumes", label: "EAU DE PERFUMES" },
-            { key: "bodylotion", label: "BATH GEL" },
-            { key: "hamper", label: "HAMPER" },
-          ].map((item) => (
-            <Col xs={4} md={2} key={item.key}>
-              <span
-                className={`product-link ${active === item.key ? "active" : ""}`}
-                onClick={() => setActive(item.key)}
-              >
-                {item.label}
-              </span>
-            </Col>
-          ))}
+            { key: "Bath Gel", label: "BATH GEL" },
+            { key: "Soap", label: "SOAP" },
+            { key: "Essential Oil", label: "ESSENTIAL OIL" },
+            { key: "Perfume", label: "EAU DE PERFUMES" },
+            { key: "Body Lotion", label: "BODY LOTION" },
+            { key: "Hamper", label: "HAMPER" },
+          ]
+            /* 1. FILTER: We check the Category of the product currently open in the DB.
+                 If it matches the key, we hide it.
+            */
+            .filter((item) => {
+              const currentCategory = dbProduct?.Category?.trim();
+              return item.key.toLowerCase() !== currentCategory?.toLowerCase();
+            })
+            .map((item) => (
+              <Col xs={4} md={2} key={item.key}>
+                <span
+                  className="product-link"
+                  style={{ cursor: "pointer", fontWeight: "bold", textDecoration: "underline" }}
+                  onClick={() => {
+                    /* 2. NAVIGATE: Go to the /product page and pass the category 
+                       in the URL so Mainproduct.js can scroll to it.
+                    */
+                    navigate(`/product?category=${encodeURIComponent(item.key)}`);
+                  }}
+                >
+                  {item.label}
+                </span>
+              </Col>
+            ))}
         </Row>
       </Container>
 
