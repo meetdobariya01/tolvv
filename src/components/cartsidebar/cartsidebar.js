@@ -535,11 +535,12 @@ const CartSidebar = ({ show, handleClose }) => {
                             ></span>
                             {product.ProductName}
                           </h6>
+                          <div className="divider"></div>
+
                           <div className="product-meta">
                             <span>{product.size || ""}</span>
                             <span className="price">₹ {product.ProductPrice}</span>
                           </div>
-                          <div className="divider"></div>
                           <button
                             className="add-btn-1"
                             onClick={(e) => {
