@@ -42,7 +42,7 @@ const Homeproduct = () => {
       <Container>
         <h2 className="products-heading artisan-font">All Sun Signs</h2>
         <h5 className="products-subheading text-center mb-5 text-uppercase sora">
-          Product
+          Products
         </h5>
 
         <Row className="gx-4 gy-3">

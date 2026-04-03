@@ -63,3 +63,27 @@
   color: black;
   font-weight: 600;
 }
+/* .custom-form-check {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+} */
+
+/* Style checkbox */
+.custom-form-check .form-check-input {
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
+/* When checked */
+.custom-form-check .form-check-input:checked {
+  background-color: black;
+  border-color: black;
+}
+
+/* Label styling */
+.custom-form-check .form-check-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}

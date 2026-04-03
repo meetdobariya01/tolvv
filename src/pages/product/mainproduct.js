@@ -227,7 +227,7 @@ useEffect(() => {
                 All Sun Signs
               </h2>
               <h5 className="products-subheading text-center mb-5 text-uppercase sora">
-                Product
+                Products
               </h5>
               {products.map((item, index) => (
                 <Col key={index} xs={4} sm={6} md={4} lg={2}>
@@ -265,7 +265,7 @@ useEffect(() => {
 
         <hr />
 
-        <div id="product-grid" className="row product-fade mt-4">
+        <div id="product-grid" className="row product-fade mt-5">
           <h2 className="products-heading artisan-font">{activeKey}</h2>
 
           {productsByCategory[activeKey]?.map((item) => (
@@ -273,7 +273,7 @@ useEffect(() => {
               className="col-6 col-md-3 mb-4 product-card-animate"
               key={item._id}
             >
-              <Card className="product-card p-1">
+              <Card className="product-card p-1 mt-5">
                 {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
                 <NavLink to={`/productdetails/${item._id}`}>
                   <div className="product-img-wrap">

@@ -383,7 +383,7 @@ const AccountPage = () => {
 
                     {/* Default Address */}
                     <Form.Check
-                      className="mb-3"
+                      className="mb-3  custom-form-check"
                       label="Keep it as a default Address"
                       checked={newAddress.isDefault}
                       onChange={(e) =>

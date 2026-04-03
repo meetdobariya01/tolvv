@@ -121,7 +121,7 @@ const planetData = [
     description:
       "The Wise Elder Woman of the cosmos and our inner world, she guides us toward profound self-knowledge through direct experience with Source. Her teachings are rooted in silence, discipline, time, and a grounded connection to reality. She embodies the art of boundaries and the practice of self-mastery — inviting us to cultivate inner strength, discipline, and the refinement of our skills and spirit.",
     meta: {
-      energy: "Wisdom, Mastery",
+      energy: "Wisdom",
       colour: "Black",
       element: "Earth",
       rules: "Capricorn & Aquarius",

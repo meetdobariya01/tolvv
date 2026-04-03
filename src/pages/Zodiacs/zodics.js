@@ -501,7 +501,7 @@ const Zodic = () => {
               {/* <p className="aries-date mb-3">{selectedZodiac.date}</p> */}
 
               <div className="d-none d-md-block">
-                <div className="d-flex justify-content-center align-items-center gap-5  ">
+                <div className="d-flex justify-content-center gap-5  ">
                   <div className="d-block">
                     <h1 className="aries-title gt-super mb-0">
                       {selectedZodiac.name}
