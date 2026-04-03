@@ -10,22 +10,22 @@ const Reviews = () => {
       text: "I bought Gemini Bath Gel. It has beautiful texture and such a refined fragrance. It feels gentle on the skin. I feel properly cleansed and refreshed.",
       name: "Preeti Arora",
       heartColor: "#BB892C",
-      leftImg: "/images/ingredient/Lemon.png",
-      rightImg: "/images/ingredient/Lavender.png",
+      leftImg: "/images/ingredient/Lemon-08.png",
+      rightImg: "/images/ingredient/Lavender-04.png",
     },
     {
       text: "I love how soft my skin feels after using Aries Bath Gel. The scent is subtle and calming — it makes my shower feel intentional, not rushed.",
       name: "Saumya Shah",
       heartColor: "#7A1318",
-      leftImg: "./images/ingredient/Ginger.png",
-      rightImg: "./images/ingredient/Cinnamon.png",
+      leftImg: "./images/ingredient/Ginger-12.png",
+      rightImg: "./images/ingredient/Cinnamon-07.png",
     },
     {
       text: "I’ve tried many bath gels, but this Virgo Bath Gel feels elevated. It turns a basic shower into something indulgent.",
       name: "Mihir Shah",
       heartColor: "#DC4D2D",
-      leftImg: "/images/ingredient/Fennel-33.png",
-      rightImg: "/images/ingredient/Lemongrass.png",
+      leftImg: "/images/ingredient/Fennel-21.png",
+      rightImg: "/images/ingredient/Lemongrass-18.png",
     },
   ];
 

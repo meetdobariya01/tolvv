@@ -200,7 +200,7 @@
 
 /* BUTTON */
 
-.add-btn {
+.add-btn-1 {
   /* background: black; */
   color:#000;
   /* border: none; */
@@ -215,7 +215,7 @@
   border: 1px solid black;
 }
 
-.add-btn:hover {
+.add-btn-1:hover {
   background: black;
   color: white;
 }
@@ -232,4 +232,7 @@
   display: flex;
   align-items: center;
   gap: 8px; /* 🔥 controls spacing */
+}
+.add-btn-1{
+  width: auto;
 }

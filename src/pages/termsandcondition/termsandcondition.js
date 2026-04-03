@@ -1,4 +1,5 @@
-import React from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaShippingFast, FaCreditCard, FaMapMarkedAlt } from "react-icons/fa";
@@ -12,6 +13,16 @@ const fadeUp = {
 };
 
 const Termsconditions = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // or "smooth"
+    });
+  }, [pathname]);
+
   return (
     <div>
       {/* Header Section */}
@@ -45,9 +56,9 @@ const Termsconditions = () => {
                   <Card.Body className="p-4 p-md-5">
                     <p>
                       The terms <strong>"We" / "Us" / "Our" / ”Company”</strong>{" "}
-                      individually and collectively refer to{" "}
-                      <strong>OM</strong> and the terms{" "}
-                      <strong>"Visitor" / "User"</strong> refer to the users.
+                      individually and collectively refer to <strong>OM</strong>{" "}
+                      and the terms <strong>"Visitor" / "User"</strong> refer to
+                      the users.
                     </p>
 
                     <p>

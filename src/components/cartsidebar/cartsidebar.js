@@ -541,7 +541,7 @@ const CartSidebar = ({ show, handleClose }) => {
                           </div>
                           <div className="divider"></div>
                           <button
-                            className="add-btn"
+                            className="add-btn-1"
                             onClick={(e) => {
                               e.stopPropagation();
                               addToCart(product);
@@ -594,7 +594,7 @@ const CartSidebar = ({ show, handleClose }) => {
                             <span className="price">₹ {product.ProductPrice}</span>
                           </div>
                           <button
-                            className="add-btn"
+                            className="add-btn-1"
                             onClick={(e) => {
                               e.stopPropagation();
                               addToCart(product);
@@ -636,7 +636,7 @@ const CartSidebar = ({ show, handleClose }) => {
                 {selectedProduct.Description || "This premium product is crafted with care using high-quality ingredients to provide the best experience."}
               </p>
               <button 
-                className="modal-add-btn"
+                className="modal-add-btn-1"
                 onClick={() => {
                   addToCart(selectedProduct);
                   closeProductDetail();
