@@ -280,3 +280,11 @@
     padding: 20px;
   }
 }
+
+
+.product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr); /* or auto-fit */
+  gap: 20px;
+  width: 100%;
+}

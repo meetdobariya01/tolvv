@@ -238,6 +238,8 @@ const Productdetails = ({ handleCartOpen }) => {
       </div>
     );
 
+  const isHamper = dbProduct.Category?.toLowerCase() === "hamper";
+
   return (
     <div>
       <Header />
@@ -323,8 +325,12 @@ const Productdetails = ({ handleCartOpen }) => {
                 <div className="details-text">
                   <h6 className="fw-bold">HOW TO USE</h6>
                   <p>{productInfo[activeTab]?.howToUse}</p>
-                  <h6 className="fw-bold">INGREDIENTS</h6>
-                  <p>{productInfo[activeTab]?.ingredients}</p>
+                  {!isHamper && (
+                    <>
+                      <h6 className="fw-bold">INGREDIENTS</h6>
+                      <p>{productInfo[activeTab]?.ingredients}</p>
+                    </>
+                  )}
                   <h6 className="fw-bold">CAUTION</h6>
                   <p className="small">{productInfo[activeTab]?.caution}</p>
                 </div>
