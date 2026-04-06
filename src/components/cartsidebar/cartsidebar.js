@@ -63,7 +63,7 @@ const CartSidebar = ({ show, handleClose }) => {
         const res = await axios.get(`${API_URL}/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        
+
         const rawItems = res.data?.cart?.items?.map((item) => {
           // Handle regular products
           if (item.productId && item.productId._id) {
@@ -82,7 +82,7 @@ const CartSidebar = ({ show, handleClose }) => {
           // Handle hampers (both custom and zodiac)
           if (item.hamperId && item.hamperId._id) {
             const isCustomHamper = item.hamperId.products && item.hamperId.products.length > 0;
-            
+
             return {
               id: item.hamperId._id,
               name: isCustomHamper ? "Custom Hamper" : (item.hamperId.ProductName || "Zodiac Hamper"),
@@ -110,8 +110,9 @@ const CartSidebar = ({ show, handleClose }) => {
         }) || [];
 
         const items = rawItems.flat();
-        const uniqueItems = Array.from(
-          new Map(items.map(item => [item.id, item])).values()
+        const uniqueItems = items.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.cartItemId === item.cartItemId)
         );
 
         setCartItems(uniqueItems);
@@ -156,7 +157,7 @@ const CartSidebar = ({ show, handleClose }) => {
             // Handle hampers (both custom and zodiac)
             if (item.type === "hamper" || item.hamperData) {
               const isCustomHamper = item.hamperData || (item.hamperProducts && item.hamperProducts.length > 0);
-              
+
               return {
                 id: item.id || `hamper-${index}`,
                 name: isCustomHamper ? "Custom Hamper" : (item.name || "Zodiac Hamper"),
@@ -313,46 +314,32 @@ const CartSidebar = ({ show, handleClose }) => {
     setUpdatingId(id);
     try {
       if (token) {
-        // Find the cart item to get its cartItemId
         const cartItem = cartItems.find(item => item.id === id);
-        
+
         if (cartItem && cartItem.cartItemId) {
-          // Use the same remove endpoint for both products and hampers
           await axios.delete(`${API_URL}/cart/remove/${cartItem.cartItemId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-        } else {
-          // Fallback: try to remove by product/hamper ID
-          await axios.delete(`${API_URL}/cart/remove/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
         }
-        
-        const updatedItems = cartItems.filter(item => item.id !== id);
-        setCartItems(updatedItems);
-        setTotalPrice(updatedItems.reduce((s, i) => s + i.price * i.qty, 0));
-        if (updatedItems.length === 0) {
-          setRelatedProducts([]);
-        }
+
+        // ❗ IMPORTANT: Do NOT manually update state here
+        await fetchCart(); // ✅ always sync from backend
       } else {
         let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+
         guestCart = guestCart.filter((i) => {
-          if (i.type === "hamper") {
-            return i.id !== id;
-          }
+          if (i.type === "hamper") return i.id !== id;
           return i.productId !== id;
         });
+
         localStorage.setItem("guestCart", JSON.stringify(guestCart));
-        const updatedItems = cartItems.filter(item => item.id !== id);
-        setCartItems(updatedItems);
-        setTotalPrice(updatedItems.reduce((s, i) => s + i.price * i.qty, 0));
-        if (updatedItems.length === 0) {
-          setRelatedProducts([]);
-        }
+
+        await fetchCart(); // ✅ re-sync guest cart also
       }
+
+      window.dispatchEvent(new Event("cartUpdated"));
     } catch (error) {
       console.error("Error removing item:", error);
-      fetchCart();
     } finally {
       setUpdatingId(null);
     }
@@ -420,7 +407,7 @@ const CartSidebar = ({ show, handleClose }) => {
 
   const getFilteredBestSellers = () => {
     const cartProductIds = cartItems.map(item => item.id);
-    const filtered = bestSellers.filter(product => 
+    const filtered = bestSellers.filter(product =>
       !cartProductIds.includes(product._id)
     );
     return filtered;
@@ -500,7 +487,7 @@ const CartSidebar = ({ show, handleClose }) => {
                 <img src={item.img} alt={item.name} className="cart-img" />
                 <div className="cart-details">
                   <p className="cart-name">{item.name}</p>
-                  
+
                   {/* Show zodiac dot for products */}
                   {item.type === "product" && item.zodiac && (
                     <div className="d-flex align-items-center gap-1 mt-1">
@@ -517,13 +504,13 @@ const CartSidebar = ({ show, handleClose }) => {
                       <small style={{ fontSize: "10px", color: "#666" }}>{item.zodiac}</small>
                     </div>
                   )}
-                  
+
                   <div className="qty-box mt-2">
                     <button onClick={() => decreaseQty(item.id, item.type)} disabled={updatingId === item.id}>-</button>
                     <span>{item.qty}</span>
                     <button onClick={() => increaseQty(item.id, item.type)} disabled={updatingId === item.id}>+</button>
                   </div>
-                  
+
                   {/* Show hamper products for custom hampers */}
                   {item.type === "hamper" && item.hamperProducts && item.hamperProducts.length > 0 && (
                     <div style={{ marginTop: "8px", paddingLeft: "10px" }}>
@@ -535,7 +522,7 @@ const CartSidebar = ({ show, handleClose }) => {
                       ))}
                     </div>
                   )}
-                  
+
                   {/* Show zodiac for zodiac hampers */}
                   {item.type === "hamper" && item.hamperZodiac && item.hamperZodiac.length > 0 && !item.isCustomHamper && (
                     <div style={{ marginTop: "5px" }}>
@@ -712,7 +699,7 @@ const CartSidebar = ({ show, handleClose }) => {
               <h2>{selectedProduct.ProductName}</h2>
               <p className="modal-category">Category: {selectedProduct.Category}</p>
               <p className="modal-zodiac">
-                <span 
+                <span
                   className="zodiac-dot"
                   style={{ backgroundColor: zodiacColors[getZodiacFromProduct(selectedProduct.ProductName)] || "#000" }}
                 ></span>
@@ -722,7 +709,7 @@ const CartSidebar = ({ show, handleClose }) => {
               <p className="modal-description">
                 {selectedProduct.Description || "This premium product is crafted with care using high-quality ingredients to provide the best experience."}
               </p>
-              <button 
+              <button
                 className="modal-add-btn"
                 onClick={() => {
                   addToCart(selectedProduct);

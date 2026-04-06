@@ -23,37 +23,37 @@ const Checkout = () => {
   });
   // ================= APPLY COUPON =================
   const applyCoupon = async () => {
-  if (!couponCode || couponApplied) return;
+    if (!couponCode || couponApplied) return;
 
-  try {
-    const res = await fetch(`${API_URL}/orders/coupon/validate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ couponCode }),
-    });
+    try {
+      const res = await fetch(`${API_URL}/orders/coupon/validate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ couponCode }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Coupon not valid for this order");
-      setDiscount(0);
-      setCouponApplied(false);
-      return;
+      if (!res.ok) {
+        alert(data.message || "Coupon not valid for this order");
+        setDiscount(0);
+        setCouponApplied(false);
+        return;
+      }
+
+      const discountAmount = (subtotal * data.discountPercent) / 100;
+
+      setDiscount(discountAmount);
+      setCouponApplied(true);
+
+    } catch (err) {
+      console.error(err);
+      alert("Coupon validation failed");
     }
-
-    const discountAmount = (subtotal * data.discountPercent) / 100;
-
-    setDiscount(discountAmount);
-    setCouponApplied(true);
-
-  } catch (err) {
-    console.error(err);
-    alert("Coupon validation failed");
-  }
-};
+  };
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [placing, setPlacing] = useState(false);
   const [addFreeProduct, setAddFreeProduct] = useState(false);
@@ -155,7 +155,23 @@ const Checkout = () => {
 
   // ================= TOTAL =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
-  const total = subtotal - discount;
+
+  // ✅ TOTAL ITEMS COUNT
+  const totalItems = cart.reduce((acc, it) => acc + it.qty, 0);
+
+  // ✅ SHIPPING LOGIC
+  let shipping = 0;
+
+  if (subtotal >= 2000) {
+    shipping = 0;
+  } else if (totalItems === 1) {
+    shipping = 98;
+  } else {
+    shipping = totalItems * 35;
+  }
+
+  // ✅ FINAL TOTAL
+  const total = subtotal - discount + shipping;
 
   const hasHamper = cart.some(
     (item) =>
@@ -491,9 +507,10 @@ const Checkout = () => {
 
                   <div className="d-flex justify-content-between">
                     <span>Shipping</span>
-                    <span>-</span>
+                    <span>
+                      {shipping === 0 ? "FREE" : currencyFormat(shipping)}
+                    </span>
                   </div>
-
                   <div className="d-flex justify-content-between mt-5">
                     <span>Discount</span>
                     <span>- {currencyFormat(discount)}</span>

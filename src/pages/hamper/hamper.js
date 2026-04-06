@@ -15,6 +15,7 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
 const API_URL = process.env.REACT_APP_API_URL;
+
 const zodiacData = [
   { name: "Aries", img: "/images/zodiac/1-2.png" },
   { name: "Taurus", img: "/images/zodiac/2-2.png" },
@@ -29,6 +30,7 @@ const zodiacData = [
   { name: "Aquarius", img: "/images/zodiac/11-2.png" },
   { name: "Pisces", img: "/images/zodiac/12-2.png" },
 ];
+
 const productData = [
   { id: 1, name: "Bath Gel", size: "200 ml", img: "/images/bl.png" },
   { id: 2, name: "Body Lotion", size: "200 ml", img: "/images/bl.png" },
@@ -62,7 +64,13 @@ function HamperPage({ handleCartOpen }) {
   };
 
   const normalize = (str) => str?.toLowerCase().replace(/\s/g, "");
+  const getCategoryImage = (categoryName) => {
+    const product = fetchedProducts.find((p) =>
+      normalize(p.Category).includes(normalize(categoryName))
+    );
 
+    return product ? getImage(product.Photos) : null;
+  };
   useEffect(() => {
     const fetchHampers = async () => {
       try {
@@ -76,10 +84,13 @@ function HamperPage({ handleCartOpen }) {
   }, []);
 
   const handleZodiacSelect = (name) => {
-    setSelectedZodiac(name);
-    setSelectedCategories([]);
-    // Don't clear existing products when zodiac changes
-  };
+  setSelectedZodiac(name);
+
+  // ❌ REMOVE these resets
+  // setSelectedCategories([]);
+  // setAllAddedProducts([]);
+  // setQty({});
+};
 
   const getImage = (photos) => {
     if (!photos) return "";
@@ -90,7 +101,6 @@ function HamperPage({ handleCartOpen }) {
 
   const handleBuyNow = async (product) => {
     if (!product) return;
-
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -105,9 +115,8 @@ function HamperPage({ handleCartOpen }) {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
-
         if (handleCartOpen) {
           handleCartOpen();
         }
@@ -122,9 +131,7 @@ function HamperPage({ handleCartOpen }) {
       } catch {
         cart = [];
       }
-
       const existing = cart.find((item) => item.productId === product._id);
-
       if (existing) {
         existing.quantity += 1;
       } else {
@@ -136,45 +143,70 @@ function HamperPage({ handleCartOpen }) {
           img: getImage(product.Photos),
         });
       }
-
       localStorage.setItem("guestCart", JSON.stringify(cart));
       window.dispatchEvent(new Event("cartUpdated"));
-
       if (handleCartOpen) {
         handleCartOpen();
       }
     }
   };
+ useEffect(() => {
+  if (selectedZodiac) {
+    const fetchProducts = async () => {
+      const res = await axios.post(`${API_URL}/hamper/zodiac-products`, {
+        zodiacs: [selectedZodiac],
+        category: [],
+      });
+
+      setFetchedProducts(res.data); // ✅ ONLY HERE
+    };
+
+    fetchProducts();
+  }
+}, [selectedZodiac]);
+
 
   useEffect(() => {
-    if (selectedZodiac && selectedCategories.length > 0) {
-      const getProducts = async () => {
-        try {
-          const res = await axios.post(`${API_URL}/hamper/zodiac-products`, {
-            zodiacs: [selectedZodiac],
-            category: selectedCategories,
+  if (selectedZodiac && selectedCategories.length > 0) {
+    const getProducts = async () => {
+      try {
+        const res = await axios.post(`${API_URL}/hamper/zodiac-products`, {
+          zodiacs: [selectedZodiac],
+          category: selectedCategories,
+        });
+
+        setAllAddedProducts((prev) => {
+          let updatedProducts = [...prev];
+
+          res.data.forEach((product) => {
+            const exists = updatedProducts.find(p => p._id === product._id);
+
+            if (!exists) {
+              updatedProducts.push(product);
+
+              // ✅ set default qty = 1
+              setQty(prevQty => ({
+                ...prevQty,
+                [product._id]: 1
+              }));
+            }
           });
 
-          const existingProductIds = new Set(
-            allAddedProducts.map((p) => p._id),
-          );
-          const newProducts = res.data.filter(
-            (p) => !existingProductIds.has(p._id),
-          );
+          return updatedProducts;
+        });
 
-          setAllAddedProducts((prev) => [...prev, ...newProducts]);
-          setFetchedProducts(res.data);
-        } catch (err) {
-          console.error("Fetch Error:", err);
-        }
-      };
-      getProducts();
-    }
-  }, [selectedZodiac, selectedCategories]);
+      } catch (err) {
+        console.error("Fetch Error:", err);
+      }
+    };
+
+    getProducts();
+  }
+}, [selectedZodiac, selectedCategories]);
 
   const handleCategoryToggle = (name) => {
     setSelectedCategories((prev) =>
-      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name],
+      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
     );
   };
 
@@ -183,9 +215,7 @@ function HamperPage({ handleCartOpen }) {
       alert("Please select a zodiac sign first");
       return;
     }
-
     const productExists = allAddedProducts.some((p) => p._id === product._id);
-
     if (!productExists) {
       setAllAddedProducts((prev) => [...prev, product]);
       setQty((prev) => ({
@@ -204,15 +234,11 @@ function HamperPage({ handleCartOpen }) {
     setQty((prev) => {
       const current = prev[id] || 0;
       const newQty = type === "inc" ? current + 1 : Math.max(0, current - 1);
-
-      return {
-        ...prev,
-        [id]: newQty,
-      };
+      return { ...prev, [id]: newQty };
     });
   };
 
-  // FIXED: Handle Add to Cart for Custom Hamper
+  // Handle Add to Cart for Custom Hamper
   const handleAddToCart = async () => {
     const selectedItems = allAddedProducts.filter((p) => (qty[p._id] || 0) > 0);
 
@@ -223,7 +249,7 @@ function HamperPage({ handleCartOpen }) {
 
     const total = selectedItems.reduce(
       (sum, p) => sum + p.ProductPrice * (qty[p._id] || 0),
-      0,
+      0
     );
 
     if (total < 2500) {
@@ -244,40 +270,27 @@ function HamperPage({ handleCartOpen }) {
 
     try {
       if (token) {
-        // For logged-in users: Create hamper in backend first
         const res = await axios.post(`${API_URL}/hamper/create`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
         });
-        
         const hamperId = res.data.hamper._id;
-        
-        // Add hamper to cart
         await axios.post(
           `${API_URL}/cart/add-hamper`,
           { hamperId, quantity: 1 },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        
         alert("Custom Hamper added to cart successfully!");
-        
-        // Reset hamper selection
         setAllAddedProducts([]);
         setQty({});
         setSelectedCategories([]);
         setSelectedZodiac("");
-        
         if (handleCartOpen) {
           handleCartOpen();
         }
       } else {
-        // For guest users: Store hamper in localStorage
         let cart = [];
         try {
           const stored = localStorage.getItem("guestCart");
@@ -285,10 +298,7 @@ function HamperPage({ handleCartOpen }) {
         } catch {
           cart = [];
         }
-        
         const hamperId = `hamper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        
-        // Store complete hamper details with all products
         cart.push({
           id: hamperId,
           type: "hamper",
@@ -308,18 +318,13 @@ function HamperPage({ handleCartOpen }) {
           name: "Custom Hamper",
           img: "/images/hamper.jpg",
         });
-        
         localStorage.setItem("guestCart", JSON.stringify(cart));
         window.dispatchEvent(new Event("cartUpdated"));
-        
         alert("Custom Hamper added to cart!");
-        
-        // Reset hamper selection
         setAllAddedProducts([]);
         setQty({});
         setSelectedCategories([]);
         setSelectedZodiac("");
-        
         if (handleCartOpen) {
           handleCartOpen();
         }
@@ -335,16 +340,13 @@ function HamperPage({ handleCartOpen }) {
   return (
     <div>
       <Header />
-
       <div className="hamper-section">
         <Container>
           <h2 className="text-center mb-5 artisan-font">Hampers</h2>
           <p className="text-center sora">
-            Beautifully presented in our signature branded Hamper Box, made for
-            effortless Gifting. <br /> Includes a complimentary Face Towel for
-            an added touch of care
+            Beautifully presented in our signature branded Hamper Box, made for effortless Gifting. <br />
+            Includes a complimentary Face Towel for an added touch of care
           </p>
-
           <div className="sora">
             <div className="container-fluid">
               <div className="row align-items-center justify-content-center">
@@ -362,26 +364,17 @@ function HamperPage({ handleCartOpen }) {
                       <hr />
                       <p className="hamper-subtitle">
                         Choose Your Sun Sign <br />
-                        To Explore Products Crafted For It & Enjoy A
-                        Complimentary Face Towel
+                        To Explore Products Crafted For It & Enjoy A Complimentary Face Towel
                       </p>
                     </div>
-                    <img
-                      src="./images/hamper-1.png"
-                      className="w-50"
-                      alt="Zodiac"
-                    />
+                    <img src="./images/hamper-1.png" className="w-50" alt="Zodiac" />
                   </div>
                 </div>
 
                 {/* CENTER IMAGE */}
                 <div className="col-lg-4 col-md-6 col-12 text-center mb-4 mb-lg-0">
                   <div className="center-image-wrapper">
-                    <img
-                      src="./images/hamper-banner.png"
-                      className="center-image"
-                      alt="Main"
-                    />
+                    <img src="./images/hamper-banner.png" className="center-image" alt="Main" />
                   </div>
                 </div>
 
@@ -391,23 +384,16 @@ function HamperPage({ handleCartOpen }) {
                     className="hamper-card side-card d-flex gap-2 right-card"
                     onClick={() => setActiveSection("craft")}
                   >
-                    <img
-                      src="./images/hamper-2.png"
-                      className="w-50"
-                      alt="Craft"
-                    />
+                    <img src="./images/hamper-2.png" className="w-50" alt="Craft" />
                     <div>
                       <div className="d-flex justify-content-between align-items-start mt-3">
                         <FontAwesomeIcon icon={faAngleLeft} />
-                        <h5 className="hamper-title text-end w-100">
-                          Curate Your Hamper
-                        </h5>
+                        <h5 className="hamper-title text-end w-100"> Curate Your Hamper </h5>
                       </div>
                       <hr />
                       <p className="hamper-subtitle text-end">
                         Choose Your Sun Sign <br />
-                        To Explore Products Crafted For It & Enjoy A
-                        Complimentary Face Towel
+                        To Explore Products Crafted For It & Enjoy A Complimentary Face Towel
                       </p>
                     </div>
                   </div>
@@ -418,7 +404,7 @@ function HamperPage({ handleCartOpen }) {
         </Container>
       </div>
 
-      <div className="container py-5 ">
+      <div className="container py-5">
         {activeSection === "zodiac" && (
           <div className="mt-5">
             <h2 className="text-center artisan-font">Zodiac Hampers</h2>
@@ -426,8 +412,7 @@ function HamperPage({ handleCartOpen }) {
               Curated for your Zodiac, Crafted for your Self-Care Ritual.
             </p>
             <p className="sora text-center mb-5">
-              Each hamper includes a Body Lotion, Bath Gel, Bath Soap, Essential
-              Oil and Eau De Perfume
+              Each hamper includes a Body Lotion, Bath Gel, Bath Soap, Essential Oil and Eau De Perfume
             </p>
             <div className="row">
               {zodiacHampers.map((item) => (
@@ -437,30 +422,21 @@ function HamperPage({ handleCartOpen }) {
                     onClick={() => navigate(`/productdetails/${item._id}`)}
                     style={{ cursor: "pointer" }}
                   >
-                    <img
-                      src={getImage(item.Photos)}
-                      className="img-fluid"
-                      alt={item.ProductName}
-                    />
+                    <img src={getImage(item.Photos)} className="img-fluid" alt={item.ProductName} />
                     <Card.Body className="product-info sora p-1">
                       <div className="product-top">
                         <div className="title-wrap d-block d-md-flex align-items-center justify-content-between w-100">
                           <div className="price-with-dot-1 d-flex align-items-center gap-2">
                             <span
                               className="zodiac-dot"
-                              style={{
-                                backgroundColor:
-                                  zodiacColors[item.Zodiac] || "#000",
-                              }}
+                              style={{ backgroundColor: zodiacColors[item.Zodiac] || "#000" }}
                             ></span>
                             <h6 className="product-page-title">
                               {item.ProductName} <span>›</span>
                             </h6>
                           </div>
                           <div className="price-with-dot-1 d-flex align-items-center gap-2">
-                            <span className="product-price">
-                              ₹ {item.ProductPrice}
-                            </span>
+                            <span className="product-price"> ₹ {item.ProductPrice} </span>
                           </div>
                         </div>
                       </div>
@@ -487,13 +463,11 @@ function HamperPage({ handleCartOpen }) {
           <div className="mt-5 sora">
             <h2 className="text-center artisan-font">Curate Your Hamper</h2>
             <p className="text-center m-0 sora">
-              Curate Your Hamper With Different Sun Sign Products And Enjoy A
-              Complimentary Face Towel
+              Curate Your Hamper With Different Sun Sign Products And Enjoy A Complimentary Face Towel
             </p>
             <p className="text-center mt-2 mb-5">
               Minimum purchase of ₹ 2,500 applies to all Curated Hampers
             </p>
-
             <p className="hamper-zodiac-title-1">Pick a Zodiac</p>
             <div className="d-flex flex-wrap justify-content-between gap-4 my-4">
               {zodiacData.map((zodiac, index) => (
@@ -520,29 +494,15 @@ function HamperPage({ handleCartOpen }) {
               <h5 className="mb-4 fw-semibold">Pick your preferred products</h5>
               <div className="row">
                 {productData.map((item) => (
-                  <div
-                    key={item.id}
-                    className="col-lg-custom col-md-4 col-6 mb-4"
-                  >
-                    <div
-                      className="hamper-product-card"
-                      style={{
-                        padding: "10px",
-                        position: "relative",
-                      }}
-                    >
+                  <div key={item.id} className="col-lg-custom col-md-4 col-6 mb-4">
+                    <div className="hamper-product-card" style={{ padding: "10px", position: "relative" }}>
                       <input
                         type="checkbox"
                         name="cat"
                         checked={selectedCategories.includes(item.name)}
                         onChange={() => handleCategoryToggle(item.name)}
                         className="product-checkbox"
-                        style={{
-                          position: "absolute",
-                          top: "10px",
-                          right: "10px",
-                          zIndex: 1,
-                        }}
+                        style={{ position: "absolute", top: "10px", right: "10px", zIndex: 1 }}
                       />
                       <div
                         className="hamper-product-img"
@@ -555,7 +515,14 @@ function HamperPage({ handleCartOpen }) {
                           handleCategoryToggle(item.name);
                         }}
                       >
-                        <img src={item.img} alt={item.name} />
+                        <img
+                          src={
+                            selectedZodiac
+                              ? getCategoryImage(item.name) || item.img
+                              : item.img
+                          }
+                          alt={item.name}
+                        />
                       </div>
                       <div className="hamper-product-info">
                         <h6>{item.name}</h6>
@@ -584,16 +551,12 @@ function HamperPage({ handleCartOpen }) {
                           onChange={() =>
                             updateQty(
                               item._id,
-                              (qty[item._id] || 0) > 0 ? "dec" : "inc",
+                              (qty[item._id] || 0) > 0 ? "dec" : "inc"
                             )
                           }
                         />
                         <div className="hamper-img">
-                          <img
-                            src={getImage(item.Photos)}
-                            alt={item.ProductName}
-                            style={{ width: "100%" }}
-                          />
+                          <img src={getImage(item.Photos)} alt={item.ProductName} style={{ width: "100%" }} />
                         </div>
                         <div className="hamper-info">
                           <div className="d-flex justify-content-between align-items-center">
@@ -601,8 +564,7 @@ function HamperPage({ handleCartOpen }) {
                               <span
                                 className="zodiac-dot"
                                 style={{
-                                  backgroundColor:
-                                    zodiacColors[item.Zodiac] || "#000",
+                                  backgroundColor: zodiacColors[item.Zodiac] || "#000",
                                   width: "14px",
                                   height: "14px",
                                   borderRadius: "50%",
@@ -621,17 +583,9 @@ function HamperPage({ handleCartOpen }) {
                           <div className="d-flex justify-content-between align-items-center">
                             <small className="text-muted">{item.size}</small>
                             <div className="qty-box">
-                              <button
-                                onClick={() => updateQty(item._id, "dec")}
-                              >
-                                -
-                              </button>
+                              <button onClick={() => updateQty(item._id, "dec")}> - </button>
                               <span>{qty[item._id] || 0}</span>
-                              <button
-                                onClick={() => updateQty(item._id, "inc")}
-                              >
-                                +
-                              </button>
+                              <button onClick={() => updateQty(item._id, "inc")}> + </button>
                             </div>
                           </div>
                         </div>
@@ -648,11 +602,7 @@ function HamperPage({ handleCartOpen }) {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="btn btn-outline-dark"
-              onClick={handleAddToCart}
-            >
+            <button type="button" className="btn btn-outline-dark" onClick={handleAddToCart}>
               ADD TO CART <FiShoppingCart className="ms-1" size={22} />
             </button>
           </div>
