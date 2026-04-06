@@ -412,7 +412,7 @@ function HamperPage({ handleCartOpen }) {
         </Container>
       </div>
 
-      <div className="container py-5 ">
+      <div className="container ">
         {activeSection === "zodiac" && (
           <div className="mt-5">
             <h2 className="text-center artisan-font">Zodiac Hampers</h2>
@@ -429,7 +429,7 @@ function HamperPage({ handleCartOpen }) {
               {zodiacHampers.map((item) => (
                 <div className="col-lg-3 col-md-4 col-6 mb-4" key={item._id}>
                   <div
-                    className="product-card text-center"
+                    className="product-card-hamper text-center"
                     onClick={() => navigate(`/productdetails/${item._id}`)}
                     style={{ cursor: "pointer" }}
                   >
@@ -647,7 +647,7 @@ function HamperPage({ handleCartOpen }) {
 
             <button
               type="button"
-              className="btn btn-outline-dark"
+              className="btn btn-outline-dark mb-5"
               onClick={handleAddToCart}
             >
               ADD TO CART <FiShoppingCart className="ms-1" size={22} />

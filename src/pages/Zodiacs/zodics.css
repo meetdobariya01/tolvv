@@ -412,3 +412,19 @@
     padding: 20px 0 0 0;
   }
 }
+.zodiac-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* ACTIVE ZODIAC */
+.active-zodiac-tolvv .zodiac-circle {
+  transform: scale(1.1);
+  border: 2px solid #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+}
+
+.active-zodiac-tolvv .zodiac-name {
+  font-weight: 600;
+  color: #fff;
+}

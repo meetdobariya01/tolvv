@@ -325,8 +325,8 @@ const Productdetails = ({ handleCartOpen }) => {
                   <p>{productInfo[activeTab]?.howToUse}</p>
                   <h6 className="fw-bold">INGREDIENTS</h6>
                   <p>{productInfo[activeTab]?.ingredients}</p>
-                  <h6 className="fw-bold">CAUTION</h6>
-                  <p className="small">{productInfo[activeTab]?.caution}</p>
+                  <h6 className="fw-bold">CARE</h6>
+                  <p className="">{productInfo[activeTab]?.caution}</p>
                 </div>
                 {/* <Nav.Link
                   href="/refund-policy"

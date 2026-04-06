@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import "./zodics.css";
 import axios from "axios";
@@ -9,8 +9,38 @@ import Calculator from "../../components/calculator/calculator";
 
 const Zodic = () => {
   // const [active, setActive] = useState(null);
+  const detailRef = useRef(null);
+  const handleZodiacClick = (sign) => {
+    setSelectedZodiac(zodiacData[sign.name]);
 
-  const zodiacColors = { Aries: "#7A1318", Taurus: "#7A8B3D", Gemini: "#BB892C", Cancer: "#8A8C8E", Leo: "#E8C43A", Virgo: "#DC4D2D", Libra: "#F04E4C", Scorpio: "#000000", Sagittarius: "#74489D", Capricorn: "#CCC29F", Aquarius: "#519AA2", Pisces: "#043D5D", }
+    // Scroll after render
+    setTimeout(() => {
+      if (detailRef.current) {
+        const yOffset = -120; // adjust as needed
+        const y =
+          detailRef.current.getBoundingClientRect().top +
+          window.pageYOffset +
+          yOffset;
+
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }, 100);
+  };
+
+  const zodiacColors = {
+    Aries: "#7A1318",
+    Taurus: "#7A8B3D",
+    Gemini: "#BB892C",
+    Cancer: "#8A8C8E",
+    Leo: "#E8C43A",
+    Virgo: "#DC4D2D",
+    Libra: "#F04E4C",
+    Scorpio: "#000000",
+    Sagittarius: "#74489D",
+    Capricorn: "#CCC29F",
+    Aquarius: "#519AA2",
+    Pisces: "#043D5D",
+  };
 
   const zodiacData = {
     Aries: {
@@ -371,70 +401,76 @@ const Zodic = () => {
   ];
   // const token = localStorage.getItem("token");
   const [selectedZodiac, setSelectedZodiac] = useState(null);
- // In Zodic.js - Replace the sorting logic
+  // In Zodic.js - Replace the sorting logic
 
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/products`);
-      const data = res.data;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/products`);
+        const data = res.data;
 
-      // 1. Desired Order - exact match patterns
-      const categoryOrder = [
-        "Bath Gel",
-        "Body Lotion", 
-        "Perfume",
-        "Essential Oil",
-        "Soap",
-        "Hamper"
-      ];
+        // 1. Desired Order - exact match patterns
+        const categoryOrder = [
+          "Bath Gel",
+          "Body Lotion",
+          "Perfume",
+          "Essential Oil",
+          "Soap",
+          "Hamper",
+        ];
 
-      // Helper function to get category priority
-      const getCategoryPriority = (productName) => {
-        // Check for exact match first
-        for (let i = 0; i < categoryOrder.length; i++) {
-          if (productName.toLowerCase().includes(categoryOrder[i].toLowerCase())) {
-            return i;
+        // Helper function to get category priority
+        const getCategoryPriority = (productName) => {
+          // Check for exact match first
+          for (let i = 0; i < categoryOrder.length; i++) {
+            if (
+              productName.toLowerCase().includes(categoryOrder[i].toLowerCase())
+            ) {
+              return i;
+            }
           }
-        }
-        // Check for variations
-        if (productName.toLowerCase().includes("bath")) return 0;
-        if (productName.toLowerCase().includes("lotion")) return 1;
-        if (productName.toLowerCase().includes("perfume") || productName.toLowerCase().includes("eau")) return 2;
-        if (productName.toLowerCase().includes("essential")) return 3;
-        if (productName.toLowerCase().includes("soap")) return 4;
-        if (productName.toLowerCase().includes("hamper")) return 5;
-        return 99; // Unknown category goes to end
-      };
+          // Check for variations
+          if (productName.toLowerCase().includes("bath")) return 0;
+          if (productName.toLowerCase().includes("lotion")) return 1;
+          if (
+            productName.toLowerCase().includes("perfume") ||
+            productName.toLowerCase().includes("eau")
+          )
+            return 2;
+          if (productName.toLowerCase().includes("essential")) return 3;
+          if (productName.toLowerCase().includes("soap")) return 4;
+          if (productName.toLowerCase().includes("hamper")) return 5;
+          return 99; // Unknown category goes to end
+        };
 
-      const grouped = {};
-      Zodiac.forEach((cat) => (grouped[cat] = []));
+        const grouped = {};
+        Zodiac.forEach((cat) => (grouped[cat] = []));
 
-      data.forEach((prod) => {
-        const zodiac = prod.Zodiac?.trim();
-        if (grouped[zodiac]) {
-          if (!grouped[zodiac].find((p) => p._id === prod._id)) {
-            grouped[zodiac].push(prod);
+        data.forEach((prod) => {
+          const zodiac = prod.Zodiac?.trim();
+          if (grouped[zodiac]) {
+            if (!grouped[zodiac].find((p) => p._id === prod._id)) {
+              grouped[zodiac].push(prod);
+            }
           }
-        }
-      });
-
-      // 2. FIXED SORT LOGIC - Using the helper function
-      Object.keys(grouped).forEach((key) => {
-        grouped[key].sort((a, b) => {
-          const priorityA = getCategoryPriority(a.ProductName);
-          const priorityB = getCategoryPriority(b.ProductName);
-          return priorityA - priorityB;
         });
-      });
 
-      setProductsByZodiac(grouped);
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-    }
-  };
-  fetchProducts();
-}, [API_URL]);// Added dependency array to prevent infinite loops
+        // 2. FIXED SORT LOGIC - Using the helper function
+        Object.keys(grouped).forEach((key) => {
+          grouped[key].sort((a, b) => {
+            const priorityA = getCategoryPriority(a.ProductName);
+            const priorityB = getCategoryPriority(b.ProductName);
+            return priorityA - priorityB;
+          });
+        });
+
+        setProductsByZodiac(grouped);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+    fetchProducts();
+  }, [API_URL]); // Added dependency array to prevent infinite loops
 
   return (
     <div>
@@ -458,8 +494,10 @@ useEffect(() => {
                 {zodiacSigns.map((sign, index) => (
                   <div
                     key={index}
-                    className="col-4 col-lg-3  zodiac-item text-center"
-                    onClick={() => setSelectedZodiac(zodiacData[sign.name])}
+                    className={`col-4 col-lg-3 zodiac-item text-center ${
+                      selectedZodiac?.name === sign.name ? "active-zodiac-tolvv" : ""
+                    }`}
+                    onClick={() => handleZodiacClick(sign)}
                   >
                     <div
                       className="zodiac-circle"
@@ -490,6 +528,7 @@ useEffect(() => {
       {/* RED SECTION (Dynamic Content) */}
       {selectedZodiac && (
         <section
+          ref={detailRef}
           className="aries-section text-center"
           style={{ backgroundColor: selectedZodiac.color }}
         >
@@ -503,7 +542,9 @@ useEffect(() => {
                     <h1 className="aries-title gt-super mb-0">
                       {selectedZodiac.name}
                     </h1>
-                    <p className="aries-date mb-3 gt-super">{selectedZodiac.date}</p>
+                    <p className="aries-date mb-3 gt-super">
+                      {selectedZodiac.date}
+                    </p>
                   </div>
                   <div
                     className="aries-icon-circle d-flex justify-content-center align-items-center"
@@ -536,7 +577,9 @@ useEffect(() => {
                   <h1 className="aries-title text-center gt-super mb-0">
                     {selectedZodiac.name}
                   </h1>
-                  <p className="aries-date gt-super mb-3">{selectedZodiac.date}</p>
+                  <p className="aries-date gt-super mb-3">
+                    {selectedZodiac.date}
+                  </p>
                 </div>
               </div>
             </div>
@@ -561,7 +604,7 @@ useEffect(() => {
           <p className="gt-super ingredients">INGREDIENTS</p>
 
           {/* Herbs Section */}
-          <div className="aries-images container d-flex justify-content-center  flex-wrap">
+          <div className="aries-images container d-flex justify-content-around  flex-wrap">
             {selectedZodiac.herbs.map((img, i) => (
               <img key={i} src={img} alt="herb" className="half-out-image" />
             ))}
@@ -597,7 +640,10 @@ useEffect(() => {
                           <div className="price-with-dot-1">
                             <span
                               className="zodiac-dot"
-                              style={{ backgroundColor: zodiacColors[selectedZodiac.name] }}
+                              style={{
+                                backgroundColor:
+                                  zodiacColors[selectedZodiac.name],
+                              }}
                             ></span>
 
                             <span className="zodiac-price fw-bolder">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
@@ -25,7 +25,7 @@ const zodiacColors = {
 const getZodiacFromProduct = (name) => {
   if (!name) return null;
   return Object.keys(zodiacColors).find((zodiac) =>
-    name.toLowerCase().includes(zodiac.toLowerCase())
+    name.toLowerCase().includes(zodiac.toLowerCase()),
   );
 };
 
@@ -50,7 +50,8 @@ const planetData = [
     image: "/images/sun.png",
     mood: "Energy",
     bg: "#D3B42B",
-    description: "The King and the Great Father embody the archetype of the Sun - the radiant source of all light and life, both earthly and spiritual. The Sun stands as a symbol of inspiration, energy, and inner balance. It governs our sense of self-worth, purpose, creativity, healing, and the very vitality that sustains life itself.",
+    description:
+      "The King and the Great Father embody the archetype of the Sun - the radiant source of all light and life, both earthly and spiritual. The Sun stands as a symbol of inspiration, energy, and inner balance. It governs our sense of self-worth, purpose, creativity, healing, and the very vitality that sustains life itself.",
     meta: { energy: "Vitality", colour: "Gold", element: "Fire", rules: "Leo" },
     zodiac: "Leo",
   },
@@ -59,8 +60,14 @@ const planetData = [
     image: "/images/mercury.png",
     mood: "Clarity",
     bg: "#E6B222",
-    description: "The Winged Messenger of the Gods, Mercury, serves as the vital bridge between the solar and lunar forces within us. Long revered as the archetype of duality and fluidity, Mercury represents the ancient source of non-binary thought and the seamless flow between masculine and feminine energies — both physical and energetic.",
-    meta: { energy: "Harmonizing", colour: "Orange", element: "Air", rules: "Gemini & Virgo" },
+    description:
+      "The Winged Messenger of the Gods, Mercury, serves as the vital bridge between the solar and lunar forces within us. Long revered as the archetype of duality and fluidity, Mercury represents the ancient source of non-binary thought and the seamless flow between masculine and feminine energies — both physical and energetic.",
+    meta: {
+      energy: "Harmonizing",
+      colour: "Orange",
+      element: "Air",
+      rules: "Gemini & Virgo",
+    },
     zodiac: "Gemini & Virgo",
   },
   {
@@ -68,8 +75,14 @@ const planetData = [
     image: "/images/venus.png",
     mood: "Radiance",
     bg: "#04683F",
-    description: "Venus embodies the divine desire for self-renewal and the innate love of beauty within us. She is the inner Artist — the force that transforms both self and world through love, aesthetics, and creative expression.",
-    meta: { energy: "Loving", colour: "Green", element: "Air", rules: "Taurus & Libra" },
+    description:
+      "Venus embodies the divine desire for self-renewal and the innate love of beauty within us. She is the inner Artist — the force that transforms both self and world through love, aesthetics, and creative expression.",
+    meta: {
+      energy: "Loving",
+      colour: "Green",
+      element: "Air",
+      rules: "Taurus & Libra",
+    },
     zodiac: "Taurus & Libra",
   },
   {
@@ -77,8 +90,14 @@ const planetData = [
     image: "/images/mars.png",
     mood: "Passion",
     bg: "#A72024",
-    description: "Mars, the Proud Warrior, embodies the spirit of courage and the fire of empowerment within us all. It represents our capacity for action — our passion, daring, and strength of will.",
-    meta: { energy: "Empowering", colour: "Red", element: "Fire", rules: "Aries & Scorpio" },
+    description:
+      "Mars, the Proud Warrior, embodies the spirit of courage and the fire of empowerment within us all. It represents our capacity for action — our passion, daring, and strength of will.",
+    meta: {
+      energy: "Empowering",
+      colour: "Red",
+      element: "Fire",
+      rules: "Aries & Scorpio",
+    },
     zodiac: "Aries & Scorpio",
   },
   {
@@ -86,8 +105,14 @@ const planetData = [
     image: "/images/jupiter.png",
     mood: "Optimism",
     bg: "#303188",
-    description: "Jupiter, the beloved Wise Man of the cosmos and our inner world, governs faith, wisdom, and the shared values that shape culture and society.",
-    meta: { energy: "Expansiveness", colour: "Blue", element: "Fire", rules: "Sagittarius & Pisces" },
+    description:
+      "Jupiter, the beloved Wise Man of the cosmos and our inner world, governs faith, wisdom, and the shared values that shape culture and society.",
+    meta: {
+      energy: "Expansiveness",
+      colour: "Blue",
+      element: "Fire",
+      rules: "Sagittarius & Pisces",
+    },
     zodiac: "Sagittarius & Pisces",
   },
   {
@@ -111,7 +136,18 @@ const Moonsection = () => {
   const [activePlanet, setActivePlanet] = useState(null);
   const [planetProducts, setPlanetProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const sectionRef = useRef(null);
+  const scrollToSection = () => {
+    if (sectionRef.current) {
+      const yOffset = -100; // 👈 adjust this (negative = scroll a little above)
+      const y =
+        sectionRef.current.getBoundingClientRect().top +
+        window.pageYOffset +
+        yOffset;
 
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
   const planet = planetData.find((p) => p.name === activePlanet);
 
   // Fetch products for the selected planet
@@ -126,11 +162,10 @@ const Moonsection = () => {
       "Perfume",
       "Essential Oil",
       "Soap",
-      "Hamper"
+      "Hamper",
     ];
 
-    const normalize = (str) =>
-      str?.toLowerCase().replace(/\s+/g, "").trim();
+    const normalize = (str) => str?.toLowerCase().replace(/\s+/g, "").trim();
 
     const zodiacs = planet.zodiac.split("&").map((z) => z.trim());
 
@@ -138,27 +173,26 @@ const Moonsection = () => {
       zodiacs.map((zodiac) =>
         axios
           .get(`${API_URL}/products/zodiac/${zodiac}`)
-          .then((res) => res.data)
-      )
+          .then((res) => res.data),
+      ),
     )
       .then((results) => {
         const combinedProducts = results.flat();
 
         // ✅ Remove duplicates
         const uniqueProducts = Array.from(
-          new Map(combinedProducts.map((item) => [item._id, item])).values()
+          new Map(combinedProducts.map((item) => [item._id, item])).values(),
         );
 
         // ✅ FINAL SORT (THIS IS THE MAIN FIX)
         const sortedProducts = uniqueProducts.sort((a, b) => {
-
           // 1️⃣ Zodiac grouping (Capricorn first, then Aquarius)
-          const zodiacIndexA = zodiacs.findIndex(z =>
-            a.ProductName?.toLowerCase().includes(z.toLowerCase())
+          const zodiacIndexA = zodiacs.findIndex((z) =>
+            a.ProductName?.toLowerCase().includes(z.toLowerCase()),
           );
 
-          const zodiacIndexB = zodiacs.findIndex(z =>
-            b.ProductName?.toLowerCase().includes(z.toLowerCase())
+          const zodiacIndexB = zodiacs.findIndex((z) =>
+            b.ProductName?.toLowerCase().includes(z.toLowerCase()),
           );
 
           if (zodiacIndexA !== zodiacIndexB) {
@@ -169,7 +203,7 @@ const Moonsection = () => {
           const getCategoryIndex = (product) => {
             const productCategory = normalize(product.Category);
             return categoryOrder.findIndex(
-              (cat) => normalize(cat) === productCategory
+              (cat) => normalize(cat) === productCategory,
             );
           };
 
@@ -186,7 +220,6 @@ const Moonsection = () => {
         setPlanetProducts([]);
       })
       .finally(() => setLoading(false));
-
   }, [planet]);
 
   const getProductColor = (product) => {
@@ -203,12 +236,21 @@ const Moonsection = () => {
           <h2 className="planet-heading sora">EXPLORE BY YOUR RULING PLANET</h2>
           <Row className="justify-content-center moon-planet">
             {planetData.map((p, i) => (
-              <Col key={i} xs={2} sm={3} md={1} className="text-center planet-item">
+              <Col
+                key={i}
+                xs={2}
+                sm={3}
+                md={1}
+                className="text-center planet-item"
+              >
                 <motion.div
                   className={`planet-circle ${activePlanet === p.name ? "active" : ""}`}
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setActivePlanet(p.name)}
+                  onClick={() => {
+                    setActivePlanet(p.name);
+                    setTimeout(scrollToSection, 100); // wait for render
+                  }}
                 >
                   <img src={p.image} alt={p.name} className="planet-img" />
                 </motion.div>
@@ -225,6 +267,7 @@ const Moonsection = () => {
       {planet && (
         <AnimatePresence mode="wait">
           <motion.section
+            ref={sectionRef}
             key={planet.name}
             className="moon-section"
             style={{ background: planet.bg }}
@@ -249,9 +292,14 @@ const Moonsection = () => {
                     </p>
                   </div>
                 </Col>
-                <Col md={7} className="moon-right d-flex justify-content-center flex-column">
+                <Col
+                  md={7}
+                  className="moon-right d-flex justify-content-center flex-column"
+                >
                   <div className="">
-                    <p className="moon-description sora">{planet.description}</p>
+                    <p className="moon-description sora">
+                      {planet.description}
+                    </p>
                     <div className="moon-meta sora">
                       <span>Astral Energy : {planet.meta.energy}</span>
                       <span>Colour : {planet.meta.colour}</span>
@@ -301,7 +349,7 @@ const Moonsection = () => {
                               style={{
                                 backgroundColor:
                                   zodiacColors[
-                                  getZodiacFromProduct(product.ProductName)
+                                    getZodiacFromProduct(product.ProductName)
                                   ] || "#CCC29F",
                               }}
                             ></span>
@@ -316,7 +364,9 @@ const Moonsection = () => {
                           {/* SIZE + PRICE */}
                           <div className="size-price-row">
                             <span className="size">{product.size}</span>
-                            <span className="zodiac-price">₹ {product.ProductPrice}</span>
+                            <span className="zodiac-price">
+                              ₹ {product.ProductPrice}
+                            </span>
                           </div>
                         </div>
                       </div>

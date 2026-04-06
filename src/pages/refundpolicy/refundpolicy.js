@@ -26,7 +26,7 @@ const RefundPolicy = () => {
     <div>
       {/* Header Section */}
       <Header />
-      <Container fluid className="py-5 bg-light">
+      <Container fluid className="py-5 bg-light sora">
         <Container>
           {/* Page Header */}
           <motion.div
@@ -195,7 +195,7 @@ const RefundPolicy = () => {
             <Col md={4}>
               <motion.div whileHover={{ scale: 1.05 }}>
                 <FaShippingFast size={80} className="mb-2 text-dark" />
-                <h6 className="fw-semibold">Free Shipping</h6>
+                <h6 className="fw-semibold">Free Shipping after 2000RS.</h6>
               </motion.div>
             </Col>
 

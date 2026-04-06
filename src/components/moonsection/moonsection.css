@@ -216,6 +216,11 @@
 .product-box-zodiac:hover img {
   transform: scale(1.1);
 }
+.planet-circle.active {
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255,255,255,0.6);
+  transform: scale(1.1);
+}
 /* ============================
    MOBILE VIEW
 ============================ */
@@ -250,6 +255,9 @@
     display: block;
     margin-bottom: 10px;
   }
+  .moon-section {
+    padding: 60px 20px;
+  }
 }
 
 /* MOBILE – PRODUCTS (2 PER ROW) */
@@ -277,6 +285,9 @@
     margin-top: 0 !important;
   }
   .moon-description {
-    padding: 20px;
+    /* padding: 20px; */
+  }
+  .moon-section {
+    padding: 40px 20px;
   }
 }
