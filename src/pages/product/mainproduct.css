@@ -77,7 +77,12 @@
   background: #fff;
   color: #000;
 }
-
+.product-img-card{
+  transition: transform 0.5s ease;
+}
+.product-img-card:hover {
+  transform: scale(1.1);
+}
 /* Animation */
 @keyframes fadeUp {
   from {
@@ -155,7 +160,7 @@
   transition: transform 0.5s ease;
 }
 
-.product-card:hover img {
+.product-img-wrap:hover img {
   transform: scale(1.1);
 }
 
@@ -290,5 +295,3 @@
     font-size: 11px;
   }
 }
-
-

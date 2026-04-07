@@ -31,6 +31,12 @@
   font-size: 24px;
   font-weight: 400;
 }
+.product-card-hamper img {
+  transition: 0.3s;
+}
+.product-card-hamper:hover img {
+  transform: scale(1.03);
+}
 @media (max-width: 768px) {
   .craft-hamper-description {
     font-size: 14px;

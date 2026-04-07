@@ -85,7 +85,7 @@ function HamperPage({ handleCartOpen }) {
 
   const handleZodiacSelect = (name) => {
   setSelectedZodiac(name);
-
+ setSelectedCategories([]);
   // ❌ REMOVE these resets
   // setSelectedCategories([]);
   // setAllAddedProducts([]);
@@ -418,7 +418,7 @@ function HamperPage({ handleCartOpen }) {
               {zodiacHampers.map((item) => (
                 <div className="col-lg-3 col-md-4 col-6 mb-4" key={item._id}>
                   <div
-                    className="product-card text-center"
+                    className="product-card-hamper text-center"
                     onClick={() => navigate(`/productdetails/${item._id}`)}
                     style={{ cursor: "pointer" }}
                   >

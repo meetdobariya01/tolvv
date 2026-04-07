@@ -1,6 +1,6 @@
 .about-section {
   background: #7a7a7a;
-  padding: 80px 0;
+  padding: 40px 0;
   color: #fff;
 }
 
@@ -14,11 +14,13 @@
 /* CENTER TEXT */
 .about-center p {
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 19px;
   color: #e5e5e5;
   margin-bottom: 15px;
 }
-
+.tolvv-section{
+  align-items: start !important;
+}
 .about-tagline {
   margin-top: 30px;
   font-size: 18px;
@@ -41,7 +43,83 @@
   border-top-left-radius: 40px;
   border-bottom-left-radius: 40px;
 }
+.about-section {
+  background: #7a7a7a;
+  /* padding: 60px 40px; */
+  color: #fff;
+}
 
+/* LEFT TITLE */
+.about-left h2 {
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+/* CENTER TEXT */
+.about-center p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.about-tagline {
+  margin-top: 20px;
+  font-weight: 500;
+}
+
+/* RIGHT IMAGE */
+.about-right {
+  display: flex;
+  justify-content: center;
+}
+
+.about-image {
+  width: 100%;
+  /* max-width: 320px; */
+  /* border-radius: 20px; */
+}
+
+
+/* 🔥 ZODIAC ROW */
+.zodiac-row-tolvv {
+  margin-top: 40px;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.zodiac-item {
+  text-align: center;
+  font-size: 12px;
+}
+
+.zodiac-circle-tolvv {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.zodiac-circle-tolvv img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Hover Effect */
+.zodiac-circle:hover {
+  transform: scale(1.15);
+}
+
+.zodiac-item p {
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: 0.9;
+}
 /* 🔥 RESPONSIVE */
 @media (max-width: 992px) {
   .about-section {

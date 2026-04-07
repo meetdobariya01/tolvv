@@ -54,7 +54,7 @@ const Mainproduct = ({ handleCartOpen }) => {
       img: "/images/eo.png",
       category: "Essential Oil",
     },
-    { title: "Soap", size: "100 gsm", img: "/images/sp.png", category: "Soap" },
+    { title: "Soap", size: "100 gmss", img: "/images/sp.png", category: "Soap" },
     {
       title: "Hamper",
       size: "",
@@ -79,44 +79,44 @@ const Mainproduct = ({ handleCartOpen }) => {
 
   const location = useLocation();
   const categories = products.map((p) => p.category);
-useEffect(() => {
-  const params = new URLSearchParams(location.search);
-  const category = params.get("category");
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const category = params.get("category");
 
-  if (category) {
-    setActiveKey(category);
+    if (category) {
+      setActiveKey(category);
 
-    setTimeout(() => {
-      document
-        .getElementById("product-grid")
-        ?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
-  }
-}, [location.search]);
- useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/products`);
-      const data = res.data;
-
-      const grouped = {};
-      categories.forEach((cat) => (grouped[cat] = []));
-
-      data.forEach((prod) => {
-        const category = prod.Category?.trim();
-        if (grouped[category]) {
-          grouped[category].push(prod);
-        }
-      });
-
-      setProductsByCategory(grouped);
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
+      setTimeout(() => {
+        document
+          .getElementById("product-grid")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
     }
-  };
+  }, [location.search]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/products`);
+        const data = res.data;
 
-  fetchProducts();
-}, []); // ✅ IMPORTANT
+        const grouped = {};
+        categories.forEach((cat) => (grouped[cat] = []));
+
+        data.forEach((prod) => {
+          const category = prod.Category?.trim();
+          if (grouped[category]) {
+            grouped[category].push(prod);
+          }
+        });
+
+        setProductsByCategory(grouped);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []); // ✅ IMPORTANT
 
   const handleBuyNow = async (product) => {
     if (!product) return;
@@ -230,9 +230,9 @@ useEffect(() => {
                 Products
               </h5>
               {products.map((item, index) => (
-                <Col key={index} xs={4} sm={6} md={4} lg={2}>
+                <Col key={index} xs={4} sm={4} md={4} lg={2}>
                   <div
-                    className="product-card p-2"
+                    className="product-card-main p-2"
                     onClick={() => {
                       if (item.category === "Hamper") {
                         navigate("/hamper"); // ✅ go to hamper page
@@ -273,7 +273,7 @@ useEffect(() => {
               className="col-6 col-md-3 mb-4 product-card-animate"
               key={item._id}
             >
-              <Card className="product-card p-1 mt-5">
+              <div className="product-card-main p-1 mt-5">
                 {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
                 <NavLink to={`/productdetails/${item._id}`}>
                   <div className="product-img-wrap">
@@ -323,7 +323,7 @@ useEffect(() => {
                     <span className="product-price">₹ {item.ProductPrice}</span>
                   </div>
                 </div>
-              </Card>
+              </div>
             </div>
           ))}
         </div>

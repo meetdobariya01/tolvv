@@ -273,7 +273,7 @@ const { pathname } = useLocation();
         {/* <Container> */}
         <Row className="align-items-center">
           {/* LEFT CONTENT */}
-          <Col lg={8} md={12} className="d-flex justify-content-center px-2 px-md-5">
+          <Col lg={6} md={12} className="d-flex justify-content-center px-2 px-md-5">
             <div className="know-content sora ">
               <h2 className="know-title artisan-font">Know Us Better</h2>
               <h6 className="know-subtitle text-end">Neha, Shreeya & Aditi</h6>
@@ -317,8 +317,8 @@ const { pathname } = useLocation();
           </Col>
 
           {/* RIGHT IMAGE */}
-          <Col lg={4} md={12} className="d-flex justify-content-end">
-            <div className="know-image">
+            <Col lg={6} md={12} className="d-flex justify-content-end">
+              <div className="know-image">
               <img src="./images/knowus.png" alt="team" className="" />
             </div>
           </Col>

@@ -491,7 +491,7 @@ const CartSidebar = ({ show, handleClose }) => {
                   {/* Show zodiac dot for products */}
                   {item.type === "product" && item.zodiac && (
                     <div className="d-flex align-items-center gap-1 mt-1">
-                      <span
+                      {/* <span
                         className="zodiac-dot"
                         style={{
                           backgroundColor: zodiacColors[item.zodiac] || "#CCC29F",
@@ -500,8 +500,8 @@ const CartSidebar = ({ show, handleClose }) => {
                           borderRadius: "50%",
                           display: "inline-block",
                         }}
-                      ></span>
-                      <small style={{ fontSize: "10px", color: "#666" }}>{item.zodiac}</small>
+                      ></span> */}
+                      {/* <small style={{ fontSize: "10px", color: "#666" }}>{item.zodiac}</small> */}
                     </div>
                   )}
 
@@ -588,7 +588,7 @@ const CartSidebar = ({ show, handleClose }) => {
                   {visibleBestSellers.map((product, index) => (
                     <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
                       <motion.div
-                        className="product-card p-1"
+                        className="product-card-cart p-1"
                         whileHover={{ y: -10 }}
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -641,7 +641,7 @@ const CartSidebar = ({ show, handleClose }) => {
                   {relatedProducts.map((product, index) => (
                     <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
                       <motion.div
-                        className="product-card p-1"
+                        className="product-card-cart p-1"
                         whileHover={{ y: -10 }}
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
