@@ -7,8 +7,6 @@ const Cart = require("../Model/Cart");
 const User = require("../Model/UserSchema");
 const { authenticate } = require("../middleware/auth.middleware");
 const {
-  sendOrderConfirmationEmail,
-  sendAdminOrderNotification,
   sendAdminSubscriptionNotification
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
@@ -250,11 +248,11 @@ router.post("/place", authenticate, async (req, res) => {
       phone: address.mobile
     };
 
-    sendOrderConfirmationEmail(user.email, orderDetails)
-      .catch(err => console.error(err));
+    // sendOrderConfirmationEmail(user.email, orderDetails)
+    //   .catch(err => console.error(err));
 
-    sendAdminOrderNotification(orderDetails, user, address, note)
-      .catch(err => console.error(err));
+    // sendAdminOrderNotification(orderDetails, user, address, note)
+    //   .catch(err => console.error(err));
 
     // ✅ PAYMENT FLOW
     if (paymentMethod === "card" || paymentMethod === "upi") {

@@ -44,6 +44,7 @@ const orderSchema = new mongoose.Schema({
   cgst: { type: Number },
   sgst: { type: Number },
   totalAmount: { type: Number, required: true },
+  emailSent: { type: Boolean, default: false },
 
   paymentMethod: { type: String, default: "upi" }, // upi, card, cod
   status: { type: String, default: "Pending" },    // Pending, CHARGED, FAILED

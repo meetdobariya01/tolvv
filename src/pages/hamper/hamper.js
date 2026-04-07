@@ -44,8 +44,6 @@ function HamperPage({ handleCartOpen }) {
   const [qty, setQty] = useState({});
   const [zodiacHampers, setZodiacHampers] = useState([]);
   const [selectedZodiac, setSelectedZodiac] = useState("");
-
-  // New state to track all added products (accumulated across zodiac changes)
   const [allAddedProducts, setAllAddedProducts] = useState([]);
 
   const zodiacColors = {
@@ -80,7 +78,6 @@ function HamperPage({ handleCartOpen }) {
   const handleZodiacSelect = (name) => {
     setSelectedZodiac(name);
     setSelectedCategories([]);
-
     // Don't clear existing products when zodiac changes
   };
 
@@ -111,7 +108,6 @@ function HamperPage({ handleCartOpen }) {
           },
         );
 
-        // ✅ OPEN CART SIDEBAR
         if (handleCartOpen) {
           handleCartOpen();
         }
@@ -142,17 +138,14 @@ function HamperPage({ handleCartOpen }) {
       }
 
       localStorage.setItem("guestCart", JSON.stringify(cart));
-
-      // Dispatch event to update cart UI
       window.dispatchEvent(new Event("cartUpdated"));
 
-      // ✅ OPEN CART SIDEBAR
       if (handleCartOpen) {
         handleCartOpen();
       }
     }
   };
-  // Fetch products when zodiac or categories change, but ADD to existing products instead of replacing
+
   useEffect(() => {
     if (selectedZodiac && selectedCategories.length > 0) {
       const getProducts = async () => {
@@ -162,7 +155,6 @@ function HamperPage({ handleCartOpen }) {
             category: selectedCategories,
           });
 
-          // NEW: Filter out products that are already in allAddedProducts to avoid duplicates
           const existingProductIds = new Set(
             allAddedProducts.map((p) => p._id),
           );
@@ -170,7 +162,6 @@ function HamperPage({ handleCartOpen }) {
             (p) => !existingProductIds.has(p._id),
           );
 
-          // Add new products to the accumulated list
           setAllAddedProducts((prev) => [...prev, ...newProducts]);
           setFetchedProducts(res.data);
         } catch (err) {
@@ -181,34 +172,27 @@ function HamperPage({ handleCartOpen }) {
     }
   }, [selectedZodiac, selectedCategories]);
 
-  // Handle Category Selection (Checkbox style)
   const handleCategoryToggle = (name) => {
     setSelectedCategories((prev) =>
       prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name],
     );
   };
 
-  // Handle direct product addition when clicking on product
   const handleProductClick = (product) => {
-    // Check if zodiac is selected first
     if (!selectedZodiac) {
       alert("Please select a zodiac sign first");
       return;
     }
 
-    // Check if product already exists in allAddedProducts
     const productExists = allAddedProducts.some((p) => p._id === product._id);
 
     if (!productExists) {
-      // Add product directly
       setAllAddedProducts((prev) => [...prev, product]);
-      // Also add to qty with default quantity 1
       setQty((prev) => ({
         ...prev,
         [product._id]: (prev[product._id] || 0) + 1,
       }));
     } else {
-      // If product exists, increase quantity
       setQty((prev) => ({
         ...prev,
         [product._id]: (prev[product._id] || 0) + 1,
@@ -221,7 +205,6 @@ function HamperPage({ handleCartOpen }) {
       const current = prev[id] || 0;
       const newQty = type === "inc" ? current + 1 : Math.max(0, current - 1);
 
-      // If quantity becomes 0, optionally keep the product but with 0 quantity
       return {
         ...prev,
         [id]: newQty,
@@ -229,9 +212,14 @@ function HamperPage({ handleCartOpen }) {
     });
   };
 
+  // FIXED: Handle Add to Cart for Custom Hamper
   const handleAddToCart = async () => {
-    // Use allAddedProducts instead of fetchedProducts
     const selectedItems = allAddedProducts.filter((p) => (qty[p._id] || 0) > 0);
+
+    if (selectedItems.length === 0) {
+      alert("Please add at least one product to your hamper");
+      return;
+    }
 
     const total = selectedItems.reduce(
       (sum, p) => sum + p.ProductPrice * (qty[p._id] || 0),
@@ -254,76 +242,94 @@ function HamperPage({ handleCartOpen }) {
 
     const token = localStorage.getItem("token");
 
-  try {
-    if (token) {
-      const res = await axios.post(`${API_URL}/hamper/create`, payload);
-      const hamperId = res.data.hamper._id;
-      await axios.post(
-        `${API_URL}/cart/add-hamper`,
-        { hamperId, quantity: 1 },
-        {
+    try {
+      if (token) {
+        // For logged-in users: Create hamper in backend first
+        const res = await axios.post(`${API_URL}/hamper/create`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
           },
-        },
-      );
-      alert("Hamper added to cart!");
-      
-      // ✅ OPEN CART SIDEBAR AFTER ADDING TO CART
-      if (handleCartOpen) {
-        handleCartOpen();
+        });
+        
+        const hamperId = res.data.hamper._id;
+        
+        // Add hamper to cart
+        await axios.post(
+          `${API_URL}/cart/add-hamper`,
+          { hamperId, quantity: 1 },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        
+        alert("Custom Hamper added to cart successfully!");
+        
+        // Reset hamper selection
+        setAllAddedProducts([]);
+        setQty({});
+        setSelectedCategories([]);
+        setSelectedZodiac("");
+        
+        if (handleCartOpen) {
+          handleCartOpen();
+        }
+      } else {
+        // For guest users: Store hamper in localStorage
+        let cart = [];
+        try {
+          const stored = localStorage.getItem("guestCart");
+          cart = stored ? JSON.parse(stored) : [];
+        } catch {
+          cart = [];
+        }
+        
+        const hamperId = `hamper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Store complete hamper details with all products
+        cart.push({
+          id: hamperId,
+          type: "hamper",
+          hamperData: payload,
+          hamperProducts: selectedItems.map(p => ({
+            productId: {
+              _id: p._id,
+              ProductName: p.ProductName,
+              ProductPrice: p.ProductPrice,
+              Photos: p.Photos,
+              Category: p.Category
+            },
+            quantity: qty[p._id] || 0
+          })),
+          quantity: 1,
+          price: total,
+          name: "Custom Hamper",
+          img: "/images/hamper.jpg",
+        });
+        
+        localStorage.setItem("guestCart", JSON.stringify(cart));
+        window.dispatchEvent(new Event("cartUpdated"));
+        
+        alert("Custom Hamper added to cart!");
+        
+        // Reset hamper selection
+        setAllAddedProducts([]);
+        setQty({});
+        setSelectedCategories([]);
+        setSelectedZodiac("");
+        
+        if (handleCartOpen) {
+          handleCartOpen();
+        }
       }
-      
-      // Optional: Reset the hamper selection after adding to cart
-      // setAllAddedProducts([]);
-      // setQty({});
-      // setSelectedCategories([]);
-      // setSelectedZodiac("");
-      
-    } else {
-      let cart = [];
-      try {
-        const stored = localStorage.getItem("guestCart");
-        cart = stored ? JSON.parse(stored) : [];
-      } catch {
-        cart = [];
-      }
-      
-      // Create a unique ID for the hamper
-      const hamperId = `hamper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      
-      cart.push({
-        id: hamperId,
-        type: "hamper",
-        hamperData: payload,
-        quantity: 1,
-        price: total,
-        name: "Custom Hamper",
-        img: "/images/hamper.jpg",
-      });
-      
-      localStorage.setItem("guestCart", JSON.stringify(cart));
-      
-      // Dispatch event to update cart UI
-      window.dispatchEvent(new Event("cartUpdated"));
-      
-      alert("Hamper added to cart!");
-      
-      // ✅ OPEN CART SIDEBAR AFTER ADDING TO CART
-      if (handleCartOpen) {
-        handleCartOpen();
-      }
-      
-      // Optional: Reset the hamper selection after adding to cart
-      // setAllAddedProducts([]);
-      // setQty({});
-      // setSelectedCategories([]);
-      // setSelectedZodiac("");
+    } catch (err) {
+      console.error("Error adding hamper:", err);
+      alert(err.response?.data?.message || "Error adding hamper to cart");
     }
-  } catch (err) {
-    alert(err.response?.data?.message || "Error adding hamper");
-  }
-};
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -351,7 +357,7 @@ function HamperPage({ handleCartOpen }) {
                     <div className="align-items-center">
                       <div className="d-flex justify-content-between align-items-start mt-3">
                         <h5 className="hamper-title">Zodiac Hampers</h5>
-                        <FontAwesomeIcon  icon={faAngleRight} />
+                        <FontAwesomeIcon icon={faAngleRight} />
                       </div>
                       <hr />
                       <p className="hamper-subtitle">
@@ -419,9 +425,7 @@ function HamperPage({ handleCartOpen }) {
             <p className="text-center m-0 sora">
               Curated for your Zodiac, Crafted for your Self-Care Ritual.
             </p>
-
             <p className="sora text-center mb-5">
-              {" "}
               Each hamper includes a Body Lotion, Bath Gel, Bath Soap, Essential
               Oil and Eau De Perfume
             </p>
@@ -544,7 +548,6 @@ function HamperPage({ handleCartOpen }) {
                         className="hamper-product-img"
                         style={{ cursor: "pointer" }}
                         onClick={() => {
-                          // When clicking on product image/info, fetch and add products from this category
                           if (!selectedZodiac) {
                             alert("Please select a zodiac sign first");
                             return;
