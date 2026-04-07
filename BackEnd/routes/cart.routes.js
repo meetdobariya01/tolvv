@@ -150,22 +150,28 @@ router.put("/update/:productId", authenticate, async (req, res) => {
 });
 
 // Remove item from cart
-router.delete("/remove/:productId", authenticate, async (req, res) => {
+router.delete("/remove/:cartItemId", authenticate, async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.user.id });
-    if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    // ✅ REMOVE by cart item _id (CORRECT WAY)
     cart.items = cart.items.filter(
-      item =>
-        (item.productId && item.productId.toString() !== req.params.productId) ||
-        (item.hamperId && item.hamperId.toString() !== req.params.productId)
+      (item) => item._id.toString() !== req.params.cartItemId
     );
+
     await cart.save();
 
-    res.status(200).json({ message: 'Item removed from cart', cart });
+    res.status(200).json({
+      message: "Item removed successfully",
+      cart,
+    });
   } catch (error) {
     console.error("Remove item error:", error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 

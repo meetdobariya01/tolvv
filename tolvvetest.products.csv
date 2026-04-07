@@ -59,15 +59,15 @@ _id,ProductName,ProductPrice,Category,Zodiac,Photos[0],Photos[1],size
 692ed828b9100f9cea7957b9,Capricorn Body Lotion,750,Body Lotion,Capricorn,/images/product/capricorn-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
 692ed828b9100f9cea7957ba,Aquarius  Body Lotion,750,Body Lotion,Aquarius,/images/product/aquarius-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
 692ed828b9100f9cea7957bb,Pisces Body Lotion,750,Body Lotion,Pisces,/images/product/pisces-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
-695b9c6bf4eb1bbf53789698,Aries Hamper,4250,Hamper,Aries,/images/product/aries-hamper.webp,,5 Product
-695b9c6bf4eb1bbf53789699,Taurus Hamper,4250,Hamper,Taurus,/images/product/taurus-hamper.webp,,5 Product
-695b9c6bf4eb1bbf5378969a,Gemini Hamper,4250,Hamper,Gemini,/images/product/gemini-hamper.webp,,5 Product
-695b9c6bf4eb1bbf5378969b,Cancer Hamper,4250,Hamper,Cancer,/images/product/cancer-hamper.webp,,5 Product
-69c3bb9fad4046ba0bae6bec,Leo Hamper,4250,Hamper,Leo,/images/product/leo-hamper.webp,,5 Product
-695b9c6bf4eb1bbf5378969d,Virgo Hamper,4250,Hamper,Virgo,/images/product/virgo-hamper.webp,,5 Product
-695b9c6bf4eb1bbf5378969e,Libra Hamper,4250,Hamper,Libra,/images/product/libra-hamper.webp,,5 Product
-695b9c6bf4eb1bbf5378969f,Scorpio Hamper,4250,Hamper,Scorpio,/images/product/scorpio-hamper.webp,,5 Product
-695b9c6bf4eb1bbf537896a0,Sagittarius Hamper,4250,Hamper,Sagittarius,/images/product/sagittarius-hamper.webp,,5 Product
-695b9c6bf4eb1bbf537896a1,Capricon Hamper,4250,Hamper,Capricorn,/images/product/capricorn-hamper.webp,,5 Product
-695b9c6bf4eb1bbf537896a2,Aquarius Hamper,4250,Hamper,Aquarius,/images/product/aquarius-hamper.webp,,5 Product
-695b9c6bf4eb1bbf537896a3,Pisces Hamper,4250,Hamper,Pisces,/images/product/pisces-hamper.webp,,5 Product
+695b9c6bf4eb1bbf53789698,Aries Hamper,4250,Hamper,Aries,/images/product/aries-hamper.webp,/images/product/aries.webp,5 Product
+695b9c6bf4eb1bbf53789699,Taurus Hamper,4250,Hamper,Taurus,/images/product/taurus-hamper.webp,/images/product/taurus.webp,5 Product
+695b9c6bf4eb1bbf5378969a,Gemini Hamper,4250,Hamper,Gemini,/images/product/gemini-hamper.webp,/images/product/gemini.webp,5 Product
+695b9c6bf4eb1bbf5378969b,Cancer Hamper,4250,Hamper,Cancer,/images/product/cancer-hamper.webp,/images/product/cancer.webp,5 Product
+69c3bb9fad4046ba0bae6bec,Leo Hamper,4250,Hamper,Leo,/images/product/leo-hamper.webp,/images/product/leo.webp,5 Product
+695b9c6bf4eb1bbf5378969d,Virgo Hamper,4250,Hamper,Virgo,/images/product/virgo-hamper.webp,/images/product/virgo.webp,5 Product
+695b9c6bf4eb1bbf5378969e,Libra Hamper,4250,Hamper,Libra,/images/product/libra-hamper.webp,/images/product/libra.webp,5 Product
+695b9c6bf4eb1bbf5378969f,Scorpio Hamper,4250,Hamper,Scorpio,/images/product/scorpio-hamper.webp,/images/product/scorpio.webp,5 Product
+695b9c6bf4eb1bbf537896a0,Sagittarius Hamper,4250,Hamper,Sagittarius,/images/product/sagittarius-hamper.webp,/images/product/sagittarius.webp,5 Product
+695b9c6bf4eb1bbf537896a1,Capricon Hamper,4250,Hamper,Capricorn,/images/product/capricorn-hamper.webp,/images/product/capricorn.webp,5 Product
+695b9c6bf4eb1bbf537896a2,Aquarius Hamper,4250,Hamper,Aquarius,/images/product/aquarius-hamper.webp,/images/product/aquarius.webp,5 Product
+695b9c6bf4eb1bbf537896a3,Pisces Hamper,4250,Hamper,Pisces,/images/product/pisces-hamper.webp,/images/product/pisces.webp,5 Product

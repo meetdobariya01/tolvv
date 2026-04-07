@@ -60,106 +60,105 @@ router.post("/place", authenticate, async (req, res) => {
     if (!address?.mobile)
       return res.status(400).json({ message: "Phone number required" });
 
-    let subtotal = 0;
-    const orderItems = [];
+   // ✅ CALCULATE SUBTOTAL
+let subtotal = 0;
+const orderItems = [];
 
-    // ✅ CALCULATE SUBTOTAL
-    for (const item of items) {
+for (const item of items) {
 
-      // ✅ VALIDATE PRODUCT ID
-      if (item.productId) {
-
-        if (!mongoose.Types.ObjectId.isValid(item.productId)) {
-          return res.status(400).json({ message: "Invalid productId" });
-        }
-
-        const product = await Product.findById(item.productId);
-
-        if (!product)
-          return res.status(404).json({ message: "Product not found" });
-
-        // ✅ FREE PRODUCT LOGIC
-        const isFree = item.isFree === true;
-
-        if (!isFree) {
-          subtotal += product.ProductPrice * item.quantity;
-        }
-
-        orderItems.push({
-          productId: product._id,
-          productName: isFree ? `${product.ProductName} (FREE)` : product.ProductName,
-          quantity: item.quantity,
-          priceAtBuy: isFree ? 0 : product.ProductPrice,
-          isFree: isFree // optional
-        });
-      }
-
-      // ✅ VALIDATE HAMPER ID
-      if (item.hamperId) {
-
-        const hamper = await Hamper.findById(item.hamperId)
-          .populate("products.productId");
-
-        if (!hamper)
-          return res.status(404).json({ message: "Hamper not found" });
-
-        subtotal += hamper.totalPrice * item.quantity;
-
-        let hamperItems = hamper.products.map((p) => ({
-          productId: p.productId._id,
-          name: p.productId.ProductName,
-          quantity: p.quantity,
-          isFree: false
-        }));
-
-        // ✅ MANUAL FREE ITEM (NO DB)
-        if (item.addFreeProduct) {
-          hamperItems.push({
-            productId: null,
-            name: "Complimentary Gift 🎁",
-            quantity: 1,
-            isFree: true
-          });
-        }
-
-        orderItems.push({
-          hamperId: hamper._id,
-          productName: "Custom Hamper",
-          quantity: item.quantity,
-          priceAtBuy: hamper.totalPrice,
-          hamperItems
-        });
-      }
+  if (item.productId) {
+    if (!mongoose.Types.ObjectId.isValid(item.productId)) {
+      return res.status(400).json({ message: "Invalid productId" });
     }
 
-    // ✅ CHECK FIRST ORDER
-    const existingOrders = await Order.find({
-      userId: req.user.id,
-      status: { $in: ["PAID", "COD_CONFIRMED"] }
+    const product = await Product.findById(item.productId);
+    if (!product)
+      return res.status(404).json({ message: "Product not found" });
+
+    const isFree = item.isFree === true;
+
+    if (!isFree) {
+      subtotal += product.ProductPrice * item.quantity;
+    }
+
+    orderItems.push({
+      productId: product._id,
+      productName: isFree
+        ? `${product.ProductName} (FREE)`
+        : product.ProductName,
+      quantity: item.quantity,
+      priceAtBuy: isFree ? 0 : product.ProductPrice,
+      isFree
     });
+  }
 
-    const isFirstOrder = existingOrders.length === 0;
+  if (item.hamperId) {
+    const hamper = await Hamper.findById(item.hamperId)
+      .populate("products.productId");
 
-    // ✅ APPLY COUPON
-    let discount = 0;
-    let discountPercent = 0;
+    if (!hamper)
+      return res.status(404).json({ message: "Hamper not found" });
 
-    if (couponCode) {
-      const code = couponCode.toUpperCase();
+    subtotal += hamper.totalPrice * item.quantity;
 
-      try {
-        discountPercent = await validateCoupon(code, req.user.id);
-      } catch (err) {
-        return res.status(400).json({
-          message: err.message
-        });
-      }
+    let hamperItems = hamper.products.map((p) => ({
+      productId: p.productId._id,
+      name: p.productId.ProductName,
+      quantity: p.quantity,
+      isFree: false
+    }));
 
-      discount = (subtotal * discountPercent) / 100;
+    if (item.addFreeProduct) {
+      hamperItems.push({
+        productId: null,
+        name: "Complimentary Gift 🎁",
+        quantity: 1,
+        isFree: true
+      });
     }
 
-    // ✅ FINAL TOTAL
-    const totalAmount = Math.round(subtotal - discount);
+    orderItems.push({
+      hamperId: hamper._id,
+      productName: "Custom Hamper",
+      quantity: item.quantity,
+      priceAtBuy: hamper.totalPrice,
+      hamperItems
+    });
+  }
+}
+
+// ✅ TOTAL ITEM COUNT (IMPORTANT)
+const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+
+// ✅ SHIPPING LOGIC
+let shippingCharge = 0;
+
+if (subtotal >= 2000) {
+  shippingCharge = 0;
+} else if (totalItems === 1) {
+  shippingCharge = 98;
+} else {
+  shippingCharge = totalItems * 35;
+}
+
+// ✅ APPLY COUPON
+let discount = 0;
+let discountPercent = 0;
+
+if (couponCode) {
+  const code = couponCode.toUpperCase();
+
+  try {
+    discountPercent = await validateCoupon(code, req.user.id);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+
+  discount = (subtotal * discountPercent) / 100;
+}
+
+// ✅ FINAL TOTAL
+const totalAmount = Math.round(subtotal - discount + shippingCharge);
 
     // ✅ GENERATE ORDER ID
     const customOrderId = `ord_${Date.now()}_${Math.floor(
@@ -168,38 +167,39 @@ router.post("/place", authenticate, async (req, res) => {
 
     // ✅ CREATE ORDER
     const newOrder = new Order({
-      userId: req.user.id,
-      customOrderId,
-      subscribe,
-      customerName,
-      customerEmail,
+  userId: req.user.id,
+  customOrderId,
+  subscribe,
+  customerName,
+  customerEmail,
 
-      items: orderItems,
+  items: orderItems,
 
-      subtotal,          // ✅ FIXED
-      totalAmount,       // ✅ FIXED
-      discount,          // ✅ IMPORTANT SAVE
-      couponCode,
+  subtotal,
+  discount,
+  shippingCharge,   // ✅ NEW FIELD
+  totalAmount,
 
-      paymentMethod,
-      status:
-        paymentMethod === "cod"
-          ? "COD_CONFIRMED"
-          : "PAYMENT_PENDING",
+  couponCode,
+  paymentMethod,
+  status:
+    paymentMethod === "cod"
+      ? "COD_CONFIRMED"
+      : "PAYMENT_PENDING",
 
-      address: {
-        houseNumber: address.houseNumber,
-        buildingName: address.buildingName,
-        societyName: address.societyName,
-        road: address.road,
-        landmark: address.landmark,
-        city: address.city,
-        pincode: address.pincode,
-        mobile: address.mobile
-      },
+  address: {
+    houseNumber: address.houseNumber,
+    buildingName: address.buildingName,
+    societyName: address.societyName,
+    road: address.road,
+    landmark: address.landmark,
+    city: address.city,
+    pincode: address.pincode,
+    mobile: address.mobile
+  },
 
-      note: note || ""
-    });
+  note: note || ""
+});
 
     await newOrder.save();
 
