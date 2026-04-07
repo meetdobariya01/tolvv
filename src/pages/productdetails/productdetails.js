@@ -46,7 +46,7 @@ const productInfo = {
   },
   oil: {
     title: "ESSENTIAL OIL",
-      images: [
+    images: [
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
@@ -75,7 +75,7 @@ const productInfo = {
   },
   bodylotion: {
     title: "BODY LOTION",
-      images: [
+    images: [
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
@@ -104,7 +104,6 @@ const productInfo = {
       "Perform a patch test for each product. Store in a cool place. Keep away from direct sunlight.",
   },
 };
-
 
 const categoryMap = {
   "bath gel": "bath",
@@ -255,7 +254,7 @@ const Productdetails = ({ handleCartOpen }) => {
       </section> */}
       <Container fluid className="py-5 container sora">
         <Row className="align-items-start">
-          <Col md={4}>
+          <Col xs={6} md={4}>
             {dbProduct.Photos &&
               Array.isArray(dbProduct.Photos) &&
               dbProduct.Photos.length > 0 && (
@@ -275,7 +274,7 @@ const Productdetails = ({ handleCartOpen }) => {
               )}
           </Col>
 
-          <Col md={4}>
+          <Col xs={6} md={4}>
             {dbProduct.Photos &&
               Array.isArray(dbProduct.Photos) &&
               dbProduct.Photos.length > 1 && (
@@ -309,11 +308,11 @@ const Productdetails = ({ handleCartOpen }) => {
                 </h4>
                 <Row className="mb-4 g-3">
                   {productInfo[activeTab]?.images?.map((img, idx) => (
-                    <Col xs={6} md={3} key={idx} className="text-center">
+                    <Col xs={3} md={3} key={idx} className="text-center">
                       <motion.img
                         src={img.src}
                         alt={img.name}
-                        className="img-fluid"
+                        className="img-fluid w-75 w-lg-100 "
                         style={{ maxHeight: "100px" }}
                         whileHover={{ scale: 1.08 }}
                         transition={{ duration: 0.2 }}
@@ -354,7 +353,7 @@ const Productdetails = ({ handleCartOpen }) => {
         <hr />
         <h5>You May Also Like</h5>
 
-        <Row className="mt-5 text-center text-decoration-none">
+        <Row className="mt-2 text-center g-2">
           {[
             { key: "Bath Gel", label: "BATH GEL" },
             { key: "Soap", label: "SOAP" },
@@ -363,22 +362,20 @@ const Productdetails = ({ handleCartOpen }) => {
             { key: "Body Lotion", label: "BODY LOTION" },
             { key: "Hamper", label: "HAMPER" },
           ]
-            /* 1. FILTER: We check the Category of the product currently open in the DB.
-                 If it matches the key, we hide it.
-            */
             .filter((item) => {
               const currentCategory = dbProduct?.Category?.trim();
               return item.key.toLowerCase() !== currentCategory?.toLowerCase();
             })
             .map((item) => (
-              <Col xs={4} md={2} key={item.key}>
+              <Col xs={6} sm={4} md={2} key={item.key}>
                 <span
-                  className="product-link border border-dark rounded px-2 py-1"
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
+                  className="product-link border border-dark rounded px-2 py-2 d-block"
+                  style={{
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                  }}
                   onClick={() => {
-                    /* 2. NAVIGATE: Go to the /product page and pass the category 
-                       in the URL so Mainproduct.js can scroll to it.
-                    */
                     navigate(
                       `/product?category=${encodeURIComponent(item.key)}`,
                     );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./hamper.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FiShoppingCart } from "react-icons/fi";
 import {
@@ -248,12 +248,12 @@ function HamperPage({ handleCartOpen }) {
         const res = await axios.post(`${API_URL}/hamper/create`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
         });
-        
+
         const hamperId = res.data.hamper._id;
-        
+
         // Add hamper to cart
         await axios.post(
           `${API_URL}/cart/add-hamper`,
@@ -264,15 +264,15 @@ function HamperPage({ handleCartOpen }) {
             },
           },
         );
-        
+
         alert("Custom Hamper added to cart successfully!");
-        
+
         // Reset hamper selection
         setAllAddedProducts([]);
         setQty({});
         setSelectedCategories([]);
         setSelectedZodiac("");
-        
+
         if (handleCartOpen) {
           handleCartOpen();
         }
@@ -285,41 +285,41 @@ function HamperPage({ handleCartOpen }) {
         } catch {
           cart = [];
         }
-        
+
         const hamperId = `hamper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        
+
         // Store complete hamper details with all products
         cart.push({
           id: hamperId,
           type: "hamper",
           hamperData: payload,
-          hamperProducts: selectedItems.map(p => ({
+          hamperProducts: selectedItems.map((p) => ({
             productId: {
               _id: p._id,
               ProductName: p.ProductName,
               ProductPrice: p.ProductPrice,
               Photos: p.Photos,
-              Category: p.Category
+              Category: p.Category,
             },
-            quantity: qty[p._id] || 0
+            quantity: qty[p._id] || 0,
           })),
           quantity: 1,
           price: total,
           name: "Custom Hamper",
           img: "/images/hamper.jpg",
         });
-        
+
         localStorage.setItem("guestCart", JSON.stringify(cart));
         window.dispatchEvent(new Event("cartUpdated"));
-        
+
         alert("Custom Hamper added to cart!");
-        
+
         // Reset hamper selection
         setAllAddedProducts([]);
         setQty({});
         setSelectedCategories([]);
         setSelectedZodiac("");
-        
+
         if (handleCartOpen) {
           handleCartOpen();
         }
@@ -331,6 +331,15 @@ function HamperPage({ handleCartOpen }) {
   };
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // or "smooth"
+    });
+  }, [pathname]);
 
   return (
     <div>
