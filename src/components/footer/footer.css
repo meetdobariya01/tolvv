@@ -136,4 +136,8 @@
   .vertical-brand {
     display: none;
   }
+  .footer-links li, .footer-text .footer-text-1 {
+    font-size: 16px;
+    font-weight: 200;
+  }
 }

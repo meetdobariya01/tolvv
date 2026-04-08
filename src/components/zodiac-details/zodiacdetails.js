@@ -359,7 +359,7 @@ const Zodiacdetails = () => {
           <div className="container">
             <div className="row align-items-center text-white">
               <div className="container details-zodiac-section text-center sora">
-                <h5 className="mb-4 text-dark fw-semibold text-start">
+                <h5 className="mb-4 text-dark fw-semibold text-start ms-2">
                   Explore Other Sun Sign
                 </h5>
 
@@ -367,7 +367,7 @@ const Zodiacdetails = () => {
                   {zodiacSigns.map((sign, index) => (
                     <div
                       key={index}
-                      className="col-3 col-sm-3 col-md-2 col-lg-1 details-zodiac-item"
+                      className="col-2 col-sm-2 col-md-2 col-lg-1 details-zodiac-item"
                       onClick={() => setSelectedZodiac(zodiacData[sign.name])}
                     >
                       <div className="details-zodiac-circle">

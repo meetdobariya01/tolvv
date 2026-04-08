@@ -94,7 +94,7 @@ const HomeModal = () => {
               {/* CLOSE BUTTON */}
               <div className="text-end">
                 <button
-                  className="btn-close"
+                  className="btn-close mt-1"
                   onClick={() => setShow(false)}
                 ></button>
               </div>

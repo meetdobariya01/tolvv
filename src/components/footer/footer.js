@@ -29,7 +29,7 @@ const ScrollToSection = ({ to, smooth = true, duration = 500, children, classNam
 
 const Footer = () => {
   return (
-    <footer className="footer-section sora">
+    <footer className="footer-section text-center text-md-start sora">
       <div className="container">
         <div className="row">
           {/* Useful Links */}
@@ -68,7 +68,7 @@ const Footer = () => {
               </li>
             </ul>
 
-            <div className="mt-5">
+            <div className="mt-0 mt-lg-5">
               <h6 className="footer-subtitle">BULK / CORPORATE ORDERS</h6>
               <p className="footer-text">
                 <a
@@ -123,7 +123,7 @@ const Footer = () => {
               </a>
             </p>
 
-            <div className="social-icons">
+            <div className="social-icons d-flex justify-content-center justify-content-lg-start">
               <a
                 href="https://www.instagram.com/tolvvsigns?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                 target="_blank"
