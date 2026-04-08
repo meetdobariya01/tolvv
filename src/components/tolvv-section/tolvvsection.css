@@ -3,7 +3,9 @@
   padding: 40px 0;
   color: #fff;
 }
-
+.tolvv-section-wrapper {
+  background: #7a7a7a;
+}
 /* LEFT */
 .about-left h2 {
   font-size: 40px;
@@ -40,8 +42,9 @@
   width: 100%;
   /* max-width: 320px; */
   object-fit: contain;
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
+  border-radius: 20px;
+  /* border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px; */
 }
 .about-section {
   background: #7a7a7a;

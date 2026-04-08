@@ -14,8 +14,8 @@ const Tolvvsection = () => {
   }, []);
 
   return (
-    <div>
-      <section className="about-section sora">
+    <div className="tolvv-section-wrapper">
+      <section className="about-section sora container ">
         {/* <Container> */}
         <Row className="align-items- justify-content-center g-0 g-md-5">
           {/* 1️⃣ LEFT SMALL TITLE */}
@@ -99,7 +99,7 @@ const Tolvvsection = () => {
           </Col>
         </Row>
         {/* </Container> */}
-        <div className="zodiac-row-tolvv sora d-none d-lg-flex ms-5">
+        <div className="zodiac-row-tolvv sora d-none d-lg-flex">
           {[
             { name: "Aries", img: "./images/zodiac/1-2.png" },
             { name: "Taurus", img: "./images/zodiac/2-2.png" },

@@ -331,7 +331,7 @@ const Productdetails = ({ handleCartOpen }) => {
                     </>
                   )}
                   <h6 className="fw-bold">CAUTION</h6>
-                  <p className="small">{productInfo[activeTab]?.caution}</p>
+                  <p className="">{productInfo[activeTab]?.caution}</p>
                 </div>
                 {/* <Nav.Link
                   href="/refund-policy"

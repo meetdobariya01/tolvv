@@ -192,7 +192,7 @@ const Header = () => {
             )}
           </div>
 
-          <Navbar.Collapse>
+          <Navbar.Collapse className="mobile-menu">
             <Nav className="nav-links gap-0">
               <Nav.Link as={NavLink} to="/product">
                 PRODUCTS
