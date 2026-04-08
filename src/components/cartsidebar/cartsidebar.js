@@ -76,7 +76,7 @@ const CartSidebar = ({ show, handleClose }) => {
               category: item.productId.Category,
               type: "product",
               zodiac: item.productId.Zodiac,
-              cartItemId: item._id, // Store cart item ID for removal
+              cartItemId: item._id,
             };
           }
           // Handle hampers (both custom and zodiac)
@@ -94,7 +94,7 @@ const CartSidebar = ({ show, handleClose }) => {
               hamperProducts: item.hamperId.products || [],
               hamperZodiac: item.hamperId.zodiacs || [],
               isCustomHamper: isCustomHamper,
-              cartItemId: item._id, // Store cart item ID for removal
+              cartItemId: item._id,
             };
           }
           return {
@@ -219,7 +219,6 @@ const CartSidebar = ({ show, handleClose }) => {
             { headers: { Authorization: `Bearer ${token}` } }
           );
         } else {
-          // For hampers - use add-hamper endpoint
           await axios.post(
             `${API_URL}/cart/add-hamper`,
             { hamperId: id, quantity: 1 },
@@ -257,7 +256,6 @@ const CartSidebar = ({ show, handleClose }) => {
             { headers: { Authorization: `Bearer ${token}` } }
           );
         } else {
-          // For hampers - use add-hamper endpoint with negative quantity
           await axios.post(
             `${API_URL}/cart/add-hamper`,
             { hamperId: id, quantity: -1 },
@@ -322,8 +320,7 @@ const CartSidebar = ({ show, handleClose }) => {
           });
         }
 
-        // ❗ IMPORTANT: Do NOT manually update state here
-        await fetchCart(); // ✅ always sync from backend
+        await fetchCart();
       } else {
         let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
 
@@ -334,7 +331,7 @@ const CartSidebar = ({ show, handleClose }) => {
 
         localStorage.setItem("guestCart", JSON.stringify(guestCart));
 
-        await fetchCart(); // ✅ re-sync guest cart also
+        await fetchCart();
       }
 
       window.dispatchEvent(new Event("cartUpdated"));
@@ -395,6 +392,12 @@ const CartSidebar = ({ show, handleClose }) => {
     } catch (error) {
       console.error("Add to cart error:", error);
     }
+  };
+
+  // ✅ NEW: Navigate to product details page (closes sidebar first)
+  const goToProductDetail = (productId) => {
+    handleClose(); // Close the cart sidebar
+    navigate(`/productdetails/${productId}`); // Navigate to product details page
   };
 
   const openProductDetail = (product) => {
@@ -593,7 +596,7 @@ const CartSidebar = ({ show, handleClose }) => {
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.1 }}
-                        onClick={() => openProductDetail(product)}
+                        onClick={() => goToProductDetail(product._id)}
                         style={{ cursor: 'pointer' }}
                       >
                         <div className="product-img-box">
@@ -646,7 +649,7 @@ const CartSidebar = ({ show, handleClose }) => {
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.1 }}
-                        onClick={() => openProductDetail(product)}
+                        onClick={() => goToProductDetail(product._id)}
                         style={{ cursor: 'pointer' }}
                       >
                         <div className="product-img-box">

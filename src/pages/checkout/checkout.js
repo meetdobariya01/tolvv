@@ -160,9 +160,12 @@ const Checkout = () => {
   const totalItems = cart.reduce((acc, it) => acc + it.qty, 0);
 
   // ✅ SHIPPING LOGIC
+  const codCharge = paymentMethod === "cod" ? 200 : 0;
+
+
   let shipping = 0;
 
-  if (subtotal >= 2000) {
+  if (subtotal >= 1500) {
     shipping = 0;
   } else if (totalItems === 1) {
     shipping = 98;
@@ -171,7 +174,7 @@ const Checkout = () => {
   }
 
   // ✅ FINAL TOTAL
-  const total = subtotal - discount + shipping;
+  const total = subtotal - discount + shipping + codCharge;
 
   const hasHamper = cart.some(
     (item) =>
@@ -374,7 +377,7 @@ const Checkout = () => {
                   <div className="payment-block mt-4">
                     <h3>Payment Method</h3>
                     <div className="payment-options">
-                      {["upi", "card"].map((op) => (
+                      {["upi", "card", "cod"].map((op) => (
                         <label
                           key={op}
                           className={paymentMethod === op ? "active" : ""}
@@ -389,7 +392,7 @@ const Checkout = () => {
                             ? "UPI / Google Pay"
                             : op === "card"
                               ? "Credit / Debit Card"
-                              : "Cash on Delivery"}
+                              : "Cash on Delivery (+₹200)"}
                         </label>
                       ))}
                     </div>
@@ -403,7 +406,9 @@ const Checkout = () => {
                     >
                       {placing
                         ? "Processing..."
-                        : `Pay Now— ${currencyFormat(total)}`}
+                        : paymentMethod === "cod"
+                          ? `Place Order — ${currencyFormat(total)}`
+                          : `Pay Now — ${currencyFormat(total)}`}
                     </button>
                   </div>
                 </form>
@@ -515,6 +520,12 @@ const Checkout = () => {
                     <span>Discount</span>
                     <span>- {currencyFormat(discount)}</span>
                   </div>
+                  {codCharge > 0 && (
+                    <div className="d-flex justify-content-between">
+                      <span>COD Charge</span>
+                      <span>{currencyFormat(codCharge)}</span>
+                    </div>
+                  )}
 
                   <div className="d-flex justify-content-between total">
                     <strong>Total</strong>

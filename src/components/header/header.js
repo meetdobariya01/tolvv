@@ -7,7 +7,7 @@ import {
   FormControl,
   Dropdown,
 } from "react-bootstrap";
-import { NavLink, useNavigate, useLocation  } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 // import { Link } from "react-scroll";
@@ -274,6 +274,9 @@ const Header = () => {
         </Container>
 
         {/* SEARCH */}
+        {/* SEARCH */}
+        {/* SEARCH */}
+        {/* SEARCH */}
         <AnimatePresence>
           {searchOpen && (
             <motion.div
@@ -284,7 +287,7 @@ const Header = () => {
               transition={{ duration: 0.4 }}
             >
               <Form className="search-form">
-                <div style={{ position: "relative" }}>
+                <div style={{ position: "relative", width: "100%" }}>
                   <FormControl
                     type="search"
                     placeholder="Search products..."
@@ -293,25 +296,11 @@ const Header = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
 
-                  {searchQuery && (
-                    <FiX
-                      style={{
-                        position: "absolute",
-                        right: "10px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        setSearchQuery("");
-                        setSearchResults([]);
-                      }}
-                    />
-                  )}
+                  {/* REMOVED the FiX clear button from here */}
                 </div>
               </Form>
 
-              {/* ✅ DROPDOWN */}
+              {/* Search Results Dropdown */}
               {searchResults.length > 0 && (
                 <div
                   style={{
@@ -321,6 +310,11 @@ const Header = () => {
                     transform: "translateX(-50%)",
                     width: "500px",
                     zIndex: 9999,
+                    backgroundColor: "white",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    borderRadius: "4px",
+                    maxHeight: "300px",
+                    overflowY: "auto",
                   }}
                 >
                   {searchResults.map((item) => (
@@ -331,13 +325,19 @@ const Header = () => {
                         cursor: "pointer",
                         borderBottom: "1px solid #eee",
                         backgroundColor: "#fff",
-                      
+                        transition: "background-color 0.2s",
                       }}
                       onClick={() => {
                         navigate(`/productdetails/${item._id}`);
                         setSearchOpen(false);
                         setSearchQuery("");
                         setSearchResults([]);
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "#f5f5f5";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "#fff";
                       }}
                     >
                       {item.ProductName}
