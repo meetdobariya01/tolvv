@@ -277,7 +277,7 @@ const Moonsection = () => {
           >
             <Container>
               <Row className="align-items-center moon-layout">
-                <Col md={5} className="moon-left">
+                <Col md={3} className="moon-left">
                   <div className="moon-visual">
                     <motion.img
                       src={planet.image}
@@ -293,10 +293,10 @@ const Moonsection = () => {
                   </div>
                 </Col>
                 <Col
-                  md={7}
+                  md={9}
                   className="moon-right d-flex justify-content-center flex-column"
                 >
-                  <div className="">
+                  <div className="justify-content-center align-items-center d-flex flex-column h-100">
                     <p className="moon-description sora">
                       {planet.description}
                     </p>
