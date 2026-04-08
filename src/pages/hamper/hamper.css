@@ -1,5 +1,5 @@
 .hamper-section {
-  background: #C6C6C8;
+  background: #c6c6c8;
 }
 /* .hamper-card {
   cursor: pointer;
@@ -36,11 +36,6 @@
 }
 .product-card-hamper:hover img {
   transform: scale(1.03);
-}
-@media (max-width: 768px) {
-  .craft-hamper-description {
-    font-size: 14px;
-  }
 }
 .product-card {
   transition: all 0.3s ease;
@@ -374,23 +369,6 @@
 
 /* ================= MOBILE (EXACT STACK LIKE DESIGN INTENT) ================= */
 
-@media (max-width: 768px) {
-  .hamper-main {
-    height: auto;
-    flex-direction: column;
-  }
-
-  .side-card {
-    position: static;
-    transform: none;
-    margin: 15px 0;
-  }
-
-  /* .center-image img {
-    width: 90%;
-  } */
-}
-
 .hamper-section {
   /* background: #f5f5f5; */
   padding: 60px 0;
@@ -455,9 +433,33 @@
 .hamper-card:hover {
   transform: translateY(-5px);
 }
+.zodiac-img img {
+  transition: all 0.3s ease;
+}
+
+.zodiac-img.active img {
+  transform: scale(1.1);
+}
 
 /* 📱 MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+  .craft-hamper-description {
+    font-size: 14px;
+  }
+  .hamper-main {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .side-card {
+    position: static;
+    transform: none;
+    margin: 15px 0;
+  }
+
+  /* .center-image img {
+    width: 90%;
+  } */
   .center-image-wrapper {
     border-radius: 20px;
     padding: 20px;
@@ -470,12 +472,26 @@
     right: 0;
   }
 
+  .left-card {
+    position: relative;
+    top: 100px;
+  }
+  .right-card {
+    position: relative;
+    bottom: 80px;
+  }
   .hamper-title {
     font-size: 14px;
   }
 
   .hamper-subtitle {
     font-size: 11px;
+  }
+  .hamper-text {
+    font-size: 11px;
+  }
+  .hamper-section {
+    padding: 30px 0;
   }
 }
 .active-section {
@@ -486,7 +502,7 @@
 .active-zodiac {
   border: 2px solid #000 !important;
   transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .fade-in {
@@ -494,6 +510,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

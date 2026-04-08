@@ -54,7 +54,12 @@ const Mainproduct = ({ handleCartOpen }) => {
       img: "/images/eo.png",
       category: "Essential Oil",
     },
-    { title: "Soap", size: "100 gmss", img: "/images/sp.png", category: "Soap" },
+    {
+      title: "Soap",
+      size: "100 gmss",
+      img: "/images/sp.png",
+      category: "Soap",
+    },
     {
       title: "Hamper",
       size: "",
@@ -219,7 +224,16 @@ const Mainproduct = ({ handleCartOpen }) => {
     <div>
       <Header />
 
-      <div className="container py-5 sora">
+      <div className="mobile-banner d-block d-md-none d-lg-none">
+        <img src="./images/poster.png" alt="banner" />
+
+        <div className="mobile-banner-overlay">
+          <span className="small-text">Introductory</span>
+          <span className="big-text">EDIT</span>
+        </div>
+      </div>
+
+      <div className="container py-0 p-md-5 sora">
         <section className="products-section-grid">
           <Container>
             <Row className="gx-0 gy-3 mb-5">
@@ -270,10 +284,10 @@ const Mainproduct = ({ handleCartOpen }) => {
 
           {productsByCategory[activeKey]?.map((item) => (
             <div
-              className="col-6 col-md-3 mb-4 product-card-animate"
+              className="col-6 col-md-3 mb-4 product-card-animate my-2 my-lg-5"
               key={item._id}
             >
-              <div className="product-card-main p-1 mt-5">
+              <div className="product-card-main p-1 ">
                 {/* ✅ IMAGE CLICK → PRODUCT DETAILS */}
                 <NavLink to={`/productdetails/${item._id}`}>
                   <div className="product-img-wrap">

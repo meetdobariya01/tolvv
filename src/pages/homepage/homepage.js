@@ -328,7 +328,7 @@ const { pathname } = useLocation();
 
       {/* FAQ Section */}
       <div
-        className="container-fluid py-5"
+        className="container-fluid py-2 py-lg-5"
         style={{ backgroundColor: "#D1D3D4" }}
       >
         <section className="faq-header sora pt-5" id="faqs">
@@ -368,7 +368,7 @@ const { pathname } = useLocation();
         </div>
       </div>
 
-      <div className="p-5" style={{ backgroundColor: "#f2f3f3" }}>
+      <div className="pt-5 p-lg-5 " style={{ backgroundColor: "#f2f3f3" }}>
         {/* Contact Form Section */}
         <section className="form-section sora" id="contact">
           <Container>

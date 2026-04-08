@@ -64,4 +64,7 @@
   .faq-question p {
     font-size: 14px;
   }
+  .faq-line {
+    padding: 2px 0;
+  }
 }

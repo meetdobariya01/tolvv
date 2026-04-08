@@ -218,7 +218,7 @@
 }
 .planet-circle.active {
   border: 2px solid #fff;
-  box-shadow: 0 0 20px rgba(255,255,255,0.6);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
   transform: scale(1.1);
 }
 /* ============================
@@ -293,8 +293,15 @@
   .moon-section {
     padding: 40px 20px;
   }
+  .moon-big-img {
+    width: 150px;
+    height: 150px;
+  }
+  .moon-big-title {
+    font-size: 28px;
+    letter-spacing: 10px;
+  }
 }
-
 
 .product-grid {
   display: grid !important;

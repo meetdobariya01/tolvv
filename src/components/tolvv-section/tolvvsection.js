@@ -47,10 +47,10 @@ const Tolvvsection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="about-center p-3"
+              className="about-center p-3 mt-0 mt-lg-4"
             >
               <h5 className="about-tagline">
-                Celestial. Ritualistic. Personalized
+                Celestial. Ritualistic. Personal
               </h5>
               <p>
                 TOLVV, derived from the Scandinavian word for 12, is a Zodiac
