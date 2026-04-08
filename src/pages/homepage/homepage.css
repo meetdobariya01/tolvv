@@ -569,6 +569,7 @@
 
 .know-title {
   margin-bottom: 5px;
+  font-size: 70px !important;
 }
 
 .know-subtitle {
@@ -579,7 +580,7 @@
 
 .know-content p {
   font-size: 15px;
-  /* line-height: 1.8; */
+  line-height: 18px;
   color: #222;
 }
 

@@ -270,7 +270,7 @@ const { pathname } = useLocation();
 
       {/* Know us Section */}
       <section className="know-wrapper" id="knowus">
-        {/* <Container> */}
+        <Container>
         <Row className="align-items-center">
           {/* LEFT CONTENT */}
           <Col lg={6} md={12} className="d-flex justify-content-center px-2 px-md-5">
@@ -323,7 +323,7 @@ const { pathname } = useLocation();
             </div>
           </Col>
         </Row>
-        {/* </Container>   */}
+        </Container>  
       </section>
 
       {/* FAQ Section */}

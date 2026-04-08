@@ -151,7 +151,7 @@ const Footer = () => {
                 <p>All rights reserved.</p>
               </div>
               <img
-                src="/images/logo-footer.png"
+                src="/images/logo-tolvv.png"
                 alt="logo"
                 className="footer-logo"
               />
