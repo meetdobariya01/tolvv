@@ -63,7 +63,7 @@ const Mainproduct = ({ handleCartOpen }) => {
     {
       title: "Hamper",
       size: "",
-      img: "/images/hamper.jpg",
+      img: "/images/hamper.png",
       category: "Hamper",
     },
   ];

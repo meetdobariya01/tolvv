@@ -19,7 +19,7 @@ const productInfo = {
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
-      { src: "/images/icon-4.png", name: "CrueltyFree" },
+      { src: "/images/icon-4.png", name: "Cruelty Free" },
     ],
     howToUse:
       "Wet your skin, then work a small amount of 12’s Bath Gel into a lather using a loofah or your hands. Gently massage over your body, rinse thoroughly and pat dry.",
@@ -35,7 +35,7 @@ const productInfo = {
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
-      { src: "/images/icon-4.png", name: "CrueltyFree" },
+      { src: "/images/icon-4.png", name: "Cruelty Free" },
     ],
     howToUse:
       "Rediscover purity in every wash. Gentle ingredients inspired by nature, free from harshness.",
@@ -50,7 +50,7 @@ const productInfo = {
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
-      { src: "/images/icon-4.png", name: "CrueltyFree" },
+      { src: "/images/icon-4.png", name: "Cruelty Free" },
     ],
     howToUse:
       "12’s Essential Oil is best used in three ways—by inhaling through a diffuser, applying on your skin after mixing with a carrier oil, or adding to your bath after proper dilution.",
@@ -64,7 +64,7 @@ const productInfo = {
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
-      { src: "/images/icon-4.png", name: "CrueltyFree" },
+      { src: "/images/icon-4.png", name: "Cruelty Free" },
     ],
     howToUse:
       "12’s Perfumes are designed for gentle elegance. Spray on pulse points like wrists and neck to uplift your spirit.",
@@ -79,7 +79,7 @@ const productInfo = {
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
-      { src: "/images/icon-4.png", name: "CrueltyFree" },
+      { src: "/images/icon-4.png", name: "Cruelty Free" },
     ],
     howToUse:
       "Apply on slightly damp skin. Gently massage in upward circular motions until fully absorbed for a radiant glow.",
@@ -94,7 +94,7 @@ const productInfo = {
       { src: "/images/icon-1.png", name: "No Harmful Chemicals" },
       { src: "/images/icon-2.png", name: "Paraben Free" },
       { src: "/images/icon-3.png", name: "Skin Friendly" },
-      { src: "/images/icon-4.png", name: "CrueltyFree" },
+      { src: "/images/icon-4.png", name: "Cruelty Free" },
     ],
     howToUse:
       "This hamper contains a curated selection of products. Refer to each individual product within the hamper for specific usage instructions.",
