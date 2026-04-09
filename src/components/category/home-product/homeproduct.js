@@ -32,7 +32,7 @@ const products = [
   {
     title: "Hampers",
     size: "",
-    img: "/images/hamper.jpg",
+    img: "/images/hamper.png",
   },
 ];
 

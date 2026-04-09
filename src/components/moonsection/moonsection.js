@@ -36,7 +36,7 @@ const planetData = [
     mood: "Calm",
     bg: "#5F286E",
     description:
-      "The King and the Great Father embody the archetypes of the Sun - the source of all light and life, both earthly and spiritual. The Sun uplifts and energizes, offering inspiration, balance and renewal. It rules over healthy self-esteem, life purpose, creativity, healing, and vitality, illuminating the path toward wholeness and strength.",
+      "The Great Mother and the Inner Guardian embody the archetypes of the Moon—the keeper of emotions, intuition, and inner rhythms. The Moon soothes and reflects, guiding us through cycles of change, rest, and renewal. It governs emotional intelligence, subconscious wisdom, nurturing, and inner healing, gently illuminating the path toward self-awareness, balance, and deep inner strength.",
     meta: {
       energy: "Peaceful",
       colour: "Violet",

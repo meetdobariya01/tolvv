@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import "./zodiacdetails.css";
@@ -24,7 +24,7 @@ const Zodiacdetails = () => {
   const getZodiacFromProduct = (name) => {
     if (!name) return null;
     return Object.keys(zodiacColors).find((zodiac) =>
-      name.toLowerCase().includes(zodiac.toLowerCase())
+      name.toLowerCase().includes(zodiac.toLowerCase()),
     );
   };
 
@@ -298,7 +298,7 @@ const Zodiacdetails = () => {
   // Helper function to get sort order for a product
   const getSortOrder = (product) => {
     const name = product.ProductName.toLowerCase();
-    
+
     // Determine category order: Bath Gel → Body Lotion → Perfume → Essential Oil → Soap → Hamper
     let categoryOrder = 99;
     if (name.includes("bath gel")) categoryOrder = 0;
@@ -307,7 +307,7 @@ const Zodiacdetails = () => {
     else if (name.includes("essential oil")) categoryOrder = 3;
     else if (name.includes("soap")) categoryOrder = 4;
     else if (name.includes("hamper")) categoryOrder = 5;
-    
+
     return categoryOrder;
   };
 
@@ -350,7 +350,15 @@ const Zodiacdetails = () => {
     };
     fetchProducts();
   }, []);
-
+  const sectionRef = useRef(null);
+  useEffect(() => {
+    if (selectedZodiac && sectionRef.current) {
+      sectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start", // aligns top
+      });
+    }
+  }, [selectedZodiac]);
   return (
     <div>
       <div>
@@ -391,7 +399,8 @@ const Zodiacdetails = () => {
         {/* DYNAMIC CONTENT */}
         {selectedZodiac && (
           <section
-            className="aries-section text-center"
+            ref={sectionRef}
+            className="aries-section text-center active-section"
             style={{ backgroundColor: selectedZodiac.color }}
           >
             <div className="aries-content inter container sora">
@@ -475,7 +484,7 @@ const Zodiacdetails = () => {
                 <div className="product-grid mt-5">
                   {productsByZodiac[selectedZodiac.name]?.map((p, index) => {
                     const dotColor = getProductDotColor(p);
-                    
+
                     return (
                       <NavLink
                         to={`/productdetails/${p._id}`}
