@@ -26,7 +26,7 @@ body {
 
 /* Container */
 .checkout {
-  padding: 0 16px 40px;
+  /* padding: 0 16px 40px; */
   background-color: #d1d3d4;
 }
 .checkout-root {
