@@ -141,7 +141,7 @@ const Homepage = () => {
       setSending(false);
     }
   };
-const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo({
@@ -162,7 +162,7 @@ const { pathname } = useLocation();
       <TopBanner />
 
       {/* Main Content */}
-      <div className="carousel-container">
+      <div className="carousel-container d-none d-md-block d-lg-block">
         <Carousel
           fade
           controls={false}
@@ -190,6 +190,41 @@ const { pathname } = useLocation();
             <img
               className="d-block w-100 h-auto carousel-img"
               src="./images/banner-3.jpeg"
+              alt="third slide"
+            />
+          </Carousel.Item>
+        </Carousel>
+      </div>
+
+      {/* Mobile */}
+      <div className="carousel-container d-block d-md-none d-lg-none">
+        <Carousel
+          fade
+          controls={false}
+          indicators={true}
+          interval={2000}
+          pause={false}
+        >
+          <Carousel.Item>
+            <img
+              className="d-block w-100 h-auto carousel-img"
+              src="./images/mobile-1.jpg"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="d-block w-100 h-auto carousel-img"
+              src="./images/mobile-2.jpg"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="d-block w-100 h-auto carousel-img"
+              src="./images/mobile-3.jpg"
               alt="third slide"
             />
           </Carousel.Item>
@@ -271,59 +306,66 @@ const { pathname } = useLocation();
       {/* Know us Section */}
       <section className="know-wrapper" id="knowus">
         <Container>
-        <Row className="align-items-center">
-          {/* LEFT CONTENT */}
-          <Col lg={6} md={12} className="d-flex justify-content-center px-2 px-md-5">
-            <div className="know-content sora ">
-              <h2 className="know-title artisan-font">Know Us Better</h2>
-              <h6 className="know-subtitle text-end">Neha, Shreeya & Aditi</h6>
+          <Row className="align-items-center">
+            {/* LEFT CONTENT */}
+            <Col
+              lg={6}
+              md={12}
+              className="d-flex justify-content-center px-2 px-md-5"
+            >
+              <div className="know-content sora ">
+                <h2 className="know-title artisan-font">Know Us Better</h2>
+                <h6 className="know-subtitle text-end">
+                  Neha, Shreeya & Aditi
+                </h6>
 
-              <p className="bold">
-                We’re Neha and Aditi, kindred souls on a shared path.
-              </p>
+                <p className="bold">
+                  We’re Neha and Aditi, kindred souls on a shared path.
+                </p>
 
-              <p>
-                United by more than friendship, a spiritual journey that has
-                guided every step of our lives. A bond beyond emotions, founded
-                on connection, spirituality, and the subtle guidance of the
-                universe.
-              </p>
+                <p>
+                  United by more than friendship, a spiritual journey that has
+                  guided every step of our lives. A bond beyond emotions,
+                  founded on connection, spirituality, and the subtle guidance
+                  of the universe.
+                </p>
 
-              <p>
-                Together, we discovered a shared passion for zodiac, the energy
-                of the signs, and he spiritual rhythm that flows through
-                everything around us. This passion inspired us to start our
-                personalised bath and body brand, a space where signs meets
-                science, where every product resonates with the unique energy of
-                the 12 sun signs. Each product is crafted with intention, care,
-                and love, so you can experience self-care that’s deeply
-                personal, and aligned with your cosmic energy.
-              </p>
+                <p>
+                  Together, we discovered a shared passion for zodiac, the
+                  energy of the signs, and he spiritual rhythm that flows
+                  through everything around us. This passion inspired us to
+                  start our personalised bath and body brand, a space where
+                  signs meets science, where every product resonates with the
+                  unique energy of the 12 sun signs. Each product is crafted
+                  with intention, care, and love, so you can experience
+                  self-care that’s deeply personal, and aligned with your cosmic
+                  energy.
+                </p>
 
-              <p className="bold">Hi, I am Shreeya,</p>
+                <p className="bold">Hi, I am Shreeya,</p>
 
-              <p>
-                As the next generation in this journey, I grew up immersed in
-                spirituality, zodiac wisdom, and the belief that energy shapes
-                everything. As a Capricorn, I am grounded yet deeply intuitive -
-                drawn to the structure of science as much as the mystery of the
-                cosmos. I help bridge tradition with a modern lens, blending
-                branding, creativity, and intention into every detail of our
-                products. For me, this brand is about creating rituals that feel
-                intimate, empowering & aligned — where self-care becomes a
-                reflection of who you truly are.
-              </p>
-            </div>
-          </Col>
+                <p>
+                  As the next generation in this journey, I grew up immersed in
+                  spirituality, zodiac wisdom, and the belief that energy shapes
+                  everything. As a Capricorn, I am grounded yet deeply intuitive
+                  - drawn to the structure of science as much as the mystery of
+                  the cosmos. I help bridge tradition with a modern lens,
+                  blending branding, creativity, and intention into every detail
+                  of our products. For me, this brand is about creating rituals
+                  that feel intimate, empowering & aligned — where self-care
+                  becomes a reflection of who you truly are.
+                </p>
+              </div>
+            </Col>
 
-          {/* RIGHT IMAGE */}
+            {/* RIGHT IMAGE */}
             <Col lg={6} md={12} className="d-flex justify-content-end">
               <div className="know-image">
-              <img src="./images/knowus.png" alt="team" className="" />
-            </div>
-          </Col>
-        </Row>
-        </Container>  
+                <img src="./images/knowus.png" alt="team" className="" />
+              </div>
+            </Col>
+          </Row>
+        </Container>
       </section>
 
       {/* FAQ Section */}
