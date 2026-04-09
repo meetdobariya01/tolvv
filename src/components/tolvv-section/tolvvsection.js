@@ -91,7 +91,7 @@ const Tolvvsection = () => {
               className="about-right d-flex justify-content-center align-items-center"
             >
               <img
-                src="/images/hamper-tolvv.jpg"
+                src="/images/tolvv-section.png"
                 alt="product"
                 className="about-image"
               />

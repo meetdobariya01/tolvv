@@ -592,11 +592,11 @@ const CartSidebar = ({ show, handleClose }) => {
                     <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
                       <motion.div
                         className="product-card-cart p-1"
-                        whileHover={{ y: -10 }}
+                        // whileHover={{ y: -10 }}
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        onClick={() => goToProductDetail(product._id)}
+                        // transition={{ duration: 0.4, delay: index * 0.1 }}
+                        onClick={() => openProductDetail(product)}
                         style={{ cursor: 'pointer' }}
                       >
                         <div className="product-img-box">
@@ -645,11 +645,11 @@ const CartSidebar = ({ show, handleClose }) => {
                     <Col lg={3} md={6} sm={6} xs={6} key={product._id}>
                       <motion.div
                         className="product-card-cart p-1"
-                        whileHover={{ y: -10 }}
+                        // whileHover={{ y: -10 }}
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        onClick={() => goToProductDetail(product._id)}
+                        // transition={{ duration: 0.4, delay: index * 0.1 }}
+                        onClick={() => openProductDetail(product)}
                         style={{ cursor: 'pointer' }}
                       >
                         <div className="product-img-box">

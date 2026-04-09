@@ -598,19 +598,19 @@
   border-bottom-left-radius: 40px;
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-  animation: imageFade 1.5s ease;
+  /* animation: imageFade 1.5s ease; */
 }
 
 .know-image img {
   width: 100%;
   height: auto;
-  transition: transform 6s ease;
+  /* transition: transform 6s ease; */
 }
 
 /* hover zoom */
 
 .know-image:hover img {
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
 }
 
 /* ANIMATIONS */
