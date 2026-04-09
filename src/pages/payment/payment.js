@@ -656,7 +656,7 @@ const Payment = () => {
                   </motion.div>
                 </Col>
               ))}
-            </Row>
+            </Row>  
           </Container>
         </section>
       )}
