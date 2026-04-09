@@ -1,0 +1,73 @@
+_id,ProductName,ProductPrice,Category,Zodiac,Photos[0],Photos[1],size
+692ed828b9100f9cea795780,Aries Bath Gel,750,Bath Gel,Aries,/images/product/aries-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795781,Taurus Bath Gel,750,Bath Gel,Taurus,/images/product/taurus-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795782,Gemini Bath Gel,750,Bath Gel,Gemini,/images/product/gemini-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795783,Cancer Bath Gel,750,Bath Gel,Cancer,/images/product/cancer-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795784,Leo Bath Gel,750,Bath Gel,Leo,/images/product/leo-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795785,Virgo Bath Gel,750,Bath Gel,Virgo,/images/product/virgo-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795786,Libra Bath Gel,750,Bath Gel,Libra,/images/product/libra-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795787,Scorpio Bath Gel,750,Bath Gel,Scorpio,/images/product/scorpio-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795788,Sagittarius Bath Gel,750,Bath Gel,Sagittarius,/images/product/sagittarius-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea795789,Capricorn Bath Gel,750,Bath Gel,Capricorn,/images/product/capricorn-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea79578a,Aquarius Bath Gel,750,Bath Gel,Aquarius,/images/product/aquarius-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea79578b,Pisces Bath Gel,750,Bath Gel,Pisces,/images/product/pisces-bath-gel.webp,/images/product/bath-gel-back.webp,200 ML
+692ed828b9100f9cea79578c,Aries soap,200,Soap,Aries,/images/product/aries-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea79578d,Taurus Soap,200,Soap,Taurus,/images/product/taurus-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea79578e,Gemini Soap,200,Soap,Gemini,/images/product/gemini-soap.webp,/images/product/Soap-Back.webp,100 GM
+69c24fbba1b3b5ea859ce396,Cancer Soap,200,Soap,Cancer,/images/product/cancer-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795790,Leo Soap,200,Soap,Leo,/images/product/leo-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795791,Virgo Soap,200,Soap,Virgo,/images/product/virgo-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795792,Libra Soap,200,Soap,Libra,/images/product/libra-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795793,Scorpio Soap,200,Soap,Scorpio,/images/product/scorpio-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795794,Sagittarius Soap,200,Soap,Sagittarius,/images/product/sagittarius-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795795,Capricorn Soap,200,Soap,Capricorn,/images/product/capricorn-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795796,Aquarius Soap,200,Soap,Aquarius,/images/product/aquarius-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795797,Pisces Soap,200,Soap,Pisces,/images/product/pisces-soap.webp,/images/product/Soap-Back.webp,100 GM
+692ed828b9100f9cea795798,Aries Perfume,1800,Perfume,Aries,/images/product/aries-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea795799,Taurus Perfume,1800,Perfume,Taurus,/images/product/taurus-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea79579a,Gemini Perfume,1800,Perfume,Gemini,/images/product/gemini-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea79579b,Cancer Perfume,1800,Perfume,Cancer,/images/product/cancer-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea79579c,Leo Perfume,1800,Perfume,Leo,/images/product/leo-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+69c24f94a1b3b5ea859ce395,Virgo Perfume,1800,Perfume,Virgo,/images/product/virgo-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea79579e,Libra Perfume,1800,Perfume,Libra,/images/product/libra-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea79579f,Scorpio Perfume,1800,Perfume,Scorpio,/images/product/scorpio-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea7957a0,Sagittarius Perfume,1800,Perfume,Sagittarius,/images/product/sagittarius-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea7957a1,Capricorn Perfume,1800,Perfume,Capricorn,/images/product/capricorn-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea7957a2,Aquarius Perfume,1800,Perfume,Aquarius,/images/product/aquarius-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+692ed828b9100f9cea7957a3,Pisces Perfume,1800,Perfume,Pisces,/images/product/pisces-perfume.webp,/images/product/Perfume-Back.jpeg,50 ML
+69c3dbff1c064c0032ed486a,Aries Essential Oil,750,Essential Oil,Aries,/images/product/aries-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+69c3dc6a1c064c0032ed486b,Taurus  Essential Oil,750,Essential Oil,Taurus,/images/product/taurus-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957a6,Gemini  Essential Oil,750,Essential Oil,Gemini,/images/product/gemini-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957a7,Cancer  Essential Oil,750,Essential Oil,Cancer,/images/product/cancer-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957a8,Leo  Essential Oil,750,Essential Oil,Leo,/images/product/leo-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957a9,Virgo  Essential Oil,750,Essential Oil,Virgo,/images/product/virgo-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957aa,Libra  Essential Oil,750,Essential Oil,Libra,/images/product/libra-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957ab,Scorpio  Essential Oil,750,Essential Oil,Scorpio,/images/product/scorpio-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957ac,Sagittarius  Essential Oil,750,Essential Oil,Sagittarius,/images/product/sagittarius-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957ad,Capricorn  Essential Oil,750,Essential Oil,Capricorn,/images/product/capricorn-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957ae,Aquarius  Essential Oil,750,Essential Oil,Aquarius,/images/product/aquarius-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957af,Pisces  Essential Oil,750,Essential Oil,Pisces,/images/product/pisces-essential-oil.webp,/images/product/EO-Back.webp,30 ML
+692ed828b9100f9cea7957b0,Aries Body Lotion,750,Body Lotion,Aries,/images/product/aries-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b1,Taurus  Body Lotion,750,Body Lotion,Taurus,/images/product/taurus-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b2,Gemini  Body Lotion,750,Body Lotion,Gemini,/images/product/gemini-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b3,Cancer  Body Lotion,750,Body Lotion,Cancer,/images/product/cancer-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b4,Leo Body Lotion,750,Body Lotion,Leo,/images/product/leo-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b5,Virgo  Body Lotion,750,Body Lotion,Virgo,/images/product/virgo-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b6,Libra  Body Lotion,750,Body Lotion,Libra,/images/product/libra-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b7,Scorpio  Body Lotion,750,Body Lotion,Scorpio,/images/product/scorpio-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b8,Sagittarius  Body Lotion,750,Body Lotion,Sagittarius,/images/product/sagittarius-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957b9,Capricorn Body Lotion,750,Body Lotion,Capricorn,/images/product/capricorn-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957ba,Aquarius  Body Lotion,750,Body Lotion,Aquarius,/images/product/aquarius-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+692ed828b9100f9cea7957bb,Pisces Body Lotion,750,Body Lotion,Pisces,/images/product/pisces-body-lotion.webp,/images/product/body-lotion-back.webp,200 ML
+695b9c6bf4eb1bbf53789698,Aries Hamper,4250,Hamper,Aries,/images/product/aries-hamper.webp,,5 Product
+695b9c6bf4eb1bbf53789699,Taurus Hamper,4250,Hamper,Taurus,/images/product/taurus-hamper.webp,,5 Product
+695b9c6bf4eb1bbf5378969a,Gemini Hamper,4250,Hamper,Gemini,/images/product/gemini-hamper.webp,,5 Product
+695b9c6bf4eb1bbf5378969b,Cancer Hamper,4250,Hamper,Cancer,/images/product/cancer-hamper.webp,,5 Product
+69c3bb9fad4046ba0bae6bec,Leo Hamper,4250,Hamper,Leo,/images/product/leo-hamper.webp,,5 Product
+695b9c6bf4eb1bbf5378969d,Virgo Hamper,4250,Hamper,Virgo,/images/product/virgo-hamper.webp,,5 Product
+695b9c6bf4eb1bbf5378969e,Libra Hamper,4250,Hamper,Libra,/images/product/libra-hamper.webp,,5 Product
+695b9c6bf4eb1bbf5378969f,Scorpio Hamper,4250,Hamper,Scorpio,/images/product/scorpio-hamper.webp,,5 Product
+695b9c6bf4eb1bbf537896a0,Sagittarius Hamper,4250,Hamper,Sagittarius,/images/product/sagittarius-hamper.webp,,5 Product
+695b9c6bf4eb1bbf537896a1,Capricorn Hamper,4250,Hamper,Capricorn,/images/product/capricorn-hamper.webp,,5 Product
+695b9c6bf4eb1bbf537896a2,Aquarius Hamper,4250,Hamper,Aquarius,/images/product/aquarius-hamper.webp,,5 Product
+695b9c6bf4eb1bbf537896a3,Pisces Hamper,4250,Hamper,Pisces,/images/product/pisces-hamper.webp,,5 Product

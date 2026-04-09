@@ -131,7 +131,7 @@ const Checkout = () => {
               name: "Custom Hamper",
               price: item.hamperId.totalPrice,
               qty: item.quantity,
-              img: "/images/hamper.jpg",
+              img: "/images/hamper.png",
               hamperItems:
                 item.hamperId.products?.map((p) => ({
                   name: p.productId?.ProductName,

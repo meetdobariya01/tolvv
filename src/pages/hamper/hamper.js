@@ -373,7 +373,7 @@ function HamperPage({ handleCartOpen }) {
           quantity: 1,
           price: total,
           name: "Custom Hamper",
-          img: "/images/hamper.jpg",
+          img: "/images/hamper.png",
         });
 
         localStorage.setItem("guestCart", JSON.stringify(cart));
