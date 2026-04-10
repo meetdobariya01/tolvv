@@ -499,3 +499,28 @@ body {
 .coupon-btn:hover {
   background-color:transparent;
 }
+
+.hybrid-cod-box {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #c4b5fd;
+  background: #f5f3ff;
+  border-radius: 8px;
+}
+
+.hybrid-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #4c1d95;
+}
+
+.hybrid-list {
+  padding-left: 18px;
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.hybrid-list li {
+  margin-bottom: 4px;
+}

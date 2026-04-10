@@ -14,7 +14,7 @@ const {
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
 const ShipRocketService = require("../services/shiprocket.service");
-
+const ADVANCE_AMOUNT = 200;
 const COUPONS = {
   LAUNCH5: { discount: 5, firstOrderOnly: true },
   WELCOME10: { discount: 10, firstOrderOnly: true },
@@ -36,30 +36,47 @@ async function createShipRocketShipment(order) {
   try {
     const shiprocket = ShipRocketService.getInstance();
     const formattedPhone = formatPhoneNumber(order.address.mobile);
-    
+
     const addressParts = [
       order.address.houseNumber,
       order.address.buildingName,
       order.address.societyName,
       order.address.road
     ].filter(Boolean);
-    
-    const fullAddress = addressParts.length > 0 ? addressParts.join(', ') : order.address.street || "Address not provided";
-    
-    const orderItems = order.items.map(item => ({
+
+    const fullAddress =
+      addressParts.length > 0
+        ? addressParts.join(", ")
+        : order.address.street || "Address not provided";
+
+    const orderItems = order.items.map((item) => ({
       name: item.productName.substring(0, 100),
-      sku: item.productId?.toString() || item.hamperId?.toString() || "CUSTOM",
+      sku:
+        item.productId?.toString() ||
+        item.hamperId?.toString() ||
+        "CUSTOM",
       units: item.quantity,
       selling_price: Math.round(item.priceAtBuy),
       discount: 0,
       tax: 0,
-      hsn: 0
+      hsn: 0,
     }));
-    
+
+    // ✅ FIX: Handle Hybrid COD properly
+    let codAmount = order.totalAmount;
+
+  if (order.paymentMethod === "cod_hybrid") {
+  codAmount = order.partialPayment?.remainingToPay || order.totalAmount;
+}
+
     const shiprocketOrderData = {
       order_id: order.customOrderId,
-      order_date: new Date(order.createdAt || Date.now()).toISOString().split('T')[0],
+      order_date: new Date(order.createdAt || Date.now())
+        .toISOString()
+        .split("T")[0],
+
       pickup_location: process.env.SHIPROCKET_PICKUP_LOCATION || "home",
+
       billing_customer_name: order.customerName || "Customer",
       billing_last_name: "",
       billing_address: fullAddress,
@@ -70,38 +87,54 @@ async function createShipRocketShipment(order) {
       billing_country: "India",
       billing_email: order.customerEmail,
       billing_phone: formattedPhone,
+
       shipping_is_billing: true,
       order_items: orderItems,
-      payment_method: order.paymentMethod === "cod" ? "COD" : "Prepaid",
+
+      // ✅ FIX: treat hybrid as COD
+      payment_method:
+        order.paymentMethod === "cod" ||
+          order.paymentMethod === "cod_hybrid"
+          ? "COD"
+          : "Prepaid",
+
       shipping_charges: order.shippingCost || 0,
       giftwrap_charges: 0,
       transaction_charges: 0,
       total_discount: order.discount || 0,
-      sub_total: Math.round(order.subtotal || order.totalAmount),
+
+      // ✅ MOST IMPORTANT FIX
+      sub_total: Math.round(codAmount),
+
       length: 10,
       breadth: 10,
       height: 10,
-      weight: order.totalWeight || 1.0
+      weight: order.totalWeight || 1.0,
     };
 
-    console.log("Creating ShipRocket order for:", order.customOrderId, "Payment:", order.paymentMethod);
+    console.log("📦 Shiprocket Payload:", shiprocketOrderData);
+
     const response = await shiprocket.createOrder(shiprocketOrderData);
-    
+
     if (response && response.status === 200) {
       order.shiprocketOrderId = response.data.order_id;
       order.shiprocketShipmentId = response.data.shipment_id;
       order.orderStatus = "Processing for Shipping";
       await order.save();
+
       console.log(`✅ ShipRocket order created for ${order.customOrderId}`);
       return true;
     }
+
     throw new Error("ShipRocket order creation failed");
   } catch (error) {
-    console.error(`❌ ShipRocket failed for ${order.customOrderId}:`, error.response?.data || error.message);
+    console.error(
+      `❌ ShipRocket failed for ${order.customOrderId}:`,
+      error.response?.data || error.message
+    );
     return false;
   }
 }
-
 async function sendOrderEmails(order, user) {
   try {
     const itemsHtml = order.items.map(i => {
@@ -142,13 +175,13 @@ async function sendOrderEmails(order, user) {
 const validateCoupon = async (code, userId) => {
   const coupon = COUPONS[code];
   if (!coupon) throw new Error("Invalid coupon code");
-  
+
   const existingOrders = await Order.find({
     userId,
     status: { $in: ["PAID", "COD_CONFIRMED"] }
   });
   const isFirstOrder = existingOrders.length === 0;
-  
+
   if (coupon.firstOrderOnly && !isFirstOrder) {
     throw new Error("This coupon is valid only for first order");
   }
@@ -238,15 +271,15 @@ router.post("/place", authenticate, async (req, res) => {
     if (subtotal >= 1500) {
       shippingCharge = 0;
     } else if (totalItems === 1) {
-      shippingCharge = 98;
+      shippingCharge = 90;
     } else {
       shippingCharge = totalItems * 35;
     }
 
-    let codCharge = 0;
-    if (paymentMethod === "cod") {
-      codCharge = 200;
-    }
+    // let codCharge = 0;
+    // if (paymentMethod === "cod" || paymentMethod === "cod_hybrid") {
+    //   codCharge = 200;
+    // }
 
     let discount = 0;
     let discountPercent = 0;
@@ -260,8 +293,11 @@ router.post("/place", authenticate, async (req, res) => {
       discount = (subtotal * discountPercent) / 100;
     }
 
-    const totalAmount = Math.round(subtotal - discount + shippingCharge + codCharge);
-    const customOrderId = `ord_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
+    const totalAmount = Math.round(subtotal - discount + shippingCharge);
+    const customOrderId = `ORD${Date.now().toString(36).toUpperCase()}${Math.random()
+      .toString(36)
+      .substring(2, 6)
+      .toUpperCase()}`;
     const cleanPhone = formatPhoneNumber(address.mobile);
 
     // Create order
@@ -275,13 +311,34 @@ router.post("/place", authenticate, async (req, res) => {
       subtotal,
       discount,
       shippingCost: shippingCharge,
+    
       totalAmount,
       couponCode,
       paymentMethod,
-      status: paymentMethod === "cod" ? "COD_CONFIRMED" : "PAYMENT_PENDING",
-      orderStatus: paymentMethod === "cod" ? "Confirmed" : "Pending",
-      address: { 
-        ...address, 
+   
+  partialPayment:
+  paymentMethod === "cod_hybrid"
+    ? {
+        paidOnline: ADVANCE_AMOUNT,
+        remainingToPay: Math.max(totalAmount - ADVANCE_AMOUNT, 0),
+        paymentMode: "COD_HYBRID",
+      }
+    : {},
+      status:
+  paymentMethod === "cod"
+    ? "COD_CONFIRMED"
+    : paymentMethod === "cod_hybrid"
+    ? "PARTIALLY_PAID_COD"
+    : "PAYMENT_PENDING",
+
+orderStatus:
+  paymentMethod === "cod"
+    ? "Confirmed"
+    : paymentMethod === "cod_hybrid"
+    ? "Partial Payment Received"
+    : "Pending",
+      address: {
+        ...address,
         mobile: cleanPhone,
         name: customerName,
         street: address.houseNumber || address.address,
@@ -291,15 +348,28 @@ router.post("/place", authenticate, async (req, res) => {
     });
 
     await newOrder.save();
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: {
+        address: {
+          name: customerName,
+          houseNumber: address.houseNumber,
+          buildingName: address.buildingName,
+          city: address.city,
+          pincode: address.pincode,
+          mobile: cleanPhone
+        }
+      }
+    });
+
     await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
 
     // ================= FOR COD ORDERS: Send Email & Create ShipRocket =================
     if (paymentMethod === "cod") {
       const user = await User.findById(req.user.id);
-      
+
       // Send emails
       await sendOrderEmails(newOrder, user);
-      
+
       // Create ShipRocket shipment (delay to ensure order is saved)
       setTimeout(async () => {
         await createShipRocketShipment(newOrder);
@@ -310,7 +380,7 @@ router.post("/place", authenticate, async (req, res) => {
       message: paymentMethod === "cod" ? "Order placed successfully" : "Order placed, proceed to payment",
       orderId: customOrderId,
       requiresPayment: paymentMethod !== "cod",
-      codChargeApplied: codCharge
+     advancePaid: paymentMethod === "cod_hybrid" ? 200 : 0
     });
 
   } catch (err) {
