@@ -430,7 +430,7 @@ const Homepage = () => {
                 COLLABORATION
               </p>
 
-              <Form className="connect-form mt-4 " onSubmit={handleSubmit}>
+              <Form className="connect-form mt-4 p-2 p-md-3 p-lg-0" onSubmit={handleSubmit}>
                 <Form.Group className="mb-4 ">
                   <Form.Control
                     className="underline-input"

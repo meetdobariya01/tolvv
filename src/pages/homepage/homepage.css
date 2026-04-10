@@ -507,7 +507,7 @@
 
 .benefits-content p {
   font-size: 15px;
-  line-height: 1.9;
+  line-height: 1.4;
   color: #e0e0e0;
   margin-bottom: 20px;
 }
@@ -750,6 +750,9 @@
 
   .faq-right p {
     margin: auto;
+  }
+  .connect-subtext, .connect-desc {
+  font-size: 0.8rem;
   }
 }
 

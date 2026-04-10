@@ -491,7 +491,7 @@ const Zodiacdetails = () => {
                         className="text-decoration-none"
                         key={p._id}
                       >
-                        <div className="product-card">
+                        <div className="product-card-zodiac">
                           <div className="product-box-zodiac p-1">
                             <img
                               src={

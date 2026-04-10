@@ -442,7 +442,7 @@ const Checkout = () => {
                   />
                   <div className="payment-block mt-4">
                     <h3>Payment Method</h3>
-                    <div className="payment-options">
+                    <div className="payment-options radio-button-checkout">
                       {["upi", "card", "cod_hybrid"].map((op) => (
                         <label
                           key={op}
@@ -451,6 +451,7 @@ const Checkout = () => {
                           <input
                             type="radio"
                             name="payment"
+                            className="radio-button-checkout"
                             checked={paymentMethod === op}
                             onChange={() => setPaymentMethod(op)}
                           />
