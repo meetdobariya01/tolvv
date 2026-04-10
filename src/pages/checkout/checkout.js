@@ -115,25 +115,36 @@ const Checkout = () => {
     if (!token) return false;
 
     try {
+      const payload = {
+        houseNumber: addressData.houseNumber,
+        buildingName: addressData.buildingName,
+        city: addressData.city,
+        pincode: addressData.pincode,
+        mobile: addressData.mobile,
+        State: addressData.State || "Gujarat",
+        email: addressData.email || billing.email, // ✅ Include email
+        road: addressData.road || "",
+        landmark: addressData.landmark || "",
+        societyName: addressData.societyName || "",
+      };
+      
       const res = await fetch(`${API_URL}/user/addresses`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(addressData),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
         const data = await res.json();
         console.log("Address saved successfully:", data);
         await fetchSavedAddresses(); // Refresh addresses immediately
-
+        
         // ✅ Show success message
-        alert(
-          "Address saved successfully! You can now use it for future orders.",
-        );
-
+        alert("Address saved successfully! You can now use it for future orders.");
+        
         // ✅ Auto-select the newly saved address
         if (data.address && data.address._id) {
           setSelectedAddressId(data.address._id);
@@ -141,6 +152,10 @@ const Checkout = () => {
         }
 
         return true;
+      } else {
+        const errorData = await res.json();
+        console.error("Failed to save address:", errorData);
+        alert(errorData.message || "Failed to save address. Please try again.");
       }
     } catch (err) {
       console.error("Failed to save address:", err);
@@ -256,7 +271,6 @@ const Checkout = () => {
         (addr) => addr._id === selectedAddressId,
       );
       if (selectedAddress) {
-        // Format the full address
         const fullAddress = [
           selectedAddress.houseNumber,
           selectedAddress.buildingName,
@@ -270,7 +284,7 @@ const Checkout = () => {
         setBilling({
           name: selectedAddress.buildingName || selectedAddress.name || "",
           phone: selectedAddress.mobile || "",
-          email: billing.email || "",
+          email: selectedAddress.email || billing.email || "", // ✅ Use saved address email if available
           address: fullAddress || selectedAddress.houseNumber || "",
           city: selectedAddress.city || "",
           pincode: selectedAddress.pincode || "",
@@ -334,7 +348,7 @@ const Checkout = () => {
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
     setBilling((b) => ({ ...b, [name]: value }));
-
+    
     // If user edits a saved address, deselect it
     if (useSaved) {
       setUseSaved(false);
@@ -344,7 +358,6 @@ const Checkout = () => {
 
   const handleUseSavedToggle = () => {
     if (!useSaved) {
-      // Switching to saved address mode
       if (savedAddresses.length > 0) {
         if (!selectedAddressId) {
           setSelectedAddressId(savedAddresses[0]._id);
@@ -355,7 +368,6 @@ const Checkout = () => {
         return;
       }
     } else {
-      // Switching to manual mode - restore manual billing if exists
       if (manualBilling) {
         setBilling(manualBilling);
       }
@@ -400,16 +412,15 @@ const Checkout = () => {
       // Save address if user opted to
       if (saveNewAddress && token && !useSaved) {
         const addressToSave = {
-          houseNumber: billing.address.split(",")[0],
+          houseNumber: billing.address.split(",")[0] || billing.address,
           buildingName: billing.name,
           city: billing.city,
           pincode: billing.pincode,
           mobile: billing.phone,
-          State: "Gujarat",
+          State: "Gujarat"
         };
 
         await saveAddressToBackend(addressToSave);
-        // Don't reset saveNewAddress here so it works for future orders
       }
 
       const orderItems = cart
@@ -537,7 +548,6 @@ const Checkout = () => {
                         <p>Loading saved addresses...</p>
                       ) : (
                         savedAddresses.map((addr) => {
-                          // Format the full address for display
                           const displayAddress = [
                             addr.houseNumber,
                             addr.buildingName,
@@ -593,6 +603,12 @@ const Checkout = () => {
                               <div style={{ fontSize: "14px", color: "#666" }}>
                                 📞 {addr.mobile}
                               </div>
+                              {/* ✅ Display email if it exists */}
+                              {addr.email && (
+                                <div style={{ fontSize: "14px", color: "#666", marginTop: "3px" }}>
+                                  ✉️ {addr.email}
+                                </div>
+                              )}
                               {addr.isDefault && (
                                 <span
                                   style={{
