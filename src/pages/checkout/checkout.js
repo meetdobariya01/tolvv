@@ -26,7 +26,7 @@ const Checkout = () => {
     city: "",
     pincode: "",
   });
-  
+
   const [paymentMethod, setPaymentMethod] = useState("upi");
   const [placing, setPlacing] = useState(false);
   const [addFreeProduct, setAddFreeProduct] = useState(false);
@@ -91,13 +91,13 @@ const Checkout = () => {
   // ================= FETCH SAVED ADDRESSES =================
   const fetchSavedAddresses = async () => {
     if (!token) return;
-    
+
     setLoadingAddresses(true);
     try {
       const res = await fetch(`${API_URL}/user/addresses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       if (res.ok) {
         const data = await res.json();
         console.log("Fetched addresses:", data.addresses);
@@ -113,7 +113,7 @@ const Checkout = () => {
   // ================= SAVE ADDRESS TO BACKEND =================
   const saveAddressToBackend = async (addressData) => {
     if (!token) return false;
-    
+
     try {
       const res = await fetch(`${API_URL}/user/addresses`, {
         method: "POST",
@@ -123,21 +123,23 @@ const Checkout = () => {
         },
         body: JSON.stringify(addressData),
       });
-      
+
       if (res.ok) {
         const data = await res.json();
         console.log("Address saved successfully:", data);
         await fetchSavedAddresses(); // Refresh addresses immediately
-        
+
         // ✅ Show success message
-        alert("Address saved successfully! You can now use it for future orders.");
-        
+        alert(
+          "Address saved successfully! You can now use it for future orders.",
+        );
+
         // ✅ Auto-select the newly saved address
         if (data.address && data.address._id) {
           setSelectedAddressId(data.address._id);
           setUseSaved(true);
         }
-        
+
         return true;
       }
     } catch (err) {
@@ -150,15 +152,16 @@ const Checkout = () => {
   // ================= DELETE SAVED ADDRESS =================
   const deleteSavedAddress = async (addressId) => {
     if (!token) return;
-    
-    if (!window.confirm("Are you sure you want to delete this address?")) return;
-    
+
+    if (!window.confirm("Are you sure you want to delete this address?"))
+      return;
+
     try {
       const res = await fetch(`${API_URL}/user/addresses/${addressId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       if (res.ok) {
         await fetchSavedAddresses();
         if (selectedAddressId === addressId) {
@@ -249,7 +252,9 @@ const Checkout = () => {
   // ================= HANDLE SELECTING SAVED ADDRESS =================
   useEffect(() => {
     if (useSaved && selectedAddressId) {
-      const selectedAddress = savedAddresses.find(addr => addr._id === selectedAddressId);
+      const selectedAddress = savedAddresses.find(
+        (addr) => addr._id === selectedAddressId,
+      );
       if (selectedAddress) {
         // Format the full address
         const fullAddress = [
@@ -257,9 +262,11 @@ const Checkout = () => {
           selectedAddress.buildingName,
           selectedAddress.societyName,
           selectedAddress.road,
-          selectedAddress.landmark
-        ].filter(Boolean).join(", ");
-        
+          selectedAddress.landmark,
+        ]
+          .filter(Boolean)
+          .join(", ");
+
         setBilling({
           name: selectedAddress.buildingName || selectedAddress.name || "",
           phone: selectedAddress.mobile || "",
@@ -282,10 +289,10 @@ const Checkout = () => {
 
         const data = await res.json();
         if (data?.email) {
-          setBilling(prev => ({ ...prev, email: data.email }));
+          setBilling((prev) => ({ ...prev, email: data.email }));
         }
         if (data?.mobile && !billing.phone) {
-          setBilling(prev => ({ ...prev, phone: data.mobile }));
+          setBilling((prev) => ({ ...prev, phone: data.mobile }));
         }
       } catch (err) {
         console.log("Could not fetch user data");
@@ -317,16 +324,17 @@ const Checkout = () => {
   const advanceAmount = isHybridCOD ? 200 : total;
   const ADVANCE = 200;
   const remainingCOD = isHybridCOD ? total - ADVANCE : 0;
-  
+
   const hasHamper = cart.some(
-    (item) => item.type === "hamper" || item.name?.toLowerCase().includes("hamper")
+    (item) =>
+      item.type === "hamper" || item.name?.toLowerCase().includes("hamper"),
   );
 
   // ================= BILLING HANDLERS =================
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
     setBilling((b) => ({ ...b, [name]: value }));
-    
+
     // If user edits a saved address, deselect it
     if (useSaved) {
       setUseSaved(false);
@@ -366,8 +374,14 @@ const Checkout = () => {
       return false;
     }
 
-    if (!billing.name || !billing.email || !billing.phone || 
-        !billing.address || !billing.city || !billing.pincode) {
+    if (
+      !billing.name ||
+      !billing.email ||
+      !billing.phone ||
+      !billing.address ||
+      !billing.city ||
+      !billing.pincode
+    ) {
       alert("Please fill all fields.");
       return false;
     }
@@ -391,9 +405,9 @@ const Checkout = () => {
           city: billing.city,
           pincode: billing.pincode,
           mobile: billing.phone,
-          State: "Gujarat"
+          State: "Gujarat",
         };
-        
+
         await saveAddressToBackend(addressToSave);
         // Don't reset saveNewAddress here so it works for future orders
       }
@@ -445,11 +459,18 @@ const Checkout = () => {
         return;
       }
 
-      if (paymentMethod === "upi" || paymentMethod === "card" || paymentMethod === "cod_hybrid") {
-        const paymentRes = await fetch(`${API_URL}/payment/initiate/${data.orderId}`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      if (
+        paymentMethod === "upi" ||
+        paymentMethod === "card" ||
+        paymentMethod === "cod_hybrid"
+      ) {
+        const paymentRes = await fetch(
+          `${API_URL}/payment/initiate/${data.orderId}`,
+          {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         const paymentData = await paymentRes.json();
 
@@ -484,13 +505,16 @@ const Checkout = () => {
 
               {/* Saved Addresses Section - Always show if there are addresses */}
               {token && savedAddresses.length > 0 && (
-                <div className="saved-addresses-section mb-4" style={{ 
-                  border: "1px solid #e0e0e0", 
-                  borderRadius: "8px", 
-                  padding: "15px",
-                  marginBottom: "20px",
-                  backgroundColor: "#f9f9f9"
-                }}>
+                <div
+                  className="saved-addresses-section mb-4"
+                  style={{
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px",
+                    padding: "15px",
+                    marginBottom: "20px",
+                    backgroundColor: "#f9f9f9",
+                  }}
+                >
                   <div className="d-flex align-items-center gap-2 mb-3">
                     <input
                       type="checkbox"
@@ -499,7 +523,10 @@ const Checkout = () => {
                       onChange={handleUseSavedToggle}
                       style={{ width: "18px", height: "18px" }}
                     />
-                    <label htmlFor="useSavedAddress" style={{ cursor: "pointer", fontWeight: "500" }}>
+                    <label
+                      htmlFor="useSavedAddress"
+                      style={{ cursor: "pointer", fontWeight: "500" }}
+                    >
                       Use a saved address
                     </label>
                   </div>
@@ -516,27 +543,48 @@ const Checkout = () => {
                             addr.buildingName,
                             addr.societyName,
                             addr.road,
-                            addr.landmark
-                          ].filter(Boolean).join(", ");
-                          
+                            addr.landmark,
+                          ]
+                            .filter(Boolean)
+                            .join(", ");
+
                           return (
                             <div
                               key={addr._id}
                               onClick={() => handleAddressSelect(addr._id)}
                               style={{
-                                border: selectedAddressId === addr._id ? "2px solid #7c3aed" : "1px solid #ddd",
+                                border:
+                                  selectedAddressId === addr._id
+                                    ? "2px solid #7c3aed"
+                                    : "1px solid #ddd",
                                 borderRadius: "8px",
                                 padding: "12px",
                                 marginBottom: "10px",
                                 cursor: "pointer",
-                                backgroundColor: selectedAddressId === addr._id ? "#f3e8ff" : "#fff",
-                                position: "relative"
+                                backgroundColor:
+                                  selectedAddressId === addr._id
+                                    ? "#f3e8ff"
+                                    : "#fff",
+                                position: "relative",
                               }}
                             >
-                              <div style={{ fontWeight: "500", marginBottom: "5px" }}>
-                                {addr.buildingName || addr.name || "Saved Address"}
+                              <div
+                                style={{
+                                  fontWeight: "500",
+                                  marginBottom: "5px",
+                                }}
+                              >
+                                {addr.buildingName ||
+                                  addr.name ||
+                                  "Saved Address"}
                               </div>
-                              <div style={{ fontSize: "14px", color: "#666", marginBottom: "5px" }}>
+                              <div
+                                style={{
+                                  fontSize: "14px",
+                                  color: "#666",
+                                  marginBottom: "5px",
+                                }}
+                              >
                                 {displayAddress || addr.houseNumber}
                               </div>
                               <div style={{ fontSize: "14px", color: "#666" }}>
@@ -546,14 +594,16 @@ const Checkout = () => {
                                 📞 {addr.mobile}
                               </div>
                               {addr.isDefault && (
-                                <span style={{
-                                  position: "absolute",
-                                  top: "8px",
-                                  right: "8px",
-                                  fontSize: "12px",
-                                  color: "#7c3aed",
-                                  fontWeight: "500"
-                                }}>
+                                <span
+                                  style={{
+                                    position: "absolute",
+                                    top: "8px",
+                                    right: "8px",
+                                    fontSize: "12px",
+                                    color: "#7c3aed",
+                                    fontWeight: "500",
+                                  }}
+                                >
                                   Default
                                 </span>
                               )}
@@ -571,7 +621,7 @@ const Checkout = () => {
                                   border: "none",
                                   color: "#ff4444",
                                   cursor: "pointer",
-                                  fontSize: "14px"
+                                  fontSize: "14px",
                                 }}
                               >
                                 Delete
@@ -587,16 +637,19 @@ const Checkout = () => {
 
               {/* Show message if no saved addresses */}
               {token && savedAddresses.length === 0 && !loadingAddresses && (
-                <div style={{
-                  border: "1px dashed #ccc",
-                  borderRadius: "8px",
-                  padding: "15px",
-                  marginBottom: "20px",
-                  textAlign: "center",
-                  backgroundColor: "#fafafa"
-                }}>
+                <div
+                  style={{
+                    border: "1px dashed #ccc",
+                    borderRadius: "8px",
+                    padding: "15px",
+                    marginBottom: "20px",
+                    textAlign: "center",
+                    backgroundColor: "#fafafa",
+                  }}
+                >
                   <p style={{ margin: 0, color: "#666" }}>
-                    💡 No saved addresses yet. Fill the form below and check "Save this address" to save it for future orders.
+                    💡 No saved addresses yet. Fill the form below and check
+                    "Save this address" to save it for future orders.
                   </p>
                 </div>
               )}
@@ -678,94 +731,135 @@ const Checkout = () => {
                 </div>
 
                 {/* Save Address Option - Only show for logged-in users and when not using saved address */}
-                {/* {token && !useSaved && (
-                  <div className="save-address-option d-flex align-items-center gap-2 mt-3">
+                {token && !useSaved && (
+                  <>
+                    <div className="save-address-option d-flex align-items-center gap-2 mt-3">
+                      <input
+                        type="checkbox"
+                        id="saveAddress"
+                        checked={saveNewAddress}
+                        onChange={(e) => setSaveNewAddress(e.target.checked)}
+                        style={{ width: "18px", height: "18px" }}
+                      />
+                      <label
+                        htmlFor="saveAddress"
+                        style={{ cursor: "pointer", fontSize: "14px" }}
+                      >
+                        Save this address for future orders
+                      </label>
+                    </div>
+
                     <input
                       type="checkbox"
-                      id="saveAddress"
-                      checked={saveNewAddress}
-                      onChange={(e) => setSaveNewAddress(e.target.checked)}
-                      style={{ width: "18px", height: "18px" }}
+                      checked={useSaved}
+                      onChange={() => {
+                        if (!useSaved) {
+                          setManualBilling(billing);
+                        } else {
+                          if (manualBilling) setBilling(manualBilling);
+                        }
+                        setUseSaved(!useSaved);
+                      }}
                     />
-                    <label htmlFor="saveAddress" style={{ cursor: "pointer", fontSize: "14px" }}>
-                      Save this address for future orders
-                    </label>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={useSaved}
-                    onChange={() => {
-                      if (!useSaved) {
-                        // Save current manual input before switching
-                        setManualBilling(billing);
-                      } else {
-                        // Restore manual input when unchecked
-                        if (manualBilling) setBilling(manualBilling);
-                      }
 
-                      setUseSaved(!useSaved);
-                    }}
-                  />
-                  <div className="payment-block mt-4">
-                    <h3>Payment Method</h3>
-                    <div className="payment-options">
-                      {["upi", "card", "cod_hybrid"].map((op) => (
-                        <label
-                          key={op}
-                          className={paymentMethod === op ? "active" : ""}
-                        >
-                          <input
-                            type="radio"
-                            name="payment"
-                            checked={paymentMethod === op}
-                            onChange={() => setPaymentMethod(op)}
-                          />
-                          {op === "upi"
-                            ? "UPI / Google Pay"
-                            : op === "card"
-                              ? "Credit / Debit Card"
-                              : "₹200 Advance + Remaining COD"}
-                        </label>
-                      ))}
-                    </div>
-                  </div> */}
-                  {isHybridCOD && (
-                    <div className="hybrid-cod-box">
-                      <div className="hybrid-title">
-                        💡 How Hybrid COD works:
+                    <div className="payment-block mt-4">
+                      <h3>Payment Method</h3>
+                      <div className="payment-options">
+                        {["upi", "card", "cod_hybrid"].map((op) => (
+                          <label
+                            key={op}
+                            className={paymentMethod === op ? "active" : ""}
+                          >
+                            <input
+                              type="radio"
+                              name="payment"
+                              checked={paymentMethod === op}
+                              onChange={() => setPaymentMethod(op)}
+                            />
+                            {op === "upi"
+                              ? "UPI / Google Pay"
+                              : op === "card"
+                                ? "Credit / Debit Card"
+                                : "₹200 Advance + Remaining COD"}
+                          </label>
+                        ))}
                       </div>
-                      <ol className="hybrid-list">
-                        <li>
-                          Pay <strong>{currencyFormat(advanceAmount)}</strong> online now to confirm your order this amount will be not refunded in any case
-                        </li>
-                        <li>
-                          Pay the remaining <strong>{currencyFormat(remainingCOD)}</strong> in cash when delivered
-                        </li>
-                        <li>
-                          Your order will be processed only after online payment
-                        </li>
-                      </ol>
                     </div>
-                  )}
-                  <div className="form-actions">
-                    <button
-                      className="btn-outline-dark btn"
-                      type="submit"
-                      disabled={placing}
-                    >
-                      {placing
-                        ? "Processing..."
-                        : isHybridCOD
-                          ? `Pay ₹200 Now`
-                          : paymentMethod === "upi" || paymentMethod === "card"
-                            ? `Pay Now — ${currencyFormat(total)}`
-                            : `Place Order`}
-                    </button>
-                  </div>
-                </form>
 
-              </div>
+                    {isHybridCOD && (
+                      <div className="hybrid-cod-box">
+                        <div className="hybrid-title">
+                          💡 How Hybrid COD works:
+                        </div>
+                        <ol className="hybrid-list">
+                          <li>
+                            Pay <strong>{currencyFormat(advanceAmount)}</strong>{" "}
+                            online now
+                          </li>
+                          <li>
+                            Pay <strong>{currencyFormat(remainingCOD)}</strong>{" "}
+                            on delivery
+                          </li>
+                        </ol>
+                      </div>
+                    )}
+
+                    <div className="form-actions">
+                      <button
+                        className="btn-outline-dark btn"
+                        type="submit"
+                        disabled={placing}
+                      >
+                        {placing
+                          ? "Processing..."
+                          : isHybridCOD
+                            ? `Pay ₹200 Now`
+                            : paymentMethod === "upi" ||
+                                paymentMethod === "card"
+                              ? `Pay Now — ${currencyFormat(total)}`
+                              : `Place Order`}
+                      </button>
+                    </div>
+                  </>
+                )}
+                {isHybridCOD && (
+                  <div className="hybrid-cod-box">
+                    <div className="hybrid-title">💡 How Hybrid COD works:</div>
+                    <ol className="hybrid-list">
+                      <li>
+                        Pay <strong>{currencyFormat(advanceAmount)}</strong>{" "}
+                        online now to confirm your order this amount will be not
+                        refunded in any case
+                      </li>
+                      <li>
+                        Pay the remaining{" "}
+                        <strong>{currencyFormat(remainingCOD)}</strong> in cash
+                        when delivered
+                      </li>
+                      <li>
+                        Your order will be processed only after online payment
+                      </li>
+                    </ol>
+                  </div>
+                )}
+                <div className="form-actions">
+                  <button
+                    className="btn-outline-dark btn"
+                    type="submit"
+                    disabled={placing}
+                  >
+                    {placing
+                      ? "Processing..."
+                      : isHybridCOD
+                        ? `Pay ₹200 Now`
+                        : paymentMethod === "upi" || paymentMethod === "card"
+                          ? `Pay Now — ${currencyFormat(total)}`
+                          : `Place Order`}
+                  </button>
+                </div>
+              </form>
             </div>
+          </div>
 
           <aside className="panel summary-panel">
             <div className="panel-inner order-summary">
@@ -778,7 +872,11 @@ const Checkout = () => {
                     <img
                       src={it.img}
                       alt={it.name}
-                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        objectFit: "cover",
+                      }}
                     />
                     <div>
                       <div className="name">{it.name}</div>
@@ -806,7 +904,9 @@ const Checkout = () => {
                     className="coupon-input"
                     value={couponCode}
                     disabled={couponApplied}
-                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    onChange={(e) =>
+                      setCouponCode(e.target.value.toUpperCase())
+                    }
                   />
                   <button className="coupon-btn sora" onClick={applyCoupon}>
                     Apply
@@ -820,9 +920,16 @@ const Checkout = () => {
                   id="newsletter"
                   checked={subscribe}
                   onChange={(e) => setSubscribe(e.target.checked)}
-                  style={{ width: '18px', height: '18px', accentColor: '#7c3aed' }}
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    accentColor: "#7c3aed",
+                  }}
                 />
-                <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                <label
+                  htmlFor="newsletter"
+                  style={{ fontSize: "14px", cursor: "pointer" }}
+                >
                   Subscribe to our Newsletter
                 </label>
               </div>
@@ -837,7 +944,10 @@ const Checkout = () => {
                     onChange={(e) => setAddFreeProduct(e.target.checked)}
                     style={{ width: "18px", height: "18px" }}
                   />
-                  <label htmlFor="freeProduct" style={{ fontSize: "14px", cursor: "pointer" }}>
+                  <label
+                    htmlFor="freeProduct"
+                    style={{ fontSize: "14px", cursor: "pointer" }}
+                  >
                     Add Complimentary Free Product
                   </label>
                 </div>
@@ -852,7 +962,9 @@ const Checkout = () => {
 
                 <div className="d-flex justify-content-between">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? "FREE" : currencyFormat(shipping)}</span>
+                  <span>
+                    {shipping === 0 ? "FREE" : currencyFormat(shipping)}
+                  </span>
                 </div>
 
                 <div className="d-flex justify-content-between">
