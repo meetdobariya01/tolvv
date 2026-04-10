@@ -13,9 +13,12 @@ const Checkout = () => {
   const [subscribe, setSubscribe] = useState(false);
   const [couponApplied, setCouponApplied] = useState(false);
   const [cart, setCart] = useState([]);
-  const [savedAddress, setSavedAddress] = useState(null);
+  const [savedAddresses, setSavedAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [manualBilling, setManualBilling] = useState(null);
   const [useSaved, setUseSaved] = useState(false);
+  const [saveNewAddress, setSaveNewAddress] = useState(false);
+  const [showSavedAddresses, setShowSavedAddresses] = useState(false);
   const [billing, setBilling] = useState({
     name: "",
     email: "",
@@ -24,6 +27,14 @@ const Checkout = () => {
     city: "",
     pincode: "",
   });
+  
+  const [paymentMethod, setPaymentMethod] = useState("upi");
+  const [placing, setPlacing] = useState(false);
+  const [addFreeProduct, setAddFreeProduct] = useState(false);
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
+
+  const token = localStorage.getItem("token");
+
   // ================= APPLY COUPON =================
   const applyCoupon = async () => {
     if (!couponCode || couponApplied) return;
@@ -48,22 +59,15 @@ const Checkout = () => {
       }
 
       const discountAmount = (subtotal * data.discountPercent) / 100;
-
       setDiscount(discountAmount);
       setCouponApplied(true);
-
     } catch (err) {
       console.error(err);
       alert("Coupon validation failed");
     }
   };
-  const [paymentMethod, setPaymentMethod] = useState("upi");
-  const [placing, setPlacing] = useState(false);
-  const [addFreeProduct, setAddFreeProduct] = useState(false);
 
-  const token = localStorage.getItem("token");
-
-  // ================= ✅ FIXED HELPER =================
+  // ================= HELPER FUNCTIONS =================
   const saveGuestCart = () => {
     return JSON.parse(Cookies.get("guestCart") || "[]");
   };
@@ -85,7 +89,82 @@ const Checkout = () => {
       : `/images/${photo.replace("images/", "")}`;
   };
 
-  // ================= FETCH & MERGE =================
+  // ================= FETCH SAVED ADDRESSES =================
+  const fetchSavedAddresses = async () => {
+    if (!token) return;
+    
+    setLoadingAddresses(true);
+    try {
+      const res = await fetch(`${API_URL}/user/addresses`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Fetched addresses:", data.addresses);
+        setSavedAddresses(data.addresses || []);
+        
+        // Auto-show saved addresses section if there are addresses
+        if (data.addresses && data.addresses.length > 0) {
+          setShowSavedAddresses(true);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch addresses:", err);
+    } finally {
+      setLoadingAddresses(false);
+    }
+  };
+
+  // ================= SAVE ADDRESS TO BACKEND =================
+  const saveAddressToBackend = async (addressData) => {
+    if (!token) return false;
+    
+    try {
+      const res = await fetch(`${API_URL}/user/addresses`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(addressData),
+      });
+      
+      if (res.ok) {
+        await fetchSavedAddresses(); // Refresh addresses
+        return true;
+      }
+    } catch (err) {
+      console.error("Failed to save address:", err);
+    }
+    return false;
+  };
+
+  // ================= DELETE SAVED ADDRESS =================
+  const deleteSavedAddress = async (addressId) => {
+    if (!token) return;
+    
+    if (!window.confirm("Are you sure you want to delete this address?")) return;
+    
+    try {
+      const res = await fetch(`${API_URL}/user/addresses/${addressId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (res.ok) {
+        await fetchSavedAddresses();
+        if (selectedAddressId === addressId) {
+          setSelectedAddressId(null);
+          setUseSaved(false);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to delete address:", err);
+    }
+  };
+
+  // ================= FETCH & MERGE CART =================
   const mergeCart = useCallback(async () => {
     if (!token) {
       setCart(saveGuestCart());
@@ -104,8 +183,7 @@ const Checkout = () => {
           },
           body: JSON.stringify({ guestItems: guestCart }),
         });
-
-        clearGuestCart(); // ✅ FIXED
+        clearGuestCart();
       }
 
       const res = await fetch(`${API_URL}/cart`, {
@@ -151,20 +229,41 @@ const Checkout = () => {
       console.error("Failed to fetch or merge cart:", err);
     }
   }, [token]);
-  useEffect(() => {
-    if (!savedAddress) return;
 
-    if (useSaved) {
-      setBilling({
-        name: savedAddress.name || "",
-        phone: savedAddress.mobile || "",
-        email: billing.email || "",
-        address: savedAddress.houseNumber || "",
-        city: savedAddress.city || "",
-        pincode: savedAddress.pincode || "",
-      });
+  // ================= LOAD SAVED ADDRESSES ON MOUNT =================
+  useEffect(() => {
+    if (token) {
+      fetchSavedAddresses();
     }
-  }, [useSaved, savedAddress]);
+  }, [token]);
+
+  // ================= HANDLE SELECTING SAVED ADDRESS =================
+  useEffect(() => {
+    if (useSaved && selectedAddressId) {
+      const selectedAddress = savedAddresses.find(addr => addr._id === selectedAddressId);
+      if (selectedAddress) {
+        // Format the full address
+        const fullAddress = [
+          selectedAddress.houseNumber,
+          selectedAddress.buildingName,
+          selectedAddress.societyName,
+          selectedAddress.road,
+          selectedAddress.landmark
+        ].filter(Boolean).join(", ");
+        
+        setBilling({
+          name: selectedAddress.buildingName || "",
+          phone: selectedAddress.mobile || "",
+          email: billing.email || "",
+          address: fullAddress,
+          city: selectedAddress.city || "",
+          pincode: selectedAddress.pincode || "",
+        });
+      }
+    }
+  }, [selectedAddressId, useSaved, savedAddresses, billing.email]);
+
+  // ================= INITIAL USER DATA LOAD =================
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -173,41 +272,30 @@ const Checkout = () => {
         });
 
         const data = await res.json();
-        if (data?.address) {
-          setSavedAddress(data.address);
-
-          setBilling({
-            name: data.address.name || "",
-            phone: data.address.mobile || "",
-            email: data.email || "",
-            address: data.address.houseNumber || "",
-            city: data.address.city || "",
-            pincode: data.address.pincode || "",
-          });
+        if (data?.email) {
+          setBilling(prev => ({ ...prev, email: data.email }));
+        }
+        if (data?.mobile && !billing.phone) {
+          setBilling(prev => ({ ...prev, phone: data.mobile }));
         }
       } catch (err) {
-        console.log("No saved address");
+        console.log("Could not fetch user data");
       }
     };
 
     if (token) fetchUser();
   }, [token]);
+
   useEffect(() => {
     mergeCart();
   }, [mergeCart]);
 
-  // ================= TOTAL =================
+  // ================= TOTALS =================
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
-
-  // ✅ TOTAL ITEMS COUNT
   const totalItems = cart.reduce((acc, it) => acc + it.qty, 0);
-
-  // ✅ SHIPPING LOGIC
   const isHybridCOD = paymentMethod === "cod_hybrid";
 
-
   let shipping = 0;
-
   if (subtotal >= 1500) {
     shipping = 0;
   } else if (totalItems === 1) {
@@ -216,37 +304,56 @@ const Checkout = () => {
     shipping = totalItems * 35;
   }
 
-  // ✅ FINAL TOTAL
   const total = subtotal - discount + shipping;
   const advanceAmount = isHybridCOD ? 200 : total;
   const ADVANCE = 200;
-
-  const remainingCOD = isHybridCOD
-    ? total - ADVANCE
-    : 0;
+  const remainingCOD = isHybridCOD ? total - ADVANCE : 0;
+  
   const hasHamper = cart.some(
-    (item) =>
-      item.type === "hamper" ||
-      item.name?.toLowerCase().includes("hamper")
+    (item) => item.type === "hamper" || item.name?.toLowerCase().includes("hamper")
   );
 
-  // ================= BILLING =================
+  // ================= BILLING HANDLERS =================
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
     setBilling((b) => ({ ...b, [name]: value }));
+    
+    // If user edits a saved address, deselect it
+    if (useSaved) {
+      setUseSaved(false);
+      setSelectedAddressId(null);
+    }
+  };
+
+  const handleUseSavedToggle = () => {
+    if (!useSaved) {
+      // Switching to saved address mode
+      if (savedAddresses.length > 0 && !selectedAddressId) {
+        setSelectedAddressId(savedAddresses[0]._id);
+      }
+      setManualBilling(billing);
+    } else {
+      // Switching to manual mode - restore manual billing if exists
+      if (manualBilling) {
+        setBilling(manualBilling);
+      }
+      setSelectedAddressId(null);
+    }
+    setUseSaved(!useSaved);
+  };
+
+  const handleAddressSelect = (addressId) => {
+    setSelectedAddressId(addressId);
   };
 
   const validate = () => {
-    if (cart.length === 0) return alert("Your cart is empty.");
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return false;
+    }
 
-    if (
-      !billing.name ||
-      !billing.email ||
-      !billing.phone ||
-      !billing.address ||
-      !billing.city ||
-      !billing.pincode
-    ) {
+    if (!billing.name || !billing.email || !billing.phone || 
+        !billing.address || !billing.city || !billing.pincode) {
       alert("Please fill all fields.");
       return false;
     }
@@ -262,12 +369,23 @@ const Checkout = () => {
     setPlacing(true);
 
     try {
+      // Save address if user opted to
+      if (saveNewAddress && token && !useSaved) {
+        await saveAddressToBackend({
+          houseNumber: billing.address.split(",")[0],
+          buildingName: billing.name,
+          city: billing.city,
+          pincode: billing.pincode,
+          mobile: billing.phone,
+          State: "Gujarat"
+        });
+      }
+
       const orderItems = cart
         .map((item) => {
           if (item.type === "product") {
             return { productId: item.id, quantity: item.qty };
           }
-
           if (item.type === "hamper") {
             return {
               hamperId: item.id,
@@ -275,7 +393,6 @@ const Checkout = () => {
               addFreeProduct,
             };
           }
-
           return null;
         })
         .filter(Boolean);
@@ -289,7 +406,7 @@ const Checkout = () => {
         body: JSON.stringify({
           items: orderItems,
           paymentMethod,
-          couponCode,
+          couponCode: couponApplied ? couponCode : "",
           subscribe,
           address: {
             houseNumber: billing.address,
@@ -311,18 +428,11 @@ const Checkout = () => {
         return;
       }
 
-      if (
-        paymentMethod === "upi" ||
-        paymentMethod === "card" ||
-        paymentMethod === "cod_hybrid"
-      ) {
-        const paymentRes = await fetch(
-          `${API_URL}/payment/initiate/${data.orderId}`,
-          {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+      if (paymentMethod === "upi" || paymentMethod === "card" || paymentMethod === "cod_hybrid") {
+        const paymentRes = await fetch(`${API_URL}/payment/initiate/${data.orderId}`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const paymentData = await paymentRes.json();
 
@@ -350,295 +460,395 @@ const Checkout = () => {
       <Header />
 
       <div className="checkout sora">
-        <div className="checkout sora">
-          <div className="checkout-grid checkout-root">
-            <div className="panel billing-panel">
-              <div className="panel-inner">
-                <h2>Shipping Details</h2>
+        <div className="checkout-grid checkout-root">
+          <div className="panel billing-panel">
+            <div className="panel-inner">
+              <h2>Shipping Details</h2>
 
-                <form onSubmit={placeOrder} className="billing-form" noValidate>
-                  <label>
-                    <input
-                      name="name"
-                      className="underline-input text-dark"
-                      placeholder="Full name"
-                      value={billing.name}
-                      onChange={handleBillingChange}
-                      required
-                    />
-                  </label>
-
-                  <label>
-                    <input
-                      name="phone"
-                      className="underline-input"
-                      placeholder="Phone"
-                      value={billing.phone}
-                      onChange={handleBillingChange}
-                      required
-                    />
-                  </label>
-
-                  <label>
-                    <input
-                      name="email"
-                      className="underline-input"
-                      type="email"
-                      placeholder="Email"
-                      value={billing.email}
-                      onChange={handleBillingChange}
-                      required
-                    />
-                  </label>
-
-                  <label>
-                    <textarea
-                      name="address"
-                      className="underline-input"
-                      placeholder="Address"
-                      value={billing.address}
-                      onChange={handleBillingChange}
-                      rows="1"
-                      required
-                    />
-                  </label>
-
-                  <div className="row-two">
-                    <label>
-                      <input
-                        name="city"
-                        className="underline-input"
-                        placeholder="City"
-                        value={billing.city}
-                        onChange={handleBillingChange}
-                        required
-                      />
-                    </label>
-                    <label>
-                      <input
-                        name="pincode"
-                        className="underline-input"
-                        placeholder="Pincode"
-                        value={billing.pincode}
-                        onChange={handleBillingChange}
-                        required
-                      />
-                    </label>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={useSaved}
-                    onChange={() => {
-                      if (!useSaved) {
-                        // Save current manual input before switching
-                        setManualBilling(billing);
-                      } else {
-                        // Restore manual input when unchecked
-                        if (manualBilling) setBilling(manualBilling);
-                      }
-
-                      setUseSaved(!useSaved);
-                    }}
-                  />
-                  <div className="payment-block mt-4">
-                    <h3>Payment Method</h3>
-                    <div className="payment-options">
-                      {["upi", "card", "cod_hybrid"].map((op) => (
-                        <label
-                          key={op}
-                          className={paymentMethod === op ? "active" : ""}
-                        >
-                          <input
-                            type="radio"
-                            name="payment"
-                            checked={paymentMethod === op}
-                            onChange={() => setPaymentMethod(op)}
-                          />
-                          {op === "upi"
-                            ? "UPI / Google Pay"
-                            : op === "card"
-                              ? "Credit / Debit Card"
-                              : "₹200 Advance + Remaining COD"}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  {isHybridCOD && (
-                    <div className="hybrid-cod-box">
-                      <div className="hybrid-title">
-                        💡 How Hybrid COD works:
-                      </div>
-                      <ol className="hybrid-list">
-                        <li>
-                          Pay <strong>{currencyFormat(advanceAmount)}</strong> online now to confirm your order this amount will be not refunded in any case
-                        </li>
-                        <li>
-                          Pay the remaining <strong>{currencyFormat(remainingCOD)}</strong> in cash when delivered
-                        </li>
-                        <li>
-                          Your order will be processed only after online payment
-                        </li>
-                      </ol>
-                    </div>
-                  )}
-                  <div className="form-actions">
-                    <button
-                      className="btn-outline-dark btn"
-                      type="submit"
-                      disabled={placing}
-                    >
-                      {placing
-                        ? "Processing..."
-                        : isHybridCOD
-                          ? `Pay ₹200 Now`
-                          : paymentMethod === "upi" || paymentMethod === "card"
-                            ? `Pay Now — ${currencyFormat(total)}`
-                            : `Place Order`}
-                    </button>
-                  </div>
-                </form>
-
-              </div>
-            </div>
-
-            <aside className="panel summary-panel">
-              <div className="panel-inner order-summary">
-                <h2 className="summary-title">Order Summary</h2>
-
-                {/* PRODUCT LIST */}
-                <div className="items-list">
-                  {cart.map((it) => (
-                    <div key={it.id} className="item-row d-flex gap-3">
-
-                      {/* ✅ IMAGE */}
-                      <img
-                        src={it.img}
-                        alt={it.name}
-                        style={{ width: "60px", height: "60px", objectFit: "cover" }}
-                      />
-
-                      <div>
-                        <div className="name">{it.name}</div>
-                        <div>x{it.qty}</div>
-
-                        {it.hamperItems && (
-                          <ul style={{ fontSize: "12px", marginTop: "5px" }}>
-                            {it.hamperItems.map((h, i) => (
-                              <li key={i}>
-                                {h.name} × {h.quantity}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-
-                    </div>
-                  ))}
-                </div>
-
-                {/* COUPON */}
-                {/* COUPON */}
-                {/* COUPON */}
-                <div className="coupon-box mt-3">
-
-                  <div className="coupon-container">
-                    <input
-                      type="text"
-                      placeholder="Enter Coupon Code"
-                      className="coupon-input"
-                      value={couponCode}
-                      disabled={couponApplied}
-                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                    />
-
-                    <button className="coupon-btn sora" onClick={applyCoupon}>
-                      Apply
-                    </button>
-                  </div>
-
-                </div>
-
-                <div className="newsletter-subscription mt-3 d-flex align-items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="newsletter"
-                    checked={subscribe}
-                    onChange={(e) => setSubscribe(e.target.checked)}
-                    style={{ width: '18px', height: '18px', accentColor: '#7c3aed', borderBlockColor: 'black' }}
-                  />
-                  <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
-                    Subscribe to our Newsletter
-                  </label>
-                </div>
-
-                {/* ✅ FREE PRODUCT (ONLY FOR HAMPER) */}
-                {hasHamper && (
-                  <div className="free-product-box mt-3 d-flex align-items-center gap-2">
+              {/* Saved Addresses Section - Always show if there are addresses */}
+              {token && savedAddresses.length > 0 && (
+                <div className="saved-addresses-section mb-4" style={{ 
+                  border: "1px solid #e0e0e0", 
+                  borderRadius: "8px", 
+                  padding: "15px",
+                  marginBottom: "20px",
+                  backgroundColor: "#f9f9f9"
+                }}>
+                  <div className="d-flex align-items-center gap-2 mb-3">
                     <input
                       type="checkbox"
-                      id="freeProduct"
-                      checked={addFreeProduct}
-                      onChange={(e) => setAddFreeProduct(e.target.checked)}
+                      id="useSavedAddress"
+                      checked={useSaved}
+                      onChange={handleUseSavedToggle}
                       style={{ width: "18px", height: "18px" }}
                     />
-                    <label
-                      htmlFor="freeProduct"
-                      style={{ fontSize: "14px", cursor: "pointer" }}
-                    >
-                      Add Complimentary Free Product
+                    <label htmlFor="useSavedAddress" style={{ cursor: "pointer", fontWeight: "500" }}>
+                      Use a saved address
+                    </label>
+                  </div>
+
+                  {useSaved && (
+                    <div className="saved-addresses-list">
+                      {loadingAddresses ? (
+                        <p>Loading saved addresses...</p>
+                      ) : (
+                        savedAddresses.map((addr) => {
+                          // Format the full address for display
+                          const displayAddress = [
+                            addr.houseNumber,
+                            addr.buildingName,
+                            addr.societyName,
+                            addr.road,
+                            addr.landmark
+                          ].filter(Boolean).join(", ");
+                          
+                          return (
+                            <div
+                              key={addr._id}
+                              onClick={() => handleAddressSelect(addr._id)}
+                              style={{
+                                border: selectedAddressId === addr._id ? "2px solid #7c3aed" : "1px solid #ddd",
+                                borderRadius: "8px",
+                                padding: "12px",
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                                backgroundColor: selectedAddressId === addr._id ? "#f3e8ff" : "#fff",
+                                position: "relative"
+                              }}
+                            >
+                              <div style={{ fontWeight: "500", marginBottom: "5px" }}>
+                                {addr.buildingName || "Saved Address"}
+                              </div>
+                              <div style={{ fontSize: "14px", color: "#666", marginBottom: "5px" }}>
+                                {displayAddress}
+                              </div>
+                              <div style={{ fontSize: "14px", color: "#666" }}>
+                                {addr.city} - {addr.pincode}
+                              </div>
+                              <div style={{ fontSize: "14px", color: "#666" }}>
+                                📞 {addr.mobile}
+                              </div>
+                              {addr.isDefault && (
+                                <span style={{
+                                  position: "absolute",
+                                  top: "8px",
+                                  right: "8px",
+                                  fontSize: "12px",
+                                  color: "#7c3aed",
+                                  fontWeight: "500"
+                                }}>
+                                  Default
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteSavedAddress(addr._id);
+                                }}
+                                style={{
+                                  position: "absolute",
+                                  bottom: "8px",
+                                  right: "8px",
+                                  background: "none",
+                                  border: "none",
+                                  color: "#ff4444",
+                                  cursor: "pointer",
+                                  fontSize: "14px"
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Show message if no saved addresses */}
+              {token && savedAddresses.length === 0 && !loadingAddresses && (
+                <div style={{
+                  border: "1px dashed #ccc",
+                  borderRadius: "8px",
+                  padding: "15px",
+                  marginBottom: "20px",
+                  textAlign: "center",
+                  backgroundColor: "#fafafa"
+                }}>
+                  <p style={{ margin: 0, color: "#666" }}>
+                    💡 No saved addresses yet. Fill the form below and check "Save this address" to save it for future orders.
+                  </p>
+                </div>
+              )}
+
+              <form onSubmit={placeOrder} className="billing-form" noValidate>
+                <label>
+                  <input
+                    name="name"
+                    className="underline-input text-dark"
+                    placeholder="Full name"
+                    value={billing.name}
+                    onChange={handleBillingChange}
+                    required
+                    disabled={useSaved}
+                  />
+                </label>
+
+                <label>
+                  <input
+                    name="phone"
+                    className="underline-input"
+                    placeholder="Phone"
+                    value={billing.phone}
+                    onChange={handleBillingChange}
+                    required
+                    disabled={useSaved}
+                  />
+                </label>
+
+                <label>
+                  <input
+                    name="email"
+                    className="underline-input"
+                    type="email"
+                    placeholder="Email"
+                    value={billing.email}
+                    onChange={handleBillingChange}
+                    required
+                    disabled={useSaved}
+                  />
+                </label>
+
+                <label>
+                  <textarea
+                    name="address"
+                    className="underline-input"
+                    placeholder="Address (House No, Building, Road, Landmark)"
+                    value={billing.address}
+                    onChange={handleBillingChange}
+                    rows="2"
+                    required
+                    disabled={useSaved}
+                  />
+                </label>
+
+                <div className="row-two">
+                  <label>
+                    <input
+                      name="city"
+                      className="underline-input"
+                      placeholder="City"
+                      value={billing.city}
+                      onChange={handleBillingChange}
+                      required
+                      disabled={useSaved}
+                    />
+                  </label>
+                  <label>
+                    <input
+                      name="pincode"
+                      className="underline-input"
+                      placeholder="Pincode"
+                      value={billing.pincode}
+                      onChange={handleBillingChange}
+                      required
+                      disabled={useSaved}
+                    />
+                  </label>
+                </div>
+
+                {/* Save Address Option - Only show for logged-in users and when not using saved address */}
+                {token && !useSaved && (
+                  <div className="save-address-option d-flex align-items-center gap-2 mt-3">
+                    <input
+                      type="checkbox"
+                      id="saveAddress"
+                      checked={saveNewAddress}
+                      onChange={(e) => setSaveNewAddress(e.target.checked)}
+                      style={{ width: "18px", height: "18px" }}
+                    />
+                    <label htmlFor="saveAddress" style={{ cursor: "pointer", fontSize: "14px" }}>
+                      Save this address for future orders
                     </label>
                   </div>
                 )}
-                {/* PRICE BREAKDOWN */}
-                <div className="price-breakdown mt-4">
-                  <div className="d-flex justify-content-between">
-                    <span>Subtotal · {cart.length} item</span>
-                    <span>{currencyFormat(subtotal)}</span> {/* ✅ FIX */}
+
+                <div className="payment-block mt-4">
+                  <h3>Payment Method</h3>
+                  <div className="payment-options">
+                    {["upi", "card", "cod_hybrid"].map((op) => (
+                      <label
+                        key={op}
+                        className={paymentMethod === op ? "active" : ""}
+                      >
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={paymentMethod === op}
+                          onChange={() => setPaymentMethod(op)}
+                        />
+                        {op === "upi"
+                          ? "UPI / Google Pay"
+                          : op === "card"
+                            ? "Credit / Debit Card"
+                            : "₹200 Advance + Remaining COD"}
+                      </label>
+                    ))}
                   </div>
+                </div>
 
-                  <div className="d-flex justify-content-between">
-                    <span>Shipping</span>
-                    <span>
-                      {shipping === 0 ? "FREE" : currencyFormat(shipping)}
-                    </span>
+                {isHybridCOD && (
+                  <div className="hybrid-cod-box">
+                    <div className="hybrid-title">💡 How Hybrid COD works:</div>
+                    <ol className="hybrid-list">
+                      <li>
+                        Pay <strong>{currencyFormat(advanceAmount)}</strong> online now to confirm your order 
+                        (this amount will not be refunded in any case)
+                      </li>
+                      <li>
+                        Pay the remaining <strong>{currencyFormat(remainingCOD)}</strong> in cash when delivered
+                      </li>
+                      <li>Your order will be processed only after online payment</li>
+                    </ol>
                   </div>
-                  <div className="d-flex justify-content-between mt-5">
-                    <span>Discount</span>
-                    <span>- {currencyFormat(discount)}</span>
+                )}
+
+                <div className="form-actions">
+                  <button
+                    className="btn-outline-dark btn"
+                    type="submit"
+                    disabled={placing}
+                  >
+                    {placing
+                      ? "Processing..."
+                      : isHybridCOD
+                        ? "Pay ₹200 Now"
+                        : paymentMethod === "upi" || paymentMethod === "card"
+                          ? `Pay Now — ${currencyFormat(total)}`
+                          : "Place Order"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <aside className="panel summary-panel">
+            <div className="panel-inner order-summary">
+              <h2 className="summary-title">Order Summary</h2>
+
+              {/* PRODUCT LIST */}
+              <div className="items-list">
+                {cart.map((it) => (
+                  <div key={it.id} className="item-row d-flex gap-3">
+                    <img
+                      src={it.img}
+                      alt={it.name}
+                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                    />
+                    <div>
+                      <div className="name">{it.name}</div>
+                      <div>x{it.qty}</div>
+                      {it.hamperItems && (
+                        <ul style={{ fontSize: "12px", marginTop: "5px" }}>
+                          {it.hamperItems.map((h, i) => (
+                            <li key={i}>
+                              {h.name} × {h.quantity}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
+                ))}
+              </div>
 
-
-                  <div className="d-flex justify-content-between total">
-                    <strong>Total</strong>
-                    <strong>{currencyFormat(total)}</strong>
-                  </div>
-                  {/* ✅ ADD HERE */}
-                  {isHybridCOD && (
-                    <>
-                      <div className="d-flex justify-content-between">
-                        <span>Advance Paid</span>
-                        <span>{currencyFormat(advanceAmount)}</span>
-                      </div>
-
-                      <div className="d-flex justify-content-between">
-                        <span>Pay on Delivery</span>
-                        <span>{currencyFormat(remainingCOD)}</span>
-                      </div>
-                    </>
-                  )}
-                  {/* <div className="d-flex justify-content-between total">
-                    <strong>Total</strong>
-                    <strong>{currencyFormat(total)}</strong>
-                  </div> */}
-
-                  {/* ✅ ADD HERE 👇 */}
-
+              {/* COUPON */}
+              <div className="coupon-box mt-3">
+                <div className="coupon-container">
+                  <input
+                    type="text"
+                    placeholder="Enter Coupon Code"
+                    className="coupon-input"
+                    value={couponCode}
+                    disabled={couponApplied}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                  />
+                  <button className="coupon-btn sora" onClick={applyCoupon}>
+                    Apply
+                  </button>
                 </div>
               </div>
-            </aside>
-          </div>
-        </div>
 
+              <div className="newsletter-subscription mt-3 d-flex align-items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="newsletter"
+                  checked={subscribe}
+                  onChange={(e) => setSubscribe(e.target.checked)}
+                  style={{ width: '18px', height: '18px', accentColor: '#7c3aed' }}
+                />
+                <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
+                  Subscribe to our Newsletter
+                </label>
+              </div>
+
+              {/* FREE PRODUCT FOR HAMPER */}
+              {hasHamper && (
+                <div className="free-product-box mt-3 d-flex align-items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="freeProduct"
+                    checked={addFreeProduct}
+                    onChange={(e) => setAddFreeProduct(e.target.checked)}
+                    style={{ width: "18px", height: "18px" }}
+                  />
+                  <label htmlFor="freeProduct" style={{ fontSize: "14px", cursor: "pointer" }}>
+                    Add Complimentary Free Product
+                  </label>
+                </div>
+              )}
+
+              {/* PRICE BREAKDOWN */}
+              <div className="price-breakdown mt-4">
+                <div className="d-flex justify-content-between">
+                  <span>Subtotal · {cart.length} item(s)</span>
+                  <span>{currencyFormat(subtotal)}</span>
+                </div>
+
+                <div className="d-flex justify-content-between">
+                  <span>Shipping</span>
+                  <span>{shipping === 0 ? "FREE" : currencyFormat(shipping)}</span>
+                </div>
+
+                <div className="d-flex justify-content-between">
+                  <span>Discount</span>
+                  <span>- {currencyFormat(discount)}</span>
+                </div>
+
+                <div className="d-flex justify-content-between total">
+                  <strong>Total</strong>
+                  <strong>{currencyFormat(total)}</strong>
+                </div>
+
+                {isHybridCOD && (
+                  <>
+                    <div className="d-flex justify-content-between">
+                      <span>Advance Paid</span>
+                      <span>{currencyFormat(advanceAmount)}</span>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                      <span>Pay on Delivery</span>
+                      <span>{currencyFormat(remainingCOD)}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
 
       <Footer />
@@ -647,4 +857,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-

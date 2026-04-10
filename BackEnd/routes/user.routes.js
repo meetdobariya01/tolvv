@@ -103,81 +103,86 @@ router.put("/profile", authenticate, async (req, res) => {
 });
 
 // GET USER ADDRESSES
-router.get("/address", authenticate, async (req, res) => {
+// ================= ADDRESS MANAGEMENT ROUTES =================
+
+// GET USER ADDRESSES - Fix for your schema
+router.get("/addresses", authenticate, async (req, res) => {
   try {
-
     const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json(user.addresses);
-
+    // Your schema uses "addresses" not "savedAddresses"
+    res.json({ addresses: user.addresses || [] });
   } catch (err) {
-    console.error("Address fetch error:", err);
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-
-// ADD NEW ADDRESS
-router.post("/address", authenticate, async (req, res) => {
+// Add a new address - Fix for your schema
+router.post("/addresses", authenticate, async (req, res) => {
   try {
-
-    const {
-      houseNumber,
-      buildingName,
-      societyName,
-      road,
-      landmark,
-      city,
-      State,
-      pincode,
-      mobile,
-      isDefault
-    } = req.body;
-
-    if (!city || !pincode) {
-      return res.status(400).json({
-        message: "City and Pincode are required"
-      });
+    const { houseNumber, buildingName, societyName, road, landmark, city, pincode, State, mobile, isDefault } = req.body;
+    
+    if (!houseNumber || !city || !pincode || !mobile) {
+      return res.status(400).json({ message: "House number, city, pincode and mobile are required" });
     }
-
+    
     const user = await User.findById(req.user.id);
-
-    if (!Array.isArray(user.addresses)) {
+    
+    if (!user.addresses) {
       user.addresses = [];
     }
-
-    if (isDefault) {
-      user.addresses.forEach(addr => addr.isDefault = false);
+    
+    // If this is first address or isDefault true, set as default
+    if (user.addresses.length === 0 || isDefault) {
+      user.addresses.forEach(addr => {
+        addr.isDefault = false;
+      });
     }
-
-    const newAddress = {
+    
+    user.addresses.push({
       houseNumber,
       buildingName,
       societyName,
       road,
       landmark,
       city,
-      State: city, // Assuming State is same as City for simplicity
       pincode,
+      State,
       mobile,
-      isDefault
-    };
-
-    user.addresses.push(newAddress);
-
-    await user.save();
-
-    res.json({
-      message: "Address added successfully",
-      addresses: user.addresses
+      isDefault: isDefault || user.addresses.length === 0
     });
-
+    
+    await user.save();
+    
+    res.json({ 
+      success: true,
+      message: "Address saved successfully",
+      address: user.addresses[user.addresses.length - 1]
+    });
   } catch (err) {
-    console.error("Add address error:", err);
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Delete an address
+router.delete("/addresses/:addressId", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    
+    if (!user.addresses) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+    
+    user.addresses = user.addresses.filter(
+      addr => addr._id.toString() !== req.params.addressId
+    );
+    
+    await user.save();
+    
+    res.json({ message: "Address deleted successfully" });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
