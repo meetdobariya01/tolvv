@@ -18,12 +18,10 @@ class ShipRocketService {
 
   async authenticate() {
     try {
-      // Check if token is still valid (expires in 24 hours)
       if (this.token && this.tokenExpiry && Date.now() < this.tokenExpiry) {
         return this.token;
       }
 
-      console.log("Authenticating with ShipRocket...");
       const response = await axios.post(`${this.baseUrl}/auth/login`, {
         email: this.email,
         password: this.password
@@ -31,14 +29,12 @@ class ShipRocketService {
 
       if (response.data && response.data.token) {
         this.token = response.data.token;
-        // Set expiry to 23 hours (tokens typically last 24 hours)
-        this.tokenExpiry = Date.now() + (23 * 60 * 60 * 1000);
-        console.log("✅ ShipRocket authentication successful");
+        this.tokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
         return this.token;
       }
-      throw new Error('Authentication failed - no token received');
+      throw new Error('Authentication failed');
     } catch (error) {
-      console.error('❌ ShipRocket authentication error:', error.response?.data || error.message);
+      console.error('ShipRocket auth error:', error.response?.data || error.message);
       throw error;
     }
   }
@@ -46,20 +42,23 @@ class ShipRocketService {
   async getHeaders() {
     const token = await this.authenticate();
     return {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     };
   }
 
+  // ✅ FIXED: Use ADHOC endpoint - NO channel_id required
   async createOrder(orderData) {
     try {
       const headers = await this.getHeaders();
-      console.log("Creating ShipRocket order with data:", JSON.stringify(orderData, null, 2));
+      // Remove channel_id if present (not needed for adhoc)
+      if (orderData.channel_id) {
+        delete orderData.channel_id;
+      }
       const response = await axios.post(`${this.baseUrl}/orders/create/adhoc`, orderData, { headers });
-      console.log("✅ ShipRocket order created:", response.data);
-      return { status: 200, data: response.data };
+      return response;
     } catch (error) {
-      console.error('❌ ShipRocket create order error:', error.response?.data || error.message);
+      console.error('ShipRocket create order error:', error.response?.data || error.message);
       throw error;
     }
   }
@@ -67,8 +66,8 @@ class ShipRocketService {
   async generateLabel(shipmentId) {
     try {
       const headers = await this.getHeaders();
-      const response = await axios.post(`${this.baseUrl}/shipments/${shipmentId}/generate/label`, {}, { headers });
-      return { status: 200, data: response.data };
+      const response = await axios.post(`${this.baseUrl}/shipments/${shipmentId}/generate-label`, {}, { headers });
+      return response;
     } catch (error) {
       console.error('ShipRocket generate label error:', error.response?.data || error.message);
       throw error;
@@ -79,9 +78,9 @@ class ShipRocketService {
     try {
       const headers = await this.getHeaders();
       const response = await axios.get(`${this.baseUrl}/shipments/${shipmentId}/track`, { headers });
-      return { status: 200, data: response.data };
+      return response;
     } catch (error) {
-      console.error('ShipRocket track shipment error:', error.response?.data || error.message);
+      console.error('ShipRocket track error:', error.response?.data || error.message);
       throw error;
     }
   }
@@ -90,23 +89,24 @@ class ShipRocketService {
     try {
       const headers = await this.getHeaders();
       const response = await axios.post(`${this.baseUrl}/courier/serviceability`, data, { headers });
-      return { status: 200, data: response.data };
+      return response;
     } catch (error) {
-      console.error('ShipRocket calculate shipping error:', error.response?.data || error.message);
+      console.error('ShipRocket calculate error:', error.response?.data || error.message);
       throw error;
     }
   }
 
-  async cancelOrder(shipmentId) {
+  async getChannels() {
     try {
       const headers = await this.getHeaders();
-      const response = await axios.post(`${this.baseUrl}/orders/cancel`, { ids: [shipmentId] }, { headers });
-      return { status: 200, data: response.data };
+      const response = await axios.get(`${this.baseUrl}/channels`, { headers });
+      return response;
     } catch (error) {
-      console.error('ShipRocket cancel order error:', error.response?.data || error.message);
+      console.error('ShipRocket get channels error:', error.response?.data || error.message);
       throw error;
     }
   }
 }
 
+ShipRocketService.instance = null;
 module.exports = ShipRocketService;

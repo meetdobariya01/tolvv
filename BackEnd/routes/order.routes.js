@@ -6,13 +6,13 @@ const Product = require("../Model/Product.add.admin");
 const Cart = require("../Model/Cart");
 const User = require("../Model/UserSchema");
 const { authenticate } = require("../middleware/auth.middleware");
+const { createShipRocketShipment } = require("../services/shiprocket.helper"); // ✅ Import from helper
 const {
   sendAdminSubscriptionNotification,
   sendOrderConfirmationEmail,
   sendAdminOrderNotification,
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
-const ShipRocketService = require("../services/shiprocket.service");
 const ADVANCE_AMOUNT = 200;
 const COUPONS = {
   LAUNCH5: { discount: 5, firstOrderOnly: true },
@@ -31,112 +31,8 @@ function formatPhoneNumber(phone) {
   return cleaned.padStart(10, '0');
 }
 
-async function createShipRocketShipment(order) {
-  try {
-    const shiprocket = ShipRocketService.getInstance();
-    const formattedPhone = formatPhoneNumber(order.address.mobile);
-
-    const addressParts = [
-      order.address.houseNumber,
-      order.address.buildingName,
-      order.address.societyName,
-      order.address.road
-    ].filter(Boolean);
-
-    const fullAddress = addressParts.length > 0 ? addressParts.join(", ") : order.address.street || "Address not provided";
-
-    const orderItems = order.items.map((item) => ({
-      name: item.productName.substring(0, 100),
-      sku: item.productId?.toString() || item.hamperId?.toString() || "CUSTOM",
-      units: item.quantity,
-      selling_price: Math.round(item.priceAtBuy),
-      discount: 0,
-      tax: 0,
-      hsn: 0,
-    }));
-
-    // ✅ CRITICAL FIX: Calculate the correct COD amount
-    let codAmount = 0;
-    let subtotalForShiprocket = 0;
-
-    if (order.paymentMethod === "cod_hybrid") {
-      // For hybrid COD: Only the remaining amount is collected on delivery
-      codAmount = order.partialPayment?.remainingToPay || (order.totalAmount - ADVANCE_AMOUNT);
-      subtotalForShiprocket = codAmount;  // ShipRocket should collect only this amount
-    } else if (order.paymentMethod === "cod") {
-      codAmount = order.totalAmount;
-      subtotalForShiprocket = order.totalAmount;
-    } else {
-      // Prepaid orders
-      subtotalForShiprocket = order.totalAmount;
-    }
-
-    const shiprocketOrderData = {
-      order_id: order.customOrderId,
-      order_date: new Date(order.createdAt || Date.now()).toISOString().split("T")[0],
-
-      pickup_location: process.env.SHIPROCKET_PICKUP_LOCATION || "home",
-
-      billing_customer_name: order.customerName || "Customer",
-      billing_last_name: "",
-      billing_address: fullAddress,
-      billing_address_2: order.address.landmark || "",
-      billing_city: order.address.city || "Ahmedabad",
-      billing_pincode: order.address.pincode || "380015",
-      billing_state: order.address.state || "Gujarat",
-      billing_country: "India",
-      billing_email: order.customerEmail,
-      billing_phone: formattedPhone,
-
-      shipping_is_billing: true,
-      order_items: orderItems,
-
-      payment_method: (order.paymentMethod === "cod" || order.paymentMethod === "cod_hybrid") ? "COD" : "Prepaid",
-
-      // ✅ FOR COD: Only include if actual COD amount > 0
-      ...(codAmount > 0 && { cod_amount: codAmount }),
-      
-      shipping_charges: 0,
-      giftwrap_charges: 0,
-      transaction_charges: 0,
-      total_discount: order.discount || 0,
-
-      // ✅ CRITICAL FIX: subtotal must be the COD amount for COD orders
-      sub_total: Math.round(subtotalForShiprocket),
-
-      length: 10,
-      breadth: 10,
-      height: 10,
-      weight: order.totalWeight || 1.0,
-    };
-
-    console.log("📦 Shiprocket Payload:", JSON.stringify({
-      ...shiprocketOrderData,
-      cod_amount: codAmount,
-      sub_total: subtotalForShiprocket,
-      payment_method: shiprocketOrderData.payment_method,
-      order_type: order.paymentMethod,
-      remaining_to_pay: order.partialPayment?.remainingToPay
-    }, null, 2));
-
-    const response = await shiprocket.createOrder(shiprocketOrderData);
-
-    if (response && response.status === 200) {
-      order.shiprocketOrderId = response.data.order_id;
-      order.shiprocketShipmentId = response.data.shipment_id;
-      order.orderStatus = "Processing for Shipping";
-      await order.save();
-
-      console.log(`✅ ShipRocket order created for ${order.customOrderId} with COD amount: ₹${codAmount}`);
-      return true;
-    }
-
-    throw new Error("ShipRocket order creation failed");
-  } catch (error) {
-    console.error(`❌ ShipRocket failed for ${order.customOrderId}:`, error.response?.data || error.message);
-    return false;
-  }
-}
+// ❌ REMOVE THIS ENTIRE FUNCTION - it's already imported above
+// async function createShipRocketShipment(order) { ... } // DELETE THIS LINE AND THE WHOLE FUNCTION
 
 async function sendOrderEmails(order, user) {
   try {
@@ -191,7 +87,7 @@ const validateCoupon = async (code, userId) => {
   return coupon.discount;
 };
 
-// ================= PLACE ORDER (UPDATED FOR COD & HYBRID) =================
+// ================= PLACE ORDER =================
 router.post("/place", authenticate, async (req, res) => {
   try {
     const {
@@ -356,7 +252,7 @@ router.post("/place", authenticate, async (req, res) => {
     await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
 
     // ================= CREATE SHIPROCKET FOR REGULAR COD ONLY =================
-    // Hybrid COD will create ShipRocket after payment confirmation
+    // Hybrid COD and UPI will create ShipRocket after payment confirmation
     if (paymentMethod === "cod") {
       const user = await User.findById(req.user.id);
       await sendOrderEmails(newOrder, user);

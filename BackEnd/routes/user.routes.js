@@ -146,6 +146,7 @@ router.post("/addresses", authenticate, async (req, res) => {
       road,
       landmark,
       city,
+      email: user.email, // Use user's email from DB
       pincode,
       State,
       mobile,

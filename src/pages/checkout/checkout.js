@@ -18,7 +18,6 @@ const Checkout = () => {
   const [manualBilling, setManualBilling] = useState(null);
   const [useSaved, setUseSaved] = useState(false);
   const [saveNewAddress, setSaveNewAddress] = useState(false);
-  const [showSavedAddresses, setShowSavedAddresses] = useState(false);
   const [billing, setBilling] = useState({
     name: "",
     email: "",
@@ -103,11 +102,6 @@ const Checkout = () => {
         const data = await res.json();
         console.log("Fetched addresses:", data.addresses);
         setSavedAddresses(data.addresses || []);
-        
-        // Auto-show saved addresses section if there are addresses
-        if (data.addresses && data.addresses.length > 0) {
-          setShowSavedAddresses(true);
-        }
       }
     } catch (err) {
       console.error("Failed to fetch addresses:", err);
@@ -131,11 +125,24 @@ const Checkout = () => {
       });
       
       if (res.ok) {
-        await fetchSavedAddresses(); // Refresh addresses
+        const data = await res.json();
+        console.log("Address saved successfully:", data);
+        await fetchSavedAddresses(); // Refresh addresses immediately
+        
+        // ✅ Show success message
+        alert("Address saved successfully! You can now use it for future orders.");
+        
+        // ✅ Auto-select the newly saved address
+        if (data.address && data.address._id) {
+          setSelectedAddressId(data.address._id);
+          setUseSaved(true);
+        }
+        
         return true;
       }
     } catch (err) {
       console.error("Failed to save address:", err);
+      alert("Failed to save address. Please try again.");
     }
     return false;
   };
@@ -158,9 +165,11 @@ const Checkout = () => {
           setSelectedAddressId(null);
           setUseSaved(false);
         }
+        alert("Address deleted successfully");
       }
     } catch (err) {
       console.error("Failed to delete address:", err);
+      alert("Failed to delete address");
     }
   };
 
@@ -252,10 +261,10 @@ const Checkout = () => {
         ].filter(Boolean).join(", ");
         
         setBilling({
-          name: selectedAddress.buildingName || "",
+          name: selectedAddress.buildingName || selectedAddress.name || "",
           phone: selectedAddress.mobile || "",
           email: billing.email || "",
-          address: fullAddress,
+          address: fullAddress || selectedAddress.houseNumber || "",
           city: selectedAddress.city || "",
           pincode: selectedAddress.pincode || "",
         });
@@ -328,10 +337,15 @@ const Checkout = () => {
   const handleUseSavedToggle = () => {
     if (!useSaved) {
       // Switching to saved address mode
-      if (savedAddresses.length > 0 && !selectedAddressId) {
-        setSelectedAddressId(savedAddresses[0]._id);
+      if (savedAddresses.length > 0) {
+        if (!selectedAddressId) {
+          setSelectedAddressId(savedAddresses[0]._id);
+        }
+        setManualBilling(billing);
+      } else {
+        alert("No saved addresses found. Please save an address first.");
+        return;
       }
-      setManualBilling(billing);
     } else {
       // Switching to manual mode - restore manual billing if exists
       if (manualBilling) {
@@ -371,14 +385,17 @@ const Checkout = () => {
     try {
       // Save address if user opted to
       if (saveNewAddress && token && !useSaved) {
-        await saveAddressToBackend({
+        const addressToSave = {
           houseNumber: billing.address.split(",")[0],
           buildingName: billing.name,
           city: billing.city,
           pincode: billing.pincode,
           mobile: billing.phone,
           State: "Gujarat"
-        });
+        };
+        
+        await saveAddressToBackend(addressToSave);
+        // Don't reset saveNewAddress here so it works for future orders
       }
 
       const orderItems = cart
@@ -517,10 +534,10 @@ const Checkout = () => {
                               }}
                             >
                               <div style={{ fontWeight: "500", marginBottom: "5px" }}>
-                                {addr.buildingName || "Saved Address"}
+                                {addr.buildingName || addr.name || "Saved Address"}
                               </div>
                               <div style={{ fontSize: "14px", color: "#666", marginBottom: "5px" }}>
-                                {displayAddress}
+                                {displayAddress || addr.houseNumber}
                               </div>
                               <div style={{ fontSize: "14px", color: "#666" }}>
                                 {addr.city} - {addr.pincode}

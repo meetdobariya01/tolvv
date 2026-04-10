@@ -455,7 +455,7 @@ const AccountPage = () => {
                     const item = items[0]; // use safe array
 
                     return (
-                      <div key={order._id} className="order-card">
+                      <div key={order._id} className="order-card ">
                         {/* Date */}
                         <p className="order-date-title">
                           {order.type === "exchange"
