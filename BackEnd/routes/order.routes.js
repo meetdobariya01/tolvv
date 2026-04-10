@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
@@ -7,13 +6,13 @@ const Product = require("../Model/Product.add.admin");
 const Cart = require("../Model/Cart");
 const User = require("../Model/UserSchema");
 const { authenticate } = require("../middleware/auth.middleware");
+const { createShipRocketShipment } = require("../services/shiprocket.helper"); // ✅ Import from helper
 const {
   sendAdminSubscriptionNotification,
   sendOrderConfirmationEmail,
   sendAdminOrderNotification,
 } = require("../utils/email.service");
 const Hamper = require("../Model/Hamper");
-const ShipRocketService = require("../services/shiprocket.service");
 const ADVANCE_AMOUNT = 200;
 const COUPONS = {
   LAUNCH5: { discount: 5, firstOrderOnly: true },
@@ -32,109 +31,9 @@ function formatPhoneNumber(phone) {
   return cleaned.padStart(10, '0');
 }
 
-async function createShipRocketShipment(order) {
-  try {
-    const shiprocket = ShipRocketService.getInstance();
-    const formattedPhone = formatPhoneNumber(order.address.mobile);
+// ❌ REMOVE THIS ENTIRE FUNCTION - it's already imported above
+// async function createShipRocketShipment(order) { ... } // DELETE THIS LINE AND THE WHOLE FUNCTION
 
-    const addressParts = [
-      order.address.houseNumber,
-      order.address.buildingName,
-      order.address.societyName,
-      order.address.road
-    ].filter(Boolean);
-
-    const fullAddress =
-      addressParts.length > 0
-        ? addressParts.join(", ")
-        : order.address.street || "Address not provided";
-
-    const orderItems = order.items.map((item) => ({
-      name: item.productName.substring(0, 100),
-      sku:
-        item.productId?.toString() ||
-        item.hamperId?.toString() ||
-        "CUSTOM",
-      units: item.quantity,
-      selling_price: Math.round(item.priceAtBuy),
-      discount: 0,
-      tax: 0,
-      hsn: 0,
-    }));
-
-    // ✅ FIX: Handle Hybrid COD properly
-    let codAmount = order.totalAmount;
-
-  if (order.paymentMethod === "cod_hybrid") {
-  codAmount = order.partialPayment?.remainingToPay || order.totalAmount;
-}
-
-    const shiprocketOrderData = {
-      order_id: order.customOrderId,
-      order_date: new Date(order.createdAt || Date.now())
-        .toISOString()
-        .split("T")[0],
-
-      pickup_location: process.env.SHIPROCKET_PICKUP_LOCATION || "home",
-
-      billing_customer_name: order.customerName || "Customer",
-      billing_last_name: "",
-      billing_address: fullAddress,
-      billing_address_2: order.address.landmark || "",
-      billing_city: order.address.city || "Ahmedabad",
-      billing_pincode: order.address.pincode || "380015",
-      billing_state: order.address.state || "Gujarat",
-      billing_country: "India",
-      billing_email: order.customerEmail,
-      billing_phone: formattedPhone,
-
-      shipping_is_billing: true,
-      order_items: orderItems,
-
-      // ✅ FIX: treat hybrid as COD
-      payment_method:
-        order.paymentMethod === "cod" ||
-          order.paymentMethod === "cod_hybrid"
-          ? "COD"
-          : "Prepaid",
-
-      shipping_charges: order.shippingCost || 0,
-      giftwrap_charges: 0,
-      transaction_charges: 0,
-      total_discount: order.discount || 0,
-
-      // ✅ MOST IMPORTANT FIX
-      sub_total: Math.round(codAmount),
-
-      length: 10,
-      breadth: 10,
-      height: 10,
-      weight: order.totalWeight || 1.0,
-    };
-
-    console.log("📦 Shiprocket Payload:", shiprocketOrderData);
-
-    const response = await shiprocket.createOrder(shiprocketOrderData);
-
-    if (response && response.status === 200) {
-      order.shiprocketOrderId = response.data.order_id;
-      order.shiprocketShipmentId = response.data.shipment_id;
-      order.orderStatus = "Processing for Shipping";
-      await order.save();
-
-      console.log(`✅ ShipRocket order created for ${order.customOrderId}`);
-      return true;
-    }
-
-    throw new Error("ShipRocket order creation failed");
-  } catch (error) {
-    console.error(
-      `❌ ShipRocket failed for ${order.customOrderId}:`,
-      error.response?.data || error.message
-    );
-    return false;
-  }
-}
 async function sendOrderEmails(order, user) {
   try {
     const itemsHtml = order.items.map(i => {
@@ -188,7 +87,7 @@ const validateCoupon = async (code, userId) => {
   return coupon.discount;
 };
 
-// ================= PLACE ORDER (UPDATED FOR COD) =================
+// ================= PLACE ORDER =================
 router.post("/place", authenticate, async (req, res) => {
   try {
     const {
@@ -276,11 +175,6 @@ router.post("/place", authenticate, async (req, res) => {
       shippingCharge = totalItems * 35;
     }
 
-    // let codCharge = 0;
-    // if (paymentMethod === "cod" || paymentMethod === "cod_hybrid") {
-    //   codCharge = 200;
-    // }
-
     let discount = 0;
     let discountPercent = 0;
     if (couponCode) {
@@ -311,32 +205,26 @@ router.post("/place", authenticate, async (req, res) => {
       subtotal,
       discount,
       shippingCost: shippingCharge,
-    
       totalAmount,
       couponCode,
       paymentMethod,
-   
-  partialPayment:
-  paymentMethod === "cod_hybrid"
-    ? {
-        paidOnline: ADVANCE_AMOUNT,
-        remainingToPay: Math.max(totalAmount - ADVANCE_AMOUNT, 0),
-        paymentMode: "COD_HYBRID",
-      }
-    : {},
-      status:
-  paymentMethod === "cod"
-    ? "COD_CONFIRMED"
-    : paymentMethod === "cod_hybrid"
-    ? "PARTIALLY_PAID_COD"
-    : "PAYMENT_PENDING",
-
-orderStatus:
-  paymentMethod === "cod"
-    ? "Confirmed"
-    : paymentMethod === "cod_hybrid"
-    ? "Partial Payment Received"
-    : "Pending",
+      partialPayment: paymentMethod === "cod_hybrid"
+        ? {
+            paidOnline: ADVANCE_AMOUNT,
+            remainingToPay: Math.max(totalAmount - ADVANCE_AMOUNT, 0),
+            paymentMode: "COD_HYBRID",
+          }
+        : {},
+      status: paymentMethod === "cod"
+        ? "COD_CONFIRMED"
+        : paymentMethod === "cod_hybrid"
+        ? "PARTIALLY_PAID_COD"
+        : "PAYMENT_PENDING",
+      orderStatus: paymentMethod === "cod"
+        ? "Confirmed"
+        : paymentMethod === "cod_hybrid"
+        ? "Partial Payment Received"
+        : "Pending",
       address: {
         ...address,
         mobile: cleanPhone,
@@ -363,14 +251,11 @@ orderStatus:
 
     await Cart.findOneAndUpdate({ userId: req.user.id }, { $set: { items: [] } });
 
-    // ================= FOR COD ORDERS: Send Email & Create ShipRocket =================
+    // ================= CREATE SHIPROCKET FOR REGULAR COD ONLY =================
+    // Hybrid COD and UPI will create ShipRocket after payment confirmation
     if (paymentMethod === "cod") {
       const user = await User.findById(req.user.id);
-
-      // Send emails
       await sendOrderEmails(newOrder, user);
-
-      // Create ShipRocket shipment (delay to ensure order is saved)
       setTimeout(async () => {
         await createShipRocketShipment(newOrder);
       }, 2000);
@@ -380,7 +265,7 @@ orderStatus:
       message: paymentMethod === "cod" ? "Order placed successfully" : "Order placed, proceed to payment",
       orderId: customOrderId,
       requiresPayment: paymentMethod !== "cod",
-     advancePaid: paymentMethod === "cod_hybrid" ? 200 : 0
+      advancePaid: paymentMethod === "cod_hybrid" ? ADVANCE_AMOUNT : 0
     });
 
   } catch (err) {
@@ -389,7 +274,7 @@ orderStatus:
   }
 });
 
-// ================= OTHER ROUTES (keep existing) =================
+// ================= OTHER ROUTES =================
 router.get("/status/:orderId", authenticate, async (req, res) => {
   try {
     const order = await Order.findOne({

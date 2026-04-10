@@ -306,7 +306,7 @@ const Productdetails = ({ handleCartOpen }) => {
                 <h4 className="sora text-uppercase mb-3">
                   {dbProduct.ProductName}
                 </h4>
-                <Row className="mb-4 g-3">
+                <Row className="mb-0 mb-md-4 mb-lg-4 g-3">
                   {productInfo[activeTab]?.images?.map((img, idx) => (
                     <Col xs={3} md={3} key={idx} className="text-center">
                       <motion.img
@@ -321,6 +321,14 @@ const Productdetails = ({ handleCartOpen }) => {
                     </Col>
                   ))}
                 </Row>
+
+                <button
+                  onClick={addToCart}
+                  className="btn btn-outline-dark mb-3 d-block d-md-none d-lg-none"
+                >
+                  ADD TO CART <FiShoppingCart className="ms-1" size={22} />
+                </button>
+
                 <div className="details-text">
                   <h6 className="fw-bold">HOW TO USE</h6>
                   <p>{productInfo[activeTab]?.howToUse}</p>
@@ -346,7 +354,7 @@ const Productdetails = ({ handleCartOpen }) => {
                 <p>Country of Origin: India</p>
                 <button
                   onClick={addToCart}
-                  className="btn btn-outline-dark mt-3"
+                  className="btn btn-outline-dark mt-3 d-none d-md-block d-lg-block"
                 >
                   ADD TO CART <FiShoppingCart className="ms-1" size={22} />
                 </button>

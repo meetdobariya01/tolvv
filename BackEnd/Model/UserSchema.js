@@ -10,6 +10,7 @@ const addressSchema = new mongoose.Schema({
   pincode: String,
   State: String,
   mobile: String,
+  email: String,
   isDefault: {
     type: Boolean,
     default: false
