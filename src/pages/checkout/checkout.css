@@ -32,7 +32,7 @@ body {
 .checkout-root {
   max-width: 1140px;
   margin:  auto;
-  padding: 20px;
+  /* padding: 20px; */
   transition: transform 0.35s ease, opacity 0.35s ease;
   opacity: 1;
 }
@@ -138,6 +138,10 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 14px;
+}
+.radio-button-checkout input{
+ width: auto;
+ margin: 0;
 }
 .payment-options label input {
   accent-color: var(--accent);
@@ -281,8 +285,9 @@ body {
 /* price breakdown */
 .price-breakdown {
   /* background: linear-gradient(180deg, #fbfdff, #fff); */
-  padding: 12px;
+  /* padding: 12px; */
   border-radius: 10px;
+  line-height: 30px;
   /* border: 1px solid #eef3ff; */
 }
 .price-breakdown .row {
@@ -339,17 +344,6 @@ body {
 }
 
 /* responsive */
-@media (max-width: 980px) {
-  .checkout-grid {
-    grid-template-columns: 1fr;
-  }
-  .summary-panel {
-    order: -1;
-  } /* summary on top for mobile */
-  .row-two {
-    grid-template-columns: 1fr 1fr;
-  }
-}
 .order-summary {
   max-width: 400px;
   margin: auto;
@@ -523,4 +517,20 @@ body {
 
 .hybrid-list li {
   margin-bottom: 4px;
+}
+@media (max-width: 980px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+  .summary-panel {
+    order: -1;
+  } /* summary on top for mobile */
+  .row-two {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 576px) {
+.payment-options label{
+  width: 100%;
+}
 }

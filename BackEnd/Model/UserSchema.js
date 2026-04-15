@@ -1,3 +1,57 @@
+// const mongoose = require("mongoose");
+
+// const addressSchema = new mongoose.Schema({
+//   houseNumber: String,
+//   buildingName: String,
+//   societyName: String,
+//   road: String,
+//   landmark: String,
+//   city: String,
+//   pincode: String,
+//   State: String,
+//   mobile: String,
+//   email: String,
+//   isDefault: {
+//     type: Boolean,
+//     default: false
+//   }
+// });
+
+// const userSchema = new mongoose.Schema({
+
+//   fname: {
+//     type: String
+//   },
+
+//   lname: {
+//     type: String
+//   },
+
+//   email: {
+//     type: String,
+//     required: true,
+//     unique: true
+//   },
+
+//   mobile: {
+//     type: String
+//   },
+
+//   password: {
+//     type: String,
+//     required: true
+//   },
+
+//   // ✅ Address array
+//   addresses: {
+//     type: [addressSchema],
+//     default: []
+//   }
+
+// });
+
+// module.exports = mongoose.model("User", userSchema);
+
 const mongoose = require("mongoose");
 
 const addressSchema = new mongoose.Schema({
@@ -18,36 +72,41 @@ const addressSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-
   fname: {
-    type: String
+    type: String,
+    default: ""
   },
-
   lname: {
-    type: String
+    type: String,
+    default: ""
   },
-
   email: {
     type: String,
     required: true,
     unique: true
   },
-
   mobile: {
-    type: String
+    type: String,
+    default: null  // Allow null for direct login users
   },
-
   password: {
     type: String,
-    required: true
+    required: false
   },
-
-  // ✅ Address array
+  role: {
+    type: String,
+    default: "user"
+  },
+  googleAuth: {
+    type: Boolean,
+    default: false
+  },
   addresses: {
     type: [addressSchema],
     default: []
   }
-
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model("User", userSchema);

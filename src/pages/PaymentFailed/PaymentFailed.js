@@ -20,12 +20,12 @@ const PaymentFailed = () => {
         </p>
 
         <div style={styles.buttonGroup}>
-          <button
+          {/* <button
             style={styles.primaryBtn}
             onClick={() => navigate("/checkout")}
           >
             Try Again
-          </button>
+          </button> */}
 
           <button
             style={styles.secondaryBtn}

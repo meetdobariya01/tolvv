@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import "./login.css";
-import Cookies from "js-cookie";
-import { useLocation } from "react-router-dom";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 
@@ -13,84 +11,59 @@ const api_base = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const navigate = useNavigate();
-const location = useLocation();
-const redirectPath = location.state?.from || "/";
+  const location = useLocation();
+  const redirectPath = location.state?.from || "/";
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const validate = () => {
     if (!formData.email.trim()) {
       setServerError("Email is required");
       return false;
     }
-
     if (!formData.password.trim()) {
       setServerError("Password is required");
       return false;
     }
-
     return true;
   };
 
-  // -----------------------------
-  // Input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setServerError(""); // Clear error on input
   };
 
-  // const mergeGuestCart = async (token) => {
-  //   const guestCart = Cookies.get("guestCart");
-  //   if (!guestCart) return;
+  // Merge guest cart after login
+  const mergeGuestCart = async (token) => {
+    const guestCart = localStorage.getItem("guestCart");
+    if (!guestCart) return;
 
-  //   const guestItems = JSON.parse(guestCart);
+    const guestItems = JSON.parse(guestCart);
 
-  //   await axios.post(
-  //     `${api_base}/merge`,
-  //     { guestItems },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     },
-  //   );
+    try {
+      await axios.post(
+        `${api_base}/cart/merge`,
+        { guestItems },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      localStorage.removeItem("guestCart");
+      console.log("✅ Guest cart merged successfully");
+    } catch (err) {
+      console.error("Merge cart error:", err);
+    }
+  };
 
-  //   Cookies.remove("guestCart");
-  // };
-
-  // -----------------------------
-  // Merge guest cart
-const mergeGuestCart = async (token) => {
-  const guestCart = localStorage.getItem("guestCart");
-  if (!guestCart) return;
-
-  const guestItems = JSON.parse(guestCart);
-
-  try {
-    await axios.post(
-      `${api_base}/cart/merge`,
-      { guestItems },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-
-    // ✅ CLEAR AFTER MERGE
-    localStorage.removeItem("guestCart");
-
-  } catch (err) {
-    console.error("Merge cart error:", err);
-  }
-};
-
-  // -----------------------------
-  // Email / Password Login
+  // Email/Password Login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -102,29 +75,36 @@ const mergeGuestCart = async (token) => {
     try {
       const res = await axios.post(`${api_base}/auth/login`, formData);
 
-      const { token, user } = res.data;
+      if (res.data.success) {
+        const { token, user } = res.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role);
-      localStorage.setItem("userId", user.id);
-      
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        // Store user data
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        // Set axios default header
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      // ✅ CORRECT FUNCTION CALL
-      await mergeGuestCart(token);
+        // Merge guest cart if exists
+        await mergeGuestCart(token);
 
-      navigate(redirectPath);
+        // Redirect to previous page or home
+        navigate(redirectPath, { replace: true });
+      } else {
+        setServerError(res.data.message || "Login failed");
+      }
     } catch (err) {
-      setServerError(err.response?.data?.message || "Invalid credentials");
+      console.error("Login error:", err);
+      setServerError(err.response?.data?.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
 
-  // -----------------------------
   // Google Login
   const handleGoogleLogin = async (credentialResponse) => {
     setLoading(true);
+    setServerError("");
 
     try {
       const { credential } = credentialResponse;
@@ -133,59 +113,74 @@ const mergeGuestCart = async (token) => {
         token: credential,
       });
 
-      const { token } = res.data;
+      if (res.data.success) {
+        const { token, user } = res.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", "user");
+        // Store user data
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        // Set axios default header
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        // Merge guest cart if exists
+        await mergeGuestCart(token);
 
-      await mergeGuestCart(token);
-
-      navigate("/");
+        // Redirect to previous page or home
+        navigate(redirectPath, { replace: true });
+      } else {
+        setServerError(res.data.message || "Google login failed");
+      }
     } catch (err) {
-      setServerError("Google login failed");
+      console.error("Google login error:", err);
+      setServerError("Google login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleGoogleError = () => {
+    setServerError("Google login failed. Please try again.");
+  };
+
   return (
     <div>
       <Header />
-
       <div className="login-3-container sora">
         {/* SECTION 1 - IMAGE */}
         <div className="login-section image-section">
-          <img
-            src="./images/login-page.png"
-            alt="login"
-          />
+          <img src="./images/login-page.png" alt="login" />
         </div>
 
         {/* SECTION 2 - HELLO TEXT */}
         <div className="login-section-1 hello-section artisan-font">
           <h1>Hello</h1>
+   
         </div>
 
         {/* SECTION 3 - FORM */}
-        <div className="login-section form-section-1  ">
+        <div className="login-section form-section-1">
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             className="form-box"
           >
-            {serverError && <div className="error-box">{serverError}</div>}
+            {serverError && (
+              <div className="error-box">
+                {serverError}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit}>
               <input
                 type="email"
                 name="email"
-                placeholder="Email ID"
+                placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
                 className="input-line"
+                required
               />
 
               <input
@@ -195,27 +190,35 @@ const mergeGuestCart = async (token) => {
                 value={formData.password}
                 onChange={handleChange}
                 className="input-line"
+                required
               />
 
-              <p className="forgot">Forgot Password</p>
-
-              <button className="login-btn" disabled={loading}>
+              <button 
+                type="submit" 
+                className="login-btn" 
+                disabled={loading}
+              >
                 {loading ? "Signing in..." : "Login"}
               </button>
             </form>
 
             <div className="divider">or</div>
 
-            <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => setServerError("Google login failed")}
-            />
-
-            {/* <button className="apple-btn">Sign in with Apple</button> */}
+            <div className="google-login-wrapper">
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={handleGoogleError}
+                useOneTap={false}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+                logo_alignment="center"
+              />
+            </div>
           </motion.div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

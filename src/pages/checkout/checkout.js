@@ -703,9 +703,9 @@ const Checkout = () => {
                       id="saveAddress"
                       checked={saveNewAddress}
                       onChange={(e) => setSaveNewAddress(e.target.checked)}
-                      style={{ width: "18px", height: "18px" }}
+                      style={{ width: "18px", height: "18px" , margin: 0}}
                     />
-                    <label htmlFor="saveAddress" style={{ cursor: "pointer", fontSize: "14px" }}>
+                    <label htmlFor="saveAddress" style={{ cursor: "pointer", fontSize: "14px" , marginTop: "13px"}}>
                       Save this address for future orders
                     </label>
                   </div>
@@ -713,7 +713,7 @@ const Checkout = () => {
 
                 <div className="payment-block mt-4">
                   <h3>Payment Method</h3>
-                  <div className="payment-options">
+                  <div className="payment-options radio-button-checkout">
                     {["upi", "card", "cod_hybrid"].map((op) => (
                       <label
                         key={op}
@@ -823,7 +823,7 @@ const Checkout = () => {
                   id="newsletter"
                   checked={subscribe}
                   onChange={(e) => setSubscribe(e.target.checked)}
-                  style={{ width: '18px', height: '18px', accentColor: '#7c3aed' }}
+                  style={{ width: '18px', height: '18px', accentColor: '#000' }}
                 />
                 <label htmlFor="newsletter" style={{ fontSize: '14px', cursor: 'pointer' }}>
                   Subscribe to our Newsletter
