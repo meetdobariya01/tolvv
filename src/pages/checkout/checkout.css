@@ -285,8 +285,9 @@ body {
 /* price breakdown */
 .price-breakdown {
   /* background: linear-gradient(180deg, #fbfdff, #fff); */
-  padding: 12px;
+  /* padding: 12px; */
   border-radius: 10px;
+  line-height: 30px;
   /* border: 1px solid #eef3ff; */
 }
 .price-breakdown .row {
