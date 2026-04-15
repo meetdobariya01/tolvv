@@ -387,12 +387,12 @@
   }
 
   .half-out-image {
-    height: 100px;
+    height: 95px;
     bottom: -50px;
   }
 
   .aries-images {
-    gap: 1.5rem;
+    /* gap: 1.5rem; */
   }
   .zodiac-row {
     row-gap: 0;

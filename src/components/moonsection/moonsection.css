@@ -231,6 +231,7 @@
 
   .moon-left {
     flex-direction: column;
+    align-items: start;
   }
 
   .moon-right {
@@ -300,6 +301,7 @@
   .moon-big-title {
     font-size: 28px;
     letter-spacing: 10px;
+    left: 100%;
   }
 }
 

@@ -368,7 +368,7 @@ const Zodiacdetails = () => {
             <div className="row align-items-center text-white">
               <div className="container details-zodiac-section text-center sora">
                 <h5 className="mb-4 text-dark fw-semibold text-start ms-2">
-                  Explore Other Sun Sign
+                  Explore Other Sun Signs
                 </h5>
 
                 <div className="row justify-content-center details-zodiac-row">

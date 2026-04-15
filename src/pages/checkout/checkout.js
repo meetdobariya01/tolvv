@@ -127,7 +127,7 @@ const Checkout = () => {
         landmark: addressData.landmark || "",
         societyName: addressData.societyName || "",
       };
-      
+
       const res = await fetch(`${API_URL}/user/addresses`, {
         method: "POST",
         headers: {
@@ -141,10 +141,12 @@ const Checkout = () => {
         const data = await res.json();
         console.log("Address saved successfully:", data);
         await fetchSavedAddresses(); // Refresh addresses immediately
-        
+
         // ✅ Show success message
-        alert("Address saved successfully! You can now use it for future orders.");
-        
+        alert(
+          "Address saved successfully! You can now use it for future orders.",
+        );
+
         // ✅ Auto-select the newly saved address
         if (data.address && data.address._id) {
           setSelectedAddressId(data.address._id);
@@ -348,7 +350,7 @@ const Checkout = () => {
   const handleBillingChange = (e) => {
     const { name, value } = e.target;
     setBilling((b) => ({ ...b, [name]: value }));
-    
+
     // If user edits a saved address, deselect it
     if (useSaved) {
       setUseSaved(false);
@@ -417,7 +419,7 @@ const Checkout = () => {
           city: billing.city,
           pincode: billing.pincode,
           mobile: billing.phone,
-          State: "Gujarat"
+          State: "Gujarat",
         };
 
         await saveAddressToBackend(addressToSave);
@@ -605,7 +607,13 @@ const Checkout = () => {
                               </div>
                               {/* ✅ Display email if it exists */}
                               {addr.email && (
-                                <div style={{ fontSize: "14px", color: "#666", marginTop: "3px" }}>
+                                <div
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "#666",
+                                    marginTop: "3px",
+                                  }}
+                                >
                                   ✉️ {addr.email}
                                 </div>
                               )}
@@ -939,7 +947,7 @@ const Checkout = () => {
                   style={{
                     width: "18px",
                     height: "18px",
-                    accentColor: "#7c3aed",
+                    accentColor: "#000",
                   }}
                 />
                 <label

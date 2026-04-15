@@ -76,6 +76,9 @@
   .zodiac-hero {
     height: 45vh;
   }
+  .image-name {
+    font-size: 13px;
+  }
 }
 .feature-icons img {
   filter: grayscale(100%);
@@ -98,8 +101,4 @@
 
 .feature-icon:hover img {
   transform: translateY(-4px);
-}
-.image-name {
-  letter-spacing: 1px;
-  font-size: 14px;
 }

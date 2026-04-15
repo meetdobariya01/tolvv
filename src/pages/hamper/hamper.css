@@ -495,7 +495,7 @@
   }
 }
 .active-section {
-  border: 2px solid #000;
+  /* border: 2px solid #000; */
   background: #f8f9fa;
 }
 

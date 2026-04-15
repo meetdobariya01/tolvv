@@ -231,6 +231,11 @@ const Homepage = () => {
         </Carousel>
       </div>
 
+      {/* Products Section */}
+      <div className="d-block d-md-none d-lg-none">
+        <Homeproduct />
+      </div>
+
       {/* what is tolvv Section */}
       <Tolvvsection />
 
@@ -251,7 +256,9 @@ const Homepage = () => {
       </div>
 
       {/* Products Section */}
-      <Homeproduct />
+      <div className="d-none d-md-block d-lg-block">
+        <Homeproduct />
+      </div>
 
       {/* benifits */}
 
@@ -430,7 +437,10 @@ const Homepage = () => {
                 COLLABORATION
               </p>
 
-              <Form className="connect-form mt-4 p-2 p-md-3 p-lg-0" onSubmit={handleSubmit}>
+              <Form
+                className="connect-form mt-4 p-2 p-md-3 p-lg-0"
+                onSubmit={handleSubmit}
+              >
                 <Form.Group className="mb-4 ">
                   <Form.Control
                     className="underline-input"
